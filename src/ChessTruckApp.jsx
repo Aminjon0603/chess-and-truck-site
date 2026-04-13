@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   aboutPage,
+  carouselSlides,
   contactEmails,
   contactNumbers,
   contactPage,
@@ -19,6 +20,7 @@ import {
   siteBrand,
   tournamentPage,
 } from "./siteData";
+import championsTrophy from "./assets/champions-trophy-optimized.jpg";
 
 const registrationInitialState = {
   firstName: "",
@@ -128,7 +130,25 @@ function AppLink({ to, navigate, children, className = "", currentPath, ...rest 
   );
 }
 
-function PageHero({ eyebrow, title, intro, actions, aside }) {
+function ChampionPortrait({ caption = "Celebrating a tournament morning that feels earned." }) {
+  return (
+    <article className="surface portrait-card">
+      <div className="portrait-ring">
+        <img
+          src={championsTrophy}
+          alt="Young players raising a trophy together"
+          className="portrait-image"
+        />
+      </div>
+      <div className="portrait-copy">
+        <span className="mini-tag">Tournament moment</span>
+        <p>{caption}</p>
+      </div>
+    </article>
+  );
+}
+
+function PageHero({ eyebrow, title, intro, actions, aside, portraitCaption }) {
   return (
     <section className="page-hero">
       <div className="shell page-hero-grid">
@@ -138,7 +158,28 @@ function PageHero({ eyebrow, title, intro, actions, aside }) {
           <p className="page-intro">{intro}</p>
           {actions ? <div className="cta-row">{actions}</div> : null}
         </div>
-        {aside ? <aside className="surface surface-dark hero-aside">{aside}</aside> : null}
+        <div className="hero-visual">
+          <aside className="surface surface-dark hero-aside">
+            {aside || (
+              <>
+                <span className="mini-tag mini-tag-dark">Event focus</span>
+                <h2>{featuredTournament.title}</h2>
+                <p>{featuredTournament.shortSummary}</p>
+                <div className="fact-list">
+                  <div>
+                    <span>Location</span>
+                    <strong>{featuredTournament.city}</strong>
+                  </div>
+                  <div>
+                    <span>Format</span>
+                    <strong>{featuredTournament.formatLabel}</strong>
+                  </div>
+                </div>
+              </>
+            )}
+          </aside>
+          <ChampionPortrait caption={portraitCaption} />
+        </div>
       </div>
     </section>
   );
@@ -154,13 +195,47 @@ function SectionIntro({ eyebrow, title, intro }) {
   );
 }
 
-function BoardArt() {
+function HighlightsCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % carouselSlides.length);
+    }, 4800);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
   return (
-    <div className="board-art" aria-hidden="true">
-      <div className="board-squares" />
-      <div className="board-piece board-piece-light">K</div>
-      <div className="board-piece board-piece-accent">N</div>
-      <div className="board-piece board-piece-dark">R</div>
+    <div className="carousel-shell">
+      <article className="surface carousel-card">
+        <div className="carousel-copy">
+          <span className="section-tag">{carouselSlides[activeIndex].label}</span>
+          <h3>{carouselSlides[activeIndex].title}</h3>
+          <p>{carouselSlides[activeIndex].text}</p>
+        </div>
+        <div className="carousel-side">
+          <div className="carousel-image-frame">
+            <img
+              src={championsTrophy}
+              alt="Young players celebrating around a trophy"
+              className="carousel-image"
+            />
+          </div>
+        </div>
+      </article>
+
+      <div className="carousel-dots" aria-label="Tournament highlight slides">
+        {carouselSlides.map((slide, index) => (
+          <button
+            key={slide.label}
+            type="button"
+            className={`carousel-dot${index === activeIndex ? " is-active" : ""}`}
+            aria-label={`Show ${slide.label}`}
+            onClick={() => setActiveIndex(index)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -270,6 +345,7 @@ function HomePage({ currentPath, navigate }) {
         eyebrow={homePage.eyebrow}
         title={homePage.title}
         intro={homePage.intro}
+        portraitCaption="Young players finishing the morning with something real to celebrate."
         actions={
           <>
             <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
@@ -299,7 +375,6 @@ function HomePage({ currentPath, navigate }) {
                 <strong>{featuredTournament.pricingLabel}</strong>
               </div>
             </div>
-            <BoardArt />
           </>
         }
       />
@@ -308,8 +383,8 @@ function HomePage({ currentPath, navigate }) {
         <div className="shell">
           <SectionIntro
             eyebrow="At a glance"
-            title="The first screen should already answer the big questions"
-            intro="These are the signals families should understand within seconds, not after they scroll through a long landing page."
+            title="What families should understand right away"
+            intro="These are the essentials that should feel clear within seconds of opening the tournament information."
           />
           <div className="stat-grid">
             {heroStats.map((item) => (
@@ -325,9 +400,20 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Why this structure"
-            title="A better tournament site is mostly about better decisions"
-            intro="The new structure makes the site easier to trust, easier to scan, and easier to use when a parent is trying to register quickly."
+            eyebrow="Tournament highlights"
+            title="A stronger first impression for players and parents"
+            intro="These are the parts of the experience that make the event feel organized, credible, and worth committing to."
+          />
+          <HighlightsCarousel />
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow="Why families choose CHESS AND TRUCK"
+            title="Clarity, communication, and a more polished event experience"
+            intro="Parents move faster when the event is easy to understand and the support path is visible from the start."
           />
           <div className="card-grid card-grid-three">
             {homePage.valueCards.map((item) => (
@@ -343,9 +429,9 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Site map"
-            title="This version is multi-page on purpose"
-            intro="Instead of hiding everything in one scroll, the site now gives each important part of the experience its own page."
+            eyebrow="Explore"
+            title="Everything families need is easy to find"
+            intro="Event details, support, FAQs, and registration each have a clear path so no one has to dig for the next step."
           />
           <div className="card-grid card-grid-three">
             {homePage.pageCards.map((item) => (
@@ -353,7 +439,7 @@ function HomePage({ currentPath, navigate }) {
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
                 <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
-                  Open page
+                  Learn more
                 </AppLink>
               </article>
             ))}
@@ -389,6 +475,7 @@ function AboutPage({ currentPath, navigate }) {
         eyebrow={aboutPage.eyebrow}
         title={aboutPage.title}
         intro={aboutPage.intro}
+        portraitCaption="A tournament should leave players proud and parents confident in how the day was run."
         actions={
           <>
             <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
@@ -404,9 +491,9 @@ function AboutPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Positioning"
-            title="The tone is sharper, calmer, and more specific"
-            intro="The copy is written to sound trustworthy and prepared, not like a placeholder template."
+            eyebrow="What families notice"
+            title="Communication matters as much as competition"
+            intro="Families commit more easily when the event feels organized, responsive, and prepared from the very beginning."
           />
           <div className="card-grid card-grid-three">
             {aboutPage.pillars.map((item) => (
@@ -423,7 +510,7 @@ function AboutPage({ currentPath, navigate }) {
         <div className="shell two-column">
           {aboutPage.storyBlocks.map((item) => (
             <article className="surface" key={item.title}>
-              <span className="mini-tag">Perspective</span>
+              <span className="mini-tag">Focus</span>
               <h3>{item.title}</h3>
               <p>{item.text}</p>
             </article>
@@ -435,8 +522,8 @@ function AboutPage({ currentPath, navigate }) {
         <div className="shell">
           <SectionIntro
             eyebrow="Operating standards"
-            title="What the site now does better"
-            intro="These are the practical improvements that make the website feel more credible and more useful."
+            title="What families can expect from the experience"
+            intro="These are the operating habits that shape both registration and tournament day."
           />
           <div className="surface checklist-surface">
             <ul className="checklist">
@@ -458,6 +545,7 @@ function EventsPage({ currentPath, navigate }) {
         eyebrow={eventsPage.eyebrow}
         title={eventsPage.title}
         intro={eventsPage.intro}
+        portraitCaption="The event should feel welcoming for newer players and serious enough for experienced competitors."
         actions={
           <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
             Open Tournament Page
@@ -492,7 +580,7 @@ function EventsPage({ currentPath, navigate }) {
 
           <article className="surface">
             <span className="mini-tag">Before families register</span>
-            <h3>What should be obvious on the events page</h3>
+            <h3>What families should know before registering</h3>
             <ul className="checklist">
               {policyItems.slice(0, 4).map((item) => (
                 <li key={item}>{item}</li>
@@ -531,7 +619,7 @@ function EventsPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Support"
             title="What families should understand before they pay"
-            intro="This content belongs on its own page, not buried near the bottom of a generic landing page."
+            intro="Families deserve this information before checkout begins, not after they have already committed."
           />
           <div className="card-grid card-grid-three">
             {eventsPage.supportCards.map((item) => (
@@ -554,6 +642,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
         eyebrow={tournamentPage.eyebrow}
         title={tournamentPage.title}
         intro={tournamentPage.intro}
+        portraitCaption="Tournament mornings should end with real energy, earned confidence, and memorable moments for players."
         actions={
           <>
             <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
@@ -586,7 +675,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Sections"
             title="Two divisions, explained clearly"
-            intro="The event page should make section choice easier before the parent reaches the form."
+            intro="Families should understand section fit before they start the registration form."
           />
           <div className="card-grid card-grid-two">
             {sectionOptions.map((item) => (
@@ -610,7 +699,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Tournament morning"
             title="A Saturday flow that is easy for families to follow"
-            intro="The event page now reads like an organized schedule rather than a loose collection of notes."
+            intro="The schedule is designed to feel organized, focused, and manageable for players and parents."
           />
           <div className="card-grid card-grid-two">
             {scheduleItems.map((item) => (
@@ -665,7 +754,12 @@ function TournamentDetailPage({ currentPath, navigate }) {
 function FaqPage() {
   return (
     <>
-      <PageHero eyebrow={faqPage.eyebrow} title={faqPage.title} intro={faqPage.intro} />
+      <PageHero
+        eyebrow={faqPage.eyebrow}
+        title={faqPage.title}
+        intro={faqPage.intro}
+        portraitCaption="Parents ask better questions when the event already feels thoughtful, organized, and player-centered."
+      />
 
       <section className="page-section">
         <div className="shell faq-stack">
@@ -684,7 +778,12 @@ function FaqPage() {
 function ContactPage({ contactState, contactSubmitState, updateContactField, handleContactSubmit }) {
   return (
     <>
-      <PageHero eyebrow={contactPage.eyebrow} title={contactPage.title} intro={contactPage.intro} />
+      <PageHero
+        eyebrow={contactPage.eyebrow}
+        title={contactPage.title}
+        intro={contactPage.intro}
+        portraitCaption="Quick, direct support helps families feel ready before registration and before tournament day."
+      />
 
       <section className="page-section">
         <div className="shell">
@@ -730,6 +829,7 @@ function RegisterPage({
         eyebrow={registerPage.eyebrow}
         title={registerPage.title}
         intro={registerPage.intro}
+        portraitCaption="The registration flow should feel just as calm and clear as the event itself."
         actions={
           <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
             Need help before paying?

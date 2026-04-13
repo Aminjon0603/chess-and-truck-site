@@ -25,3 +25,6 @@ dist-ssr
 
 .vercel
 tmp
+*.tmp.jpg
+src/assets/champions-trophy.jpg
+src/assets/champions-trophy.jpg.tmp.jpg
