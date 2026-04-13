@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
   carouselSlides,
@@ -9,16 +9,20 @@ import {
   faqItems,
   faqPage,
   featuredTournament,
+  footerLegalLinks,
   heroStats,
   homePage,
   masterTrainingDojo,
   navigationItems,
   policyItems,
+  privacyPage,
   registerPage,
+  routeMeta,
   scheduleItems,
   sectionOptions,
   serviceLevels,
   siteBrand,
+  termsPage,
   tournamentPage,
   upcomingTournaments,
 } from "./siteData";
@@ -26,6 +30,9 @@ import brandLogo from "./assets/chess-truck-logo.svg";
 import championsTrophy from "./assets/champions-trophy-optimized.jpg";
 import dojoMark from "./assets/dojo-mark.svg";
 import trophyBadge from "./assets/trophy-badge.svg";
+import { validateContactFields, validateRegistrationFields } from "./lib/validation.js";
+
+const REGISTRATION_DRAFT_KEY = "ct-registration-draft-v2";
 
 const registrationInitialState = {
   firstName: "",
@@ -47,6 +54,7 @@ const registrationInitialState = {
   emergencyName: "",
   emergencyPhone: "",
   medicalInfo: "",
+  website: "",
 };
 
 const contactInitialState = {
@@ -54,6 +62,7 @@ const contactInitialState = {
   email: "",
   phone: "",
   message: "",
+  website: "",
 };
 
 const knownRoutes = new Set([
@@ -64,17 +73,9 @@ const knownRoutes = new Set([
   "/faq",
   "/contact",
   "/register",
+  "/terms",
+  "/privacy",
 ]);
-
-const pageTitles = {
-  "/": `${siteBrand.name} | ${siteBrand.tagline}`,
-  "/about": `About | ${siteBrand.name}`,
-  "/events": `Events | ${siteBrand.name}`,
-  "/events/chess-and-truck-tournament": `${featuredTournament.title} | ${siteBrand.name}`,
-  "/faq": `FAQ | ${siteBrand.name}`,
-  "/contact": `Contact | ${siteBrand.name}`,
-  "/register": `Register | ${siteBrand.name}`,
-};
 
 const formatCurrency = (amount) =>
   new Intl.NumberFormat("en-US", {
@@ -82,14 +83,6 @@ const formatCurrency = (amount) =>
     currency: "USD",
     maximumFractionDigits: 0,
   }).format(amount);
-
-const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-const splitAdditionalEmails = (value) =>
-  value
-    .split(/[,\n;]+/)
-    .map((item) => item.trim())
-    .filter(Boolean);
 
 const normalizePath = (path) => {
   if (!path || path === "/") {
@@ -103,6 +96,14 @@ const readLocation = () => ({
   pathname: normalizePath(window.location.pathname),
   search: window.location.search,
 });
+
+const updateMetaTag = (selector, content) => {
+  const element = document.querySelector(selector);
+
+  if (element && content) {
+    element.setAttribute("content", content);
+  }
+};
 
 function AppLink({ to, navigate, children, className = "", currentPath, ...rest }) {
   const isActive = normalizePath(to) === currentPath;
@@ -278,7 +279,7 @@ function UpcomingTournamentList({ currentPath, navigate, compact = false }) {
               >
                 Book
               </AppLink>
-              <strong>{item.spotsLeft}</strong>
+              <strong>{item.availabilityLabel}</strong>
             </div>
           </div>
         </article>
@@ -372,6 +373,19 @@ function SiteFooter({ currentPath, navigate }) {
                   Register
                 </AppLink>
               </div>
+              <div className="footer-legal-links">
+                {footerLegalLinks.map((item) => (
+                  <AppLink
+                    key={item.path}
+                    to={item.path}
+                    navigate={navigate}
+                    currentPath={currentPath}
+                    className="footer-link footer-link-legal"
+                  >
+                    {item.label}
+                  </AppLink>
+                ))}
+              </div>
             </div>
 
             <div className="footer-column">
@@ -414,6 +428,25 @@ function SiteFooter({ currentPath, navigate }) {
         </div>
       </div>
     </footer>
+  );
+}
+
+function LegalPage({ eyebrow, title, intro, sections }) {
+  return (
+    <>
+      <PageHero eyebrow={eyebrow} title={title} intro={intro} />
+
+      <section className="page-section">
+        <div className="shell legal-stack">
+          {sections.map((item) => (
+            <article className="surface" key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -464,6 +497,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           value={contactState.name}
           onChange={updateContactField}
           placeholder="Your name"
+          autoComplete="name"
           required
         />
       </label>
@@ -476,6 +510,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           value={contactState.email}
           onChange={updateContactField}
           placeholder="you@example.com"
+          autoComplete="email"
           required
         />
       </label>
@@ -484,9 +519,23 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
         <span>Phone</span>
         <input
           name="phone"
+          type="tel"
           value={contactState.phone}
           onChange={updateContactField}
           placeholder="+1 ..."
+          autoComplete="tel"
+          inputMode="tel"
+        />
+      </label>
+
+      <label className="field honeypot-field" aria-hidden="true" tabIndex="-1">
+        <span>Website</span>
+        <input
+          name="website"
+          value={contactState.website}
+          onChange={updateContactField}
+          autoComplete="off"
+          tabIndex="-1"
         />
       </label>
 
@@ -498,6 +547,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           onChange={updateContactField}
           rows="5"
           placeholder="Tell us what you want to confirm before registering."
+          autoComplete="off"
           required
         />
       </label>
@@ -1021,6 +1071,7 @@ function RegisterPage({
   handleRegistrationSubmit,
   paymentState,
   selectedServiceLevel,
+  clearRegistrationDraft,
 }) {
   return (
     <>
@@ -1051,7 +1102,7 @@ function RegisterPage({
               </strong>
               <p>
                 {paymentState.status === "success" && paymentState.details
-                  ? `Payment confirmed for ${paymentState.details.playerName}. A Stripe receipt was sent to ${paymentState.details.customerEmail}.`
+                  ? `Payment confirmed for ${paymentState.details.playerName}. Reference ${paymentState.details.reference}. A Stripe receipt was sent to ${paymentState.details.customerEmail}.`
                   : paymentState.status === "loading"
                     ? "Preparing secure Stripe checkout..."
                     : paymentState.message}
@@ -1068,6 +1119,7 @@ function RegisterPage({
                   Please provide player and parent information. The tournament section and service
                   level are selected inside this form before payment.
                 </p>
+                <small className="status-copy">{registerPage.draftNote}</small>
               </div>
 
               <section className="form-section">
@@ -1082,25 +1134,52 @@ function RegisterPage({
                 <div className="field-grid">
                   <label className="field">
                     <span>First Name *</span>
-                    <input name="firstName" value={registrationState.firstName} onChange={updateRegistrationField} placeholder="First name" />
+                    <input
+                      name="firstName"
+                      value={registrationState.firstName}
+                      onChange={updateRegistrationField}
+                      placeholder="First name"
+                      autoComplete="given-name"
+                    />
                     {registrationErrors.firstName ? <small className="field-error">{registrationErrors.firstName}</small> : null}
                   </label>
 
                   <label className="field">
                     <span>Last Name *</span>
-                    <input name="lastName" value={registrationState.lastName} onChange={updateRegistrationField} placeholder="Last name" />
+                    <input
+                      name="lastName"
+                      value={registrationState.lastName}
+                      onChange={updateRegistrationField}
+                      placeholder="Last name"
+                      autoComplete="family-name"
+                    />
                     {registrationErrors.lastName ? <small className="field-error">{registrationErrors.lastName}</small> : null}
                   </label>
 
                   <label className="field">
                     <span>Phone *</span>
-                    <input name="phone" value={registrationState.phone} onChange={updateRegistrationField} placeholder="+1 ..." />
+                    <input
+                      name="phone"
+                      type="tel"
+                      value={registrationState.phone}
+                      onChange={updateRegistrationField}
+                      placeholder="+1 ..."
+                      autoComplete="tel"
+                      inputMode="tel"
+                    />
                     {registrationErrors.phone ? <small className="field-error">{registrationErrors.phone}</small> : null}
                   </label>
 
                   <label className="field">
                     <span>Email *</span>
-                    <input name="email" type="email" value={registrationState.email} onChange={updateRegistrationField} placeholder="family@example.com" />
+                    <input
+                      name="email"
+                      type="email"
+                      value={registrationState.email}
+                      onChange={updateRegistrationField}
+                      placeholder="family@example.com"
+                      autoComplete="email"
+                    />
                     {registrationErrors.email ? <small className="field-error">{registrationErrors.email}</small> : null}
                   </label>
 
@@ -1111,8 +1190,20 @@ function RegisterPage({
                       value={registrationState.additionalEmails}
                       onChange={updateRegistrationField}
                       placeholder="Add any other addresses that should receive confirmations"
+                      autoComplete="off"
                     />
                     {registrationErrors.additionalEmails ? <small className="field-error">{registrationErrors.additionalEmails}</small> : null}
+                  </label>
+
+                  <label className="field field-span-2 honeypot-field" aria-hidden="true" tabIndex="-1">
+                    <span>Website</span>
+                    <input
+                      name="website"
+                      value={registrationState.website}
+                      onChange={updateRegistrationField}
+                      autoComplete="off"
+                      tabIndex="-1"
+                    />
                   </label>
 
                   <label className="checkbox-field field-span-2">
@@ -1123,9 +1214,16 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                     />
                     <span>
-                      I accept the Terms of Service and Privacy Policy and agree to receive
-                      transactional or informational SMS communications related to reminders,
-                      customer care, and registration follow-up.
+                      I accept the{" "}
+                      <AppLink to="/terms" navigate={navigate} currentPath={currentPath} className="inline-link">
+                        Terms of Service
+                      </AppLink>{" "}
+                      and{" "}
+                      <AppLink to="/privacy" navigate={navigate} currentPath={currentPath} className="inline-link">
+                        Privacy Policy
+                      </AppLink>{" "}
+                      and agree to receive transactional or informational SMS communications related
+                      to reminders, customer care, and registration follow-up.
                     </span>
                   </label>
                   {registrationErrors.acceptSms ? <small className="field-error field-span-2">{registrationErrors.acceptSms}</small> : null}
@@ -1144,13 +1242,25 @@ function RegisterPage({
                 <div className="field-grid">
                   <label className="field">
                     <span>Player First Name *</span>
-                    <input name="playerFirstName" value={registrationState.playerFirstName} onChange={updateRegistrationField} placeholder="Player first name" />
+                    <input
+                      name="playerFirstName"
+                      value={registrationState.playerFirstName}
+                      onChange={updateRegistrationField}
+                      placeholder="Player first name"
+                      autoComplete="given-name"
+                    />
                     {registrationErrors.playerFirstName ? <small className="field-error">{registrationErrors.playerFirstName}</small> : null}
                   </label>
 
                   <label className="field">
                     <span>Player Last Name *</span>
-                    <input name="playerLastName" value={registrationState.playerLastName} onChange={updateRegistrationField} placeholder="Player last name" />
+                    <input
+                      name="playerLastName"
+                      value={registrationState.playerLastName}
+                      onChange={updateRegistrationField}
+                      placeholder="Player last name"
+                      autoComplete="family-name"
+                    />
                     {registrationErrors.playerLastName ? <small className="field-error">{registrationErrors.playerLastName}</small> : null}
                   </label>
 
@@ -1195,6 +1305,7 @@ function RegisterPage({
                       value={registrationState.uscfId}
                       onChange={updateRegistrationField}
                       placeholder="Required for the Open section"
+                      autoComplete="off"
                     />
                     <small className="field-note">
                       Players in the Open section need an active USCF membership. Leave this blank
@@ -1221,19 +1332,40 @@ function RegisterPage({
                 <div className="field-grid">
                   <label className="field">
                     <span>Parent / Guardian Name *</span>
-                    <input name="parentName" value={registrationState.parentName} onChange={updateRegistrationField} placeholder="Parent or guardian name" />
+                    <input
+                      name="parentName"
+                      value={registrationState.parentName}
+                      onChange={updateRegistrationField}
+                      placeholder="Parent or guardian name"
+                      autoComplete="name"
+                    />
                     {registrationErrors.parentName ? <small className="field-error">{registrationErrors.parentName}</small> : null}
                   </label>
 
                   <label className="field">
                     <span>Parent Email *</span>
-                    <input name="parentEmail" type="email" value={registrationState.parentEmail} onChange={updateRegistrationField} placeholder="parent@example.com" />
+                    <input
+                      name="parentEmail"
+                      type="email"
+                      value={registrationState.parentEmail}
+                      onChange={updateRegistrationField}
+                      placeholder="parent@example.com"
+                      autoComplete="email"
+                    />
                     {registrationErrors.parentEmail ? <small className="field-error">{registrationErrors.parentEmail}</small> : null}
                   </label>
 
                   <label className="field">
                     <span>Parent Phone *</span>
-                    <input name="parentPhone" value={registrationState.parentPhone} onChange={updateRegistrationField} placeholder="+1 ..." />
+                    <input
+                      name="parentPhone"
+                      type="tel"
+                      value={registrationState.parentPhone}
+                      onChange={updateRegistrationField}
+                      placeholder="+1 ..."
+                      autoComplete="tel"
+                      inputMode="tel"
+                    />
                     {registrationErrors.parentPhone ? <small className="field-error">{registrationErrors.parentPhone}</small> : null}
                   </label>
                 </div>
@@ -1251,13 +1383,27 @@ function RegisterPage({
                 <div className="field-grid">
                   <label className="field">
                     <span>Emergency Contact Name *</span>
-                    <input name="emergencyName" value={registrationState.emergencyName} onChange={updateRegistrationField} placeholder="Emergency contact name" />
+                    <input
+                      name="emergencyName"
+                      value={registrationState.emergencyName}
+                      onChange={updateRegistrationField}
+                      placeholder="Emergency contact name"
+                      autoComplete="name"
+                    />
                     {registrationErrors.emergencyName ? <small className="field-error">{registrationErrors.emergencyName}</small> : null}
                   </label>
 
                   <label className="field">
                     <span>Emergency Contact Phone *</span>
-                    <input name="emergencyPhone" value={registrationState.emergencyPhone} onChange={updateRegistrationField} placeholder="+1 ..." />
+                    <input
+                      name="emergencyPhone"
+                      type="tel"
+                      value={registrationState.emergencyPhone}
+                      onChange={updateRegistrationField}
+                      placeholder="+1 ..."
+                      autoComplete="tel"
+                      inputMode="tel"
+                    />
                     {registrationErrors.emergencyPhone ? <small className="field-error">{registrationErrors.emergencyPhone}</small> : null}
                   </label>
                 </div>
@@ -1331,6 +1477,9 @@ function RegisterPage({
                     <strong>{selectedServiceLevel ? formatCurrency(selectedServiceLevel.amount) : "$0"}</strong>
                   </div>
                 </div>
+                <button type="button" className="btn btn-secondary btn-full" onClick={clearRegistrationDraft}>
+                  Clear Saved Draft
+                </button>
               </article>
 
               <article className="surface surface-dark sidebar-card">
@@ -1390,6 +1539,8 @@ function ChessTruckApp() {
   const [paymentState, setPaymentState] = useState({ status: "idle", message: "", details: null });
   const [contactState, setContactState] = useState(contactInitialState);
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
+  const [hasLoadedRegistrationDraft, setHasLoadedRegistrationDraft] = useState(false);
+  const mainRef = useRef(null);
   const currentPath = route.pathname;
 
   const selectedServiceLevel = useMemo(
@@ -1408,7 +1559,70 @@ function ChessTruckApp() {
   }, []);
 
   useEffect(() => {
-    document.title = pageTitles[currentPath] || `${siteBrand.name} | ${siteBrand.tagline}`;
+    try {
+      const storedDraft = window.localStorage.getItem(REGISTRATION_DRAFT_KEY);
+
+      if (!storedDraft) {
+        setHasLoadedRegistrationDraft(true);
+        return;
+      }
+
+      const parsedDraft = JSON.parse(storedDraft);
+
+      if (!parsedDraft || typeof parsedDraft !== "object") {
+        return;
+      }
+
+      setRegistrationState((current) => ({
+        ...current,
+        ...Object.fromEntries(
+          Object.keys(registrationInitialState).map((key) => [key, parsedDraft[key] ?? current[key]])
+        ),
+      }));
+    } catch {
+      // Ignore malformed local drafts.
+    } finally {
+      setHasLoadedRegistrationDraft(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedRegistrationDraft) {
+      return;
+    }
+
+    const hasMeaningfulDraft = Object.entries(registrationState).some(([key, value]) => {
+      if (key === "acceptSms") {
+        return value === true;
+      }
+
+      return typeof value === "string" ? value.trim().length > 0 : Boolean(value);
+    });
+
+    if (!hasMeaningfulDraft) {
+      window.localStorage.removeItem(REGISTRATION_DRAFT_KEY);
+      return;
+    }
+
+    window.localStorage.setItem(REGISTRATION_DRAFT_KEY, JSON.stringify(registrationState));
+  }, [hasLoadedRegistrationDraft, registrationState]);
+
+  useEffect(() => {
+    const meta = routeMeta[currentPath] || routeMeta["/"];
+    document.title = meta.title;
+    updateMetaTag("meta[name='description']", meta.description);
+    updateMetaTag("meta[property='og:title']", meta.title);
+    updateMetaTag("meta[property='og:description']", meta.description);
+    updateMetaTag("meta[name='twitter:title']", meta.title);
+    updateMetaTag("meta[name='twitter:description']", meta.description);
+  }, [currentPath]);
+
+  useEffect(() => {
+    const focusTimer = window.requestAnimationFrame(() => {
+      mainRef.current?.focus();
+    });
+
+    return () => window.cancelAnimationFrame(focusTimer);
   }, [currentPath]);
 
   useEffect(() => {
@@ -1461,6 +1675,7 @@ function ChessTruckApp() {
           });
           setRegistrationState(registrationInitialState);
           setRegistrationErrors({});
+          window.localStorage.removeItem(REGISTRATION_DRAFT_KEY);
         })
         .catch((error) => {
           setPaymentState({
@@ -1532,38 +1747,7 @@ function ChessTruckApp() {
   };
 
   const validateRegistration = () => {
-    const errors = {};
-    const extraEmails = splitAdditionalEmails(registrationState.additionalEmails);
-
-    if (!registrationState.firstName.trim()) errors.firstName = "First name is required.";
-    if (!registrationState.lastName.trim()) errors.lastName = "Last name is required.";
-    if (!registrationState.phone.trim()) errors.phone = "Phone is required.";
-    if (!registrationState.email.trim()) errors.email = "Email is required.";
-    if (registrationState.email && !isValidEmail(registrationState.email.trim())) {
-      errors.email = "Enter a valid email address.";
-    }
-    if (extraEmails.some((email) => !isValidEmail(email))) {
-      errors.additionalEmails = "One or more additional email addresses are invalid.";
-    }
-    if (!registrationState.acceptSms) errors.acceptSms = "You must accept the terms.";
-    if (!registrationState.playerFirstName.trim()) errors.playerFirstName = "Required.";
-    if (!registrationState.playerLastName.trim()) errors.playerLastName = "Required.";
-    if (!registrationState.playerGrade.trim()) errors.playerGrade = "Required.";
-    if (!registrationState.section) errors.section = "Choose a section.";
-    if (!registrationState.serviceLevel) errors.serviceLevel = "Choose a service level.";
-    if (registrationState.section === "Open" && !registrationState.uscfId.trim()) {
-      errors.uscfId = "USCF ID is required for the Open section.";
-    }
-    if (!registrationState.parentName.trim()) errors.parentName = "Required.";
-    if (!registrationState.parentEmail.trim()) errors.parentEmail = "Required.";
-    if (registrationState.parentEmail && !isValidEmail(registrationState.parentEmail.trim())) {
-      errors.parentEmail = "Enter a valid parent email address.";
-    }
-    if (!registrationState.parentPhone.trim()) errors.parentPhone = "Required.";
-    if (!registrationState.emergencyName.trim()) errors.emergencyName = "Required.";
-    if (!registrationState.emergencyPhone.trim()) errors.emergencyPhone = "Required.";
-    if (!registrationState.medicalInfo.trim()) errors.medicalInfo = "Medical information is required.";
-
+    const errors = validateRegistrationFields(registrationState);
     setRegistrationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -1592,6 +1776,9 @@ function ChessTruckApp() {
       const payload = await response.json().catch(() => ({}));
 
       if (!response.ok || !payload.url) {
+        if (payload.fieldErrors) {
+          setRegistrationErrors(payload.fieldErrors);
+        }
         throw new Error(payload.error || "Stripe checkout could not be created.");
       }
 
@@ -1608,6 +1795,16 @@ function ChessTruckApp() {
 
   const handleContactSubmit = async (event) => {
     event.preventDefault();
+    const contactErrors = validateContactFields(contactState);
+
+    if (Object.keys(contactErrors).length > 0) {
+      setContactSubmitState({
+        status: "error",
+        message: Object.values(contactErrors)[0] || "Please review the contact form and try again.",
+      });
+      return;
+    }
+
     setContactSubmitState({ status: "loading", message: "" });
 
     try {
@@ -1634,6 +1831,13 @@ function ChessTruckApp() {
     }
   };
 
+  const clearRegistrationDraft = () => {
+    window.localStorage.removeItem(REGISTRATION_DRAFT_KEY);
+    setRegistrationState(registrationInitialState);
+    setRegistrationErrors({});
+    setPaymentState({ status: "idle", message: "", details: null });
+  };
+
   const pageContent = (() => {
     switch (currentPath) {
       case "/":
@@ -1646,6 +1850,10 @@ function ChessTruckApp() {
         return <TournamentDetailPage currentPath={currentPath} navigate={navigate} />;
       case "/faq":
         return <FaqPage />;
+      case "/terms":
+        return <LegalPage {...termsPage} />;
+      case "/privacy":
+        return <LegalPage {...privacyPage} />;
       case "/contact":
         return (
           <ContactPage
@@ -1666,6 +1874,7 @@ function ChessTruckApp() {
             handleRegistrationSubmit={handleRegistrationSubmit}
             paymentState={paymentState}
             selectedServiceLevel={selectedServiceLevel}
+            clearRegistrationDraft={clearRegistrationDraft}
           />
         );
       default:
@@ -1675,6 +1884,9 @@ function ChessTruckApp() {
 
   return (
     <div className="app-shell">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <div className="page-aura page-aura-left" />
       <div className="page-aura page-aura-right" />
 
@@ -1710,7 +1922,9 @@ function ChessTruckApp() {
         </div>
       </header>
 
-      <main>{pageContent}</main>
+      <main id="main-content" ref={mainRef} tabIndex="-1">
+        {pageContent}
+      </main>
 
       <SiteFooter currentPath={currentPath} navigate={navigate} />
     </div>

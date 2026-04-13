@@ -1,10 +1,10 @@
-/* global process */
-
-const fallbackRecipients = [
-  "ikrom.chess@gmail.com",
-  "alexnorth615@gmail.com",
-  "andrea.lamanna1@gmail.com",
-];
+import { applyRateLimit } from "./_lib/rate-limit.js";
+import {
+  getNotificationRecipients,
+  getResendConfig,
+  sendResendEmail,
+} from "./_lib/resend.js";
+import { validateContactFields } from "../src/lib/validation.js";
 
 const sanitize = (value, limit = 2000) => {
   if (typeof value !== "string") {
@@ -73,6 +73,16 @@ export default {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
     }
 
+    const limited = applyRateLimit(request, "contact", {
+      limit: 5,
+      windowMs: 15 * 60 * 1000,
+      message: "Too many messages were sent from this network. Please wait a little and try again.",
+    });
+
+    if (limited) {
+      return limited;
+    }
+
     let payload;
 
     try {
@@ -86,22 +96,29 @@ export default {
       email: sanitize(payload.email, 180),
       phone: sanitize(payload.phone, 80),
       message: sanitize(payload.message, 4000),
+      website: sanitize(payload.website, 120),
     };
 
-    if (!data.name || !data.email || !data.message) {
+    if (data.website) {
       return Response.json(
-        { error: "Please fill in your name, email, and message." },
+        {
+          message: "Thanks. Your message was sent to the tournament team.",
+        },
+        { status: 200 }
+      );
+    }
+
+    const errors = validateContactFields(data);
+
+    if (Object.keys(errors).length > 0) {
+      return Response.json(
+        { error: Object.values(errors)[0] || "Please fill in your name, email, and message." },
         { status: 400 }
       );
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.CONTACT_FROM_EMAIL;
-    const toEmails = (process.env.CONTACT_TO_EMAILS || "")
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
-    const recipients = toEmails.length ? toEmails : fallbackRecipients;
+    const { apiKey, fromEmail } = getResendConfig();
+    const recipients = getNotificationRecipients();
 
     if (!apiKey || !fromEmail) {
       return Response.json(
@@ -113,23 +130,12 @@ export default {
       );
     }
 
-    const resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "User-Agent": "chessandtruck.com/1.0",
-      },
-      body: JSON.stringify({
-        from: fromEmail,
-        to: recipients,
-        subject: `New CHESS AND TRUCK inquiry - ${data.name}`,
-        html: buildHtml(data),
-        text: buildText(data),
-        headers: {
-          "Reply-To": data.email,
-        },
-      }),
+    const resendResponse = await sendResendEmail({
+      to: recipients,
+      subject: `New CHESS AND TRUCK inquiry - ${data.name}`,
+      html: buildHtml(data),
+      text: buildText(data),
+      replyTo: data.email,
     });
 
     if (!resendResponse.ok) {

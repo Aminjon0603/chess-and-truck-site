@@ -1,10 +1,7 @@
-/* global process */
-
-const fallbackRecipients = [
-  "ikrom.chess@gmail.com",
-  "alexnorth615@gmail.com",
-  "andrea.lamanna1@gmail.com",
-];
+import crypto from "node:crypto";
+import { applyRateLimit } from "./_lib/rate-limit.js";
+import { getNotificationRecipients, sendResendEmail } from "./_lib/resend.js";
+import { validateRegistrationFields } from "../src/lib/validation.js";
 
 const serviceLevels = {
   entry: { label: "Tournament Entry", amount: 5500 },
@@ -19,12 +16,6 @@ const sanitize = (value, limit = 200) => {
   return value.trim().replace(/\r\n/g, "\n").slice(0, limit);
 };
 
-const splitAdditionalEmails = (value) =>
-  value
-    .split(/[,\n;]+/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-
 const getBaseUrl = (request) => {
   const url = new URL(request.url);
   const forwardedHost = request.headers.get("x-forwarded-host");
@@ -37,23 +28,45 @@ const getBaseUrl = (request) => {
   return request.headers.get("origin") || url.origin;
 };
 
-const buildMetadata = (data, serviceLevel) => ({
-  contact_name: `${data.firstName} ${data.lastName}`.trim().slice(0, 120),
-  contact_email: data.email.slice(0, 180),
+const buildRegistrationReference = () => {
+  const dateCode = new Date().toISOString().slice(0, 10).replaceAll("-", "");
+  return `CT-${dateCode}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+};
+
+const buildMetadata = (data, serviceLevel, registrationReference) => ({
+  registration_reference: registrationReference,
   player_name: `${data.playerFirstName} ${data.playerLastName}`.trim().slice(0, 120),
   section: data.section.slice(0, 32),
   service_level: serviceLevel.label.slice(0, 120),
-  parent_name: data.parentName.slice(0, 120),
   parent_email: data.parentEmail.slice(0, 180),
-  parent_phone: data.parentPhone.slice(0, 80),
-  emergency_name: data.emergencyName.slice(0, 120),
-  emergency_phone: data.emergencyPhone.slice(0, 80),
-  grade: data.playerGrade.slice(0, 32),
-  school_name: data.schoolName.slice(0, 120),
-  uscf_id: data.uscfId.slice(0, 60),
-  additional_emails: data.additionalEmails.slice(0, 300),
-  medical_info: data.medicalInfo.slice(0, 450),
 });
+
+const buildInternalEmailText = (data, serviceLevel, registrationReference) =>
+  [
+    "A family completed the tournament form and was sent to Stripe checkout.",
+    "",
+    `Reference: ${registrationReference}`,
+    `Primary contact: ${data.firstName} ${data.lastName}`,
+    `Primary email: ${data.email}`,
+    `Primary phone: ${data.phone}`,
+    `Additional emails: ${data.additionalEmails || "-"}`,
+    "",
+    `Player: ${data.playerFirstName} ${data.playerLastName}`,
+    `Grade: ${data.playerGrade}`,
+    `School: ${data.schoolName || "-"}`,
+    `Section: ${data.section}`,
+    `Service level: ${serviceLevel.label}`,
+    `USCF ID: ${data.uscfId || "-"}`,
+    "",
+    `Parent / Guardian: ${data.parentName}`,
+    `Parent email: ${data.parentEmail}`,
+    `Parent phone: ${data.parentPhone}`,
+    "",
+    `Emergency contact: ${data.emergencyName} (${data.emergencyPhone})`,
+    `Medical information: ${data.medicalInfo}`,
+    "",
+    "Payment confirmation should be checked in Stripe or through the webhook notification.",
+  ].join("\n");
 
 export const runtime = "nodejs";
 
@@ -61,6 +74,16 @@ export default {
   async fetch(request) {
     if (request.method !== "POST") {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
+    }
+
+    const limited = applyRateLimit(request, "registration", {
+      limit: 6,
+      windowMs: 15 * 60 * 1000,
+      message: "Too many registration attempts were sent from this network. Please try again shortly.",
+    });
+
+    if (limited) {
+      return limited;
     }
 
     let payload;
@@ -76,7 +99,7 @@ export default {
       lastName: sanitize(payload.lastName, 120),
       phone: sanitize(payload.phone, 80),
       email: sanitize(payload.email, 180),
-      additionalEmails: splitAdditionalEmails(sanitize(payload.additionalEmails, 400)).join(", "),
+      additionalEmails: sanitize(payload.additionalEmails, 400),
       acceptSms: Boolean(payload.acceptSms),
       playerFirstName: sanitize(payload.playerFirstName, 120),
       playerLastName: sanitize(payload.playerLastName, 120),
@@ -91,41 +114,23 @@ export default {
       emergencyName: sanitize(payload.emergencyName, 120),
       emergencyPhone: sanitize(payload.emergencyPhone, 80),
       medicalInfo: sanitize(payload.medicalInfo, 800),
+      website: sanitize(payload.website, 120),
     };
 
-    if (
-      !data.firstName ||
-      !data.lastName ||
-      !data.phone ||
-      !data.email ||
-      !data.playerFirstName ||
-      !data.playerLastName ||
-      !data.playerGrade ||
-      !data.section ||
-      !data.serviceLevel ||
-      !data.parentName ||
-      !data.parentEmail ||
-      !data.parentPhone ||
-      !data.emergencyName ||
-      !data.emergencyPhone ||
-      !data.medicalInfo
-    ) {
-      return Response.json(
-        { error: "Please complete all required registration fields before payment." },
-        { status: 400 }
-      );
+    if (data.website) {
+      return Response.json({ error: "Request rejected." }, { status: 400 });
     }
 
-    if (!data.acceptSms) {
-      return Response.json(
-        { error: "You must accept the terms before continuing to payment." },
-        { status: 400 }
-      );
-    }
+    const errors = validateRegistrationFields(data);
 
-    if (data.section === "Open" && !data.uscfId) {
+    if (Object.keys(errors).length > 0) {
       return Response.json(
-        { error: "USCF ID is required for players registering in the Open section." },
+        {
+          error:
+            Object.values(errors)[0] ||
+            "Please complete all required registration fields before payment.",
+          fieldErrors: errors,
+        },
         { status: 400 }
       );
     }
@@ -148,40 +153,15 @@ export default {
       );
     }
 
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.CONTACT_FROM_EMAIL;
-    const toEmails = (process.env.CONTACT_TO_EMAILS || "")
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
-    const recipients = toEmails.length ? toEmails : fallbackRecipients;
+    const registrationReference = buildRegistrationReference();
+    const internalRecipients = getNotificationRecipients();
 
-    if (resendApiKey && fromEmail) {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-          "User-Agent": "chessandtruck.com/1.0",
-        },
-        body: JSON.stringify({
-          from: fromEmail,
-          to: recipients,
-          subject: `Registration started - ${data.playerFirstName} ${data.playerLastName}`,
-          text: [
-            "A family completed the tournament form and was sent to Stripe checkout.",
-            `Player: ${data.playerFirstName} ${data.playerLastName}`,
-            `Section: ${data.section}`,
-            `Service level: ${serviceLevel.label}`,
-            `Parent email: ${data.parentEmail}`,
-            "Payment confirmation should be checked in Stripe.",
-          ].join("\n"),
-          headers: {
-            "Reply-To": data.parentEmail || data.email,
-          },
-        }),
-      }).catch(() => null);
-    }
+    await sendResendEmail({
+      to: internalRecipients,
+      subject: `Registration started - ${data.playerFirstName} ${data.playerLastName} (${registrationReference})`,
+      text: buildInternalEmailText(data, serviceLevel, registrationReference),
+      replyTo: data.parentEmail || data.email,
+    }).catch(() => null);
 
     const params = new URLSearchParams();
     params.set("mode", "payment");
@@ -191,6 +171,7 @@ export default {
     );
     params.set("cancel_url", `${getBaseUrl(request)}/register?payment=cancel`);
     params.set("customer_email", data.parentEmail || data.email);
+    params.set("client_reference_id", registrationReference);
     params.set("allow_promotion_codes", "true");
     params.set("billing_address_collection", "auto");
     params.set("phone_number_collection[enabled]", "true");
@@ -203,11 +184,13 @@ export default {
       `${serviceLevel.label} | ${data.section} section`
     );
 
-    Object.entries(buildMetadata(data, serviceLevel)).forEach(([key, value]) => {
-      if (value) {
-        params.set(`metadata[${key}]`, value);
+    Object.entries(buildMetadata(data, serviceLevel, registrationReference)).forEach(
+      ([key, value]) => {
+        if (value) {
+          params.set(`metadata[${key}]`, value);
+        }
       }
-    });
+    );
 
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
@@ -231,6 +214,12 @@ export default {
       );
     }
 
-    return Response.json({ url: stripePayload.url }, { status: 200 });
+    return Response.json(
+      {
+        url: stripePayload.url,
+        reference: registrationReference,
+      },
+      { status: 200 }
+    );
   },
 };

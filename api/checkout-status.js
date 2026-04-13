@@ -1,5 +1,3 @@
-/* global process */
-
 const sanitize = (value, limit = 180) => {
   if (typeof value !== "string") {
     return "";
@@ -78,6 +76,8 @@ export default {
         status: "paid",
         message: "Payment confirmed successfully.",
         customerEmail: stripePayload.customer_details?.email || stripePayload.customer_email || "",
+        reference:
+          metadata.registration_reference || stripePayload.client_reference_id || stripePayload.id,
         playerName: metadata.player_name || "the registered player",
         section: metadata.section || "",
         serviceLevel: metadata.service_level || "",

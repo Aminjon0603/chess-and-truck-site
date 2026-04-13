@@ -1,0 +1,29 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#F4F7F1"/>
+  <circle cx="120" cy="86" r="170" fill="#D2A444" fill-opacity="0.18"/>
+  <circle cx="1038" cy="124" r="190" fill="#2E6B57" fill-opacity="0.16"/>
+  <rect x="70" y="76" width="1060" height="478" rx="38" fill="url(#panel)"/>
+  <rect x="110" y="116" width="118" height="118" rx="59" fill="url(#mark)"/>
+  <path d="M151 176C166 188 178 193 191 193C204 193 216 188 231 176" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
+  <path d="M168 135H214V148H208V158C208 170 201 177 191 181C181 177 174 170 174 158V148H168V135Z" fill="#F7F4EA"/>
+  <path d="M162 149C152 150 148 158 148 166C148 175 154 181 163 183" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
+  <path d="M219 149C229 150 233 158 233 166C233 175 227 181 218 183" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
+  <path d="M176 151H206V162C206 173 199 180 191 183C183 180 176 173 176 162V151Z" fill="#E4BE5E"/>
+  <text x="264" y="164" fill="#F7F4EA" font-family="Sora, Arial, sans-serif" font-size="54" font-weight="700">CHESS AND TRUCK</text>
+  <text x="264" y="214" fill="#D2DFD6" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="600">New York City scholastic chess tournaments</text>
+  <text x="112" y="336" fill="#F7F4EA" font-family="Sora, Arial, sans-serif" font-size="64" font-weight="700">Open and Beginner divisions.</text>
+  <text x="112" y="410" fill="#DCE7E0" font-family="Manrope, Arial, sans-serif" font-size="34" font-weight="500">Clear registration. Direct family support. Secure Stripe checkout.</text>
+  <rect x="112" y="454" width="282" height="64" rx="32" fill="#D2A444"/>
+  <text x="154" y="496" fill="#183126" font-family="Sora, Arial, sans-serif" font-size="28" font-weight="700">Register Online</text>
+  <defs>
+    <linearGradient id="panel" x1="110" y1="96" x2="1090" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15382E"/>
+      <stop offset="1" stop-color="#244638"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="116" y1="118" x2="222" y2="226" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D4A33E"/>
+      <stop offset="0.5" stop-color="#7FA35A"/>
+      <stop offset="1" stop-color="#173C31"/>
+    </linearGradient>
+  </defs>
+</svg>

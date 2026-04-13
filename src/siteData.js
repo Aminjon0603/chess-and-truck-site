@@ -15,6 +15,54 @@ export const navigationItems = [
   { label: "Contact", path: "/contact" },
 ];
 
+export const routeMeta = {
+  "/": {
+    title: "CHESS AND TRUCK | NYC Scholastic Chess Tournaments",
+    description:
+      "Open and Beginner scholastic chess tournaments in New York City with direct family support, clear event details, and secure online registration.",
+  },
+  "/about": {
+    title: "About | CHESS AND TRUCK",
+    description:
+      "Learn how CHESS AND TRUCK structures New York City chess tournaments for ambitious players and families who want clarity before tournament day.",
+  },
+  "/events": {
+    title: "Events | CHESS AND TRUCK",
+    description:
+      "View upcoming CHESS AND TRUCK tournaments, event dates, division details, and the registration path for New York City families.",
+  },
+  "/events/chess-and-truck-tournament": {
+    title: "Chess & Truck Tournament | CHESS AND TRUCK",
+    description:
+      "See tournament format, schedule, sections, pricing, Master Training Dojo options, and registration details for the Chess & Truck Tournament.",
+  },
+  "/faq": {
+    title: "FAQ | CHESS AND TRUCK",
+    description:
+      "Get answers about USCF requirements, Open and Beginner sections, payment, medical details, and tournament support.",
+  },
+  "/contact": {
+    title: "Contact | CHESS AND TRUCK",
+    description:
+      "Reach the CHESS AND TRUCK tournament team by phone, WhatsApp, email, or the contact form before registration or tournament day.",
+  },
+  "/register": {
+    title: "Register | CHESS AND TRUCK",
+    description:
+      "Complete player, parent, emergency, and medical details first, then continue to secure Stripe checkout for CHESS AND TRUCK.",
+  },
+  "/terms": {
+    title: "Terms of Service | CHESS AND TRUCK",
+    description:
+      "Review tournament registration terms, payment terms, cancellations, transfers, and event participation rules for CHESS AND TRUCK.",
+  },
+  "/privacy": {
+    title: "Privacy Policy | CHESS AND TRUCK",
+    description:
+      "See how CHESS AND TRUCK uses registration, contact, and payment-related information for tournament operations and family communication.",
+  },
+};
+
 export const featuredTournament = {
   slug: "chess-and-truck-tournament",
   title: "Chess & Truck Tournament",
@@ -30,6 +78,11 @@ export const featuredTournament = {
   basePrice: 55,
   dojoPrice: 155,
 };
+
+export const footerLegalLinks = [
+  { label: "Terms of Service", path: "/terms" },
+  { label: "Privacy Policy", path: "/privacy" },
+];
 
 export const heroStats = [
   {
@@ -246,6 +299,7 @@ export const registerPage = {
   title: "Complete the form first, then continue to secure checkout",
   intro:
     "The registration form gathers player, parent, emergency, and medical details before sending the family to Stripe for payment.",
+  draftNote: "This form saves a local draft on this device while you work.",
   sidebarNotes: [
     "Open section players need an active USCF ID.",
     "Beginner section players do not need a USCF membership.",
@@ -321,7 +375,7 @@ export const upcomingTournaments = [
     meta: "3 hours @ $55.00",
     summary:
       "Open and Beginner sections. Saturday morning format designed to finish around lunch.",
-    spotsLeft: "71 spots left",
+    availabilityLabel: "Registration available",
   },
   {
     id: "may-02-2026",
@@ -332,7 +386,7 @@ export const upcomingTournaments = [
     meta: "3 hours @ $55.00",
     summary:
       "A repeat tournament date for families who want the same structure, support, and pricing.",
-    spotsLeft: "78 spots left",
+    availabilityLabel: "Next registration cycle open",
   },
   {
     id: "may-16-2026",
@@ -343,7 +397,7 @@ export const upcomingTournaments = [
     meta: "3 hours @ $55.00",
     summary:
       "Another Saturday event date for players who prefer a later registration window.",
-    spotsLeft: "64 spots left",
+    availabilityLabel: "New date available",
   },
 ];
 
@@ -457,3 +511,76 @@ export const contactEmails = [
     href: "mailto:andrea.lamanna1@gmail.com",
   },
 ];
+
+export const termsPage = {
+  eyebrow: "Terms of Service",
+  title: "Tournament registration terms for families and players",
+  intro:
+    "These terms explain how CHESS AND TRUCK handles event registration, payment, cancellations, and participation expectations.",
+  sections: [
+    {
+      title: "Registration accuracy",
+      body:
+        "Families are responsible for submitting accurate player, parent, emergency, and medical information. Open section players must provide a valid active USCF ID at registration time.",
+    },
+    {
+      title: "Payment and confirmation",
+      body:
+        "Registration is submitted through the website first and payment is completed through Stripe. A registration is treated as paid only after Stripe confirms payment successfully.",
+    },
+    {
+      title: "Section placement",
+      body:
+        "Families should choose the most appropriate section before paying. CHESS AND TRUCK may contact a family if the selected section appears inconsistent with the player's tournament readiness or eligibility.",
+    },
+    {
+      title: "Cancellations and changes",
+      body:
+        "Requests to cancel or change a registration should be sent to the tournament team as early as possible. Approved changes depend on timing, event capacity, and operational feasibility.",
+    },
+    {
+      title: "Tournament conduct",
+      body:
+        "Players, parents, and guests are expected to follow event-day instructions, respect tournament staff, and maintain an environment that supports fair competition and player focus.",
+    },
+    {
+      title: "Contact",
+      body:
+        "Questions about registration, eligibility, or tournament terms may be sent through the Contact page before payment is made.",
+    },
+  ],
+};
+
+export const privacyPage = {
+  eyebrow: "Privacy Policy",
+  title: "How registration and contact information is used",
+  intro:
+    "CHESS AND TRUCK collects only the information needed to operate tournaments, communicate with families, and process secure payments.",
+  sections: [
+    {
+      title: "Information collected",
+      body:
+        "The site may collect contact details, player information, parent and emergency contact information, and medical notes that are relevant to tournament-day safety and communication.",
+    },
+    {
+      title: "How information is used",
+      body:
+        "Registration information is used for event operations, support, eligibility review, emergency readiness, and tournament communication. Contact form submissions are used to respond to family questions and support needs.",
+    },
+    {
+      title: "Payments",
+      body:
+        "Payments are processed securely through Stripe. CHESS AND TRUCK does not store full card information on the website.",
+    },
+    {
+      title: "Limited sharing",
+      body:
+        "Information is shared only with service providers that help operate the registration and communication workflow, such as payment and email delivery services, and only for operational purposes.",
+    },
+    {
+      title: "Retention and review",
+      body:
+        "Registration and contact records may be retained for tournament operations, support follow-up, and event administration. Families can contact the tournament team if they need help reviewing or correcting submitted information.",
+    },
+  ],
+};

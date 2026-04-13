@@ -24,10 +24,13 @@ Create these in the new Vercel project only:
 
 ```bash
 STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
 RESEND_API_KEY=
 CONTACT_FROM_EMAIL=
 CONTACT_TO_EMAILS=ikrom.chess@gmail.com,alexnorth615@gmail.com,andrea.lamanna1@gmail.com
 ```
+
+`STRIPE_WEBHOOK_SECRET` is used by `/api/stripe-webhook` so the site can receive a trusted payment confirmation directly from Stripe after checkout completes.
 
 ## Deploy safely
 
@@ -51,6 +54,8 @@ git push -u origin main
 - `src/ChessTruckApp.jsx` - multi-page site app and route handling
 - `src/siteData.js` - CHESS AND TRUCK page copy and labels
 - `src/site.css` - active site styling
+- `src/lib/validation.js` - shared validation rules for frontend and API handlers
 - `api/create-checkout-session.js` - Stripe Checkout session creation
 - `api/checkout-status.js` - payment confirmation lookup
 - `api/tournament-contact.js` - contact form email handler
+- `api/stripe-webhook.js` - trusted Stripe payment confirmation webhook
