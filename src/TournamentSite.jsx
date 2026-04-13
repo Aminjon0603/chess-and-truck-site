@@ -10,7 +10,7 @@ import {
   scheduleItems,
   sectionOptions,
   serviceLevels,
-} from "./siteContent";
+} from "./chessSiteContent";
 
 const registrationInitialState = {
   firstName: "",
