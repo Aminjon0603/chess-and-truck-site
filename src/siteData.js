@@ -298,6 +298,55 @@ export const serviceLevels = [
   },
 ];
 
+export const masterTrainingDojo = {
+  eyebrow: "Master Training Dojo",
+  title: "A focused training layer around tournament day",
+  summary:
+    "Master Training Dojo adds guided analysis, structured work between rounds, and a stronger learning rhythm around the event.",
+  bullets: [
+    "Review critical positions with coach guidance during the tournament day",
+    "Turn the event into both a competition experience and a training block",
+    "Give ambitious players more value than a standard entry alone",
+  ],
+  highlight: "Available as part of the premium tournament package.",
+};
+
+export const upcomingTournaments = [
+  {
+    id: "apr-18-2026",
+    dateLabel: "Saturday, April 18th, 2026",
+    statusLabel: "Registration Open",
+    timeLabel: "9:00 AM",
+    title: "Chess & Truck Tournament",
+    meta: "3 hours @ $55.00",
+    summary:
+      "Open and Beginner sections. Saturday morning format designed to finish around lunch.",
+    spotsLeft: "71 spots left",
+  },
+  {
+    id: "may-02-2026",
+    dateLabel: "Saturday, May 2nd, 2026",
+    statusLabel: "Next cycle",
+    timeLabel: "9:00 AM",
+    title: "Chess & Truck Tournament",
+    meta: "3 hours @ $55.00",
+    summary:
+      "A repeat tournament date for families who want the same structure, support, and pricing.",
+    spotsLeft: "78 spots left",
+  },
+  {
+    id: "may-16-2026",
+    dateLabel: "Saturday, May 16th, 2026",
+    statusLabel: "New date",
+    timeLabel: "9:00 AM",
+    title: "Chess & Truck Tournament",
+    meta: "3 hours @ $55.00",
+    summary:
+      "Another Saturday event date for players who prefer a later registration window.",
+    spotsLeft: "64 spots left",
+  },
+];
+
 export const scheduleItems = [
   {
     title: "Arrival and check-in",

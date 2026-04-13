@@ -28,3 +28,4 @@ tmp
 *.tmp.jpg
 src/assets/champions-trophy.jpg
 src/assets/champions-trophy.jpg.tmp.jpg
+src/chessSiteContent.js

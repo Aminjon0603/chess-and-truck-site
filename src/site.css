@@ -43,7 +43,7 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.02;
   background-image:
     linear-gradient(90deg, rgba(24, 36, 29, 0.85) 12.5%, transparent 12.5%, transparent 50%, rgba(24, 36, 29, 0.85) 50%, rgba(24, 36, 29, 0.85) 62.5%, transparent 62.5%),
     linear-gradient(rgba(24, 36, 29, 0.85) 12.5%, transparent 12.5%, transparent 50%, rgba(24, 36, 29, 0.85) 50%, rgba(24, 36, 29, 0.85) 62.5%, transparent 62.5%);
@@ -81,7 +81,7 @@ a {
 .page-aura {
   position: absolute;
   border-radius: 999px;
-  filter: blur(90px);
+  filter: blur(80px);
   pointer-events: none;
 }
 
@@ -157,21 +157,29 @@ a {
 
 .brand-mark {
   display: inline-flex;
-  width: 52px;
-  height: 52px;
+  width: 60px;
+  height: 60px;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(199, 155, 66, 0.9), rgba(22, 61, 49, 0.98));
-  color: #fff;
-  font-family: var(--display);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  box-shadow: 0 18px 30px rgba(22, 61, 49, 0.16);
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+}
+
+.brand-mark-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand-copy strong,
 .brand-copy small {
   display: block;
+}
+
+.brand-copy {
+  display: grid;
+  gap: 2px;
 }
 
 .brand-copy strong,
@@ -273,16 +281,21 @@ a {
   gap: 18px;
 }
 
+.page-hero-copy {
+  gap: 22px;
+}
+
 .page-hero-copy h1 {
   max-width: 11ch;
-  font-size: clamp(3.3rem, 7vw, 5.6rem);
-  line-height: 0.95;
+  font-size: clamp(2.95rem, 6vw, 4.7rem);
+  line-height: 0.98;
 }
 
 .page-intro {
   max-width: 62ch;
   font-size: 1.08rem;
   line-height: 1.7;
+  margin: 0;
 }
 
 .cta-row,
@@ -291,6 +304,10 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.cta-row {
+  margin-top: 8px;
 }
 
 .surface,
@@ -383,6 +400,14 @@ a {
   margin-bottom: 24px;
 }
 
+.feature-event-card,
+.card-link-card,
+.stat-card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
 .section-intro h2,
 .contact-form h3,
 .form-header h2 {
@@ -443,6 +468,12 @@ a {
   width: fit-content;
   font-weight: 700;
   color: var(--accent-deep);
+}
+
+.card-link-card .text-link,
+.feature-event-card .text-link,
+.footer-event-column .text-link {
+  margin-top: 12px;
 }
 
 .nav-link:hover,
@@ -555,6 +586,145 @@ a {
 
 .checklist-light {
   color: rgba(255, 248, 241, 0.86);
+}
+
+.tournament-list {
+  display: grid;
+  gap: 18px;
+}
+
+.tournament-slot {
+  padding: 0;
+  overflow: hidden;
+}
+
+.tournament-slot-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(24, 36, 29, 0.04);
+}
+
+.tournament-slot-head strong {
+  font-family: var(--display);
+  font-size: 1.25rem;
+}
+
+.tournament-slot-head span {
+  color: var(--accent-deep);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tournament-slot-body {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding: 24px 22px;
+}
+
+.tournament-trophy-wrap {
+  display: grid;
+  justify-items: center;
+}
+
+.tournament-trophy {
+  width: 138px;
+  height: 138px;
+}
+
+.tournament-slot-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.tournament-slot-copy h3,
+.slot-title,
+.slot-meta,
+.tournament-slot-copy p {
+  margin: 0;
+}
+
+.tournament-slot-copy h3 {
+  font-size: clamp(1.65rem, 3vw, 2rem);
+}
+
+.slot-title {
+  font-weight: 800;
+  font-size: 1.12rem;
+  color: var(--ink);
+}
+
+.slot-meta {
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.tournament-slot-side {
+  display: grid;
+  justify-items: end;
+  gap: 16px;
+}
+
+.tournament-slot-button {
+  min-height: 48px;
+  padding: 0 20px;
+}
+
+.tournament-slot-side strong {
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.dojo-feature {
+  display: grid;
+  grid-template-columns: 156px minmax(0, 1fr) minmax(220px, 0.72fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.dojo-mark-shell {
+  width: 156px;
+  height: 156px;
+  border-radius: 34px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, rgba(24, 36, 29, 0.04), rgba(46, 107, 87, 0.08));
+}
+
+.dojo-mark-image {
+  width: 132px;
+  height: 132px;
+}
+
+.dojo-copy {
+  display: grid;
+  gap: 16px;
+}
+
+.dojo-copy h3,
+.dojo-copy p,
+.dojo-side p {
+  margin: 0;
+}
+
+.dojo-side {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(24, 36, 29, 0.04);
+}
+
+.dojo-side strong {
+  font-family: var(--display);
+  font-size: 1.1rem;
 }
 
 .board-art {
@@ -790,21 +960,111 @@ a {
 }
 
 .site-footer {
-  padding: 16px 0 36px;
+  padding: 24px 0 40px;
 }
 
-.footer-grid {
-  grid-template-columns: 1.2fr auto auto;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
-
-.footer-links {
+.footer-panel {
   display: grid;
-  gap: 8px;
+  gap: 24px;
+  padding: 30px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+.footer-brand-block,
+.footer-column,
+.footer-nav,
+.footer-contact-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.footer-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-logo-wrap {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 auto;
+}
+
+.footer-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.footer-brand-text {
+  display: grid;
+  gap: 4px;
+}
+
+.footer-brand-text strong,
+.footer-event-column h3 {
+  font-family: var(--display);
+  margin: 0;
+}
+
+.footer-brand-text span,
+.footer-brand-block p,
+.footer-event-column p,
+.footer-contact-link span {
+  color: var(--ink-soft);
+}
+
+.footer-brand-block p,
+.footer-event-column p,
+.footer-contact-link,
+.footer-meta {
+  margin: 0;
+}
+
+.footer-nav {
+  display: grid;
+  gap: 10px;
 }
 
 .footer-link {
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.footer-contact-link {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.footer-contact-link strong {
+  color: var(--ink);
+}
+
+.footer-meta {
+  display: grid;
+  gap: 6px;
+}
+
+.footer-meta strong {
+  color: var(--ink);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
   color: var(--ink-soft);
 }
 
@@ -818,15 +1078,22 @@ a {
   .card-grid-three,
   .stat-grid,
   .footer-grid,
+  .footer-top,
   .two-column,
   .contact-layout,
   .register-layout,
-  .carousel-card {
+  .carousel-card,
+  .dojo-feature,
+  .tournament-slot-body {
     grid-template-columns: 1fr;
   }
 
   .register-sidebar {
     position: static;
+  }
+
+  .tournament-slot-side {
+    justify-items: start;
   }
 }
 
@@ -871,5 +1138,20 @@ a {
   .portrait-ring {
     width: 140px;
     height: 140px;
+  }
+
+  .footer-bottom,
+  .footer-brand-row,
+  .tournament-slot-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-panel {
+    padding: 22px;
+  }
+
+  .brand-copy small {
+    font-size: 0.92rem;
   }
 }

@@ -11,6 +11,7 @@ import {
   featuredTournament,
   heroStats,
   homePage,
+  masterTrainingDojo,
   navigationItems,
   policyItems,
   registerPage,
@@ -19,8 +20,12 @@ import {
   serviceLevels,
   siteBrand,
   tournamentPage,
+  upcomingTournaments,
 } from "./siteData";
+import brandLogo from "./assets/chess-truck-logo.svg";
 import championsTrophy from "./assets/champions-trophy-optimized.jpg";
+import dojoMark from "./assets/dojo-mark.svg";
+import trophyBadge from "./assets/trophy-badge.svg";
 
 const registrationInitialState = {
   firstName: "",
@@ -237,6 +242,178 @@ function HighlightsCarousel() {
         ))}
       </div>
     </div>
+  );
+}
+
+function UpcomingTournamentList({ currentPath, navigate, compact = false }) {
+  const items = compact ? upcomingTournaments.slice(0, 2) : upcomingTournaments;
+
+  return (
+    <div className="tournament-list">
+      {items.map((item) => (
+        <article className="surface tournament-slot" key={item.id}>
+          <div className="tournament-slot-head">
+            <strong>{item.dateLabel}</strong>
+            <span>{item.statusLabel}</span>
+          </div>
+
+          <div className="tournament-slot-body">
+            <div className="tournament-trophy-wrap">
+              <img src={trophyBadge} alt="" className="tournament-trophy" />
+            </div>
+
+            <div className="tournament-slot-copy">
+              <h3>{item.timeLabel}</h3>
+              <p className="slot-title">{item.title}</p>
+              <p className="slot-meta">{item.meta}</p>
+              <p>{item.summary}</p>
+            </div>
+
+            <div className="tournament-slot-side">
+              <AppLink
+                to="/register"
+                navigate={navigate}
+                currentPath={currentPath}
+                className="btn btn-primary tournament-slot-button"
+              >
+                Book
+              </AppLink>
+              <strong>{item.spotsLeft}</strong>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function DojoFeature({ currentPath, navigate }) {
+  return (
+    <article className="surface dojo-feature">
+      <div className="dojo-mark-shell">
+        <img src={dojoMark} alt="" className="dojo-mark-image" />
+      </div>
+
+      <div className="dojo-copy">
+        <span className="section-tag">{masterTrainingDojo.eyebrow}</span>
+        <h3>{masterTrainingDojo.title}</h3>
+        <p>{masterTrainingDojo.summary}</p>
+        <ul className="checklist">
+          {masterTrainingDojo.bullets.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="dojo-side">
+        <span className="mini-tag">Add-on option</span>
+        <strong>+$100 with tournament entry</strong>
+        <p>{masterTrainingDojo.highlight}</p>
+        <AppLink
+          to="/register"
+          navigate={navigate}
+          currentPath={currentPath}
+          className="btn btn-secondary"
+        >
+          Choose Dojo Package
+        </AppLink>
+      </div>
+    </article>
+  );
+}
+
+function SiteFooter({ currentPath, navigate }) {
+  return (
+    <footer className="site-footer">
+      <div className="shell">
+        <div className="surface footer-panel">
+          <div className="footer-top">
+            <div className="footer-brand-block">
+              <div className="footer-brand-row">
+                <div className="footer-logo-wrap">
+                  <img src={brandLogo} alt="" className="footer-logo" />
+                </div>
+                <div className="footer-brand-text">
+                  <strong>{siteBrand.name}</strong>
+                  <span>{siteBrand.tagline}</span>
+                </div>
+              </div>
+              <p>{siteBrand.footerNote}</p>
+              <AppLink
+                to="/register"
+                navigate={navigate}
+                currentPath={currentPath}
+                className="btn btn-primary footer-cta"
+              >
+                Register for the Tournament
+              </AppLink>
+            </div>
+
+            <div className="footer-column">
+              <span className="mini-tag">Explore</span>
+              <div className="footer-nav">
+                {navigationItems.map((item) => (
+                  <AppLink
+                    key={item.path}
+                    to={item.path}
+                    navigate={navigate}
+                    currentPath={currentPath}
+                    className="footer-link"
+                  >
+                    {item.label}
+                  </AppLink>
+                ))}
+                <AppLink
+                  to="/register"
+                  navigate={navigate}
+                  currentPath={currentPath}
+                  className="footer-link"
+                >
+                  Register
+                </AppLink>
+              </div>
+            </div>
+
+            <div className="footer-column">
+              <span className="mini-tag">Support</span>
+              <div className="footer-contact-stack">
+                <a href={contactNumbers[0].href} className="footer-contact-link" target="_blank" rel="noreferrer">
+                  <span>WhatsApp / Phone</span>
+                  <strong>{contactNumbers[0].display}</strong>
+                </a>
+                <a href={contactEmails[0].href} className="footer-contact-link">
+                  <span>Email</span>
+                  <strong>{contactEmails[0].display}</strong>
+                </a>
+              </div>
+            </div>
+
+            <div className="footer-column footer-event-column">
+              <span className="mini-tag">Featured event</span>
+              <h3>{featuredTournament.title}</h3>
+              <p>{featuredTournament.scheduleLabel}</p>
+              <div className="footer-meta">
+                <span>{featuredTournament.formatLabel}</span>
+                <strong>{featuredTournament.pricingLabel}</strong>
+              </div>
+              <AppLink
+                to="/events/chess-and-truck-tournament"
+                navigate={navigate}
+                currentPath={currentPath}
+                className="text-link"
+              >
+                View Event Details
+              </AppLink>
+            </div>
+          </div>
+
+          <div className="footer-bottom">
+            <span>{siteBrand.city}</span>
+            <small>&copy; {new Date().getFullYear()} {siteBrand.name}</small>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }
 
@@ -593,6 +770,17 @@ function EventsPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
+            eyebrow="Upcoming tournament dates"
+            title="Saturday events with the same clear structure"
+            intro="Families can choose the date that fits them best while keeping the same tournament format and registration flow."
+          />
+          <UpcomingTournamentList currentPath={currentPath} navigate={navigate} />
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
             eyebrow="Divisions"
             title="A clear difference between Open and Beginner"
             intro="Parents should not need to infer the difference from scattered notes inside a long form."
@@ -709,6 +897,17 @@ function TournamentDetailPage({ currentPath, navigate }) {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow="Training add-on"
+            title="Master Training Dojo"
+            intro="For players who want more than tournament entry alone, the dojo package adds a coached training layer around the day."
+          />
+          <DojoFeature currentPath={currentPath} navigate={navigate} />
         </div>
       </section>
 
@@ -1191,7 +1390,6 @@ function ChessTruckApp() {
   const [paymentState, setPaymentState] = useState({ status: "idle", message: "", details: null });
   const [contactState, setContactState] = useState(contactInitialState);
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
-  const currentYear = new Date().getFullYear();
   const currentPath = route.pathname;
 
   const selectedServiceLevel = useMemo(
@@ -1483,7 +1681,9 @@ function ChessTruckApp() {
       <header className="site-header">
         <div className="shell header-row">
           <AppLink to="/" navigate={navigate} currentPath={currentPath} className="brand-link" aria-label={`${siteBrand.name} home`}>
-            <span className="brand-mark">{siteBrand.short}</span>
+            <span className="brand-mark">
+              <img src={brandLogo} alt="" className="brand-mark-image" />
+            </span>
             <span className="brand-copy">
               <strong>{siteBrand.name}</strong>
               <small>{siteBrand.tagline}</small>
@@ -1512,23 +1712,7 @@ function ChessTruckApp() {
 
       <main>{pageContent}</main>
 
-      <footer className="site-footer">
-        <div className="shell footer-grid">
-          <div>
-            <strong>{siteBrand.name}</strong>
-            <p>{siteBrand.footerNote}</p>
-          </div>
-          <div className="footer-links">
-            <AppLink to="/" navigate={navigate} currentPath={currentPath} className="footer-link">Home</AppLink>
-            <AppLink to="/about" navigate={navigate} currentPath={currentPath} className="footer-link">About</AppLink>
-            <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="footer-link">Events</AppLink>
-            <AppLink to="/faq" navigate={navigate} currentPath={currentPath} className="footer-link">FAQ</AppLink>
-            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="footer-link">Contact</AppLink>
-            <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="footer-link">Register</AppLink>
-          </div>
-          <small>&copy; {currentYear} {siteBrand.name}</small>
-        </div>
-      </footer>
+      <SiteFooter currentPath={currentPath} navigate={navigate} />
     </div>
   );
 }
