@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
-  carouselSlides,
   contactEmails,
   contactNumbers,
   contactPage,
@@ -65,6 +64,65 @@ const contactInitialState = {
   website: "",
 };
 
+const registrationStepDefinitions = [
+  {
+    id: "contact",
+    number: "01",
+    title: "Contact Information",
+    shortTitle: "Contact",
+    description: "The primary account details for the family completing the registration.",
+    fields: ["firstName", "lastName", "phone", "email", "additionalEmails", "acceptSms"],
+  },
+  {
+    id: "player",
+    number: "02",
+    title: "Player Information",
+    shortTitle: "Player",
+    description: "Choose the correct division and service level for the player.",
+    fields: [
+      "playerFirstName",
+      "playerLastName",
+      "playerGrade",
+      "schoolName",
+      "section",
+      "serviceLevel",
+      "uscfId",
+    ],
+  },
+  {
+    id: "parent",
+    number: "03",
+    title: "Parent / Guardian Information",
+    shortTitle: "Parent",
+    description: "The primary adult contact for tournament communications.",
+    fields: ["parentName", "parentEmail", "parentPhone"],
+  },
+  {
+    id: "emergency",
+    number: "04",
+    title: "Emergency Contact",
+    shortTitle: "Emergency",
+    description: "Backup contact details for tournament-day communication.",
+    fields: ["emergencyName", "emergencyPhone"],
+  },
+  {
+    id: "medical",
+    number: "05",
+    title: "Medical Information",
+    shortTitle: "Medical",
+    description: "List allergies, medications, conditions, or anything staff should know.",
+    fields: ["medicalInfo"],
+  },
+];
+
+const getStepErrors = (errors, stepDefinition) =>
+  Object.fromEntries(stepDefinition.fields.flatMap((field) => (errors[field] ? [[field, errors[field]]] : [])));
+
+const findFirstStepWithErrors = (errors) =>
+  registrationStepDefinitions.findIndex(
+    (stepDefinition) => Object.keys(getStepErrors(errors, stepDefinition)).length > 0
+  );
+
 const knownRoutes = new Set([
   "/",
   "/about",
@@ -105,7 +163,7 @@ const updateMetaTag = (selector, content) => {
   }
 };
 
-function AppLink({ to, navigate, children, className = "", currentPath, ...rest }) {
+function AppLink({ to, navigate, children, className = "", currentPath, onNavigate, ...rest }) {
   const isActive = normalizePath(to) === currentPath;
 
   const handleClick = (event) => {
@@ -122,6 +180,7 @@ function AppLink({ to, navigate, children, className = "", currentPath, ...rest 
 
     event.preventDefault();
     navigate(to);
+    onNavigate?.();
   };
 
   return (
@@ -197,51 +256,6 @@ function SectionIntro({ eyebrow, title, intro }) {
       {eyebrow ? <span className="section-tag">{eyebrow}</span> : null}
       <h2>{title}</h2>
       {intro ? <p>{intro}</p> : null}
-    </div>
-  );
-}
-
-function HighlightsCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % carouselSlides.length);
-    }, 4800);
-
-    return () => window.clearInterval(timer);
-  }, []);
-
-  return (
-    <div className="carousel-shell">
-      <article className="surface carousel-card">
-        <div className="carousel-copy">
-          <span className="section-tag">{carouselSlides[activeIndex].label}</span>
-          <h3>{carouselSlides[activeIndex].title}</h3>
-          <p>{carouselSlides[activeIndex].text}</p>
-        </div>
-        <div className="carousel-side">
-          <div className="carousel-image-frame">
-            <img
-              src={championsTrophy}
-              alt="Young players celebrating around a trophy"
-              className="carousel-image"
-            />
-          </div>
-        </div>
-      </article>
-
-      <div className="carousel-dots" aria-label="Tournament highlight slides">
-        {carouselSlides.map((slide, index) => (
-          <button
-            key={slide.label}
-            type="button"
-            className={`carousel-dot${index === activeIndex ? " is-active" : ""}`}
-            aria-label={`Show ${slide.label}`}
-            onClick={() => setActiveIndex(index)}
-          />
-        ))}
-      </div>
     </div>
   );
 }
@@ -576,10 +590,10 @@ function HomePage({ currentPath, navigate }) {
         actions={
           <>
             <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              View Tournament Page
+              See Tournament
             </AppLink>
             <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Start Registration
+              Register Now
             </AppLink>
           </>
         }
@@ -587,8 +601,8 @@ function HomePage({ currentPath, navigate }) {
           <>
             <span className="mini-tag mini-tag-dark">Featured event</span>
             <h2>{featuredTournament.title}</h2>
-            <p>{featuredTournament.longSummary}</p>
-            <div className="fact-list">
+            <p>{featuredTournament.shortSummary}</p>
+            <div className="fact-list fact-list-hero">
               <div>
                 <span>Format</span>
                 <strong>{featuredTournament.formatLabel}</strong>
@@ -596,10 +610,6 @@ function HomePage({ currentPath, navigate }) {
               <div>
                 <span>Schedule</span>
                 <strong>{featuredTournament.scheduleLabel}</strong>
-              </div>
-              <div>
-                <span>Pricing</span>
-                <strong>{featuredTournament.pricingLabel}</strong>
               </div>
             </div>
           </>
@@ -609,9 +619,8 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="At a glance"
-            title="What families should understand right away"
-            intro="These are the essentials that should feel clear within seconds of opening the tournament information."
+            eyebrow="Quick look"
+            title="What matters"
           />
           <div className="stat-grid">
             {heroStats.map((item) => (
@@ -627,20 +636,18 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Tournament highlights"
-            title="A stronger first impression for players and parents"
-            intro="These are the parts of the experience that make the event feel organized, credible, and worth committing to."
+            eyebrow="Upcoming dates"
+            title="Book the next tournament"
           />
-          <HighlightsCarousel />
+          <UpcomingTournamentList currentPath={currentPath} navigate={navigate} compact />
         </div>
       </section>
 
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Why families choose CHESS AND TRUCK"
-            title="Clarity, communication, and a more polished event experience"
-            intro="Parents move faster when the event is easy to understand and the support path is visible from the start."
+            eyebrow="Inside the event"
+            title="Choose the right path"
           />
           <div className="card-grid card-grid-three">
             {homePage.valueCards.map((item) => (
@@ -656,9 +663,8 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Explore"
-            title="Everything families need is easy to find"
-            intro="Event details, support, FAQs, and registration each have a clear path so no one has to dig for the next step."
+            eyebrow="Next step"
+            title="See it. Register. Ask."
           />
           <div className="card-grid card-grid-three">
             {homePage.pageCards.map((item) => (
@@ -666,26 +672,8 @@ function HomePage({ currentPath, navigate }) {
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
                 <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
-                  Learn more
+                  Open
                 </AppLink>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Registration flow"
-            title="What a clean registration journey looks like"
-            intro="The goal is simple: remove uncertainty before payment and make the next step obvious."
-          />
-          <div className="card-grid card-grid-three">
-            {homePage.processCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
               </article>
             ))}
           </div>
@@ -720,7 +708,7 @@ function AboutPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="What families notice"
             title="Communication matters as much as competition"
-            intro="Families commit more easily when the event feels organized, responsive, and prepared from the very beginning."
+            intro="Organized. Responsive. Easy to trust."
           />
           <div className="card-grid card-grid-three">
             {aboutPage.pillars.map((item) => (
@@ -750,7 +738,7 @@ function AboutPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Operating standards"
             title="What families can expect from the experience"
-            intro="These are the operating habits that shape both registration and tournament day."
+            intro="What stays clear before and on tournament day."
           />
           <div className="surface checklist-surface">
             <ul className="checklist">
@@ -822,7 +810,7 @@ function EventsPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Upcoming tournament dates"
             title="Saturday events with the same clear structure"
-            intro="Families can choose the date that fits them best while keeping the same tournament format and registration flow."
+            intro="Pick the date that works."
           />
           <UpcomingTournamentList currentPath={currentPath} navigate={navigate} />
         </div>
@@ -833,7 +821,7 @@ function EventsPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Divisions"
             title="A clear difference between Open and Beginner"
-            intro="Parents should not need to infer the difference from scattered notes inside a long form."
+            intro="Know the fit before you register."
           />
           <div className="card-grid card-grid-two">
             {sectionOptions.map((item) => (
@@ -857,7 +845,7 @@ function EventsPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Support"
             title="What families should understand before they pay"
-            intro="Families deserve this information before checkout begins, not after they have already committed."
+            intro="Know this before checkout."
           />
           <div className="card-grid card-grid-three">
             {eventsPage.supportCards.map((item) => (
@@ -913,7 +901,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Sections"
             title="Two divisions, explained clearly"
-            intro="Families should understand section fit before they start the registration form."
+            intro="Know the right fit first."
           />
           <div className="card-grid card-grid-two">
             {sectionOptions.map((item) => (
@@ -937,7 +925,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Tournament morning"
             title="A Saturday flow that is easy for families to follow"
-            intro="The schedule is designed to feel organized, focused, and manageable for players and parents."
+            intro="Simple schedule. Serious play."
           />
           <div className="card-grid card-grid-two">
             {scheduleItems.map((item) => (
@@ -955,7 +943,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Training add-on"
             title="Master Training Dojo"
-            intro="For players who want more than tournament entry alone, the dojo package adds a coached training layer around the day."
+            intro="Extra coaching around tournament day."
           />
           <DojoFeature currentPath={currentPath} navigate={navigate} />
         </div>
@@ -967,7 +955,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
             <SectionIntro
               eyebrow="Service levels"
               title="Pricing before checkout"
-              intro="Families should understand the options and the pricing before they ever click continue."
+              intro="See the price before you pay."
             />
             <div className="service-stack">
               {serviceLevels.map((item) => (
@@ -986,7 +974,7 @@ function TournamentDetailPage({ currentPath, navigate }) {
             <SectionIntro
               eyebrow="Registration checklist"
               title="What to have ready"
-              intro="This list helps the parent prepare before opening the registration form."
+              intro="Have this ready before you start."
             />
             <ul className="checklist">
               {tournamentPage.checklist.map((item) => (
@@ -1062,6 +1050,45 @@ function ContactPage({ contactState, contactSubmitState, updateContactField, han
   );
 }
 
+function MobileRegistrationProgress({
+  activeRegistrationStep,
+  setActiveRegistrationStep,
+  registrationErrors,
+}) {
+  const activeStep = registrationStepDefinitions[activeRegistrationStep];
+
+  return (
+    <div className="surface mobile-stepper">
+      <div className="mobile-stepper-head">
+        <span className="mini-tag">
+          Step {activeRegistrationStep + 1} of {registrationStepDefinitions.length}
+        </span>
+        <h3>{activeStep.title}</h3>
+        <p>{activeStep.description}</p>
+      </div>
+
+      <div className="mobile-stepper-track" aria-label="Registration steps">
+        {registrationStepDefinitions.map((stepDefinition, index) => {
+          const hasErrors = Object.keys(getStepErrors(registrationErrors, stepDefinition)).length > 0;
+
+          return (
+            <button
+              key={stepDefinition.id}
+              type="button"
+              className={`mobile-step-button${index === activeRegistrationStep ? " is-active" : ""}${hasErrors ? " has-error" : ""}`}
+              onClick={() => setActiveRegistrationStep(index)}
+              aria-current={index === activeRegistrationStep ? "step" : undefined}
+            >
+              <span className="mobile-step-index">{stepDefinition.number}</span>
+              <span className="mobile-step-label">{stepDefinition.shortTitle}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function RegisterPage({
   currentPath,
   navigate,
@@ -1072,7 +1099,33 @@ function RegisterPage({
   paymentState,
   selectedServiceLevel,
   clearRegistrationDraft,
+  isCompactViewport,
+  activeRegistrationStep,
+  setActiveRegistrationStep,
+  goToNextRegistrationStep,
+  goToPreviousRegistrationStep,
 }) {
+  const isMobileRegistrationFlow = isCompactViewport;
+
+  const renderSectionActions = (stepIndex) => {
+    if (!isMobileRegistrationFlow || stepIndex === registrationStepDefinitions.length - 1) {
+      return null;
+    }
+
+    return (
+      <div className="mobile-step-actions">
+        {stepIndex > 0 ? (
+          <button type="button" className="btn btn-secondary" onClick={goToPreviousRegistrationStep}>
+            Back
+          </button>
+        ) : null}
+        <button type="button" className="btn btn-primary" onClick={goToNextRegistrationStep}>
+          Continue to {registrationStepDefinitions[stepIndex + 1].shortTitle}
+        </button>
+      </div>
+    );
+  };
+
   return (
     <>
       <PageHero
@@ -1122,6 +1175,15 @@ function RegisterPage({
                 <small className="status-copy">{registerPage.draftNote}</small>
               </div>
 
+              {isMobileRegistrationFlow ? (
+                <MobileRegistrationProgress
+                  activeRegistrationStep={activeRegistrationStep}
+                  setActiveRegistrationStep={setActiveRegistrationStep}
+                  registrationErrors={registrationErrors}
+                />
+              ) : null}
+
+              {!isMobileRegistrationFlow || activeRegistrationStep === 0 ? (
               <section className="form-section">
                 <div className="form-section-head">
                   <span className="step-chip">01</span>
@@ -1228,8 +1290,11 @@ function RegisterPage({
                   </label>
                   {registrationErrors.acceptSms ? <small className="field-error field-span-2">{registrationErrors.acceptSms}</small> : null}
                 </div>
+                {renderSectionActions(0)}
               </section>
+              ) : null}
 
+              {!isMobileRegistrationFlow || activeRegistrationStep === 1 ? (
               <section className="form-section">
                 <div className="form-section-head">
                   <span className="step-chip">02</span>
@@ -1318,8 +1383,11 @@ function RegisterPage({
                     {registrationErrors.uscfId ? <small className="field-error">{registrationErrors.uscfId}</small> : null}
                   </label>
                 </div>
+                {renderSectionActions(1)}
               </section>
+              ) : null}
 
+              {!isMobileRegistrationFlow || activeRegistrationStep === 2 ? (
               <section className="form-section">
                 <div className="form-section-head">
                   <span className="step-chip">03</span>
@@ -1369,8 +1437,11 @@ function RegisterPage({
                     {registrationErrors.parentPhone ? <small className="field-error">{registrationErrors.parentPhone}</small> : null}
                   </label>
                 </div>
+                {renderSectionActions(2)}
               </section>
+              ) : null}
 
+              {!isMobileRegistrationFlow || activeRegistrationStep === 3 ? (
               <section className="form-section">
                 <div className="form-section-head">
                   <span className="step-chip">04</span>
@@ -1407,8 +1478,11 @@ function RegisterPage({
                     {registrationErrors.emergencyPhone ? <small className="field-error">{registrationErrors.emergencyPhone}</small> : null}
                   </label>
                 </div>
+                {renderSectionActions(3)}
               </section>
+              ) : null}
 
+              {!isMobileRegistrationFlow || activeRegistrationStep === 4 ? (
               <section className="form-section">
                 <div className="form-section-head">
                   <span className="step-chip">05</span>
@@ -1432,10 +1506,20 @@ function RegisterPage({
                   </label>
                 </div>
               </section>
+              ) : null}
 
-              <button type="submit" className="btn btn-primary btn-full" disabled={paymentState.status === "loading"}>
-                {paymentState.status === "loading" ? "Preparing Checkout..." : "Continue to Secure Payment"}
-              </button>
+              {!isMobileRegistrationFlow || activeRegistrationStep === registrationStepDefinitions.length - 1 ? (
+              <div className={`submit-actions${isMobileRegistrationFlow ? " submit-actions-mobile" : ""}`}>
+                {isMobileRegistrationFlow && activeRegistrationStep > 0 ? (
+                  <button type="button" className="btn btn-secondary" onClick={goToPreviousRegistrationStep}>
+                    Back
+                  </button>
+                ) : null}
+                <button type="submit" className="btn btn-primary btn-full" disabled={paymentState.status === "loading"}>
+                  {paymentState.status === "loading" ? "Preparing Checkout..." : "Continue to Secure Payment"}
+                </button>
+              </div>
+              ) : null}
 
               <small className={`status-copy status-${paymentState.status}`} aria-live="polite">
                 {paymentState.status === "idle"
@@ -1540,6 +1624,9 @@ function ChessTruckApp() {
   const [contactState, setContactState] = useState(contactInitialState);
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
   const [hasLoadedRegistrationDraft, setHasLoadedRegistrationDraft] = useState(false);
+  const [isCompactViewport, setIsCompactViewport] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [activeRegistrationStep, setActiveRegistrationStep] = useState(0);
   const mainRef = useRef(null);
   const currentPath = route.pathname;
 
@@ -1547,6 +1634,45 @@ function ChessTruckApp() {
     () => serviceLevels.find((item) => item.id === registrationState.serviceLevel) || null,
     [registrationState.serviceLevel]
   );
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 780px)");
+    const handleViewportChange = (event) => {
+      setIsCompactViewport(event.matches);
+    };
+
+    setIsCompactViewport(media.matches);
+
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", handleViewportChange);
+      return () => media.removeEventListener("change", handleViewportChange);
+    }
+
+    media.addListener(handleViewportChange);
+    return () => media.removeListener(handleViewportChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isCompactViewport) {
+      setIsMobileNavOpen(false);
+    }
+  }, [isCompactViewport]);
+
+  useEffect(() => {
+    setIsMobileNavOpen(false);
+  }, [currentPath]);
+
+  useEffect(() => {
+    if (!isCompactViewport) {
+      return undefined;
+    }
+
+    document.body.style.overflow = isMobileNavOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCompactViewport, isMobileNavOpen]);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -1675,6 +1801,7 @@ function ChessTruckApp() {
           });
           setRegistrationState(registrationInitialState);
           setRegistrationErrors({});
+          setActiveRegistrationStep(0);
           window.localStorage.removeItem(REGISTRATION_DRAFT_KEY);
         })
         .catch((error) => {
@@ -1705,6 +1832,16 @@ function ChessTruckApp() {
     window.history.pushState({}, "", `${nextRoute.pathname}${nextRoute.search}`);
     setRoute(nextRoute);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const focusRegistrationField = (fieldName) => {
+    window.requestAnimationFrame(() => {
+      const field = document.querySelector(`[name="${fieldName}"]`);
+
+      if (field instanceof HTMLElement) {
+        field.focus();
+      }
+    });
   };
 
   const updateRegistrationField = ({ target }) => {
@@ -1749,7 +1886,48 @@ function ChessTruckApp() {
   const validateRegistration = () => {
     const errors = validateRegistrationFields(registrationState);
     setRegistrationErrors(errors);
+
+    if (isCompactViewport) {
+      const firstStepWithErrors = findFirstStepWithErrors(errors);
+
+      if (firstStepWithErrors >= 0) {
+        setActiveRegistrationStep(firstStepWithErrors);
+      }
+    }
+
     return Object.keys(errors).length === 0;
+  };
+
+  const goToPreviousRegistrationStep = () => {
+    setActiveRegistrationStep((current) => Math.max(0, current - 1));
+  };
+
+  const goToNextRegistrationStep = () => {
+    const stepDefinition = registrationStepDefinitions[activeRegistrationStep];
+    const allErrors = validateRegistrationFields(registrationState);
+    const stepErrors = getStepErrors(allErrors, stepDefinition);
+
+    setRegistrationErrors((current) => {
+      const next = { ...current };
+      stepDefinition.fields.forEach((field) => {
+        delete next[field];
+      });
+
+      return {
+        ...next,
+        ...stepErrors,
+      };
+    });
+
+    if (Object.keys(stepErrors).length > 0) {
+      const firstField = Object.keys(stepErrors)[0];
+      focusRegistrationField(firstField);
+      return;
+    }
+
+    setActiveRegistrationStep((current) =>
+      Math.min(registrationStepDefinitions.length - 1, current + 1)
+    );
   };
 
   const handleRegistrationSubmit = async (event) => {
@@ -1836,6 +2014,7 @@ function ChessTruckApp() {
     setRegistrationState(registrationInitialState);
     setRegistrationErrors({});
     setPaymentState({ status: "idle", message: "", details: null });
+    setActiveRegistrationStep(0);
   };
 
   const pageContent = (() => {
@@ -1875,6 +2054,11 @@ function ChessTruckApp() {
             paymentState={paymentState}
             selectedServiceLevel={selectedServiceLevel}
             clearRegistrationDraft={clearRegistrationDraft}
+            isCompactViewport={isCompactViewport}
+            activeRegistrationStep={activeRegistrationStep}
+            setActiveRegistrationStep={setActiveRegistrationStep}
+            goToNextRegistrationStep={goToNextRegistrationStep}
+            goToPreviousRegistrationStep={goToPreviousRegistrationStep}
           />
         );
       default:
@@ -1891,8 +2075,15 @@ function ChessTruckApp() {
       <div className="page-aura page-aura-right" />
 
       <header className="site-header">
-        <div className="shell header-row">
-          <AppLink to="/" navigate={navigate} currentPath={currentPath} className="brand-link" aria-label={`${siteBrand.name} home`}>
+        <div className={`shell header-row${isMobileNavOpen ? " nav-open" : ""}`}>
+          <AppLink
+            to="/"
+            navigate={navigate}
+            currentPath={currentPath}
+            className="brand-link"
+            aria-label={`${siteBrand.name} home`}
+            onNavigate={() => setIsMobileNavOpen(false)}
+          >
             <span className="brand-mark">
               <img src={brandLogo} alt="" className="brand-mark-image" />
             </span>
@@ -1902,7 +2093,11 @@ function ChessTruckApp() {
             </span>
           </AppLink>
 
-          <nav className="site-nav" aria-label="Primary navigation">
+          <nav
+            id="primary-navigation"
+            className={`site-nav${isMobileNavOpen ? " is-open" : ""}`}
+            aria-label="Primary navigation"
+          >
             {navigationItems.map((item) => (
               <AppLink
                 key={item.path}
@@ -1910,15 +2105,36 @@ function ChessTruckApp() {
                 navigate={navigate}
                 currentPath={currentPath}
                 className="nav-link"
+                onNavigate={() => setIsMobileNavOpen(false)}
               >
                 {item.label}
               </AppLink>
             ))}
           </nav>
 
-          <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="btn btn-primary header-button">
-            Register
-          </AppLink>
+          <div className="header-actions">
+            <AppLink
+              to="/register"
+              navigate={navigate}
+              currentPath={currentPath}
+              className="btn btn-primary header-button"
+              onNavigate={() => setIsMobileNavOpen(false)}
+            >
+              Register
+            </AppLink>
+            <button
+              type="button"
+              className={`nav-toggle${isMobileNavOpen ? " is-open" : ""}`}
+              aria-label={isMobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isMobileNavOpen}
+              aria-controls="primary-navigation"
+              onClick={() => setIsMobileNavOpen((current) => !current)}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
         </div>
       </header>
 

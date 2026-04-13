@@ -67,14 +67,12 @@ export const featuredTournament = {
   slug: "chess-and-truck-tournament",
   title: "Chess & Truck Tournament",
   city: "New York City",
-  scheduleLabel: "Saturday mornings, 9:00 AM to approximately 12:00 PM",
-  formatLabel: "Open and Beginner sections",
+  scheduleLabel: "Saturday, 9:00 AM to lunch",
+  formatLabel: "Open & Beginner",
   pricingLabel: "Registration from $55",
   venueLabel: "New York City venue details shared with registered families",
-  shortSummary:
-    "A Saturday-format New York City tournament with Open and Beginner sections, direct family support, and a clean registration process.",
-  longSummary:
-    "Families can review section fit, requirements, pricing, schedule, and support contacts before completing registration.",
+  shortSummary: "Open & Beginner. Saturday, 9:00 AM to lunch.",
+  longSummary: "Serious NYC scholastic tournaments with clear sections and fast registration.",
   basePrice: 55,
   dojoPrice: 155,
 };
@@ -86,82 +84,66 @@ export const footerLegalLinks = [
 
 export const heroStats = [
   {
-    value: "Two divisions",
-    label: "Open for rated players and Beginner for players who are still building tournament experience.",
+    value: "2 tracks",
+    label: "Open and Beginner",
   },
   {
-    value: "Saturday format",
-    label: "A focused morning schedule that feels competitive without turning into an all-day event.",
+    value: "9 AM start",
+    label: "Saturday morning format",
   },
   {
-    value: "Secure checkout",
-    label: "Families complete the form first and move to Stripe only after the registration details are complete.",
+    value: "From $55",
+    label: "Secure online registration",
   },
 ];
 
 export const homePage = {
   eyebrow: "New York City scholastic chess tournaments",
-  title: "Competitive chess events for ambitious players and families who value clarity",
-  intro:
-    "CHESS AND TRUCK presents New York City tournament mornings with clearer sections, stronger communication, and a more polished registration experience.",
+  title: "Serious chess tournaments. No confusion.",
+  intro: "Open and Beginner sections. Saturday mornings. Fast registration.",
   valueCards: [
     {
-      title: "Serious competition",
-      text: "Open and Beginner sections are presented clearly, so the tournament feels competitive without becoming confusing for parents.",
+      title: "Open Section",
+      text: "Rated play for competitors with an active USCF ID.",
     },
     {
-      title: "Family-ready communication",
-      text: "Support details, eligibility notes, and contact channels are visible early so families know where to go for answers.",
+      title: "Beginner Section",
+      text: "A cleaner first step for newer tournament players.",
     },
     {
-      title: "Cleaner registration flow",
-      text: "Player details, parent contacts, and payment steps are structured in a way that feels calm and professional.",
+      title: "Dojo Add-On",
+      text: "Extra coached work around the tournament day.",
     },
   ],
   pageCards: [
     {
-      title: "Rated division",
-      text: "For players who are ready for the Open section and already understand tournament pace and responsibility.",
+      title: "See the Event",
+      text: "Format, schedule, sections, pricing.",
       path: "/events/chess-and-truck-tournament",
     },
     {
-      title: "Beginner division",
-      text: "For players who need a more welcoming first tournament step without the pressure of rated entry.",
-      path: "/events/chess-and-truck-tournament",
-    },
-    {
-      title: "Tournament schedule",
-      text: "A Saturday structure that respects family time while still feeling like a serious competitive morning.",
-      path: "/events",
-    },
-    {
-      title: "Parent communication",
-      text: "Before-event logistics, WhatsApp support, and eligibility questions all have a clear path.",
-      path: "/contact",
-    },
-    {
-      title: "Direct registration",
-      text: "Families can move from event details into a full registration form and then complete secure Stripe payment.",
+      title: "Register",
+      text: "Fill the form first. Pay after.",
       path: "/register",
     },
     {
-      title: "Tournament support",
-      text: "When a family is unsure about fit, requirements, or timing, support channels are already in place.",
-      path: "/faq",
+      title: "Ask First",
+      text: "Phone, WhatsApp, email, or contact form.",
+      path: "/contact",
     },
   ],
   processCards: [
     {
       title: "Review the event",
-      text: "Families see the format, divisions, service levels, and what to prepare before they ever open the form.",
+      text: "See the essentials fast.",
     },
     {
       title: "Choose the right section",
-      text: "The difference between Open and Beginner is explained clearly enough that the decision feels simple.",
+      text: "Open or Beginner.",
     },
     {
       title: "Complete registration and payment",
-      text: "Player details are collected first. Stripe handles the payment step only after the form is complete.",
+      text: "Form first. Checkout after.",
     },
   ],
 };
@@ -169,53 +151,52 @@ export const homePage = {
 export const carouselSlides = [
   {
     label: "Open Section",
-    title: "For players who are ready for rated competition",
-    text: "The Open division is built for players with an active USCF membership who are ready for a stronger competitive environment.",
+    title: "Rated competition",
+    text: "For players with an active USCF ID.",
   },
   {
     label: "Beginner Section",
-    title: "A friendlier first step into tournament play",
-    text: "The Beginner division lowers the barrier for newer players while still giving families a real tournament-day experience.",
+    title: "Beginner-friendly",
+    text: "A better first tournament step.",
   },
   {
     label: "Tournament Morning",
-    title: "A schedule that feels serious without taking over the whole day",
-    text: "Saturday rounds begin at 9:00 AM and are structured to keep the event focused, organized, and family-manageable.",
+    title: "Saturday 9 AM",
+    text: "Serious format without taking over the whole day.",
   },
   {
     label: "Family Support",
-    title: "Direct communication stays part of the experience",
-    text: "WhatsApp, email, and the contact form remain easy to reach before registration and before tournament day.",
+    title: "Direct support",
+    text: "WhatsApp, email, and contact stay easy to reach.",
   },
 ];
 
 export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
-  title: "Structured for families who want serious competition, direct support, and a polished tournament-day experience",
-  intro:
-    "CHESS AND TRUCK is positioned around serious scholastic competition while staying clear and approachable for parents.",
+  title: "Serious chess. Clear communication.",
+  intro: "Built for families who want competition without chaos.",
   pillars: [
     {
-      title: "Professional communication",
-      text: "The tone stays direct, composed, and useful. Families should feel informed, not overwhelmed.",
+      title: "Clear communication",
+      text: "Fast answers. No guessing.",
     },
     {
-      title: "Tournament-first planning",
-      text: "Important details are organized around division fit, preparation, support, and event-day logistics.",
+      title: "Tournament-first",
+      text: "Sections, schedule, and pricing are easy to see.",
     },
     {
-      title: "Stronger parent confidence",
-      text: "Clear requirements and visible support channels help parents commit without second-guessing what happens next.",
+      title: "Parent confidence",
+      text: "Families know what happens before they pay.",
     },
   ],
   storyBlocks: [
     {
       title: "Who this is for",
-      text: "The program is designed for scholastic players, tournament-ready families, and parents who want strong organization before tournament day arrives.",
+      text: "Scholastic players and families who want a serious, organized event.",
     },
     {
       title: "What families should feel",
-      text: "The experience should feel prepared, responsive, and credible from the first visit through payment confirmation.",
+      text: "Clear. Prepared. Worth registering for.",
     },
   ],
   standards: [
@@ -228,21 +209,20 @@ export const aboutPage = {
 
 export const eventsPage = {
   eyebrow: "Events & Tournaments",
-  title: "Upcoming tournaments should make the next step obvious",
-  intro:
-    "Families should quickly understand the format, player fit, schedule, and registration path before committing to an event.",
+  title: "Pick a date. Register fast.",
+  intro: "Same structure. Same sections. Same clean process.",
   supportCards: [
     {
       title: "Who is this event for?",
-      text: "The tournament clearly explains the difference between the Open and Beginner sections in plain language.",
+      text: "Open for rated players. Beginner for newer players.",
     },
     {
       title: "What has to be ready?",
-      text: "USCF requirements, emergency details, parent contact information, and medical notes are all explained before checkout.",
+      text: "USCF ID for Open. Parent, emergency, and medical details for the form.",
     },
     {
       title: "How does payment work?",
-      text: "Registration is completed through the form first, then the family moves into a secure Stripe payment flow.",
+      text: "Form first. Secure payment after.",
     },
   ],
 };
@@ -250,8 +230,7 @@ export const eventsPage = {
 export const tournamentPage = {
   eyebrow: "Featured Tournament",
   title: "Chess & Truck Tournament",
-  intro:
-    "A Saturday-format tournament for ambitious scholastic players and families stepping into tournament chess for the first time.",
+  intro: "Saturday tournament play for serious competitors and newer players alike.",
   atAGlance: [
     { label: "Location", value: "New York City" },
     { label: "Format", value: "Open and Beginner sections" },
@@ -268,37 +247,34 @@ export const tournamentPage = {
 
 export const faqPage = {
   eyebrow: "FAQ",
-  title: "Answers families usually want before they register",
-  intro:
-    "Keep the practical questions in one place so players and parents do not have to guess their way through the process.",
+  title: "Fast answers before you register",
+  intro: "USCF, sections, payment, schedule.",
 };
 
 export const contactPage = {
   eyebrow: "Contact",
-  title: "Reach the tournament team without hunting for the right person",
-  intro:
-    "Use WhatsApp, email, or the message form if you want help with section fit, registration details, eligibility, or tournament logistics.",
+  title: "Reach the team fast",
+  intro: "Phone, WhatsApp, email, or the contact form.",
   supportCards: [
     {
       title: "Before registration",
-      text: "Best for questions about division fit, USCF requirements, or whether the event suits a player's current level.",
+      text: "Questions about fit, section, or USCF.",
     },
     {
       title: "Operational support",
-      text: "Use contact channels for timing, follow-up, or practical issues that should not wait until tournament morning.",
+      text: "Timing, logistics, and follow-up.",
     },
     {
       title: "Direct response paths",
-      text: "Phone, WhatsApp, and email stay visible so families can choose the fastest path for their question.",
+      text: "Choose the fastest way to reach us.",
     },
   ],
 };
 
 export const registerPage = {
   eyebrow: "Registration",
-  title: "Complete the form first, then continue to secure checkout",
-  intro:
-    "The registration form gathers player, parent, emergency, and medical details before sending the family to Stripe for payment.",
+  title: "Fill the form. Then pay.",
+  intro: "Player details first. Secure checkout after.",
   draftNote: "This form saves a local draft on this device while you work.",
   sidebarNotes: [
     "Open section players need an active USCF ID.",
@@ -313,8 +289,7 @@ export const sectionOptions = [
     id: "open",
     title: "Open Section",
     badge: "Rated division",
-    description:
-      "For players who are ready for rated competition and already have experience with structured tournament play.",
+    description: "For players ready for rated competition.",
     bullets: [
       "Active USCF membership required",
       "USCF ID must be included in registration",
@@ -325,8 +300,7 @@ export const sectionOptions = [
     id: "beginner",
     title: "Beginner Section",
     badge: "Unrated division",
-    description:
-      "For players who are newer to tournament chess and need a calmer, more accessible first competitive experience.",
+    description: "For players newer to tournament chess.",
     bullets: [
       "No USCF membership required",
       "A friendlier entry point into tournament play",
@@ -339,30 +313,27 @@ export const serviceLevels = [
   {
     id: "entry",
     label: "Tournament Entry",
-    description:
-      "Tournament registration with section placement, pairings, and event-day participation.",
+    description: "Standard tournament registration.",
     amount: 55,
   },
   {
     id: "entry-dojo",
     label: "Tournament Entry + Master Training Dojo",
-    description:
-      "Tournament entry plus guided analysis and structured chess work around the event.",
+    description: "Tournament entry plus coached work around the day.",
     amount: 155,
   },
 ];
 
 export const masterTrainingDojo = {
   eyebrow: "Master Training Dojo",
-  title: "A focused training layer around tournament day",
-  summary:
-    "Master Training Dojo adds guided analysis, structured work between rounds, and a stronger learning rhythm around the event.",
+  title: "Extra coaching around tournament day",
+  summary: "Add guided work and analysis between rounds.",
   bullets: [
     "Review critical positions with coach guidance during the tournament day",
     "Turn the event into both a competition experience and a training block",
     "Give ambitious players more value than a standard entry alone",
   ],
-  highlight: "Available as part of the premium tournament package.",
+  highlight: "Available with the premium tournament package.",
 };
 
 export const upcomingTournaments = [
@@ -373,8 +344,7 @@ export const upcomingTournaments = [
     timeLabel: "9:00 AM",
     title: "Chess & Truck Tournament",
     meta: "3 hours @ $55.00",
-    summary:
-      "Open and Beginner sections. Saturday morning format designed to finish around lunch.",
+    summary: "Open and Beginner sections. Done by lunch.",
     availabilityLabel: "Registration available",
   },
   {
@@ -384,8 +354,7 @@ export const upcomingTournaments = [
     timeLabel: "9:00 AM",
     title: "Chess & Truck Tournament",
     meta: "3 hours @ $55.00",
-    summary:
-      "A repeat tournament date for families who want the same structure, support, and pricing.",
+    summary: "Same structure. Same price. Same clean format.",
     availabilityLabel: "Next registration cycle open",
   },
   {
@@ -395,8 +364,7 @@ export const upcomingTournaments = [
     timeLabel: "9:00 AM",
     title: "Chess & Truck Tournament",
     meta: "3 hours @ $55.00",
-    summary:
-      "Another Saturday event date for players who prefer a later registration window.",
+    summary: "Another Saturday date for the same event format.",
     availabilityLabel: "New date available",
   },
 ];
@@ -404,19 +372,19 @@ export const upcomingTournaments = [
 export const scheduleItems = [
   {
     title: "Arrival and check-in",
-    text: "Families arrive before round one so pairings, section placement, and tournament-day logistics stay smooth.",
+    text: "Arrive early for check-in and pairings.",
   },
   {
     title: "Round start",
-    text: "Play begins at 9:00 AM with a morning format designed to stay focused and efficient.",
+    text: "Rounds begin at 9:00 AM.",
   },
   {
     title: "Between-round support",
-    text: "Players enrolled in the Master Training Dojo receive guided chess work and analysis during the event.",
+    text: "Dojo players get coached work between rounds.",
   },
   {
     title: "Wrap-up",
-    text: "Most tournament mornings finish around noon, keeping the experience serious but manageable for families.",
+    text: "Most tournament mornings end around noon.",
   },
 ];
 
