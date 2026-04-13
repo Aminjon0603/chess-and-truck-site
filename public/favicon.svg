@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="20" fill="#0B0E13" />
+  <rect x="10" y="10" width="44" height="44" rx="16" fill="url(#a)" fill-opacity="0.16" stroke="#D7AF72" stroke-opacity="0.4" />
+  <text
+    x="32"
+    y="39"
+    fill="#F4EFE7"
+    font-family="Sora, Arial, sans-serif"
+    font-size="21"
+    font-weight="800"
+    letter-spacing="1.8"
+    text-anchor="middle"
+  >
+    SA
+  </text>
+  <defs>
+    <linearGradient id="a" x1="12" x2="51" y1="12" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D7AF72" />
+      <stop offset="1" stop-color="#9FE3CB" />
+    </linearGradient>
+  </defs>
+</svg>
