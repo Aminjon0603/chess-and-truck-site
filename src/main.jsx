@@ -1,11 +1,11 @@
 ﻿import React from "react";
 import ReactDOM from "react-dom/client";
-import "./tournament.css";
-import TournamentSite from "./TournamentSite.jsx";
+import "./site.css";
+import ChessTruckApp from "./ChessTruckApp.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <TournamentSite />
+    <ChessTruckApp />
   </React.StrictMode>
 );
 

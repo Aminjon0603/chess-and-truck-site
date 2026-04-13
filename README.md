@@ -48,9 +48,9 @@ git push -u origin main
 
 ## Main app files
 
-- `src/TournamentSite.jsx` - tournament landing page and registration flow
-- `src/chessSiteContent.js` - CHESS AND TRUCK content and labels
-- `src/tournament.css` - site styling
+- `src/ChessTruckApp.jsx` - multi-page site app and route handling
+- `src/siteData.js` - CHESS AND TRUCK page copy and labels
+- `src/site.css` - active site styling
 - `api/create-checkout-session.js` - Stripe Checkout session creation
 - `api/checkout-status.js` - payment confirmation lookup
 - `api/tournament-contact.js` - contact form email handler

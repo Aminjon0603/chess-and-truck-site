@@ -185,8 +185,11 @@ export default {
 
     const params = new URLSearchParams();
     params.set("mode", "payment");
-    params.set("success_url", `${getBaseUrl(request)}/?payment=success&session_id={CHECKOUT_SESSION_ID}#register`);
-    params.set("cancel_url", `${getBaseUrl(request)}/?payment=cancel#register`);
+    params.set(
+      "success_url",
+      `${getBaseUrl(request)}/register?payment=success&session_id={CHECKOUT_SESSION_ID}`
+    );
+    params.set("cancel_url", `${getBaseUrl(request)}/register?payment=cancel`);
     params.set("customer_email", data.parentEmail || data.email);
     params.set("allow_promotion_codes", "true");
     params.set("billing_address_collection", "auto");
