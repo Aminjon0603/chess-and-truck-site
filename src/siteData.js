@@ -2,9 +2,9 @@ export const siteBrand = {
   name: "CHESS AND TRUCK",
   short: "CT",
   city: "New York City",
-  tagline: "New York City scholastic chess tournaments",
+  tagline: "NYC scholastic chess events launching soon",
   footerNote:
-    "Scholastic chess tournaments with clear family communication, organized event-day structure, and secure online registration.",
+    "Open & Beginner Saturday tournaments for New York City players. First public dates are being finalized now.",
 };
 
 export const navigationItems = [
@@ -19,22 +19,22 @@ export const routeMeta = {
   "/": {
     title: "CHESS AND TRUCK | NYC Scholastic Chess Tournaments",
     description:
-      "Open and Beginner scholastic chess tournaments in New York City with direct family support, clear event details, and secure online registration.",
+      "Open and Beginner scholastic chess tournaments launching soon in New York City, with clear format details and direct family support.",
   },
   "/about": {
     title: "About | CHESS AND TRUCK",
     description:
-      "Learn how CHESS AND TRUCK structures New York City chess tournaments for ambitious players and families who want clarity before tournament day.",
+      "Learn how CHESS AND TRUCK is building a cleaner New York City tournament experience for ambitious players and families.",
   },
   "/events": {
     title: "Events | CHESS AND TRUCK",
     description:
-      "View upcoming CHESS AND TRUCK tournaments, event dates, division details, and the registration path for New York City families.",
+      "See the CHESS AND TRUCK launch format, division structure, and what is already confirmed before the first dates are announced.",
   },
   "/events/chess-and-truck-tournament": {
     title: "Chess & Truck Tournament | CHESS AND TRUCK",
     description:
-      "See tournament format, schedule, sections, pricing, Master Training Dojo options, and registration details for the Chess & Truck Tournament.",
+      "See the confirmed format, Saturday schedule, sections, and launch details for the Chess & Truck Tournament.",
   },
   "/faq": {
     title: "FAQ | CHESS AND TRUCK",
@@ -67,12 +67,12 @@ export const featuredTournament = {
   slug: "chess-and-truck-tournament",
   title: "Chess & Truck Tournament",
   city: "New York City",
-  scheduleLabel: "Saturday, 9:00 AM to lunch",
+  scheduleLabel: "Saturday mornings, 9:00 AM to lunch",
   formatLabel: "Open & Beginner",
   pricingLabel: "Registration from $55",
   venueLabel: "New York City venue details shared with registered families",
-  shortSummary: "Open & Beginner. Saturday, 9:00 AM to lunch.",
-  longSummary: "Serious NYC scholastic tournaments with clear sections and fast registration.",
+  shortSummary: "Open & Beginner. Saturday mornings. First dates announced soon.",
+  longSummary: "The format is locked in. The first public release is next.",
   basePrice: 55,
   dojoPrice: 155,
 };
@@ -84,51 +84,51 @@ export const footerLegalLinks = [
 
 export const heroStats = [
   {
-    value: "2 tracks",
-    label: "Open and Beginner",
+    value: "2 sections",
+    label: "Open & Beginner",
   },
   {
-    value: "9 AM start",
+    value: "9 AM to lunch",
     label: "Saturday morning format",
   },
   {
-    value: "From $55",
-    label: "Secure online registration",
+    value: "Launching soon",
+    label: "First dates released soon",
   },
 ];
 
 export const homePage = {
-  eyebrow: "New York City scholastic chess tournaments",
-  title: "Serious chess tournaments. No confusion.",
-  intro: "Open and Beginner sections. Saturday mornings. Fast registration.",
+  eyebrow: "NYC scholastic chess launch",
+  title: "Launch is close. Be early.",
+  intro: "Open & Beginner Saturday tournaments for New York City players. The first dates drop soon.",
   valueCards: [
     {
       title: "Open Section",
-      text: "Rated play for competitors with an active USCF ID.",
+      text: "Rated play for competitors who already hold an active USCF ID.",
     },
     {
       title: "Beginner Section",
-      text: "A cleaner first step for newer tournament players.",
+      text: "A cleaner first tournament step for players who are still building confidence.",
     },
     {
-      title: "Dojo Add-On",
-      text: "Extra coached work around the tournament day.",
+      title: "Dojo Option",
+      text: "An additional coached layer around the tournament morning for ambitious players.",
     },
   ],
   pageCards: [
     {
-      title: "See the Event",
-      text: "Format, schedule, sections, pricing.",
+      title: "See the Format",
+      text: "What is already confirmed before launch.",
       path: "/events/chess-and-truck-tournament",
     },
     {
-      title: "Register",
-      text: "Fill the form first. Pay after.",
-      path: "/register",
+      title: "Get Early Access",
+      text: "Reach out now and hear first when dates go live.",
+      path: "/contact",
     },
     {
       title: "Ask First",
-      text: "Phone, WhatsApp, email, or contact form.",
+      text: "Phone, WhatsApp, email, or the contact form.",
       path: "/contact",
     },
   ],
@@ -174,55 +174,55 @@ export const carouselSlides = [
 export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
   title: "Serious chess. Clear communication.",
-  intro: "Built for families who want competition without chaos.",
+  intro: "Built for families who want a serious tournament launch without chaos.",
   pillars: [
     {
       title: "Clear communication",
       text: "Fast answers. No guessing.",
     },
     {
-      title: "Tournament-first",
-      text: "Sections, schedule, and pricing are easy to see.",
+      title: "Format-first",
+      text: "Families can understand the structure before the first date is released.",
     },
     {
       title: "Parent confidence",
-      text: "Families know what happens before they pay.",
+      text: "Families know what is locked in before they commit.",
     },
   ],
   storyBlocks: [
     {
       title: "Who this is for",
-      text: "Scholastic players and families who want a serious, organized event.",
+      text: "Scholastic players and families who want a serious, organized event from day one.",
     },
     {
       title: "What families should feel",
-      text: "Clear. Prepared. Worth registering for.",
+      text: "Clear. Prepared. Ready to join as soon as dates open.",
     },
   ],
   standards: [
-    "Clear division guidance before registration begins",
+    "Clear division guidance before public launch",
     "Direct support channels before and after sign-up",
-    "Tournament expectations explained before payment",
+    "Tournament expectations explained before families pay",
     "Copy written for families, not internal jargon",
   ],
 };
 
 export const eventsPage = {
   eyebrow: "Events & Tournaments",
-  title: "Pick a date. Register fast.",
-  intro: "Same structure. Same sections. Same clean process.",
+  title: "The format is ready. The dates are next.",
+  intro: "We are in launch mode now. The first public release is coming soon.",
   supportCards: [
     {
-      title: "Who is this event for?",
-      text: "Open for rated players. Beginner for newer players.",
+      title: "What is already confirmed?",
+      text: "Open & Beginner sections, a Saturday morning window, and a cleaner family flow.",
     },
     {
-      title: "What has to be ready?",
-      text: "USCF ID for Open. Parent, emergency, and medical details for the form.",
+      title: "What opens first?",
+      text: "The first tournament date, early-access notice, and a full registration window.",
     },
     {
-      title: "How does payment work?",
-      text: "Form first. Secure payment after.",
+      title: "How do families hear first?",
+      text: "Use Contact now and we will notify you as soon as the first release is live.",
     },
   ],
 };
@@ -230,39 +230,39 @@ export const eventsPage = {
 export const tournamentPage = {
   eyebrow: "Featured Tournament",
   title: "Chess & Truck Tournament",
-  intro: "Saturday tournament play for serious competitors and newer players alike.",
+  intro: "The format is set. The first public tournament date is being finalized now.",
   atAGlance: [
     { label: "Location", value: "New York City" },
-    { label: "Format", value: "Open and Beginner sections" },
-    { label: "Schedule", value: "Saturday mornings from 9:00 AM" },
-    { label: "Payment", value: "Stripe checkout after registration" },
+    { label: "Format", value: "Open & Beginner sections" },
+    { label: "Schedule", value: "Saturday mornings, 9:00 AM to lunch" },
+    { label: "Launch status", value: "First dates announced soon" },
   ],
   checklist: [
-    "Choose the correct section before payment",
-    "Prepare a USCF ID if registering for the Open section",
-    "Include parent, emergency, and medical details in the form",
-    "Use Contact if you want to confirm fit before registering",
+    "Open section players will still need an active USCF ID",
+    "Beginner players will still have a simpler entry path",
+    "The Saturday morning structure is already set",
+    "Use Contact if you want first notice when dates go live",
   ],
 };
 
 export const faqPage = {
   eyebrow: "FAQ",
-  title: "Fast answers before you register",
-  intro: "USCF, sections, payment, schedule.",
+  title: "Fast answers before launch",
+  intro: "USCF, sections, schedule, launch timing.",
 };
 
 export const contactPage = {
   eyebrow: "Contact",
-  title: "Reach the team fast",
-  intro: "Phone, WhatsApp, email, or the contact form.",
+  title: "Get on the list fast",
+  intro: "Phone, WhatsApp, email, or the contact form. We will update early families first.",
   supportCards: [
     {
-      title: "Before registration",
-      text: "Questions about fit, section, or USCF.",
+      title: "Before launch",
+      text: "Questions about fit, section, USCF, or first-release timing.",
     },
     {
       title: "Operational support",
-      text: "Timing, logistics, and follow-up.",
+      text: "Launch updates, logistics, and follow-up.",
     },
     {
       title: "Direct response paths",
@@ -327,73 +327,79 @@ export const serviceLevels = [
 export const masterTrainingDojo = {
   eyebrow: "Master Training Dojo",
   title: "Extra coaching around tournament day",
-  summary: "Add guided work and analysis between rounds.",
+  summary: "A planned premium add-on for players who want more than the base event.",
   bullets: [
     "Review critical positions with coach guidance during the tournament day",
     "Turn the event into both a competition experience and a training block",
     "Give ambitious players more value than a standard entry alone",
   ],
-  highlight: "Available with the premium tournament package.",
+  highlight: "Planned as an add-on when the first tournament release opens.",
 };
 
 export const upcomingTournaments = [
   {
-    id: "apr-18-2026",
-    dateLabel: "Saturday, April 18th, 2026",
-    statusLabel: "Registration Open",
-    timeLabel: "9:00 AM",
-    title: "Chess & Truck Tournament",
-    meta: "3 hours @ $55.00",
-    summary: "Open and Beginner sections. Done by lunch.",
-    availabilityLabel: "Registration available",
+    id: "first-release",
+    dateLabel: "First release",
+    statusLabel: "Launching soon",
+    timeLabel: "Saturday mornings",
+    title: "First tournament date",
+    meta: "Open & Beginner format already confirmed",
+    summary: "The first public tournament date is being finalized now. Families who reach out early will hear first.",
+    availabilityLabel: "Dates announced soon",
+    ctaLabel: "Get Notified",
+    path: "/contact",
   },
   {
-    id: "may-02-2026",
-    dateLabel: "Saturday, May 2nd, 2026",
-    statusLabel: "Next cycle",
-    timeLabel: "9:00 AM",
-    title: "Chess & Truck Tournament",
-    meta: "3 hours @ $55.00",
-    summary: "Same structure. Same price. Same clean format.",
-    availabilityLabel: "Next registration cycle open",
+    id: "early-access",
+    dateLabel: "Early access",
+    statusLabel: "Priority list",
+    timeLabel: "9:00 AM to lunch",
+    title: "Launch notice for first families",
+    meta: "Direct update before the public drop",
+    summary: "If you want first notice before the public announcement, contact the team now and we will put you on the early list.",
+    availabilityLabel: "Early list open",
+    ctaLabel: "Contact Team",
+    path: "/contact",
   },
   {
-    id: "may-16-2026",
-    dateLabel: "Saturday, May 16th, 2026",
-    statusLabel: "New date",
-    timeLabel: "9:00 AM",
-    title: "Chess & Truck Tournament",
-    meta: "3 hours @ $55.00",
-    summary: "Another Saturday date for the same event format.",
-    availabilityLabel: "New date available",
+    id: "format-confirmed",
+    dateLabel: "What is locked in",
+    statusLabel: "Format confirmed",
+    timeLabel: "Open & Beginner",
+    title: "Saturday tournament structure",
+    meta: "Shorter family-friendly morning window",
+    summary: "The core structure is already set: Open & Beginner divisions, 9 AM start, and a finish around lunch.",
+    availabilityLabel: "Format live now",
+    ctaLabel: "See Format",
+    path: "/events/chess-and-truck-tournament",
   },
 ];
 
 export const scheduleItems = [
   {
-    title: "Arrival and check-in",
-    text: "Arrive early for check-in and pairings.",
+    title: "Expected arrival window",
+    text: "Families should expect a clean early check-in before play begins.",
   },
   {
-    title: "Round start",
-    text: "Rounds begin at 9:00 AM.",
+    title: "Planned round start",
+    text: "The tournament morning is designed around a 9:00 AM start.",
   },
   {
     title: "Between-round support",
-    text: "Dojo players get coached work between rounds.",
+    text: "Dojo players can add coached work between rounds once the add-on opens.",
   },
   {
-    title: "Wrap-up",
-    text: "Most tournament mornings end around noon.",
+    title: "Planned wrap-up",
+    text: "The goal is a serious morning that is done by lunch.",
   },
 ];
 
 export const policyItems = [
-  "Open section players must have an active USCF membership before the event.",
-  "Beginner section players do not need a USCF membership.",
-  "Medical information is required so staff have the safety details they need on tournament day.",
-  "Stripe is used for secure online payment after the registration form is completed.",
-  "Support questions can be sent through the contact team before registration.",
+  "Open section players will need an active USCF membership.",
+  "Beginner section players will not need a USCF membership.",
+  "The Saturday morning structure is already set before the dates go public.",
+  "Families can use Contact now if they want first notice when launch opens.",
+  "Full registration and payment happen after the first date release.",
 ];
 
 export const faqItems = [
@@ -420,7 +426,7 @@ export const faqItems = [
   {
     question: "When is payment collected?",
     answer:
-      "The family completes the registration form first. After the form is validated, they are sent to Stripe to complete payment.",
+      "Once the first date is released, the family completes the registration form first and then moves to Stripe for payment.",
   },
   {
     question: "Can I add more than one email address?",

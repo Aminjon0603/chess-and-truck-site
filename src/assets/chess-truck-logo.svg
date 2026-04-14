@@ -1,26 +1,26 @@
 <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="ctBg" x1="26" y1="24" x2="192" y2="198" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D4A33E"/>
-      <stop offset="0.5" stop-color="#7FA35A"/>
-      <stop offset="1" stop-color="#173C31"/>
+    <linearGradient id="ctBg" x1="28" y1="24" x2="194" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EEE0B8"/>
+      <stop offset="0.46" stop-color="#C89A4B"/>
+      <stop offset="1" stop-color="#1E4B43"/>
     </linearGradient>
-    <linearGradient id="ctMetal" x1="110" y1="62" x2="110" y2="164" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFF2B8"/>
-      <stop offset="0.45" stop-color="#E4BE5E"/>
-      <stop offset="1" stop-color="#A87619"/>
+    <linearGradient id="ctCore" x1="110" y1="64" x2="110" y2="158" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8E8"/>
+      <stop offset="1" stop-color="#E8E0CC"/>
     </linearGradient>
   </defs>
   <circle cx="110" cy="110" r="102" fill="url(#ctBg)"/>
-  <circle cx="110" cy="110" r="95" stroke="rgba(255,255,255,0.24)" stroke-width="2"/>
-  <path d="M65 159C82 173 96 178 110 178C124 178 138 173 155 159" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
-  <path d="M86 74H134V88H127V100C127 114 119 122 110 126C101 122 93 114 93 100V88H86V74Z" fill="#F7F4EA"/>
-  <path d="M80 89C69 90 65 98 65 107C65 116 71 123 81 125" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
-  <path d="M140 89C151 90 155 98 155 107C155 116 149 123 139 125" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
-  <path d="M94 92H126V104C126 117 118 124 110 128C102 124 94 117 94 104V92Z" fill="url(#ctMetal)"/>
-  <rect x="94" y="129" width="32" height="10" rx="5" fill="#F7F4EA"/>
-  <rect x="86" y="140" width="48" height="12" rx="6" fill="#F7F4EA"/>
-  <rect x="80" y="154" width="60" height="13" rx="6.5" fill="#F7F4EA"/>
-  <path d="M102 59L110 71L118 59" stroke="#F7F4EA" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="110" cy="52" r="6" fill="#F7F4EA"/>
+  <circle cx="110" cy="110" r="94" stroke="rgba(255,255,255,0.28)" stroke-width="2.5"/>
+  <rect x="54" y="54" width="112" height="112" rx="30" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.26)" stroke-width="2"/>
+  <path d="M82 72V148" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <path d="M110 72V148" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <path d="M138 72V148" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <path d="M72 82H148" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <path d="M72 110H148" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <path d="M72 138H148" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <path d="M88 72H132V84H126V96H122V126H134V138H86V126H98V96H94V84H88V72Z" fill="url(#ctCore)"/>
+  <rect x="94" y="60" width="32" height="10" rx="4" fill="#FFF8E8"/>
+  <circle cx="110" cy="154" r="10" fill="#FFF8E8"/>
+  <path d="M74 164C86 172 98 176 110 176C122 176 134 172 146 164" stroke="#FFF8E8" stroke-width="7" stroke-linecap="round"/>
 </svg>

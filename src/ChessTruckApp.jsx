@@ -26,7 +26,6 @@ import {
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.svg";
-import championsTrophy from "./assets/champions-trophy-optimized.jpg";
 import dojoMark from "./assets/dojo-mark.svg";
 import trophyBadge from "./assets/trophy-badge.svg";
 import { validateContactFields, validateRegistrationFields } from "./lib/validation.js";
@@ -199,15 +198,16 @@ function ChampionPortrait({ caption = "Celebrating a tournament morning that fee
   return (
     <article className="surface portrait-card">
       <div className="portrait-ring">
-        <img
-          src={championsTrophy}
-          alt="Young players raising a trophy together"
-          className="portrait-image"
-        />
+        <img src={brandLogo} alt="" className="portrait-image portrait-logo-image" />
       </div>
       <div className="portrait-copy">
-        <span className="mini-tag">Tournament moment</span>
+        <span className="mini-tag">Launch signal</span>
         <p>{caption}</p>
+        <div className="portrait-pills">
+          <span>Open Section</span>
+          <span>Beginner Section</span>
+          <span>NYC</span>
+        </div>
       </div>
     </article>
   );
@@ -268,8 +268,8 @@ function UpcomingTournamentList({ currentPath, navigate, compact = false }) {
       {items.map((item) => (
         <article className="surface tournament-slot" key={item.id}>
           <div className="tournament-slot-head">
+            <span className="slot-status-badge">{item.statusLabel}</span>
             <strong>{item.dateLabel}</strong>
-            <span>{item.statusLabel}</span>
           </div>
 
           <div className="tournament-slot-body">
@@ -286,12 +286,12 @@ function UpcomingTournamentList({ currentPath, navigate, compact = false }) {
 
             <div className="tournament-slot-side">
               <AppLink
-                to="/register"
+                to={item.path || "/contact"}
                 navigate={navigate}
                 currentPath={currentPath}
                 className="btn btn-primary tournament-slot-button"
               >
-                Book
+                {item.ctaLabel || "Open"}
               </AppLink>
               <strong>{item.availabilityLabel}</strong>
             </div>
@@ -325,12 +325,12 @@ function DojoFeature({ currentPath, navigate }) {
         <strong>+$100 with tournament entry</strong>
         <p>{masterTrainingDojo.highlight}</p>
         <AppLink
-          to="/register"
+          to="/contact"
           navigate={navigate}
           currentPath={currentPath}
           className="btn btn-secondary"
         >
-          Choose Dojo Package
+          Ask About Dojo
         </AppLink>
       </div>
     </article>
@@ -355,12 +355,12 @@ function SiteFooter({ currentPath, navigate }) {
               </div>
               <p>{siteBrand.footerNote}</p>
               <AppLink
-                to="/register"
+                to="/contact"
                 navigate={navigate}
                 currentPath={currentPath}
                 className="btn btn-primary footer-cta"
               >
-                Register for the Tournament
+                Get early access
               </AppLink>
             </div>
 
@@ -379,12 +379,12 @@ function SiteFooter({ currentPath, navigate }) {
                   </AppLink>
                 ))}
                 <AppLink
-                  to="/register"
+                  to="/contact"
                   navigate={navigate}
                   currentPath={currentPath}
                   className="footer-link"
                 >
-                  Register
+                  Early Access
                 </AppLink>
               </div>
               <div className="footer-legal-links">
@@ -422,7 +422,7 @@ function SiteFooter({ currentPath, navigate }) {
               <p>{featuredTournament.scheduleLabel}</p>
               <div className="footer-meta">
                 <span>{featuredTournament.formatLabel}</span>
-                <strong>{featuredTournament.pricingLabel}</strong>
+                <strong>Dates announced soon</strong>
               </div>
               <AppLink
                 to="/events/chess-and-truck-tournament"
@@ -498,10 +498,10 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
   return (
     <form className="surface contact-form" onSubmit={handleContactSubmit}>
       <span className="mini-tag">Message the team</span>
-      <h3>Send a question before tournament day</h3>
+      <h3>Ask before the first release</h3>
       <p>
-        Use this form for section fit, logistics, registration help, or anything you would rather
-        confirm before paying.
+        Use this form for early-access interest, section fit, launch timing, logistics, or anything
+        you want confirmed before the dates go live.
       </p>
 
       <label className="field">
@@ -560,7 +560,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           value={contactState.message}
           onChange={updateContactField}
           rows="5"
-          placeholder="Tell us what you want to confirm before registering."
+          placeholder="Tell us what you want to know before the first release opens."
           autoComplete="off"
           required
         />
@@ -572,7 +572,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
 
       <small className={`status-copy status-${contactSubmitState.status}`} aria-live="polite">
         {contactSubmitState.status === "idle"
-          ? "Messages are routed to the tournament support team."
+          ? "Messages go directly to the launch and tournament support team."
           : contactSubmitState.message}
       </small>
     </form>
@@ -590,10 +590,10 @@ function HomePage({ currentPath, navigate }) {
         actions={
           <>
             <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              See Tournament
+              See Launch Format
             </AppLink>
-            <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Register Now
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+              Get Early Access
             </AppLink>
           </>
         }
@@ -636,8 +636,9 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Upcoming dates"
-            title="Book the next tournament"
+            eyebrow="Launch sequence"
+            title="What opens first"
+            intro="No fake calendar. Just the pieces that are already locked in."
           />
           <UpcomingTournamentList currentPath={currentPath} navigate={navigate} compact />
         </div>
@@ -664,7 +665,7 @@ function HomePage({ currentPath, navigate }) {
         <div className="shell">
           <SectionIntro
             eyebrow="Next step"
-            title="See it. Register. Ask."
+            title="See it. Join early. Ask."
           />
           <div className="card-grid card-grid-three">
             {homePage.pageCards.map((item) => (
@@ -694,10 +695,10 @@ function AboutPage({ currentPath, navigate }) {
         actions={
           <>
             <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              View Events
+              View Launch Details
             </AppLink>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Contact the Team
+              Get Early Access
             </AppLink>
           </>
         }
@@ -738,7 +739,7 @@ function AboutPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Operating standards"
             title="What families can expect from the experience"
-            intro="What stays clear before and on tournament day."
+            intro="What stays clear before launch and on tournament day."
           />
           <div className="surface checklist-surface">
             <ul className="checklist">
@@ -763,7 +764,7 @@ function EventsPage({ currentPath, navigate }) {
         portraitCaption="The event should feel welcoming for newer players and serious enough for experienced competitors."
         actions={
           <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-            Open Tournament Page
+            See Launch Format
           </AppLink>
         }
       />
@@ -784,18 +785,18 @@ function EventsPage({ currentPath, navigate }) {
                 <strong>{featuredTournament.scheduleLabel}</strong>
               </div>
               <div>
-                <span>Starting price</span>
-                <strong>{featuredTournament.pricingLabel}</strong>
+                <span>Launch status</span>
+                <strong>First dates announced soon</strong>
               </div>
             </div>
             <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="text-link">
-              View full event page
+              Open launch page
             </AppLink>
           </article>
 
           <article className="surface">
-            <span className="mini-tag">Before families register</span>
-            <h3>What families should know before registering</h3>
+            <span className="mini-tag">Before launch opens</span>
+            <h3>What families should know before the first release</h3>
             <ul className="checklist">
               {policyItems.slice(0, 4).map((item) => (
                 <li key={item}>{item}</li>
@@ -808,9 +809,9 @@ function EventsPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Upcoming tournament dates"
-            title="Saturday events with the same clear structure"
-            intro="Pick the date that works."
+            eyebrow="Launch board"
+            title="What is opening first"
+            intro="The structure is real. The public dates are next."
           />
           <UpcomingTournamentList currentPath={currentPath} navigate={navigate} />
         </div>
@@ -821,7 +822,7 @@ function EventsPage({ currentPath, navigate }) {
           <SectionIntro
             eyebrow="Divisions"
             title="A clear difference between Open and Beginner"
-            intro="Know the fit before you register."
+            intro="Know the fit before the first date goes live."
           />
           <div className="card-grid card-grid-two">
             {sectionOptions.map((item) => (
@@ -844,8 +845,8 @@ function EventsPage({ currentPath, navigate }) {
         <div className="shell">
           <SectionIntro
             eyebrow="Support"
-            title="What families should understand before they pay"
-            intro="Know this before checkout."
+            title="Why families can move early with confidence"
+            intro="The key information is already visible before the first date drops."
           />
           <div className="card-grid card-grid-three">
             {eventsPage.supportCards.map((item) => (
@@ -871,11 +872,11 @@ function TournamentDetailPage({ currentPath, navigate }) {
         portraitCaption="Tournament mornings should end with real energy, earned confidence, and memorable moments for players."
         actions={
           <>
-            <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              Register Now
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+              Get Early Access
             </AppLink>
-            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Ask a Question
+            <AppLink to="/faq" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+              Review FAQ
             </AppLink>
           </>
         }
@@ -924,8 +925,8 @@ function TournamentDetailPage({ currentPath, navigate }) {
         <div className="shell">
           <SectionIntro
             eyebrow="Tournament morning"
-            title="A Saturday flow that is easy for families to follow"
-            intro="Simple schedule. Serious play."
+            title="The Saturday flow is already clear"
+            intro="The first public date is pending. The structure is not."
           />
           <div className="card-grid card-grid-two">
             {scheduleItems.map((item) => (
@@ -995,7 +996,7 @@ function FaqPage() {
         eyebrow={faqPage.eyebrow}
         title={faqPage.title}
         intro={faqPage.intro}
-        portraitCaption="Parents ask better questions when the event already feels thoughtful, organized, and player-centered."
+        portraitCaption="Families ask better questions when the launch already feels thoughtful, organized, and player-centered."
       />
 
       <section className="page-section">
@@ -1019,7 +1020,7 @@ function ContactPage({ contactState, contactSubmitState, updateContactField, han
         eyebrow={contactPage.eyebrow}
         title={contactPage.title}
         intro={contactPage.intro}
-        portraitCaption="Quick, direct support helps families feel ready before registration and before tournament day."
+        portraitCaption="Quick, direct support helps families feel ready before launch and before tournament day."
       />
 
       <section className="page-section">
@@ -2114,13 +2115,13 @@ function ChessTruckApp() {
 
           <div className="header-actions">
             <AppLink
-              to="/register"
+              to="/contact"
               navigate={navigate}
               currentPath={currentPath}
               className="btn btn-primary header-button"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Register
+              Early Access
             </AppLink>
             <button
               type="button"
