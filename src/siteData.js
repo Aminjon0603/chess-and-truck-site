@@ -44,7 +44,7 @@ export const routeMeta = {
   "/contact": {
     title: "Contact | CHESS AND TRUCK",
     description:
-      "Reach the CHESS AND TRUCK tournament team by phone, WhatsApp, email, or the contact form before registration or tournament day.",
+      "Reach the CHESS AND TRUCK tournament team by email or the contact form before registration or tournament day.",
   },
   "/register": {
     title: "Register | CHESS AND TRUCK",
@@ -128,7 +128,7 @@ export const homePage = {
     },
     {
       title: "Ask First",
-      text: "Phone, WhatsApp, email, or the contact form.",
+      text: "Email the team or use the contact form.",
       path: "/contact",
     },
   ],
@@ -167,7 +167,7 @@ export const carouselSlides = [
   {
     label: "Family Support",
     title: "Direct support",
-    text: "WhatsApp, email, and contact stay easy to reach.",
+    text: "Email and the contact form stay easy to reach.",
   },
 ];
 
@@ -254,7 +254,7 @@ export const faqPage = {
 export const contactPage = {
   eyebrow: "Contact",
   title: "Get on the list fast",
-  intro: "Phone, WhatsApp, email, or the contact form. We will update early families first.",
+  intro: "Email the team or use the contact form. We will update early families first.",
   supportCards: [
     {
       title: "Before launch",
@@ -446,43 +446,17 @@ export const faqItems = [
   {
     question: "How can I reach the tournament team quickly?",
     answer:
-      "Use the WhatsApp numbers for the fastest practical communication, or use email and the contact form for support and logistics.",
+      "Use the contact email or the contact form for support, logistics, and early-access questions.",
   },
 ];
 
-export const contactNumbers = [
-  {
-    label: "WhatsApp / Phone",
-    display: "+1 (718) 314-9084",
-    href: "https://wa.me/17183149084",
-  },
-  {
-    label: "WhatsApp / Phone",
-    display: "+1 (332) 345-0632",
-    href: "https://wa.me/13323450632",
-  },
-  {
-    label: "Phone",
-    display: "+1 (917) 394-6147",
-    href: "tel:+19173946147",
-  },
-];
+export const contactNumbers = [];
 
 export const contactEmails = [
   {
-    label: "Tournament inquiries",
-    display: "ikrom.chess@gmail.com",
-    href: "mailto:ikrom.chess@gmail.com",
-  },
-  {
-    label: "Operations",
-    display: "alexnorth615@gmail.com",
-    href: "mailto:alexnorth615@gmail.com",
-  },
-  {
-    label: "Registration support",
-    display: "andrea.lamanna1@gmail.com",
-    href: "mailto:andrea.lamanna1@gmail.com",
+    label: "General inquiries",
+    display: "info@chessandtruck.com",
+    href: "mailto:info@chessandtruck.com",
   },
 ];
 

@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
   contactEmails,
-  contactNumbers,
   contactPage,
   eventsPage,
   faqItems,
@@ -405,10 +404,6 @@ function SiteFooter({ currentPath, navigate }) {
             <div className="footer-column">
               <span className="mini-tag">Support</span>
               <div className="footer-contact-stack">
-                <a href={contactNumbers[0].href} className="footer-contact-link" target="_blank" rel="noreferrer">
-                  <span>WhatsApp / Phone</span>
-                  <strong>{contactNumbers[0].display}</strong>
-                </a>
                 <a href={contactEmails[0].href} className="footer-contact-link">
                   <span>Email</span>
                   <strong>{contactEmails[0].display}</strong>
@@ -467,18 +462,6 @@ function LegalPage({ eyebrow, title, intro, sections }) {
 function ContactDirectory() {
   return (
     <div className="stack-grid">
-      <article className="surface">
-        <span className="mini-tag">Phone / WhatsApp</span>
-        <div className="link-stack">
-          {contactNumbers.map((item) => (
-            <a href={item.href} key={item.display} className="contact-link" target="_blank" rel="noreferrer">
-              <span>{item.label}</span>
-              <strong>{item.display}</strong>
-            </a>
-          ))}
-        </div>
-      </article>
-
       <article className="surface">
         <span className="mini-tag">Email</span>
         <div className="link-stack">

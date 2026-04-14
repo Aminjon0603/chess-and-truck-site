@@ -1,7 +1,5 @@
 export const fallbackRecipients = [
-  "ikrom.chess@gmail.com",
-  "alexnorth615@gmail.com",
-  "andrea.lamanna1@gmail.com",
+  "info@chessandtruck.com",
 ];
 
 export function getNotificationRecipients() {

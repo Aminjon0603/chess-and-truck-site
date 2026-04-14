@@ -27,7 +27,7 @@ STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 RESEND_API_KEY=
 CONTACT_FROM_EMAIL=
-CONTACT_TO_EMAILS=ikrom.chess@gmail.com,alexnorth615@gmail.com,andrea.lamanna1@gmail.com
+CONTACT_TO_EMAILS=info@chessandtruck.com
 ```
 
 `STRIPE_WEBHOOK_SECRET` is used by `/api/stripe-webhook` so the site can receive a trusted payment confirmation directly from Stripe after checkout completes.
