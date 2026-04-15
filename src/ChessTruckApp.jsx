@@ -13,6 +13,7 @@ import {
   masterTrainingDojo,
   navigationItems,
   policyItems,
+  privateLessonsPage,
   privacyPage,
   registerPage,
   routeMeta,
@@ -25,6 +26,7 @@ import {
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.svg";
+import lessonPhoto from "./assets/private-lesson-visual.svg";
 import dojoMark from "./assets/dojo-mark.svg";
 import trophyBadge from "./assets/trophy-badge.svg";
 import { validateContactFields, validateRegistrationFields } from "./lib/validation.js";
@@ -126,6 +128,7 @@ const knownRoutes = new Set([
   "/about",
   "/events",
   "/events/chess-and-truck-tournament",
+  "/private-lessons",
   "/faq",
   "/contact",
   "/register",
@@ -731,6 +734,184 @@ function AboutPage({ currentPath, navigate }) {
               ))}
             </ul>
           </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function PrivateLessonsPage({ currentPath, navigate }) {
+  return (
+    <>
+      <section className="page-hero lesson-page-hero">
+        <div className="shell lesson-hero-grid">
+          <div className="lesson-hero-copy">
+            <span className="section-tag">{privateLessonsPage.eyebrow}</span>
+            <h1>{privateLessonsPage.title}</h1>
+            <p className="page-intro">{privateLessonsPage.intro}</p>
+
+            <div className="lesson-chip-row">
+              {privateLessonsPage.heroChips.map((item) => (
+                <span key={item} className="lesson-chip">
+                  {item}
+                </span>
+              ))}
+            </div>
+
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Ask About Lessons
+              </AppLink>
+              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                See Tournament Side
+              </AppLink>
+            </div>
+          </div>
+
+          <article className="surface surface-dark lesson-hero-panel">
+            <div className="lesson-hero-top">
+              <div className="lesson-photo-shell">
+                <img
+                  src={lessonPhoto}
+                  alt="Original chess coaching visual with a knight piece, board grid, and launch-style club graphics"
+                  className="lesson-photo"
+                />
+              </div>
+
+              <div className="lesson-hero-note">
+                <span className="mini-tag mini-tag-dark">Coaching focus</span>
+                <p>{privateLessonsPage.heroNote}</p>
+              </div>
+            </div>
+
+            <div className="fact-list lesson-fact-grid">
+              {privateLessonsPage.quickFacts.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow="Lesson formats"
+            title="Private coaching should fit the student, not force the same setting every time"
+            intro="Different students focus differently. The format matters."
+          />
+          <div className="card-grid card-grid-three lesson-format-grid">
+            {privateLessonsPage.formatCards.map((item) => (
+              <article className="surface lesson-format-card" key={item.title}>
+                <span className="mini-tag">{item.eyebrow}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={privateLessonsPage.pathSection.eyebrow}
+            title={privateLessonsPage.pathSection.title}
+            intro={privateLessonsPage.pathSection.intro}
+          />
+          <div className="card-grid card-grid-three lesson-plan-grid">
+            {privateLessonsPage.pathCards.map((item) => (
+              <article className="surface lesson-plan-card" key={item.title}>
+                <div className="lesson-plan-top">
+                  <span className="mini-tag">{item.eyebrow}</span>
+                  <h3>{item.title}</h3>
+                </div>
+                <ul className="checklist lesson-plan-list">
+                  {item.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+                <div className="lesson-plan-footer">
+                  <strong>{item.meta}</strong>
+                  <span>{item.note}</span>
+                </div>
+                <AppLink
+                  to="/contact"
+                  navigate={navigate}
+                  currentPath={currentPath}
+                  className="btn btn-primary lesson-plan-button"
+                >
+                  {item.cta}
+                </AppLink>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell lesson-story-grid">
+          <article className="surface surface-dark lesson-highlight-card">
+            <span className="mini-tag mini-tag-dark">Private coaching standard</span>
+            <h3>{privateLessonsPage.highlightTitle}</h3>
+            <p>{privateLessonsPage.highlightBody}</p>
+            <ul className="checklist checklist-light">
+              {privateLessonsPage.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <div className="stack-grid">
+            {privateLessonsPage.fitCards.map((item) => (
+              <article className="surface lesson-fit-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow="How it starts"
+            title="A clean start matters more than a flashy promise"
+            intro="The first conversations should make the student feel understood, not sold to."
+          />
+          <div className="lesson-process-grid">
+            {privateLessonsPage.processSteps.map((item) => (
+              <article className="surface lesson-process-card" key={item.step}>
+                <span className="lesson-step">{item.step}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-cta-panel">
+            <div className="lesson-cta-copy">
+              <span className="section-tag">Private lesson inquiry</span>
+              <h2>{privateLessonsPage.ctaTitle}</h2>
+              <p>{privateLessonsPage.ctaText}</p>
+            </div>
+            <div className="cta-row lesson-cta-actions">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Contact for Private Lessons
+              </AppLink>
+              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
+                Email info@chessandtruck.com
+              </a>
+            </div>
+          </article>
         </div>
       </section>
     </>
@@ -2011,6 +2192,8 @@ function ChessTruckApp() {
         return <EventsPage currentPath={currentPath} navigate={navigate} />;
       case "/events/chess-and-truck-tournament":
         return <TournamentDetailPage currentPath={currentPath} navigate={navigate} />;
+      case "/private-lessons":
+        return <PrivateLessonsPage currentPath={currentPath} navigate={navigate} />;
       case "/faq":
         return <FaqPage />;
       case "/terms":

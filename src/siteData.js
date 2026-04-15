@@ -11,6 +11,7 @@ export const navigationItems = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
   { label: "Events", path: "/events" },
+  { label: "Lessons", path: "/private-lessons" },
   { label: "FAQ", path: "/faq" },
   { label: "Contact", path: "/contact" },
 ];
@@ -35,6 +36,11 @@ export const routeMeta = {
     title: "Chess & Truck Tournament | CHESS AND TRUCK",
     description:
       "See the confirmed format, Saturday schedule, sections, and launch details for the Chess & Truck Tournament.",
+  },
+  "/private-lessons": {
+    title: "Private Lessons | CHESS AND TRUCK",
+    description:
+      "Private chess lessons for NYC students and families who want personalized coaching, stronger fundamentals, and cleaner tournament preparation.",
   },
   "/faq": {
     title: "FAQ | CHESS AND TRUCK",
@@ -122,12 +128,12 @@ export const homePage = {
       path: "/events/chess-and-truck-tournament",
     },
     {
-      title: "Get Early Access",
-      text: "Reach out now and hear first when dates go live.",
-      path: "/contact",
+      title: "Private Lessons",
+      text: "1:1 coaching for students who want faster progress.",
+      path: "/private-lessons",
     },
     {
-      title: "Ask First",
+      title: "Contact Team",
       text: "Email the team or use the contact form.",
       path: "/contact",
     },
@@ -269,6 +275,125 @@ export const contactPage = {
       text: "Choose the fastest way to reach us.",
     },
   ],
+};
+
+export const privateLessonsPage = {
+  eyebrow: "Private Lessons",
+  title: "One student. One coach. One clear plan.",
+  intro:
+    "Private chess coaching for students and families who want more structure, stronger fundamentals, and coaching that actually matches the player.",
+  heroChips: ["NYC-based", "Online or in person", "Beginner to tournament-ready"],
+  quickFacts: [
+    { label: "Session style", value: "1:1 coaching" },
+    { label: "Formats", value: "Home, online, club-style" },
+    { label: "Best for", value: "Students who need a real plan" },
+  ],
+  heroNote:
+    "The best private lesson does not just teach chess. It matches the student, the pace, and the format from the start.",
+  formatCards: [
+    {
+      eyebrow: "At home",
+      title: "In-home lessons",
+      text: "A focused lesson in the student's own space, ideal for families who want convenience without losing structure.",
+    },
+    {
+      eyebrow: "Online",
+      title: "Remote coaching",
+      text: "A strong option for busy schedules, recurring weekly work, and game review without commuting across the city.",
+    },
+    {
+      eyebrow: "In person",
+      title: "Club-style sessions",
+      text: "A private lesson in a chess-focused setting for students who benefit from being outside the house and near the board.",
+    },
+  ],
+  pathSection: {
+    eyebrow: "Coaching Paths",
+    title: "A clean lesson launch, not a messy menu",
+    intro:
+      "Private lessons are opening soon. These are the first coaching paths we plan to release for families who want a clear starting point.",
+  },
+  pathCards: [
+    {
+      eyebrow: "Launch first",
+      title: "Starter Lesson",
+      bullets: [
+        "One private session to assess level, pace, and coach fit",
+        "Best for families who want to meet the coach before choosing a longer rhythm",
+        "A clean first step for students who are just entering structured training",
+      ],
+      meta: "Single-session inquiry",
+      note: "First private lesson openings announced soon",
+      cta: "Ask about starter lessons",
+    },
+    {
+      eyebrow: "Core rhythm",
+      title: "Weekly Coaching",
+      bullets: [
+        "A consistent weekly lesson slot with one coach and one training direction",
+        "Better for students who improve through rhythm, accountability, and repetition",
+        "Strong fit for families who want progress that builds month to month",
+      ],
+      meta: "Recurring private coaching",
+      note: "Priority scheduling opens with launch",
+      cta: "Ask about weekly coaching",
+    },
+    {
+      eyebrow: "Competitive focus",
+      title: "Tournament Prep Block",
+      bullets: [
+        "A short focused run of lessons built around event readiness",
+        "Can center around game review, calculation, openings, and tournament habits",
+        "Best for players who already compete and want sharper preparation before key events",
+      ],
+      meta: "Pre-event coaching track",
+      note: "Available after the first lesson release",
+      cta: "Ask about prep coaching",
+    },
+  ],
+  fitCards: [
+    {
+      title: "New players who need a real base",
+      text: "Openings can wait. We start with board vision, tactics habits, notation, and decision-making that actually stays with the student.",
+    },
+    {
+      title: "Tournament players who need sharper work",
+      text: "Private lessons can center around calculation, endgames, opening clarity, time management, and review of the student's own games.",
+    },
+    {
+      title: "Families who want consistency",
+      text: "Instead of random progress, the student works with one coach, one pace, and one plan that can carry across months.",
+    },
+  ],
+  processSteps: [
+    {
+      step: "01",
+      title: "We match the coach to the student",
+      text: "Age, level, goals, temperament, and schedule matter. The pairing should feel right from the start.",
+    },
+    {
+      step: "02",
+      title: "We set the first training priorities",
+      text: "The opening weeks define the pace: fundamentals, weak spots, confidence, and what the student should work on between sessions.",
+    },
+    {
+      step: "03",
+      title: "Progress stays visible",
+      text: "Lessons should build toward something measurable: stronger play, better tournament readiness, and clearer next targets.",
+    },
+  ],
+  highlightTitle: "What private coaching should feel like",
+  highlightBody:
+    "Not generic. Not random. Not one-size-fits-all. The right private lesson should feel calm, demanding, and specific to the student in front of the board.",
+  checklist: [
+    "Coach matching based on the player, not just calendar availability",
+    "A level-appropriate lesson plan instead of generic puzzles only",
+    "Flexible format depending on how the student learns best",
+    "Clear contact path before lessons begin",
+  ],
+  ctaTitle: "Tell us the student, the goal, and the schedule you want.",
+  ctaText:
+    "If you send age, level, past tournament experience, and whether you prefer in-home or online, we can point you to the strongest starting setup.",
 };
 
 export const registerPage = {
