@@ -9,12 +9,92 @@ export const siteBrand = {
 
 export const navigationItems = [
   { label: "Home", path: "/" },
-  { label: "About", path: "/about" },
-  { label: "Events", path: "/events" },
+  { label: "Camps", path: "/camps" },
   { label: "Lessons", path: "/private-lessons" },
+  { label: "Events", path: "/events" },
+  { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
-  { label: "Contact", path: "/contact" },
 ];
+
+export const lessonMenuItems = [
+  {
+    label: "Online Lessons",
+    path: "/lessons/online",
+    description: "Remote coaching with structure, game review, and a cleaner weekly rhythm.",
+    signal: "Remote coaching",
+    imageKey: "online",
+  },
+  {
+    label: "In Person Lessons",
+    path: "/lessons/in-person",
+    description: "Face-to-face coaching in New York City for students who learn better over the board.",
+    signal: "NYC live coaching",
+    imageKey: "inperson",
+  },
+  {
+    label: "Group Lessons",
+    path: "/lessons/group",
+    description: "Small-group training with smarter pacing, better grouping, and more energy in the room.",
+    signal: "Small training groups",
+    imageKey: "group",
+  },
+  {
+    label: "Manage Your Lessons",
+    path: "/lessons/manage",
+    description: "Schedule help, lesson changes, and direct support while the lesson desk launches.",
+    signal: "Lesson desk",
+    imageKey: "manage",
+  },
+];
+
+export const lessonMenuFeature = {
+  eyebrow: "Lesson launch",
+  title: "Choose the right lesson path fast.",
+  text:
+    "Online, in-person, group, and support pages built for New York City families who want clarity before lessons open.",
+  ctaLabel: "Open lesson overview",
+  ctaPath: "/private-lessons",
+};
+
+export const campMenuItems = [
+  {
+    label: "Camp Overview",
+    path: "/camps",
+    description: "See how the first camp release is being structured for NYC families and school breaks.",
+    signal: "Camp launch",
+    imageKey: "overview",
+  },
+  {
+    label: "Training Camps",
+    path: "/camps/training",
+    description: "Daily chess camp format built around rhythm, coaching, and real over-the-board work.",
+    signal: "Daily training",
+    imageKey: "training",
+  },
+  {
+    label: "Tournament Prep Camps",
+    path: "/camps/prep",
+    description: "Sharper camp blocks for players who already compete and want stronger event preparation.",
+    signal: "Competitive focus",
+    imageKey: "prep",
+  },
+  {
+    label: "Online Camps",
+    path: "/camps/online",
+    description: "Remote camp format for families who want structure without crossing the city.",
+    signal: "Remote camp",
+    imageKey: "online",
+  },
+];
+
+export const campMenuFeature = {
+  eyebrow: "Camp launch",
+  title: "School-break chess camps, built the clean way.",
+  text:
+    "Training-first camp formats for New York City families who want clear structure before registration opens.",
+  ctaLabel: "Open camp overview",
+  ctaPath: "/camps",
+};
 
 export const routeMeta = {
   "/": {
@@ -25,12 +105,32 @@ export const routeMeta = {
   "/about": {
     title: "About | CHESS AND TRUCK",
     description:
-      "Learn how CHESS AND TRUCK is building a cleaner New York City tournament experience for ambitious players and families.",
+      "Learn why CHESS AND TRUCK is being built for NYC families, what experience shapes the program, and how camps, lessons, and events are being structured.",
+  },
+  "/camps": {
+    title: "Camps | CHESS AND TRUCK",
+    description:
+      "See the CHESS AND TRUCK camp launch structure, school-break format, and what families can expect before dates go live.",
+  },
+  "/camps/training": {
+    title: "Training Camps | CHESS AND TRUCK",
+    description:
+      "Daily training camp format for students who want structured chess work, strong rhythm, and coach-led practice.",
+  },
+  "/camps/prep": {
+    title: "Tournament Prep Camps | CHESS AND TRUCK",
+    description:
+      "Tournament prep camp blocks for competitive players who want sharper game review, calculation, and event readiness.",
+  },
+  "/camps/online": {
+    title: "Online Camps | CHESS AND TRUCK",
+    description:
+      "Online camp format for students who want a structured remote chess week with clear coaching and daily direction.",
   },
   "/events": {
     title: "Events | CHESS AND TRUCK",
     description:
-      "See the CHESS AND TRUCK launch format, division structure, and what is already confirmed before the first dates are announced.",
+      "NYC scholastic chess tournaments with Open and Beginner sections, a Saturday morning format, and clear early-access details before dates go live.",
   },
   "/events/chess-and-truck-tournament": {
     title: "Chess & Truck Tournament | CHESS AND TRUCK",
@@ -38,9 +138,29 @@ export const routeMeta = {
       "See the confirmed format, Saturday schedule, sections, and launch details for the Chess & Truck Tournament.",
   },
   "/private-lessons": {
-    title: "Private Lessons | CHESS AND TRUCK",
+    title: "Lessons | CHESS AND TRUCK",
     description:
-      "Private chess lessons for NYC students and families who want personalized coaching, stronger fundamentals, and cleaner tournament preparation.",
+      "Chess lessons in NYC and online with game review, structured coaching, and clear lesson options for beginner and tournament-ready students.",
+  },
+  "/lessons/online": {
+    title: "Online Lessons | CHESS AND TRUCK",
+    description:
+      "Online chess lessons for students who want focused coaching, cleaner structure, and a launch-ready private lesson path.",
+  },
+  "/lessons/in-person": {
+    title: "In Person Lessons | CHESS AND TRUCK",
+    description:
+      "In-person chess lessons in New York City for students who benefit from direct board work and face-to-face coaching.",
+  },
+  "/lessons/group": {
+    title: "Group Lessons | CHESS AND TRUCK",
+    description:
+      "Small-group chess lessons for students who learn well through shared pace, focused instruction, and strong level matching.",
+  },
+  "/lessons/manage": {
+    title: "Manage Lessons | CHESS AND TRUCK",
+    description:
+      "Lesson support for current and incoming families who need scheduling help, coaching guidance, or next-step coordination.",
   },
   "/faq": {
     title: "FAQ | CHESS AND TRUCK",
@@ -72,11 +192,11 @@ export const routeMeta = {
 export const featuredTournament = {
   slug: "chess-and-truck-tournament",
   title: "Chess & Truck Tournament",
-  city: "New York City",
+  city: "Brick Church, 62 E 92nd Street",
   scheduleLabel: "Saturday mornings, 9:00 AM to lunch",
   formatLabel: "Open & Beginner",
   pricingLabel: "Registration from $55",
-  venueLabel: "New York City venue details shared with registered families",
+  venueLabel: "Brick Church, 62 E 92nd Street",
   shortSummary: "Open & Beginner. Saturday mornings. First dates announced soon.",
   longSummary: "The format is locked in. The first public release is next.",
   basePrice: 55,
@@ -88,70 +208,123 @@ export const footerLegalLinks = [
   { label: "Privacy Policy", path: "/privacy" },
 ];
 
-export const heroStats = [
-  {
-    value: "2 sections",
-    label: "Open & Beginner",
-  },
-  {
-    value: "9 AM to lunch",
-    label: "Saturday morning format",
-  },
-  {
-    value: "Launching soon",
-    label: "First dates released soon",
-  },
-];
-
 export const homePage = {
-  eyebrow: "NYC scholastic chess launch",
-  title: "Launch is close. Be early.",
-  intro: "Open & Beginner Saturday tournaments for New York City players. The first dates drop soon.",
-  valueCards: [
-    {
-      title: "Open Section",
-      text: "Rated play for competitors who already hold an active USCF ID.",
-    },
-    {
-      title: "Beginner Section",
-      text: "A cleaner first tournament step for players who are still building confidence.",
-    },
-    {
-      title: "Dojo Option",
-      text: "An additional coached layer around the tournament morning for ambitious players.",
-    },
+  eyebrow: "NYC chess programs",
+  title: "Structured chess programs for NYC students.",
+  intro: "Camps, lessons, and scholastic events with clear format, direct support, and a clean path into real chess improvement.",
+  heroFacts: [
+    { label: "City", value: "New York City" },
+    { label: "Formats", value: "Camps, lessons, events" },
+    { label: "Launch", value: "Programs opening soon" },
   ],
-  pageCards: [
+  offerSection: {
+    eyebrow: "What we offer",
+    title: "Three clear ways to work with us",
+    intro: "Families should be able to see the options fast and choose the right starting point.",
+  },
+  offerCards: [
     {
-      title: "See the Format",
-      text: "What is already confirmed before launch.",
-      path: "/events/chess-and-truck-tournament",
+      title: "Camps",
+      text: "School-break camps with coached lessons, guided games, and a structured daily rhythm.",
+      path: "/camps",
     },
     {
-      title: "Private Lessons",
-      text: "1:1 coaching for students who want faster progress.",
+      title: "Lessons",
+      text: "Private and group coaching for students who want a more consistent training path.",
       path: "/private-lessons",
     },
     {
-      title: "Contact Team",
-      text: "Email the team or use the contact form.",
-      path: "/contact",
+      title: "Events",
+      text: "Open and Beginner tournament formats built to be clear and parent-friendly from the start.",
+      path: "/events",
     },
   ],
+  audienceSection: {
+    eyebrow: "Who this is for",
+    title: "Built for students and families who want structure",
+    intro: "Different players start in different places. The format should match the student.",
+  },
+  audienceCards: [
+    {
+      title: "Beginners",
+      text: "Students who need a friendlier first step into chess lessons, camps, or tournament play.",
+    },
+    {
+      title: "Improving players",
+      text: "Students who already know the basics and want stronger habits, clearer coaching, and better tournament readiness.",
+    },
+    {
+      title: "NYC parents",
+      text: "Families who want concrete details, clear scheduling, and programs that feel organized from the first click.",
+    },
+  ],
+  launchSection: {
+    eyebrow: "What opens first",
+    title: "The first release is being finalized now",
+    intro: "The calendar is still being finalized, but the structure is already visible.",
+  },
+  serviceCards: [
+    {
+      title: "See Events",
+      text: "Review the tournament structure, sections, schedule, and what is already confirmed.",
+      path: "/events/chess-and-truck-tournament",
+    },
+    {
+      title: "See Camps",
+      text: "Explore the camp format, sample day, practical details, and early access information.",
+      path: "/camps",
+    },
+    {
+      title: "See Lessons",
+      text: "Choose the lesson format that fits the student and ask about private coaching launch spots.",
+      path: "/private-lessons",
+    },
+  ],
+  processSection: {
+    eyebrow: "How it works",
+    title: "A simple way to get started",
+    intro: "The next step should always be obvious.",
+  },
   processCards: [
     {
-      title: "Review the event",
-      text: "See the essentials fast.",
+      title: "Choose the program",
+      text: "Start with camps, lessons, or events based on the student and your schedule.",
     },
     {
-      title: "Choose the right section",
-      text: "Open or Beginner.",
+      title: "Review the details",
+      text: "See format, level fit, launch timing, and the important practical information first.",
     },
     {
-      title: "Complete registration and payment",
-      text: "Form first. Checkout after.",
+      title: "Join early access",
+      text: "Use the contact page to hear first when dates, enrollment, or lesson openings go live.",
     },
   ],
+  whySection: {
+    eyebrow: "Why choose us",
+    title: "What makes the launch feel more trustworthy",
+    intro: "Good chess programs should already feel organized before registration even opens.",
+  },
+  whyCards: [
+    {
+      title: "Clear information first",
+      text: "Pages are built to answer the real questions parents ask before they commit.",
+    },
+    {
+      title: "Chess-first structure",
+      text: "Programs are centered on lessons, games, review, and actual student improvement.",
+    },
+    {
+      title: "Beginner-friendly entry points",
+      text: "Newer players get cleaner starting options instead of being thrown into the wrong environment.",
+    },
+    {
+      title: "NYC-focused",
+      text: "The site, schedule, and program direction are built around real New York City families and school rhythms.",
+    },
+  ],
+  ctaTitle: "Join the waitlist before the first release opens.",
+  ctaText:
+    "If you want first notice for camps, lessons, or tournament dates, contact us now and we will keep you updated.",
 };
 
 export const carouselSlides = [
@@ -177,60 +350,629 @@ export const carouselSlides = [
   },
 ];
 
+export const lessonCarouselSlides = [
+  {
+    key: "online",
+    label: "Online Lessons",
+    title: "Remote coaching with a real weekly rhythm",
+    text: "Best for families who want structure, game review, and no commute.",
+    imageKey: "online",
+    path: "/lessons/online",
+  },
+  {
+    key: "inperson",
+    label: "In Person Lessons",
+    title: "Face-to-face board work in New York City",
+    text: "For students who focus better live and learn faster over the board.",
+    imageKey: "inperson",
+    path: "/lessons/in-person",
+  },
+  {
+    key: "group",
+    label: "Group Lessons",
+    title: "Small groups with cleaner level matching",
+    text: "Shared pace, stronger energy, and less wasted time than oversized classes.",
+    imageKey: "group",
+    path: "/lessons/group",
+  },
+  {
+    key: "manage",
+    label: "Lesson Desk",
+    title: "Schedule, support, and launch updates",
+    text: "Use this path for lesson questions while the full lesson system opens soon.",
+    imageKey: "manage",
+    path: "/lessons/manage",
+  },
+];
+
+export const campOverviewPage = {
+  eyebrow: "Camps",
+  title: "Structured Chess Camps in NYC",
+  intro:
+    "Daily lessons, guided games, and real chess improvement during school breaks. Built for NYC families who want an organized chess-first camp day.",
+  chips: ["School-break camps", "Launch soon", "NYC families"],
+  heroFacts: [
+    { label: "Ages", value: "6-14 planned" },
+    { label: "Levels", value: "Beginner-friendly" },
+    { label: "Location", value: "Upper East Side, NYC" },
+    { label: "Format", value: "Half-day and full-day planned" },
+  ],
+  portraitCaption:
+    "Camp should feel active, organized, and clearly built around chess improvement from the first day.",
+  asideTag: "Camp snapshot",
+  asideTitle: "A practical first release",
+  asideText:
+    "The first camp launch is being finalized now. Families will get schedule, location, and enrollment details as soon as dates are released.",
+  asideFacts: [
+    { label: "Dates", value: "Coming soon" },
+    { label: "Season", value: "School breaks" },
+    { label: "Enrollment", value: "Early access open" },
+  ],
+  overviewSection: {
+    eyebrow: "What camp includes",
+    title: "What students do during the day",
+    intro: "A clear camp rhythm built around learning, playing, and improving.",
+  },
+  overviewPoints: [
+    {
+      title: "Daily coached lessons",
+      text: "Students work with a coach each day instead of being left with unstructured chess time.",
+    },
+    {
+      title: "Supervised practice games",
+      text: "Games are part of the program, with guidance and review built in.",
+    },
+    {
+      title: "Puzzle solving",
+      text: "Tactics, calculation, and pattern work are part of the daily warm-up and lesson flow.",
+    },
+    {
+      title: "Mini tournament play",
+      text: "Students get used to clock play, focus, and game-day habits in a camp setting.",
+    },
+    {
+      title: "Structured day rhythm",
+      text: "The day is organized in blocks so students know when they learn, play, break, and review.",
+    },
+  ],
+  detailsSection: {
+    eyebrow: "Camp details",
+    title: "The practical details parents ask first",
+    intro: "Some details are still being finalized. Here is what is already planned.",
+  },
+  detailsCards: [
+    { title: "Location", text: "Upper East Side, NYC" },
+    { title: "Dates", text: "Dates coming soon" },
+    { title: "Time", text: "Morning and full-day windows planned" },
+    { title: "Format", text: "Half-day and full-day options planned" },
+    { title: "Ages", text: "Ages 6-14 planned" },
+    { title: "Skill levels", text: "Beginner-friendly with level grouping" },
+    { title: "Launch status", text: "Early access list open now" },
+  ],
+  scheduleSection: {
+    eyebrow: "Sample day",
+    title: "A sample camp day",
+    intro: "Exact timing may shift slightly by age group, but the structure will stay organized and easy to follow.",
+  },
+  sampleSchedule: [
+    {
+      time: "9:00 AM",
+      title: "Warm-up puzzles",
+      text: "Short tactical work to settle in and switch into chess mode.",
+    },
+    {
+      time: "9:30 AM",
+      title: "Group lesson",
+      text: "Coach-led instruction built around one clear theme for the day.",
+    },
+    {
+      time: "10:30 AM",
+      title: "Practice games",
+      text: "Students apply the lesson in guided games instead of just listening all morning.",
+    },
+    {
+      time: "11:30 AM",
+      title: "Break / lunch block",
+      text: "Planned downtime to reset before the next training segment.",
+    },
+    {
+      time: "12:15 PM",
+      title: "Mini tournament",
+      text: "Short competitive rounds to build focus, clock habits, and confidence.",
+    },
+    {
+      time: "1:15 PM",
+      title: "Endgame or game review",
+      text: "The day closes with review so students leave with something concrete learned.",
+    },
+  ],
+  learningSection: {
+    eyebrow: "What students learn",
+    title: "The main chess areas camp can help build",
+    intro: "The goal is not only to keep students busy. The goal is to help them improve.",
+  },
+  learningCards: [
+    { title: "Tactics", text: "Pattern recognition, calculation, and spotting opportunities faster." },
+    { title: "Opening fundamentals", text: "Simple setup ideas, development habits, and cleaner early-game decisions." },
+    { title: "Strategy", text: "Piece activity, planning, and understanding what the position needs." },
+    { title: "Endgames", text: "Basic winning methods, key techniques, and confidence in simpler positions." },
+    { title: "Tournament habits", text: "Clock use, notation awareness, focus, and how to recover after mistakes." },
+    { title: "Thinking process", text: "Slowing down, checking candidate moves, and making better decisions move by move." },
+  ],
+  parentSection: {
+    eyebrow: "Why parents choose it",
+    title: "Why this camp format works for families",
+    intro: "Clear structure matters as much as strong instruction.",
+  },
+  parentReasons: [
+    { title: "Structured instruction", text: "Each day has a plan instead of filling time with random activities." },
+    { title: "Small groups planned", text: "The goal is more coaching attention and better pacing, not oversized camp rooms." },
+    { title: "Level-based guidance", text: "Students should be challenged at the right level instead of all doing the same thing." },
+    { title: "Organized environment", text: "Families should know the schedule, contact path, and expectations before camp begins." },
+    { title: "Chess-first program", text: "This is a chess camp with real learning goals, not a general camp with some chess added in." },
+  ],
+  cards: [
+    {
+      title: "Training Camps",
+      text: "Daily school-break camps with lessons, practice games, puzzle work, and coach-led review.",
+      path: "/camps/training",
+    },
+    {
+      title: "Tournament Prep Camps",
+      text: "Shorter competitive camp blocks for players getting ready for rated events and stronger tournament habits.",
+      path: "/camps/prep",
+    },
+    {
+      title: "Online Camps",
+      text: "Remote training format for families who want camp structure without commuting across the city.",
+      path: "/camps/online",
+    },
+  ],
+  formatSection: {
+    eyebrow: "Camp tracks",
+    title: "Explore the camp formats in development",
+    intro: "Each track keeps the same organized standard, but the training focus changes.",
+  },
+  faqSection: {
+    eyebrow: "Camp FAQ",
+    title: "Quick answers before dates go live",
+    intro: "Short answers to the most common parent questions.",
+  },
+  faqs: [
+    {
+      question: "Is this good for beginners?",
+      answer: "Yes. The plan is to make the first release beginner-friendly while still giving stronger students enough challenge through grouping and coaching adjustments.",
+    },
+    {
+      question: "Are students grouped by level?",
+      answer: "That is the plan. Students should be grouped as cleanly as possible so the lesson pace and game level make sense.",
+    },
+    {
+      question: "What should students bring?",
+      answer: "Final details will be shared with the first public dates, but families should expect basic camp-day items plus anything needed for lunch or snacks.",
+    },
+    {
+      question: "Is tournament experience required?",
+      answer: "No. General camp should work for students who are still building fundamentals. Tournament-prep camp is the more competitive option.",
+    },
+    {
+      question: "Is lunch included?",
+      answer: "Lunch details are not final yet. The first release will clearly state whether lunch is included or whether students should bring their own.",
+    },
+    {
+      question: "How do I join early access?",
+      answer: "Use the contact page or email info@chessandtruck.com. Families on the early access list will hear first when dates and enrollment are released.",
+    },
+  ],
+  ctaTitle: "Join the camp early access list",
+  ctaText:
+    "If chess camp is part of your plan for the next school break, contact us now and we will send dates, format details, and enrollment information as soon as the first release opens.",
+};
+
+export const campDetailPages = {
+  "/camps/training": {
+    eyebrow: "Training Camps",
+    title: "Daily camp rhythm for students who need more than casual chess.",
+    intro:
+      "A school-break camp format built around instruction, supervised play, review, and daily habits that actually move a student forward. First training camp release opens soon.",
+    chips: ["Daily rhythm", "School breaks", "Launch soon"],
+    portraitCaption:
+      "A strong training camp should feel focused and alive, not like a room where chess is just one activity in the background.",
+    asideTag: "Training camp fit",
+    asideTitle: "This should feel like a real training week",
+    asideText:
+      "The best version gives students structure each day: learn, apply, review, and come back the next morning sharper than before.",
+    asideFacts: [
+      { label: "Best for", value: "Students building fundamentals" },
+      { label: "Daily feel", value: "Coach-led and active" },
+      { label: "Launch status", value: "Opening soon" },
+    ],
+    cards: [
+      { title: "Daily instruction", text: "Coach-led camp blocks with a clear training theme instead of random activity shifts." },
+      { title: "Built-in play and review", text: "Students should not only learn ideas. They should play, make decisions, and review what happened." },
+      { title: "Stronger routine", text: "A multi-day camp can create better momentum than one-off sessions if the pace is right." },
+    ],
+    pathSection: {
+      eyebrow: "Camp paths",
+      title: "Three ways the first training camp release can work",
+      intro: "Short, concrete camp options for families who want clarity before dates open.",
+    },
+    pathCards: [
+      {
+        eyebrow: "Launch first",
+        title: "Intro Camp Week",
+        bullets: [
+          "First release week designed to set standards and rhythm correctly",
+          "Best for families who want a clean introduction to the camp format",
+          "Useful for students who need structure more than intensity right away",
+        ],
+        meta: "Founding camp release",
+        note: "First dates announced soon",
+        cta: "Ask about intro camp week",
+      },
+      {
+        eyebrow: "Core rhythm",
+        title: "Training Block",
+        bullets: [
+          "Daily coaching rhythm with instruction, play, and review built into the week",
+          "Good for students who improve through repetition and consistent expectations",
+          "Stronger fit for families who want a serious chess week, not generic childcare",
+        ],
+        meta: "Full training week",
+        note: "Priority notice opens with launch",
+        cta: "Ask about training blocks",
+      },
+      {
+        eyebrow: "Focused push",
+        title: "Skill Camp",
+        bullets: [
+          "Camp week centered on one area such as tactics, endgames, or tournament habits",
+          "Good for players who need a sharper training theme than a general program offers",
+          "Can sit well before or after an event stretch depending on the student's goals",
+        ],
+        meta: "Theme-based camp",
+        note: "Released after the first camp week",
+        cta: "Ask about skill camps",
+      },
+    ],
+    checklistTitle: "What a strong training camp should include",
+    checklist: [
+      "Coach-led structure from arrival to the final game review",
+      "Actual chess work, not only puzzle packets and casual play",
+      "Level-aware pacing so students are challenged without getting lost",
+      "Clear communication with families before registration opens",
+    ],
+    ctaTitle: "Ask about training camp launch spots",
+    ctaText:
+      "If this is the camp format your family wants first, contact us now and we will reply when the first training camp dates go live.",
+    ctaLabel: "Contact about training camps",
+  },
+  "/camps/prep": {
+    eyebrow: "Tournament Prep Camps",
+    title: "Shorter, sharper camp blocks for players who already compete.",
+    intro:
+      "This camp format is for players who are already in tournament rhythm and want a more focused training week before key events. First prep camp release opens soon.",
+    chips: ["Competitive players", "Event readiness", "Launch soon"],
+    portraitCaption:
+      "Prep camp should feel sharper than general camp: more game review, cleaner goals, and better event focus.",
+    asideTag: "Prep camp fit",
+    asideTitle: "This is for players who already care about performance",
+    asideText:
+      "The goal is not to keep the room busy. The goal is to help players walk into events feeling more prepared, more accurate, and more stable.",
+    asideFacts: [
+      { label: "Best for", value: "Active competitors" },
+      { label: "Works well for", value: "Game review and prep" },
+      { label: "Launch status", value: "Opening soon" },
+    ],
+    cards: [
+      { title: "Game review first", text: "The week should include real review of practical mistakes, not only abstract instruction." },
+      { title: "Better tournament habits", text: "Useful for pacing, notation, decision-making, and pre-event discipline." },
+      { title: "Sharper themes", text: "Calculation, openings, endgames, and competitive habits can be trained more directly here." },
+    ],
+    pathSection: {
+      eyebrow: "Prep tracks",
+      title: "Three ways tournament camp can open",
+      intro: "Competitive families usually want the fast version: what it is, who it is for, and how it starts.",
+    },
+    pathCards: [
+      {
+        eyebrow: "Launch first",
+        title: "Weekend Prep Block",
+        bullets: [
+          "Short first-release format for players who want a concentrated prep experience",
+          "Good first version while the broader prep calendar is still opening",
+          "Useful for families who want something sharper than a general camp week",
+        ],
+        meta: "Short prep release",
+        note: "First prep dates announced soon",
+        cta: "Ask about prep blocks",
+      },
+      {
+        eyebrow: "Core rhythm",
+        title: "Pre-Event Camp Week",
+        bullets: [
+          "Focused week ahead of a competitive stretch or key tournament window",
+          "Can center around game review, openings, calculation, and practical tournament habits",
+          "Best for players who already compete and want cleaner preparation",
+        ],
+        meta: "Competition week",
+        note: "Priority notice opens with launch",
+        cta: "Ask about pre-event weeks",
+      },
+      {
+        eyebrow: "Post-event reset",
+        title: "Review & Rebuild Camp",
+        bullets: [
+          "Camp block after an event stretch to review games and clean up recurring mistakes",
+          "Useful when a player needs clarity more than volume",
+          "Can help reset direction before the next tournament cycle starts",
+        ],
+        meta: "Post-event training",
+        note: "Released after the first prep cycle",
+        cta: "Ask about review camps",
+      },
+    ],
+    checklistTitle: "What tournament prep camp should include",
+    checklist: [
+      "Practical game review tied to the student's actual competitive level",
+      "Clear training themes instead of generic camp rotation",
+      "A sharper room with stronger focus and less filler",
+      "Honest positioning before registration opens",
+    ],
+    ctaTitle: "Ask about tournament prep camp release",
+    ctaText:
+      "If competitive camp blocks are what your student needs, contact us now and we will include you in the first prep release.",
+    ctaLabel: "Contact about prep camps",
+  },
+  "/camps/online": {
+    eyebrow: "Online Camps",
+    title: "Remote camp structure for families who still want a serious week.",
+    intro:
+      "For students who need a structured chess week without commuting, online camps can still feel focused, coach-led, and worth the time. First online camp release opens soon.",
+    chips: ["Remote format", "Structured days", "Launch soon"],
+    portraitCaption:
+      "Online camp should not feel passive. The right setup keeps the student engaged, moving, and accountable through the day.",
+    asideTag: "Online camp fit",
+    asideTitle: "Remote should still feel active and coach-led",
+    asideText:
+      "The screen should not lower the standard. The structure should still create pace, real work, and a meaningful week for the student.",
+    asideFacts: [
+      { label: "Best for", value: "Remote families" },
+      { label: "Works well for", value: "Review and guided practice" },
+      { label: "Launch status", value: "Opening soon" },
+    ],
+    cards: [
+      { title: "Cleaner than random online time", text: "A camp week should give students structure, not more disconnected chess activity." },
+      { title: "Useful for guided review", text: "Strong format for game review, live puzzles, training themes, and coach feedback." },
+      { title: "No city commute", text: "Good for families who want strong chess work without the daily travel commitment." },
+    ],
+    pathSection: {
+      eyebrow: "Online camp paths",
+      title: "Three ways remote camp can launch well",
+      intro: "The format should stay simple and well explained before dates go live.",
+    },
+    pathCards: [
+      {
+        eyebrow: "Launch first",
+        title: "Mini Online Camp",
+        bullets: [
+          "Short first-release format to establish pacing and parent expectations clearly",
+          "Best for families who want to test the remote camp structure first",
+          "Useful when a student benefits from shorter, more controlled camp blocks",
+        ],
+        meta: "Short online release",
+        note: "First online camp dates announced soon",
+        cta: "Ask about mini online camps",
+      },
+      {
+        eyebrow: "Core rhythm",
+        title: "Full Online Camp Week",
+        bullets: [
+          "A clearer daily rhythm with instruction, applied work, and review",
+          "Good for students who do well with a coach-led home setup",
+          "Better than random online study because the week actually holds together",
+        ],
+        meta: "Remote camp week",
+        note: "Priority notice opens with launch",
+        cta: "Ask about online camp weeks",
+      },
+      {
+        eyebrow: "Focused push",
+        title: "Theme Week Online",
+        bullets: [
+          "Remote camp built around one training theme such as tactics, endgames, or tournament review",
+          "Good for students who need one sharper training direction instead of a broad camp mix",
+          "Can sit well before a tournament stretch or as a mid-season reset",
+        ],
+        meta: "Theme-based remote camp",
+        note: "Released after the first online format",
+        cta: "Ask about theme weeks",
+      },
+    ],
+    checklistTitle: "What online camp should include",
+    checklist: [
+      "Coach-led pacing that keeps students active, not passive",
+      "Clear daily structure instead of screen time for its own sake",
+      "Real review and applied work inside the camp day",
+      "A format that respects family logistics before launch",
+    ],
+    ctaTitle: "Ask about online camp launch spots",
+    ctaText:
+      "If remote camp is the best fit for your family, contact us now and we will include you when the first online camp release opens.",
+    ctaLabel: "Contact about online camps",
+  },
+};
+
 export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
-  title: "Serious chess. Clear communication.",
-  intro: "Built for families who want a serious tournament launch without chaos.",
+  title: "A New York City chess business being built around clarity.",
+  intro:
+    "CHESS AND TRUCK is being built for families who want organized chess programs, clear communication, and a practical path into camps, lessons, and tournaments.",
+  heroFacts: [
+    { label: "Focus", value: "Scholastic chess" },
+    { label: "City", value: "New York City" },
+    { label: "Programs", value: "Events, camps, lessons" },
+    { label: "Status", value: "Launching soon" },
+  ],
+  introSection: {
+    eyebrow: "What this is",
+    title: "A chess-first program, not a vague concept site",
+    intro: "Parents should understand what is being built and why it matters before they ever register.",
+  },
   pillars: [
     {
-      title: "Clear communication",
-      text: "Fast answers. No guessing.",
+      title: "Events with visible structure",
+      text: "Tournament pages should show sections, schedule, level fit, and next steps before registration opens.",
     },
     {
-      title: "Format-first",
-      text: "Families can understand the structure before the first date is released.",
+      title: "Lessons with real coaching value",
+      text: "Lessons should feel specific, practical, and tied to actual improvement instead of generic chess activity.",
     },
     {
-      title: "Parent confidence",
-      text: "Families know what is locked in before they commit.",
+      title: "Camps with a chess-first rhythm",
+      text: "School-break camps should look organized from day one, with clear schedule, training blocks, and level guidance.",
     },
   ],
-  storyBlocks: [
+  founderSection: {
+    eyebrow: "Why this exists",
+    title: "Why this business is being built this way",
+    intro: "The goal is simple: parents should understand the offer quickly and know the next step without chasing details.",
+  },
+  founderCards: [
     {
-      title: "Who this is for",
-      text: "Scholastic players and families who want a serious, organized event from day one.",
+      title: "What kept getting in the way",
+      text: "Too many chess pages sounded polished but still made parents dig for the basics: fit, schedule, level, and what to do next.",
     },
     {
-      title: "What families should feel",
-      text: "Clear. Prepared. Ready to join as soon as dates open.",
+      title: "Why CHESS AND TRUCK exists",
+      text: "This brand is being built so camps, lessons, and events feel organized before a family ever commits time, money, or a weekend.",
+    },
+    {
+      title: "What families should get",
+      text: "Parents should know what the program is, who it fits, and how to move forward without sending three emails first.",
     },
   ],
+  experienceSection: {
+    eyebrow: "What shapes the standards",
+    title: "The standards behind the program",
+    intro: "The business is being shaped around the things that matter most on event day, in coaching, and in parent communication.",
+  },
+  experienceCards: [
+    {
+      title: "Tournament organization",
+      text: "The event side is built around what a real scholastic tournament day needs: clear sections, visible rules, and a morning schedule parents can actually plan around.",
+    },
+    {
+      title: "Coaching standards",
+      text: "The lesson side is shaped around game review, level-appropriate work, and training that connects from one session to the next.",
+    },
+    {
+      title: "Parent communication",
+      text: "Important details should be visible before sign-up, so families do not have to chase timing, fit, or next steps by email.",
+    },
+  ],
+  whySection: {
+    eyebrow: "Why families care",
+    title: "What this should lead to for NYC parents and students",
+    intro: "The standard is simple: practical information, organized programs, and direct communication.",
+  },
   standards: [
-    "Clear division guidance before public launch",
-    "Direct support channels before and after sign-up",
-    "Tournament expectations explained before families pay",
-    "Copy written for families, not internal jargon",
+    "Clear level fit before sign-up",
+    "Direct contact without confusion",
+    "Honest launch updates instead of vague promises",
+    "Programs that feel structured from the first page",
   ],
+  ctaTitle: "Want to see the first launch updates as they open?",
+  ctaText:
+    "Use Contact now if you want early access notices for events, lessons, or camps as the first public openings go live.",
 };
 
 export const eventsPage = {
   eyebrow: "Events & Tournaments",
-  title: "The format is ready. The dates are next.",
-  intro: "We are in launch mode now. The first public release is coming soon.",
-  supportCards: [
+  title: "NYC scholastic tournaments with a clear Saturday format.",
+  intro:
+    "Open and Beginner sections, a 9:00 AM start, and a morning schedule that wraps by lunch. Families can review the structure now and join early access before dates go live.",
+  heroFacts: [
+    { label: "Location", value: "Brick Church, 62 E 92nd Street" },
+    { label: "Format", value: "Open + Beginner" },
+    { label: "Status", value: "First dates coming soon" },
+  ],
+  offerSection: {
+    eyebrow: "What these events are",
+    title: "Built for students who want real tournament structure",
+    intro: "This page should answer the practical questions first, before registration opens.",
+  },
+  offerCards: [
     {
-      title: "What is already confirmed?",
-      text: "Open & Beginner sections, a Saturday morning window, and a cleaner family flow.",
+      title: "Scholastic tournaments",
+      text: "School-age players compete in a more organized NYC format built around real chess improvement.",
     },
     {
-      title: "What opens first?",
-      text: "The first tournament date, early-access notice, and a full registration window.",
+      title: "Open and Beginner sections",
+      text: "Experienced players and first-time competitors get clearer placement from the start.",
     },
     {
-      title: "How do families hear first?",
-      text: "Use Contact now and we will notify you as soon as the first release is live.",
+      title: "Shorter Saturday format",
+      text: "The goal is a serious tournament morning that starts at 9:00 AM and finishes around lunch.",
     },
   ],
+  detailSection: {
+    eyebrow: "Event details",
+    title: "The fast version parents usually ask first",
+    intro: "Dates are still being finalized, but the core event structure is already set.",
+  },
+  detailCards: [
+    { title: "Location", text: "Brick Church, 62 E 92nd Street" },
+    { title: "Dates", text: "Dates coming soon" },
+    { title: "Time", text: "Saturday mornings, 9:00 AM to lunch" },
+    { title: "Format", text: "Rated and beginner-friendly divisions" },
+    { title: "Entry", text: "Registration from $55 planned" },
+    { title: "Enrollment", text: "Early access list open now" },
+  ],
+  sampleSection: {
+    eyebrow: "Sample event morning",
+    title: "How a tournament Saturday is expected to run",
+    intro: "Exact timing may shift slightly by date, but the overall rhythm is already defined.",
+  },
+  sampleSchedule: [
+    {
+      time: "8:30 AM",
+      title: "Check-in window",
+      text: "Families arrive, settle in, and get players ready before the first round begins.",
+    },
+    {
+      time: "9:00 AM",
+      title: "Rounds begin",
+      text: "Play starts on time, with Open and Beginner sections already separated clearly.",
+    },
+    {
+      time: "Mid-morning",
+      title: "Between-round support",
+      text: "Players reset between games, and dojo add-on students can move into coached work when available.",
+    },
+    {
+      time: "Around lunch",
+      title: "Wrap-up",
+      text: "The format is designed to finish by lunch so families get a serious event without losing the whole day.",
+    },
+  ],
+  supportCards: [
+    {
+      title: "Clear section fit",
+      text: "Parents can already see the difference between Open and Beginner before the first date is posted.",
+    },
+    {
+      title: "Important rules up front",
+      text: "USCF requirements, launch timing, and the basic registration path are visible before checkout ever opens.",
+    },
+    {
+      title: "Simple next step",
+      text: "Families can use Contact now and get the first release notice as soon as the opening date goes live.",
+    },
+  ],
+  ctaTitle: "Want the first tournament date as soon as it drops?",
+  ctaText:
+    "Join early access now and we will send the first event release, section guidance, and registration details as soon as public enrollment opens.",
 };
 
 export const tournamentPage = {
@@ -238,7 +980,7 @@ export const tournamentPage = {
   title: "Chess & Truck Tournament",
   intro: "The format is set. The first public tournament date is being finalized now.",
   atAGlance: [
-    { label: "Location", value: "New York City" },
+    { label: "Location", value: "Brick Church, 62 E 92nd Street" },
     { label: "Format", value: "Open & Beginner sections" },
     { label: "Schedule", value: "Saturday mornings, 9:00 AM to lunch" },
     { label: "Launch status", value: "First dates announced soon" },
@@ -253,65 +995,216 @@ export const tournamentPage = {
 
 export const faqPage = {
   eyebrow: "FAQ",
-  title: "Fast answers before launch",
-  intro: "USCF, sections, schedule, launch timing.",
+  title: "Clear answers before registration opens.",
+  intro: "Beginner fit, USCF, what to bring, and how sign-up will work.",
+  heroFacts: [
+    { label: "Open section", value: "USCF required" },
+    { label: "Beginner section", value: "No USCF needed" },
+    { label: "Payment", value: "Form first, Stripe after" },
+    { label: "Support", value: "Contact is open now" },
+  ],
+  quickCards: [
+    {
+      title: "Beginner friendly?",
+      text: "Yes. Beginner section is the easier first step for players who are not ready for rated play yet.",
+    },
+    {
+      title: "Grouped by level?",
+      text: "Yes. Open and Beginner are separated clearly so families can choose the right fit before registering.",
+    },
+    {
+      title: "Need help first?",
+      text: "Use Contact if you want section guidance or launch updates before the first dates go live.",
+    },
+  ],
+  prepSection: {
+    eyebrow: "Before you register",
+    title: "What parents usually want to know first",
+    intro: "These are the questions that usually decide whether a family is ready to move forward.",
+  },
+  prepCards: [
+    {
+      title: "Who can join?",
+      text: "School-age players, with a clearer fit depending on whether they belong in Open or Beginner.",
+    },
+    {
+      title: "What should students bring?",
+      text: "A water bottle, anything staff should know medically, and any day-of items listed in the final event note.",
+    },
+    {
+      title: "Is tournament experience required?",
+      text: "No. Beginner section is there for players who need a cleaner first tournament step.",
+    },
+  ],
+  flowSection: {
+    eyebrow: "How sign-up works",
+    title: "The registration flow is simple",
+    intro: "Families should know what happens before they ever hit checkout.",
+  },
+  flowSteps: [
+    {
+      title: "Check the section fit",
+      text: "Review Open vs Beginner first, or contact us if you want help choosing.",
+    },
+    {
+      title: "Fill out the player form",
+      text: "Parent, player, emergency, and medical details are collected before payment.",
+    },
+    {
+      title: "Complete payment after release",
+      text: "Once dates go live, checkout moves to Stripe after the registration form is complete.",
+    },
+  ],
+  ctaTitle: "Still have a question before launch?",
+  ctaText: "If the answer is not here yet, send a message and we will point you in the right direction.",
 };
 
 export const contactPage = {
   eyebrow: "Contact",
-  title: "Get on the list fast",
-  intro: "Email the team or use the contact form. We will update early families first.",
+  title: "Contact the team for events, camps, and lessons.",
+  intro:
+    "Use the contact form or email info@chessandtruck.com for early access, section questions, lesson inquiries, camp updates, or help choosing the right program.",
+  heroFacts: [
+    { label: "Email", value: "info@chessandtruck.com" },
+    { label: "Reply type", value: "Direct response" },
+    { label: "Best for", value: "Questions + early access" },
+    { label: "Status", value: "Open now" },
+  ],
+  topicSection: {
+    eyebrow: "What to contact us about",
+    title: "Three common reasons families reach out",
+    intro: "If the right page still leaves a question, this is the next step.",
+  },
+  topicCards: [
+    {
+      title: "Event questions",
+      text: "Ask about Open vs Beginner, USCF, launch timing, event format, or early access for the first tournament release.",
+    },
+    {
+      title: "Lesson inquiries",
+      text: "Ask about online or in-person lessons, student fit, weekly coaching, or the first lesson openings.",
+    },
+    {
+      title: "Camp updates",
+      text: "Ask about school-break camp plans, launch timing, age fit, or whether your family should join the waitlist now.",
+    },
+  ],
   supportCards: [
     {
       title: "Before launch",
-      text: "Questions about fit, section, USCF, or first-release timing.",
+      text: "Reach out if you want to understand fit, format, or timing before the next public release opens.",
     },
     {
       title: "Operational support",
-      text: "Launch updates, logistics, and follow-up.",
+      text: "Use this for launch updates, logistics, and follow-up once dates and enrollment begin to open.",
     },
     {
-      title: "Direct response paths",
-      text: "Choose the fastest way to reach us.",
+      title: "Best next step",
+      text: "One clear message is enough. We will point you to the right program, page, or next release notice.",
     },
   ],
+  responseSection: {
+    eyebrow: "What happens next",
+    title: "What families should expect after sending a message",
+    intro: "The contact path should feel simple and direct, not like a black box.",
+  },
+  responseSteps: [
+    {
+      title: "We read the question first",
+      text: "Messages are reviewed for fit, timing, and whether your question is really about events, camps, or lessons.",
+    },
+    {
+      title: "We point you to the right next step",
+      text: "That may mean a direct answer, the right page, or early access for the next release that fits your student best.",
+    },
+    {
+      title: "You hear when the right opening goes live",
+      text: "If you ask for early access, we keep your message tied to the correct release instead of making you start over later.",
+    },
+  ],
+  messageChecklist: [
+    "Student age and current level",
+    "Whether you want tournaments, camps, or lessons",
+    "Open / Beginner question if relevant",
+    "Your preferred format: online, in person, or school-break camp",
+  ],
+  ctaTitle: "Need help choosing the right next step?",
+  ctaText:
+    "Send one message with the student age, current level, and whether you are looking for events, camps, or lessons. We will point you in the right direction.",
 };
 
 export const privateLessonsPage = {
-  eyebrow: "Private Lessons",
-  title: "One student. One coach. One clear plan.",
+  eyebrow: "Lesson programs",
+  title: "Chess lessons in NYC: private, small-group, and online.",
   intro:
-    "Private chess coaching for students and families who want more structure, stronger fundamentals, and coaching that actually matches the player.",
-  heroChips: ["NYC-based", "Online or in person", "Beginner to tournament-ready"],
+    "Lesson formats for NYC students who need real improvement, not random chess activity. Private coaching, small-group training, and online formats are opening soon.",
+  heroChips: ["Private coaching", "Small-group options", "Online + in person"],
   quickFacts: [
-    { label: "Session style", value: "1:1 coaching" },
-    { label: "Formats", value: "Home, online, club-style" },
-    { label: "Best for", value: "Students who need a real plan" },
+    { label: "Levels", value: "Beginner to tournament-ready" },
+    { label: "Formats", value: "Private, group, online" },
+    { label: "Includes", value: "Game + analysis" },
+    { label: "Pricing", value: "Shared before first booking window" },
   ],
   heroNote:
-    "The best private lesson does not just teach chess. It matches the student, the pace, and the format from the start.",
+    "Parents should know quickly which lesson path fits the student, what happens in a session, and how to ask for the first opening.",
+  detailsSection: {
+    eyebrow: "Lesson details",
+    title: "The practical details families ask first",
+    intro: "The lesson release is still opening, but the core structure is already clear.",
+  },
+  detailsCards: [
+    { title: "Who it is for", text: "Students ages 6-14, from beginners to players already entering tournaments." },
+    { title: "Formats", text: "Private lessons, small-group coaching, and online options are all part of the lesson release." },
+    { title: "Session flow", text: "Lesson time can include a real game, guided analysis, and targeted training work." },
+    { title: "Game format", text: "Practice games can use 10+10 or 15+10 once the student is ready for clock work." },
+    { title: "Written feedback", text: "When useful, families get a short follow-up with the key lesson points and next focus." },
+    { title: "Pricing", text: "Founding lesson rates will be shared before the first booking window opens, not after an inquiry call." },
+  ],
   formatCards: [
     {
-      eyebrow: "At home",
-      title: "In-home lessons",
-      text: "A focused lesson in the student's own space, ideal for families who want convenience without losing structure.",
+      eyebrow: "Remote",
+      title: "Online lessons",
+      text: "Weekly coaching, game review, and clear training structure without crossing the city.",
     },
     {
-      eyebrow: "Online",
-      title: "Remote coaching",
-      text: "A strong option for busy schedules, recurring weekly work, and game review without commuting across the city.",
+      eyebrow: "Face to face",
+      title: "In-person lessons",
+      text: "Board-first coaching for students who focus better live and learn faster over the board.",
     },
     {
-      eyebrow: "In person",
-      title: "Club-style sessions",
-      text: "A private lesson in a chess-focused setting for students who benefit from being outside the house and near the board.",
+      eyebrow: "Shared training",
+      title: "Group lessons",
+      text: "Small groups with better level matching, stronger pace, and cleaner coaching than generic classes.",
+    },
+  ],
+  getSection: {
+    eyebrow: "What you get",
+    title: "Each lesson should give the student something concrete",
+    intro: "Parents should be able to see what a session includes and why it helps.",
+  },
+  getCards: [
+    {
+      title: "A real game",
+      text: "Students do not only solve puzzles. The lesson can include live play so the coach can see decisions in real time.",
+    },
+    {
+      title: "Analysis that teaches something",
+      text: "Moves are reviewed with a purpose, so the student understands what to repeat and what to change next time.",
+    },
+    {
+      title: "Written follow-up when needed",
+      text: "Key notes, homework direction, or the next training focus can be sent after the session.",
+    },
+    {
+      title: "Structured improvement",
+      text: "Lessons should connect week to week instead of feeling like disconnected chess activities.",
     },
   ],
   pathSection: {
-    eyebrow: "Coaching Paths",
-    title: "A clean lesson launch, not a messy menu",
+    eyebrow: "Ways to start",
+    title: "Three clear lesson paths",
     intro:
-      "Private lessons are opening soon. These are the first coaching paths we plan to release for families who want a clear starting point.",
+      "Lesson openings start soon. These are the first lesson paths planned for release.",
   },
   pathCards: [
     {
@@ -353,47 +1246,395 @@ export const privateLessonsPage = {
   ],
   fitCards: [
     {
-      title: "New players who need a real base",
-      text: "Openings can wait. We start with board vision, tactics habits, notation, and decision-making that actually stays with the student.",
+      title: "Beginners who need real fundamentals",
+      text: "Good fit for students still building board vision, notation, habits, and simple tactical awareness.",
     },
     {
-      title: "Tournament players who need sharper work",
-      text: "Private lessons can center around calculation, endgames, opening clarity, time management, and review of the student's own games.",
+      title: "Developing players who need game review",
+      text: "Strong fit for students already playing serious games and needing clearer analysis, calculation, and tournament habits.",
     },
     {
       title: "Families who want consistency",
-      text: "Instead of random progress, the student works with one coach, one pace, and one plan that can carry across months.",
+      text: "One coach, one pace, and a lesson rhythm that actually builds over time instead of changing every week.",
     },
   ],
+  fitSection: {
+    eyebrow: "Who lessons fit",
+    title: "Who usually gets the most value from this lesson format",
+    intro: "The best lesson fit depends on level, pace, and how much structure the student needs week to week.",
+  },
   processSteps: [
     {
       step: "01",
-      title: "We match the coach to the student",
-      text: "Age, level, goals, temperament, and schedule matter. The pairing should feel right from the start.",
+      title: "Tell us the student and the goal",
+      text: "Age, level, schedule, and whether you want online or in person are enough to start the conversation well.",
     },
     {
       step: "02",
-      title: "We set the first training priorities",
-      text: "The opening weeks define the pace: fundamentals, weak spots, confidence, and what the student should work on between sessions.",
+      title: "We point you to the cleanest format",
+      text: "Some students need a starter lesson first. Others are ready for weekly coaching or a short prep block.",
     },
     {
       step: "03",
-      title: "Progress stays visible",
-      text: "Lessons should build toward something measurable: stronger play, better tournament readiness, and clearer next targets.",
+      title: "You get the first opening notice",
+      text: "When the next lesson openings go live, families on the list hear first and can move quickly.",
     },
   ],
-  highlightTitle: "What private coaching should feel like",
+  highlightTitle: "What strong coaching should feel like",
   highlightBody:
-    "Not generic. Not random. Not one-size-fits-all. The right private lesson should feel calm, demanding, and specific to the student in front of the board.",
+    "Clear fit, real coaching, and a lesson plan that matches the student from the first session.",
   checklist: [
-    "Coach matching based on the player, not just calendar availability",
-    "A level-appropriate lesson plan instead of generic puzzles only",
-    "Flexible format depending on how the student learns best",
-    "Clear contact path before lessons begin",
+    "A coach who can explain moves clearly and keep the student active",
+    "A lesson plan that matches the student level instead of generic chess busywork",
+    "Real analysis after games, not only move-by-move correction",
+    "A clean parent contact path before lessons begin",
   ],
-  ctaTitle: "Tell us the student, the goal, and the schedule you want.",
+  ctaTitle: "Tell us the student, the level, and the format you want.",
   ctaText:
-    "If you send age, level, past tournament experience, and whether you prefer in-home or online, we can point you to the strongest starting setup.",
+    "Send age, current level, and whether you want online, in-person, or group lessons. We will point you to the cleanest starting path when openings go live.",
+};
+
+export const lessonDetailPages = {
+  "/lessons/online": {
+    eyebrow: "Online Lessons",
+    title: "Serious coaching, no commute required.",
+    intro:
+      "A clean remote lesson path for students who want consistency, game review, and a real training rhythm from home. Full lesson launch opens soon.",
+    chips: ["Zoom-based", "NYC families", "Launch spots soon"],
+    portraitCaption:
+      "Remote lessons should still feel demanding, personal, and sharply structured from the first session.",
+    asideTag: "Remote standard",
+    asideTitle: "Online should still feel like real coaching",
+    asideText:
+      "The screen should never lower the standard. The right online setup keeps the pace clear, the student engaged, and the lesson specific.",
+    asideFacts: [
+      { label: "Best for", value: "Weekly rhythm" },
+      { label: "Works well for", value: "Game review and calculation" },
+      { label: "Launch status", value: "Opening soon" },
+    ],
+    cards: [
+      {
+        title: "Built for consistency",
+        text: "Strong for families who want one clear lesson slot each week without travel getting in the way.",
+      },
+      {
+        title: "Clean screen-sharing work",
+        text: "Useful for reviewing games, solving positions live, and tracking thought process move by move.",
+      },
+      {
+        title: "Better than random app time",
+        text: "The student gets a coach, a pace, and a sequence instead of scattered puzzle volume.",
+      },
+    ],
+    pathSection: {
+      eyebrow: "Online formats",
+      title: "Three strong ways online coaching can start",
+      intro: "Simple choices, clear rhythm, and launch-first availability.",
+    },
+    pathCards: [
+      {
+        eyebrow: "Launch first",
+        title: "Starter Session",
+        bullets: [
+          "One remote lesson to assess level, pace, and coach fit",
+          "Best for families who want to test the format before committing to a weekly slot",
+          "A clean first step for students entering structured online work",
+        ],
+        meta: "Single online inquiry",
+        note: "First online openings will be released soon",
+        cta: "Ask about online starters",
+      },
+      {
+        eyebrow: "Weekly rhythm",
+        title: "Core Online Coaching",
+        bullets: [
+          "One coach, one weekly slot, and one clear training direction",
+          "Strong fit for students who improve through repetition and follow-up work",
+          "Built for game review, calculation, and consistent progress from home",
+        ],
+        meta: "Recurring online coaching",
+        note: "Priority scheduling opens with launch",
+        cta: "Ask about weekly online",
+      },
+      {
+        eyebrow: "Focused block",
+        title: "Game Review Intensive",
+        bullets: [
+          "Short run of lessons centered on recent games and recurring mistakes",
+          "Useful for players who need clarity before the next tournament stretch",
+          "Can sharpen openings, decision-making, and post-game understanding fast",
+        ],
+        meta: "Targeted online block",
+        note: "Available after the first online release",
+        cta: "Ask about review blocks",
+      },
+    ],
+    checklistTitle: "What online lessons should include",
+    checklist: [
+      "A coach who keeps the student active, not passive",
+      "Structured follow-up work between sessions",
+      "Real game review, not only generic exercises",
+      "A weekly rhythm that families can actually keep",
+    ],
+    ctaTitle: "Ask about online lesson launch spots",
+    ctaText: "If online coaching is the right fit, contact us now and we will reply first when those openings go live.",
+    ctaLabel: "Contact about online lessons",
+  },
+  "/lessons/in-person": {
+    eyebrow: "In Person Lessons",
+    title: "Board work feels different in the room.",
+    intro:
+      "For students who focus better face to face, in-person coaching keeps the board, the pace, and the lesson energy sharper. Full lesson launch opens soon.",
+    chips: ["NYC-based", "Face-to-face", "Launch spots soon"],
+    portraitCaption:
+      "Some students understand more quickly when the coach is right there at the board and the lesson pace can shift in real time.",
+    asideTag: "In-person fit",
+    asideTitle: "Direct coaching can change the pace fast",
+    asideText:
+      "For certain students, over-the-board instruction creates better focus, stronger habits, and more immediate course correction than a remote setup.",
+    asideFacts: [
+      { label: "Best for", value: "Board-first learners" },
+      { label: "Works well for", value: "Habits and fundamentals" },
+      { label: "Launch status", value: "Opening soon" },
+    ],
+    cards: [
+      {
+        title: "Clearer board habits",
+        text: "Ideal for notation, piece coordination, calculation posture, and decision-making that needs direct correction.",
+      },
+      {
+        title: "Better for younger students",
+        text: "Some players stay more present and coachable when the lesson happens with the board right in front of them.",
+      },
+      {
+        title: "Stronger live interaction",
+        text: "The coach can slow down, press harder, or redirect faster depending on how the student is actually responding.",
+      },
+    ],
+    pathSection: {
+      eyebrow: "In-person formats",
+      title: "Three clean ways to start over the board",
+      intro: "Face-to-face coaching should feel direct, calm, and specific from day one.",
+    },
+    pathCards: [
+      {
+        eyebrow: "Launch first",
+        title: "Board Assessment",
+        bullets: [
+          "One in-person lesson to see how the student focuses, calculates, and responds live",
+          "Best for families who want to evaluate coach fit before choosing a longer rhythm",
+          "Useful first step for younger students and board-first learners",
+        ],
+        meta: "Single in-person inquiry",
+        note: "First in-person openings announced soon",
+        cta: "Ask about board assessments",
+      },
+      {
+        eyebrow: "Core rhythm",
+        title: "Weekly Board Coaching",
+        bullets: [
+          "A fixed lesson slot with direct correction and stronger board habits",
+          "Good for notation, discipline, calculation posture, and decision-making",
+          "Best for students who learn faster with the coach in the room",
+        ],
+        meta: "Recurring in-person coaching",
+        note: "Priority live scheduling opens with launch",
+        cta: "Ask about weekly in-person",
+      },
+      {
+        eyebrow: "Competitive focus",
+        title: "Tournament Prep Block",
+        bullets: [
+          "Short focused run of lessons built around event readiness",
+          "Can center on game review, openings, calculation, and tournament habits",
+          "Best for players who already compete and want sharper preparation",
+        ],
+        meta: "Pre-event in-person track",
+        note: "Available after the first live lesson release",
+        cta: "Ask about prep coaching",
+      },
+    ],
+    checklistTitle: "What in-person coaching should feel like",
+    checklist: [
+      "Calm, focused instruction without wasted time",
+      "More than casual play across the board",
+      "Lesson pacing that matches the student's level",
+      "A clear next step after each session",
+    ],
+    ctaTitle: "Ask about in-person lesson launch spots",
+    ctaText: "If face-to-face coaching is the right fit, contact us now and we will let you know when the first in-person openings are released.",
+    ctaLabel: "Contact about in-person lessons",
+  },
+  "/lessons/group": {
+    eyebrow: "Group Lessons",
+    title: "Small group training, not crowded filler.",
+    intro:
+      "The right group lesson creates pace, energy, and accountability without losing clarity. Group formats are part of our lesson launch plan and will open soon.",
+    chips: ["Small groups", "Better level matching", "Launch spots soon"],
+    portraitCaption:
+      "A good group lesson does not feel generic. It feels fast, focused, and matched to the students actually in the room.",
+    asideTag: "Group standard",
+    asideTitle: "Group lessons need better structure than most programs give them",
+    asideText:
+      "The students should be close enough in level for the lesson to move as one group, but varied enough for the room to stay alive.",
+    asideFacts: [
+      { label: "Best for", value: "Shared pace" },
+      { label: "Works well for", value: "Peer energy and repetition" },
+      { label: "Launch status", value: "Opening soon" },
+    ],
+    cards: [
+      {
+        title: "Smarter level grouping",
+        text: "The lesson works better when students are grouped by readiness, not just by age or convenience.",
+      },
+      {
+        title: "Built-in motivation",
+        text: "Many students push harder when they can learn alongside peers without being lost in a large room.",
+      },
+      {
+        title: "Good for ongoing rhythm",
+        text: "A steady group can become a strong weekly training environment if the structure is right from the start.",
+      },
+    ],
+    pathSection: {
+      eyebrow: "Group formats",
+      title: "Three ways group training can open well",
+      intro: "The goal is not crowd size. The goal is pace, level fit, and repeatable energy.",
+    },
+    pathCards: [
+      {
+        eyebrow: "Launch first",
+        title: "Founding Group",
+        bullets: [
+          "Small first-release group used to set pace and level standards correctly",
+          "Best for families who want to join the first clean version of the format",
+          "Strong fit for students who like peer energy but still need structure",
+        ],
+        meta: "Early group interest",
+        note: "First small groups will be announced soon",
+        cta: "Ask about founding groups",
+      },
+      {
+        eyebrow: "Core rhythm",
+        title: "Weekly Training Group",
+        bullets: [
+          "Consistent lesson time with students close enough in level to move together",
+          "Works best when the room has a clear theme, not random activity blocks",
+          "Great for repetition, confidence, and stronger weekly study habits",
+        ],
+        meta: "Recurring group coaching",
+        note: "Priority access opens with launch",
+        cta: "Ask about weekly groups",
+      },
+      {
+        eyebrow: "Competitive focus",
+        title: "Tournament Squad",
+        bullets: [
+          "Short group block around event preparation and post-game discussion",
+          "Can emphasize openings, calculation themes, and tournament habits",
+          "Best for players who benefit from training beside motivated peers",
+        ],
+        meta: "Event-focused group track",
+        note: "Released after the first group launch",
+        cta: "Ask about tournament squads",
+      },
+    ],
+    checklistTitle: "What a strong group format needs",
+    checklist: [
+      "Students who are close enough in level to move together",
+      "A coach who can keep the room active and clean",
+      "Clear themes instead of random activity blocks",
+      "A launch plan that protects quality before scale",
+    ],
+    ctaTitle: "Ask about group lesson launch updates",
+    ctaText: "If you want early notice on small-group coaching, contact us and we will include you when the first group format opens.",
+    ctaLabel: "Contact about group lessons",
+  },
+  "/lessons/manage": {
+    eyebrow: "Manage Your Lessons",
+    title: "Current-family lesson support starts here.",
+    intro:
+      "We are still in launch mode, so the lesson desk is being built now. Until the full system opens, this page is the cleanest path for scheduling, support, and next-step questions.",
+    chips: ["Schedule help", "Support requests", "Launch desk soon"],
+    portraitCaption:
+      "A lesson program feels stronger when support is easy to reach before things become messy.",
+    asideTag: "Lesson desk",
+    asideTitle: "Direct support first. Full portal after launch.",
+    asideText:
+      "Until the dedicated lesson management system opens, current and incoming families can use direct support for scheduling changes, coach questions, and coordination.",
+    asideFacts: [
+      { label: "For", value: "Current and incoming families" },
+      { label: "Use it for", value: "Schedule and support" },
+      { label: "Launch status", value: "Desk expanding soon" },
+    ],
+    cards: [
+      {
+        title: "Scheduling requests",
+        text: "Need to ask about lesson timing, availability, or a future slot? This is the right contact path.",
+      },
+      {
+        title: "Coach-fit questions",
+        text: "If a family needs to talk through lesson style, level fit, or the right format, support should be easy to reach.",
+      },
+      {
+        title: "Program next steps",
+        text: "Use this path for launch questions, continuing lesson interest, or help understanding the best next move.",
+      },
+    ],
+    pathSection: {
+      eyebrow: "Support paths",
+      title: "Three clean ways to use the lesson desk",
+      intro: "Support should feel direct, useful, and easy to route before the full portal opens.",
+    },
+    pathCards: [
+      {
+        eyebrow: "New family",
+        title: "First Lesson Inquiry",
+        bullets: [
+          "Use this path if you are choosing between online, in-person, or group lessons",
+          "Best for families who want help picking the cleanest starting format",
+          "Send age, level, and preferred schedule window to speed up the reply",
+        ],
+        meta: "New family support",
+        note: "Best first contact while lessons are still launching",
+        cta: "Ask about lesson fit",
+      },
+      {
+        eyebrow: "Current family",
+        title: "Schedule & Coordination",
+        bullets: [
+          "Use this for timing questions, upcoming availability, and lesson logistics",
+          "Helpful when a family needs clarity before the lesson desk fully expands",
+          "Strongest path for practical coordination and next-step questions",
+        ],
+        meta: "Lesson desk support",
+        note: "Direct scheduling help available now",
+        cta: "Ask about scheduling",
+      },
+      {
+        eyebrow: "Program support",
+        title: "Coaching Direction Check-In",
+        bullets: [
+          "Use this when the family wants to talk about pace, fit, or lesson direction",
+          "Good for players moving between formats or preparing for a new training phase",
+          "Lets us point the family to the right coach path before things get messy",
+        ],
+        meta: "Guidance and next steps",
+        note: "Support desk continues expanding with launch",
+        cta: "Ask for guidance",
+      },
+    ],
+    checklistTitle: "Best use of the lesson support page",
+    checklist: [
+      "Send the student's age and level",
+      "Mention whether the question is about online, in-person, or group lessons",
+      "Include scheduling constraints if timing matters",
+      "Use Contact and we will route the request properly",
+    ],
+    ctaTitle: "Contact the lesson desk",
+    ctaText: "Use the contact page and tell us whether you need scheduling help, launch information, or private lesson guidance.",
+    ctaLabel: "Contact lesson support",
+  },
 };
 
 export const registerPage = {
@@ -529,9 +1770,19 @@ export const policyItems = [
 
 export const faqItems = [
   {
-    question: "Do I need a USCF membership to register?",
+    question: "Is this good for beginners?",
+    answer:
+      "Yes. Beginner section is designed for players who are newer to tournament chess and need a more comfortable first event.",
+  },
+  {
+    question: "Do I need a USCF rating or membership?",
     answer:
       "Only players in the Open section need an active USCF membership. Beginner section players do not need one.",
+  },
+  {
+    question: "Are students grouped by level?",
+    answer:
+      "Yes. Open and Beginner are split clearly so families can choose a better fit before registering.",
   },
   {
     question: "How do I choose between Open and Beginner?",
@@ -539,39 +1790,34 @@ export const faqItems = [
       "Choose Open if the player is already ready for rated competition and has an active USCF ID. Choose Beginner if the player is newer to tournament chess and needs an easier first step.",
   },
   {
-    question: "Is the school name required?",
+    question: "What should my child bring?",
     answer:
-      "No. School name is optional and is used only if team scoring becomes relevant.",
+      "Bring a water bottle, anything the team should know medically, and any day-of items listed in the final event note.",
   },
   {
-    question: "What does the Master Training Dojo include?",
+    question: "Is tournament experience required?",
     answer:
-      "It adds guided analysis and structured chess work around the tournament, making the day feel more like a combined competition and training experience.",
+      "No. Beginner section is built for players who are still getting used to tournament play.",
   },
   {
-    question: "When is payment collected?",
+    question: "Is lunch included?",
     answer:
-      "Once the first date is released, the family completes the registration form first and then moves to Stripe for payment.",
+      "This is planned as a morning event that wraps around lunch, so families should not expect a full-day schedule. Final day-of notes will clarify snack, water, and any lunch-related logistics.",
   },
   {
-    question: "Can I add more than one email address?",
+    question: "How do I register?",
     answer:
-      "Yes. The form includes an optional field for additional confirmation or follow-up email addresses.",
+      "When the first event date goes live, families complete the registration form first and then continue to Stripe for payment.",
+  },
+  {
+    question: "How do I join early access?",
+    answer:
+      "Use the Contact page now and ask for early access. We will send the first release information as soon as it opens.",
   },
   {
     question: "What should I include in medical information?",
     answer:
       "Include allergies, medical conditions, medications, or anything tournament staff should know to support the player responsibly.",
-  },
-  {
-    question: "What if I am not sure the player belongs in Open?",
-    answer:
-      "Contact the tournament team before registering. It is better to confirm fit first than to guess during checkout.",
-  },
-  {
-    question: "How can I reach the tournament team quickly?",
-    answer:
-      "Use the contact email or the contact form for support, logistics, and early-access questions.",
   },
 ];
 

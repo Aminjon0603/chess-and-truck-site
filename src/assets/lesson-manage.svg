@@ -1,0 +1,25 @@
+<svg width="640" height="640" viewBox="0 0 640 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="640" rx="104" fill="#163731"/>
+  <rect x="56" y="56" width="528" height="528" rx="84" fill="url(#bg)"/>
+  <rect x="144" y="120" width="352" height="400" rx="34" fill="#FFF8F1"/>
+  <rect x="186" y="166" width="268" height="232" rx="22" fill="#224A43"/>
+  <path d="M214 212H426" stroke="rgba(255,248,241,0.18)" stroke-width="2"/>
+  <path d="M214 260H426" stroke="rgba(255,248,241,0.18)" stroke-width="2"/>
+  <path d="M214 308H426" stroke="rgba(255,248,241,0.18)" stroke-width="2"/>
+  <path d="M214 356H426" stroke="rgba(255,248,241,0.18)" stroke-width="2"/>
+  <circle cx="244" cy="234" r="14" fill="#E1C272"/>
+  <circle cx="244" cy="282" r="14" fill="#E1C272"/>
+  <circle cx="244" cy="330" r="14" fill="#E1C272"/>
+  <rect x="196" y="428" width="248" height="24" rx="12" fill="#D0A551"/>
+  <rect x="230" y="466" width="180" height="20" rx="10" fill="#214942"/>
+  <path d="M458 436C458 381 502 336 556 336V392C533 392 514 411 514 434H458V436Z" fill="#E1C272"/>
+  <path d="M458 440H520C520 470 496 494 466 494H458V440Z" fill="#FFF8F1"/>
+  <circle cx="520" cy="392" r="44" fill="#10241F" stroke="#E1C272" stroke-width="8"/>
+  <path d="M520 368V392L536 404" stroke="#FFF8F1" stroke-width="8" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="bg" x1="84" y1="92" x2="560" y2="552" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#254C45"/>
+      <stop offset="1" stop-color="#132E29"/>
+    </linearGradient>
+  </defs>
+</svg>

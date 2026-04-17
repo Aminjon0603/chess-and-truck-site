@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
+  campDetailPages,
+  campMenuFeature,
+  campMenuItems,
+  campOverviewPage,
   contactEmails,
   contactPage,
   eventsPage,
@@ -8,8 +12,11 @@ import {
   faqPage,
   featuredTournament,
   footerLegalLinks,
-  heroStats,
   homePage,
+  lessonDetailPages,
+  lessonCarouselSlides,
+  lessonMenuFeature,
+  lessonMenuItems,
   masterTrainingDojo,
   navigationItems,
   policyItems,
@@ -26,6 +33,14 @@ import {
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.svg";
+import campOnlineVisual from "./assets/camp-online.svg";
+import campOverviewVisual from "./assets/camp-overview.svg";
+import campPrepVisual from "./assets/camp-prep.svg";
+import campTrainingVisual from "./assets/camp-training.svg";
+import lessonGroupVisual from "./assets/lesson-group.svg";
+import lessonInPersonVisual from "./assets/lesson-inperson.svg";
+import lessonManageVisual from "./assets/lesson-manage.svg";
+import lessonOnlineVisual from "./assets/lesson-online.svg";
 import lessonPhoto from "./assets/private-lesson-visual.svg";
 import dojoMark from "./assets/dojo-mark.svg";
 import trophyBadge from "./assets/trophy-badge.svg";
@@ -125,16 +140,27 @@ const findFirstStepWithErrors = (errors) =>
 
 const knownRoutes = new Set([
   "/",
+  "/camps",
+  "/camps/training",
+  "/camps/prep",
+  "/camps/online",
   "/about",
   "/events",
   "/events/chess-and-truck-tournament",
   "/private-lessons",
+  "/lessons/online",
+  "/lessons/in-person",
+  "/lessons/group",
+  "/lessons/manage",
   "/faq",
   "/contact",
   "/register",
   "/terms",
   "/privacy",
 ]);
+
+const isCampsPath = (path) => path === "/camps" || path.startsWith("/camps/");
+const isLessonsPath = (path) => path === "/private-lessons" || path.startsWith("/lessons/");
 
 const formatCurrency = (amount) =>
   new Intl.NumberFormat("en-US", {
@@ -149,6 +175,20 @@ const normalizePath = (path) => {
   }
 
   return path.endsWith("/") ? path.slice(0, -1) : path;
+};
+
+const lessonCarouselImages = {
+  online: lessonOnlineVisual,
+  inperson: lessonInPersonVisual,
+  group: lessonGroupVisual,
+  manage: lessonManageVisual,
+};
+
+const campMenuImages = {
+  overview: campOverviewVisual,
+  training: campTrainingVisual,
+  prep: campPrepVisual,
+  online: campOnlineVisual,
 };
 
 const readLocation = () => ({
@@ -196,26 +236,284 @@ function AppLink({ to, navigate, children, className = "", currentPath, onNaviga
   );
 }
 
-function ChampionPortrait({ caption = "Celebrating a tournament morning that feels earned." }) {
+function FeatureMenu({
+  label,
+  currentPath,
+  navigate,
+  isCompactViewport,
+  closeNavigation,
+  isActive,
+  feature,
+  items,
+  imageMap,
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handlePointerDown = (event) => {
+      if (!menuRef.current?.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [isOpen]);
+
+  const handleTriggerClick = () => {
+    setIsOpen((current) => !current);
+  };
+
+  const handleNavigate = () => {
+    setIsOpen(false);
+    closeNavigation?.();
+  };
+
   return (
-    <article className="surface portrait-card">
-      <div className="portrait-ring">
-        <img src={brandLogo} alt="" className="portrait-image portrait-logo-image" />
+    <div
+      className={`nav-dropdown${isOpen ? " is-open" : ""}${isActive ? " is-active" : ""}`}
+      ref={menuRef}
+      onMouseEnter={() => {
+        if (!isCompactViewport) {
+          setIsOpen(true);
+        }
+      }}
+      onMouseLeave={() => {
+        if (!isCompactViewport) {
+          setIsOpen(false);
+        }
+      }}
+    >
+      <button
+        type="button"
+        className={`nav-link nav-dropdown-trigger${isActive ? " is-active" : ""}`}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        onClick={handleTriggerClick}
+      >
+        <span>{label}</span>
+        <span className="nav-dropdown-caret" aria-hidden="true" />
+      </button>
+
+      <div className="nav-dropdown-menu">
+        {!isCompactViewport ? (
+          <div className="nav-dropdown-feature">
+            <span className="mini-tag mini-tag-dark">{feature.eyebrow}</span>
+            <h3>{feature.title}</h3>
+            <p>{feature.text}</p>
+            <AppLink
+              to={feature.ctaPath}
+              navigate={navigate}
+              currentPath={currentPath}
+              className="btn btn-primary nav-dropdown-feature-cta"
+              onNavigate={handleNavigate}
+            >
+              {feature.ctaLabel}
+            </AppLink>
+          </div>
+        ) : null}
+
+        <div className="nav-dropdown-links">
+          <div className="nav-dropdown-copy">
+            <strong>{isCompactViewport ? label : `${label} formats`}</strong>
+            <small>{isCompactViewport ? feature.title : `${feature.eyebrow} opens soon.`}</small>
+          </div>
+          {items.map((item) => (
+            <AppLink
+              key={item.path}
+              to={item.path}
+              navigate={navigate}
+              currentPath={currentPath}
+              className="nav-dropdown-link"
+              onNavigate={handleNavigate}
+            >
+              <div className="nav-dropdown-thumb">
+                <img src={imageMap[item.imageKey]} alt="" className="nav-dropdown-thumb-image" />
+              </div>
+              <div className="nav-dropdown-link-copy">
+                <span className="nav-dropdown-link-kicker">{item.signal}</span>
+                <strong>{item.label}</strong>
+                <small>{item.description}</small>
+              </div>
+              <span className="nav-dropdown-link-arrow" aria-hidden="true">
+                {"->"}
+              </span>
+            </AppLink>
+          ))}
+          {isCompactViewport ? (
+            <AppLink
+              to={feature.ctaPath}
+              navigate={navigate}
+              currentPath={currentPath}
+              className="btn btn-secondary nav-dropdown-mobile-cta"
+              onNavigate={handleNavigate}
+            >
+              {feature.ctaLabel}
+            </AppLink>
+          ) : null}
+        </div>
       </div>
-      <div className="portrait-copy">
-        <span className="mini-tag">Launch signal</span>
-        <p>{caption}</p>
-        <div className="portrait-pills">
-          <span>Open Section</span>
-          <span>Beginner Section</span>
-          <span>NYC</span>
+    </div>
+  );
+}
+
+function CampsMenu({ currentPath, navigate, isCompactViewport, closeNavigation }) {
+  return (
+    <FeatureMenu
+      label="Camps"
+      currentPath={currentPath}
+      navigate={navigate}
+      isCompactViewport={isCompactViewport}
+      closeNavigation={closeNavigation}
+      isActive={isCampsPath(currentPath)}
+      feature={campMenuFeature}
+      items={campMenuItems}
+      imageMap={campMenuImages}
+    />
+  );
+}
+
+function LessonsMenu({ currentPath, navigate, isCompactViewport, closeNavigation }) {
+  return (
+    <FeatureMenu
+      label="Lessons"
+      currentPath={currentPath}
+      navigate={navigate}
+      isCompactViewport={isCompactViewport}
+      closeNavigation={closeNavigation}
+      isActive={isLessonsPath(currentPath)}
+      feature={lessonMenuFeature}
+      items={lessonMenuItems}
+      imageMap={lessonCarouselImages}
+    />
+  );
+}
+
+function LessonDetailHero({ page, currentPath, navigate }) {
+  const heroImageMap = {
+    "Online Lessons": lessonOnlineVisual,
+    "In Person Lessons": lessonInPersonVisual,
+    "Group Lessons": lessonGroupVisual,
+    "Manage Your Lessons": lessonManageVisual,
+  };
+
+  const heroImage = heroImageMap[page.eyebrow] || lessonPhoto;
+
+  return (
+    <section className="page-hero lesson-page-hero">
+      <div className="shell lesson-hero-grid lesson-detail-hero-grid">
+        <div className="lesson-hero-copy lesson-detail-hero-copy">
+          <span className="section-tag">{page.eyebrow}</span>
+          <h1>{page.title}</h1>
+          <p className="page-intro">{page.intro}</p>
+
+          <div className="lesson-chip-row">
+            {page.chips.map((item) => (
+              <span key={item} className="lesson-chip">
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <div className="cta-row">
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+              {page.ctaLabel}
+            </AppLink>
+            <AppLink to="/private-lessons" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+              Lesson Overview
+            </AppLink>
+          </div>
+        </div>
+
+        <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel">
+          <div className="lesson-hero-top">
+            <div className="lesson-photo-shell">
+              <img src={heroImage} alt={page.eyebrow} className="lesson-photo lesson-detail-photo" />
+            </div>
+
+            <div className="lesson-hero-note">
+              <span className="mini-tag mini-tag-dark">{page.asideTag}</span>
+              <h2>{page.asideTitle}</h2>
+              <p>{page.asideText}</p>
+            </div>
+          </div>
+
+          <div className="fact-list lesson-fact-grid">
+            {page.asideFacts.map((item) => (
+              <div key={item.label}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </div>
+            ))}
+          </div>
+        </article>
+      </div>
+
+      <div className="shell lesson-hero-carousel-wrap">
+        <LessonSignalCarousel currentPath={currentPath} navigate={navigate} intro={page.portraitCaption} />
+      </div>
+    </section>
+  );
+}
+
+function LessonSignalCarousel({ currentPath, navigate, intro = "Lesson launch opens soon." }) {
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveSlideIndex((current) => (current + 1) % lessonCarouselSlides.length);
+    }, 4200);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const activeSlide = lessonCarouselSlides[activeSlideIndex];
+  const activeImage = lessonCarouselImages[activeSlide.imageKey];
+
+  return (
+    <article className="surface carousel-card lesson-signal-carousel">
+      <div className="carousel-copy">
+        <span className="mini-tag">Lesson direction</span>
+        <h3>{activeSlide.title}</h3>
+        <p>{activeSlide.text}</p>
+        <small className="carousel-intro">{intro}</small>
+        <div className="cta-row">
+          <AppLink to={activeSlide.path} navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+            Open {activeSlide.label}
+          </AppLink>
+          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="text-link">
+            Ask About Lessons
+          </AppLink>
+        </div>
+        <div className="carousel-dots" role="tablist" aria-label="Lesson formats">
+          {lessonCarouselSlides.map((slide, index) => (
+            <button
+              key={slide.key}
+              type="button"
+              className={`carousel-dot${index === activeSlideIndex ? " is-active" : ""}`}
+              aria-label={`Show ${slide.label}`}
+              aria-selected={index === activeSlideIndex}
+              onClick={() => setActiveSlideIndex(index)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="carousel-side">
+        <div className="carousel-image-frame">
+          <img src={activeImage} alt={activeSlide.label} className="carousel-image lesson-carousel-image" />
         </div>
       </div>
     </article>
   );
 }
 
-function PageHero({ eyebrow, title, intro, actions, aside, portraitCaption }) {
+function PageHero({ eyebrow, title, intro, actions, aside, portraitCaption, heroFacts, currentPath, navigate }) {
   return (
     <section className="page-hero">
       <div className="shell page-hero-grid">
@@ -224,6 +522,16 @@ function PageHero({ eyebrow, title, intro, actions, aside, portraitCaption }) {
           <h1>{title}</h1>
           <p className="page-intro">{intro}</p>
           {actions ? <div className="cta-row">{actions}</div> : null}
+          {heroFacts?.length ? (
+            <div className="fact-list fact-list-hero page-hero-facts">
+              {heroFacts.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
         <div className="hero-visual">
           <aside className="surface surface-dark hero-aside">
@@ -245,7 +553,7 @@ function PageHero({ eyebrow, title, intro, actions, aside, portraitCaption }) {
               </>
             )}
           </aside>
-          <ChampionPortrait caption={portraitCaption} />
+          <LessonSignalCarousel currentPath={currentPath} navigate={navigate} intro={portraitCaption} />
         </div>
       </div>
     </section>
@@ -443,10 +751,10 @@ function SiteFooter({ currentPath, navigate }) {
   );
 }
 
-function LegalPage({ eyebrow, title, intro, sections }) {
+function LegalPage({ eyebrow, title, intro, sections, currentPath, navigate }) {
   return (
     <>
-      <PageHero eyebrow={eyebrow} title={title} intro={intro} />
+      <PageHero eyebrow={eyebrow} title={title} intro={intro} currentPath={currentPath} navigate={navigate} />
 
       <section className="page-section">
         <div className="shell legal-stack">
@@ -572,6 +880,9 @@ function HomePage({ currentPath, navigate }) {
         eyebrow={homePage.eyebrow}
         title={homePage.title}
         intro={homePage.intro}
+        heroFacts={homePage.heroFacts}
+        currentPath={currentPath}
+        navigate={navigate}
         portraitCaption="Young players finishing the morning with something real to celebrate."
         actions={
           <>
@@ -605,14 +916,18 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Quick look"
-            title="What matters"
+            eyebrow={homePage.offerSection.eyebrow}
+            title={homePage.offerSection.title}
+            intro={homePage.offerSection.intro}
           />
-          <div className="stat-grid">
-            {heroStats.map((item) => (
-              <article className="surface stat-card" key={item.value}>
-                <strong>{item.value}</strong>
-                <p>{item.label}</p>
+          <div className="card-grid card-grid-three">
+            {homePage.offerCards.map((item) => (
+              <article className="surface card-link-card" key={item.path}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
+                  Open
+                </AppLink>
               </article>
             ))}
           </div>
@@ -622,22 +937,12 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Launch sequence"
-            title="What opens first"
-            intro="No fake calendar. Just the pieces that are already locked in."
-          />
-          <UpcomingTournamentList currentPath={currentPath} navigate={navigate} compact />
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Inside the event"
-            title="Choose the right path"
+            eyebrow={homePage.audienceSection.eyebrow}
+            title={homePage.audienceSection.title}
+            intro={homePage.audienceSection.intro}
           />
           <div className="card-grid card-grid-three">
-            {homePage.valueCards.map((item) => (
+            {homePage.audienceCards.map((item) => (
               <article className="surface" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
@@ -650,20 +955,67 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Next step"
-            title="See it. Join early. Ask."
+            eyebrow={homePage.launchSection.eyebrow}
+            title={homePage.launchSection.title}
+            intro={homePage.launchSection.intro}
+          />
+          <UpcomingTournamentList currentPath={currentPath} navigate={navigate} compact />
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={homePage.processSection.eyebrow}
+            title={homePage.processSection.title}
+            intro={homePage.processSection.intro}
           />
           <div className="card-grid card-grid-three">
-            {homePage.pageCards.map((item) => (
-              <article className="surface card-link-card" key={item.path}>
+            {homePage.processCards.map((item) => (
+              <article className="surface stat-card" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
-                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
-                  Open
-                </AppLink>
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={homePage.whySection.eyebrow}
+            title={homePage.whySection.title}
+            intro={homePage.whySection.intro}
+          />
+          <div className="card-grid card-grid-two">
+            {homePage.whyCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-cta-panel">
+            <div className="lesson-cta-copy">
+              <span className="section-tag">Join waitlist</span>
+              <h2>{homePage.ctaTitle}</h2>
+              <p>{homePage.ctaText}</p>
+            </div>
+            <div className="cta-row lesson-cta-actions">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Join Early Access
+              </AppLink>
+              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Review Events
+              </AppLink>
+            </div>
+          </article>
         </div>
       </section>
     </>
@@ -677,11 +1029,14 @@ function AboutPage({ currentPath, navigate }) {
         eyebrow={aboutPage.eyebrow}
         title={aboutPage.title}
         intro={aboutPage.intro}
+        heroFacts={aboutPage.heroFacts}
+        currentPath={currentPath}
+        navigate={navigate}
         portraitCaption="A tournament should leave players proud and parents confident in how the day was run."
         actions={
           <>
             <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              View Launch Details
+              View Event Format
             </AppLink>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
               Get Early Access
@@ -693,9 +1048,9 @@ function AboutPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="What families notice"
-            title="Communication matters as much as competition"
-            intro="Organized. Responsive. Easy to trust."
+            eyebrow={aboutPage.introSection.eyebrow}
+            title={aboutPage.introSection.title}
+            intro={aboutPage.introSection.intro}
           />
           <div className="card-grid card-grid-three">
             {aboutPage.pillars.map((item) => (
@@ -709,23 +1064,48 @@ function AboutPage({ currentPath, navigate }) {
       </section>
 
       <section className="page-section">
-        <div className="shell two-column">
-          {aboutPage.storyBlocks.map((item) => (
+        <div className="shell">
+          <SectionIntro
+            eyebrow={aboutPage.founderSection.eyebrow}
+            title={aboutPage.founderSection.title}
+            intro={aboutPage.founderSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {aboutPage.founderCards.map((item) => (
             <article className="surface" key={item.title}>
-              <span className="mini-tag">Focus</span>
+              <span className="mini-tag">Why it matters</span>
               <h3>{item.title}</h3>
               <p>{item.text}</p>
             </article>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Operating standards"
-            title="What families can expect from the experience"
-            intro="What stays clear before launch and on tournament day."
+            eyebrow={aboutPage.experienceSection.eyebrow}
+            title={aboutPage.experienceSection.title}
+            intro={aboutPage.experienceSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {aboutPage.experienceCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={aboutPage.whySection.eyebrow}
+            title={aboutPage.whySection.title}
+            intro={aboutPage.whySection.intro}
           />
           <div className="surface checklist-surface">
             <ul className="checklist">
@@ -734,6 +1114,24 @@ function AboutPage({ currentPath, navigate }) {
               ))}
             </ul>
           </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-detail-cta">
+            <span className="section-tag">Early access</span>
+            <h3>{aboutPage.ctaTitle}</h3>
+            <p>{aboutPage.ctaText}</p>
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Join Early Access
+              </AppLink>
+              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Review Events
+              </AppLink>
+            </div>
+          </article>
         </div>
       </section>
     </>
@@ -794,6 +1192,31 @@ function PrivateLessonsPage({ currentPath, navigate }) {
             </div>
           </article>
         </div>
+        <div className="shell lesson-hero-carousel-wrap">
+          <LessonSignalCarousel
+            currentPath={currentPath}
+            navigate={navigate}
+            intro="Online, in-person, and group lesson formats all launch soon."
+          />
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={privateLessonsPage.detailsSection.eyebrow}
+            title={privateLessonsPage.detailsSection.title}
+            intro={privateLessonsPage.detailsSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {privateLessonsPage.detailsCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="page-section">
@@ -807,6 +1230,24 @@ function PrivateLessonsPage({ currentPath, navigate }) {
             {privateLessonsPage.formatCards.map((item) => (
               <article className="surface lesson-format-card" key={item.title}>
                 <span className="mini-tag">{item.eyebrow}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={privateLessonsPage.getSection.eyebrow}
+            title={privateLessonsPage.getSection.title}
+            intro={privateLessonsPage.getSection.intro}
+          />
+          <div className="card-grid card-grid-two">
+            {privateLessonsPage.getCards.map((item) => (
+              <article className="surface" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
@@ -855,7 +1296,7 @@ function PrivateLessonsPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell lesson-story-grid">
           <article className="surface surface-dark lesson-highlight-card">
-            <span className="mini-tag mini-tag-dark">Private coaching standard</span>
+            <span className="mini-tag mini-tag-dark">Lesson standard</span>
             <h3>{privateLessonsPage.highlightTitle}</h3>
             <p>{privateLessonsPage.highlightBody}</p>
             <ul className="checklist checklist-light">
@@ -866,6 +1307,11 @@ function PrivateLessonsPage({ currentPath, navigate }) {
           </article>
 
           <div className="stack-grid">
+            <SectionIntro
+              eyebrow={privateLessonsPage.fitSection.eyebrow}
+              title={privateLessonsPage.fitSection.title}
+              intro={privateLessonsPage.fitSection.intro}
+            />
             {privateLessonsPage.fitCards.map((item) => (
               <article className="surface lesson-fit-card" key={item.title}>
                 <h3>{item.title}</h3>
@@ -880,8 +1326,8 @@ function PrivateLessonsPage({ currentPath, navigate }) {
         <div className="shell">
           <SectionIntro
             eyebrow="How it starts"
-            title="A clean start matters more than a flashy promise"
-            intro="The first conversations should make the student feel understood, not sold to."
+            title="How families get into the first lesson opening"
+            intro="The next step should feel direct and low-friction."
           />
           <div className="lesson-process-grid">
             {privateLessonsPage.processSteps.map((item) => (
@@ -899,13 +1345,457 @@ function PrivateLessonsPage({ currentPath, navigate }) {
         <div className="shell">
           <article className="surface lesson-cta-panel">
             <div className="lesson-cta-copy">
-              <span className="section-tag">Private lesson inquiry</span>
+              <span className="section-tag">Lesson inquiry</span>
               <h2>{privateLessonsPage.ctaTitle}</h2>
               <p>{privateLessonsPage.ctaText}</p>
             </div>
             <div className="cta-row lesson-cta-actions">
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Contact for Private Lessons
+                Contact for Lessons
+              </AppLink>
+              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
+                Email info@chessandtruck.com
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function CampsOverviewPage({ currentPath, navigate }) {
+  return (
+    <>
+      <section className="page-hero lesson-page-hero">
+        <div className="shell lesson-hero-grid lesson-detail-hero-grid">
+          <div className="lesson-hero-copy lesson-detail-hero-copy">
+            <span className="section-tag">{campOverviewPage.eyebrow}</span>
+            <h1>{campOverviewPage.title}</h1>
+            <p className="page-intro">{campOverviewPage.intro}</p>
+
+            <div className="lesson-chip-row">
+              {campOverviewPage.chips.map((item) => (
+                <span key={item} className="lesson-chip">
+                  {item}
+                </span>
+              ))}
+            </div>
+
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Join Early Access
+              </AppLink>
+              <a href="#camp-details" className="btn btn-secondary">
+                See Camp Details
+              </a>
+            </div>
+
+            <div className="fact-list fact-list-hero camp-hero-facts">
+              {campOverviewPage.heroFacts.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel">
+            <div className="lesson-hero-top">
+              <div className="lesson-photo-shell">
+                <img src={campOverviewVisual} alt="Camp Overview" className="lesson-photo lesson-detail-photo" />
+              </div>
+
+              <div className="lesson-hero-note">
+                <span className="mini-tag mini-tag-dark">{campOverviewPage.asideTag}</span>
+                <h2>{campOverviewPage.asideTitle}</h2>
+                <p>{campOverviewPage.asideText}</p>
+              </div>
+            </div>
+
+            <div className="fact-list lesson-fact-grid">
+              {campOverviewPage.asideFacts.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="page-section" id="camp-overview">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.overviewSection.eyebrow}
+            title={campOverviewPage.overviewSection.title}
+            intro={campOverviewPage.overviewSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {campOverviewPage.overviewPoints.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section" id="camp-details">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.detailsSection.eyebrow}
+            title={campOverviewPage.detailsSection.title}
+            intro={campOverviewPage.detailsSection.intro}
+          />
+          <div className="card-grid card-grid-three camp-detail-grid">
+            {campOverviewPage.detailsCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.scheduleSection.eyebrow}
+            title={campOverviewPage.scheduleSection.title}
+            intro={campOverviewPage.scheduleSection.intro}
+          />
+          <div className="camp-schedule-grid">
+            {campOverviewPage.sampleSchedule.map((item) => (
+              <article className="surface camp-schedule-item" key={`${item.time}-${item.title}`}>
+                <span className="camp-schedule-time">{item.time}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.learningSection.eyebrow}
+            title={campOverviewPage.learningSection.title}
+            intro={campOverviewPage.learningSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {campOverviewPage.learningCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.parentSection.eyebrow}
+            title={campOverviewPage.parentSection.title}
+            intro={campOverviewPage.parentSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {campOverviewPage.parentReasons.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.formatSection.eyebrow}
+            title={campOverviewPage.formatSection.title}
+            intro={campOverviewPage.formatSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {campOverviewPage.cards.map((item) => (
+              <article className="surface card-link-card" key={item.path}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
+                  Explore this format
+                </AppLink>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.faqSection.eyebrow}
+            title={campOverviewPage.faqSection.title}
+            intro={campOverviewPage.faqSection.intro}
+          />
+          <div className="faq-stack">
+            {campOverviewPage.faqs.map((item) => (
+              <details className="faq-item" key={item.question}>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-detail-cta surface-dark camp-final-cta">
+            <span className="section-tag">Launch soon</span>
+            <h3>{campOverviewPage.ctaTitle}</h3>
+            <p>{campOverviewPage.ctaText}</p>
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Join Early Access
+              </AppLink>
+              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
+                Email info@chessandtruck.com
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function CampDetailHero({ page, currentPath, navigate }) {
+  const heroImageMap = {
+    "Training Camps": campTrainingVisual,
+    "Tournament Prep Camps": campPrepVisual,
+    "Online Camps": campOnlineVisual,
+  };
+
+  return (
+    <section className="page-hero lesson-page-hero">
+      <div className="shell lesson-hero-grid lesson-detail-hero-grid">
+        <div className="lesson-hero-copy lesson-detail-hero-copy">
+          <span className="section-tag">{page.eyebrow}</span>
+          <h1>{page.title}</h1>
+          <p className="page-intro">{page.intro}</p>
+
+          <div className="lesson-chip-row">
+            {page.chips.map((item) => (
+              <span key={item} className="lesson-chip">
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <div className="cta-row">
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+              {page.ctaLabel}
+            </AppLink>
+            <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+              Camp Overview
+            </AppLink>
+          </div>
+        </div>
+
+        <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel">
+          <div className="lesson-hero-top">
+            <div className="lesson-photo-shell">
+              <img src={heroImageMap[page.eyebrow]} alt={page.eyebrow} className="lesson-photo lesson-detail-photo" />
+            </div>
+
+            <div className="lesson-hero-note">
+              <span className="mini-tag mini-tag-dark">{page.asideTag}</span>
+              <h2>{page.asideTitle}</h2>
+              <p>{page.asideText}</p>
+            </div>
+          </div>
+
+          <div className="fact-list lesson-fact-grid">
+            {page.asideFacts.map((item) => (
+              <div key={item.label}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </div>
+            ))}
+          </div>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function CampDetailPage({ page, currentPath, navigate }) {
+  return (
+    <>
+      <CampDetailHero page={page} currentPath={currentPath} navigate={navigate} />
+
+      {page.pathSection && page.pathCards?.length ? (
+        <section className="page-section">
+          <div className="shell">
+            <SectionIntro eyebrow={page.pathSection.eyebrow} title={page.pathSection.title} intro={page.pathSection.intro} />
+            <div className="card-grid card-grid-three lesson-plan-grid">
+              {page.pathCards.map((item) => (
+                <article className="surface lesson-plan-card" key={item.title}>
+                  <div className="lesson-plan-top">
+                    <span className="mini-tag">{item.eyebrow}</span>
+                    <h3>{item.title}</h3>
+                  </div>
+                  <ul className="checklist lesson-plan-list">
+                    {item.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                  <div className="lesson-plan-footer">
+                    <strong>{item.meta}</strong>
+                    <span>{item.note}</span>
+                  </div>
+                  <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary lesson-plan-button">
+                    {item.cta}
+                  </AppLink>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro eyebrow="What matters most" title="What this camp format does well" intro="Fast signals for families deciding which camp path fits best." />
+          <div className="card-grid card-grid-three">
+            {page.cards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell two-column">
+          <article className="surface surface-dark">
+            <SectionIntro eyebrow={page.eyebrow} title={page.checklistTitle} intro="This is the standard we want families to recognize before camps open." />
+            <ul className="checklist checklist-light">
+              {page.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="surface lesson-detail-cta">
+            <span className="section-tag">Launch soon</span>
+            <h3>{page.ctaTitle}</h3>
+            <p>{page.ctaText}</p>
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Contact Us
+              </AppLink>
+              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
+                Email info@chessandtruck.com
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function LessonDetailPage({ page, currentPath, navigate }) {
+  return (
+    <>
+      <LessonDetailHero page={page} currentPath={currentPath} navigate={navigate} />
+
+      {page.pathSection && page.pathCards?.length ? (
+        <section className="page-section">
+          <div className="shell">
+            <SectionIntro
+              eyebrow={page.pathSection.eyebrow}
+              title={page.pathSection.title}
+              intro={page.pathSection.intro}
+            />
+            <div className="card-grid card-grid-three lesson-plan-grid">
+              {page.pathCards.map((item) => (
+                <article className="surface lesson-plan-card" key={item.title}>
+                  <div className="lesson-plan-top">
+                    <span className="mini-tag">{item.eyebrow}</span>
+                    <h3>{item.title}</h3>
+                  </div>
+                  <ul className="checklist lesson-plan-list">
+                    {item.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                  <div className="lesson-plan-footer">
+                    <strong>{item.meta}</strong>
+                    <span>{item.note}</span>
+                  </div>
+                  <AppLink
+                    to="/contact"
+                    navigate={navigate}
+                    currentPath={currentPath}
+                    className="btn btn-primary lesson-plan-button"
+                  >
+                    {item.cta}
+                  </AppLink>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro eyebrow="What matters most" title="What this format does well" intro="Short, clear signals for families who want the fast version." />
+          <div className="card-grid card-grid-three">
+            {page.cards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell two-column">
+          <article className="surface surface-dark">
+            <SectionIntro
+              eyebrow={page.eyebrow}
+              title={page.checklistTitle}
+              intro="This is the standard we want families to feel when lessons open."
+            />
+            <ul className="checklist checklist-light">
+              {page.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="surface lesson-detail-cta">
+            <span className="section-tag">Launch soon</span>
+            <h3>{page.ctaTitle}</h3>
+            <p>{page.ctaText}</p>
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Contact Us
               </AppLink>
               <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
                 Email info@chessandtruck.com
@@ -925,13 +1815,57 @@ function EventsPage({ currentPath, navigate }) {
         eyebrow={eventsPage.eyebrow}
         title={eventsPage.title}
         intro={eventsPage.intro}
+        heroFacts={eventsPage.heroFacts}
+        currentPath={currentPath}
+        navigate={navigate}
         portraitCaption="The event should feel welcoming for newer players and serious enough for experienced competitors."
         actions={
-          <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-            See Launch Format
-          </AppLink>
+          <>
+            <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+              Review Tournament Format
+            </AppLink>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+              Join Early Access
+            </AppLink>
+          </>
         }
       />
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={eventsPage.offerSection.eyebrow}
+            title={eventsPage.offerSection.title}
+            intro={eventsPage.offerSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {eventsPage.offerCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={eventsPage.detailSection.eyebrow}
+            title={eventsPage.detailSection.title}
+            intro={eventsPage.detailSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {eventsPage.detailCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="page-section">
         <div className="shell two-column">
@@ -954,13 +1888,13 @@ function EventsPage({ currentPath, navigate }) {
               </div>
             </div>
             <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="text-link">
-              Open launch page
+              Open event page
             </AppLink>
           </article>
 
           <article className="surface">
-            <span className="mini-tag">Before launch opens</span>
-            <h3>What families should know before the first release</h3>
+            <span className="mini-tag">Before registration opens</span>
+            <h3>What families can already confirm now</h3>
             <ul className="checklist">
               {policyItems.slice(0, 4).map((item) => (
                 <li key={item}>{item}</li>
@@ -973,9 +1907,28 @@ function EventsPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
+            eyebrow={eventsPage.sampleSection.eyebrow}
+            title={eventsPage.sampleSection.title}
+            intro={eventsPage.sampleSection.intro}
+          />
+          <div className="camp-schedule-grid">
+            {eventsPage.sampleSchedule.map((item) => (
+              <article className="surface camp-schedule-item" key={`${item.time}-${item.title}`}>
+                <span className="camp-schedule-time">{item.time}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
             eyebrow="Launch board"
-            title="What is opening first"
-            intro="The structure is real. The public dates are next."
+            title="What opens first"
+            intro="The format is already clear. The first public release is next."
           />
           <UpcomingTournamentList currentPath={currentPath} navigate={navigate} />
         </div>
@@ -1008,9 +1961,9 @@ function EventsPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Support"
-            title="Why families can move early with confidence"
-            intro="The key information is already visible before the first date drops."
+            eyebrow="Why parents move early"
+            title="Why this page is already useful before dates go live"
+            intro="Parents should be able to judge fit, format, and next step before registration opens."
           />
           <div className="card-grid card-grid-three">
             {eventsPage.supportCards.map((item) => (
@@ -1020,6 +1973,24 @@ function EventsPage({ currentPath, navigate }) {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-detail-cta">
+            <span className="section-tag">Ready for the first release?</span>
+            <h3>{eventsPage.ctaTitle}</h3>
+            <p>{eventsPage.ctaText}</p>
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Join Early Access
+              </AppLink>
+              <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Review Event Format
+              </AppLink>
+            </div>
+          </article>
         </div>
       </section>
     </>
@@ -1033,6 +2004,8 @@ function TournamentDetailPage({ currentPath, navigate }) {
         eyebrow={tournamentPage.eyebrow}
         title={tournamentPage.title}
         intro={tournamentPage.intro}
+        currentPath={currentPath}
+        navigate={navigate}
         portraitCaption="Tournament mornings should end with real energy, earned confidence, and memorable moments for players."
         actions={
           <>
@@ -1153,18 +2126,77 @@ function TournamentDetailPage({ currentPath, navigate }) {
   );
 }
 
-function FaqPage() {
+function FaqPage({ currentPath, navigate }) {
   return (
     <>
       <PageHero
         eyebrow={faqPage.eyebrow}
         title={faqPage.title}
         intro={faqPage.intro}
+        heroFacts={faqPage.heroFacts}
+        currentPath={currentPath}
+        navigate={navigate}
         portraitCaption="Families ask better questions when the launch already feels thoughtful, organized, and player-centered."
+        actions={
+          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+            Ask a Question
+          </AppLink>
+        }
       />
 
       <section className="page-section">
+        <div className="shell">
+          <SectionIntro eyebrow="Quick answers" title="The fastest things to know" />
+          <div className="card-grid card-grid-three">
+            {faqPage.quickCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
         <div className="shell faq-stack">
+          <SectionIntro
+            eyebrow={faqPage.prepSection.eyebrow}
+            title={faqPage.prepSection.title}
+            intro={faqPage.prepSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {faqPage.prepCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={faqPage.flowSection.eyebrow}
+            title={faqPage.flowSection.title}
+            intro={faqPage.flowSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {faqPage.flowSteps.map((item) => (
+              <article className="surface stat-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell faq-stack">
+          <SectionIntro eyebrow="Full FAQ" title="Direct answers to the common questions" />
           {faqItems.map((item) => (
             <details className="faq-item" key={item.question}>
               <summary>{item.question}</summary>
@@ -1173,25 +2205,95 @@ function FaqPage() {
           ))}
         </div>
       </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-detail-cta">
+            <span className="section-tag">Still unsure?</span>
+            <h3>{faqPage.ctaTitle}</h3>
+            <p>{faqPage.ctaText}</p>
+            <div className="cta-row">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Contact Us
+              </AppLink>
+              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
+                Email info@chessandtruck.com
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
     </>
   );
 }
 
-function ContactPage({ contactState, contactSubmitState, updateContactField, handleContactSubmit }) {
+function ContactPage({ currentPath, navigate, contactState, contactSubmitState, updateContactField, handleContactSubmit }) {
   return (
     <>
       <PageHero
         eyebrow={contactPage.eyebrow}
         title={contactPage.title}
         intro={contactPage.intro}
+        heroFacts={contactPage.heroFacts}
+        currentPath={currentPath}
+        navigate={navigate}
         portraitCaption="Quick, direct support helps families feel ready before launch and before tournament day."
       />
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={contactPage.topicSection.eyebrow}
+            title={contactPage.topicSection.title}
+            intro={contactPage.topicSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {contactPage.topicCards.map((item) => (
+              <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="page-section">
         <div className="shell">
           <div className="card-grid card-grid-three">
             {contactPage.supportCards.map((item) => (
               <article className="surface" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface">
+            <SectionIntro eyebrow="Before you send" title="What helps us reply faster" intro="A few details in your message make it easier to point you to the right program." />
+            <ul className="checklist">
+              {contactPage.messageChecklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={contactPage.responseSection.eyebrow}
+            title={contactPage.responseSection.title}
+            intro={contactPage.responseSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {contactPage.responseSteps.map((item) => (
+              <article className="surface stat-card" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
@@ -1209,6 +2311,24 @@ function ContactPage({ contactState, contactSubmitState, updateContactField, han
             updateContactField={updateContactField}
             handleContactSubmit={handleContactSubmit}
           />
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-detail-cta">
+            <span className="section-tag">Contact the team</span>
+            <h3>{contactPage.ctaTitle}</h3>
+            <p>{contactPage.ctaText}</p>
+            <div className="cta-row">
+              <a href="mailto:info@chessandtruck.com" className="btn btn-primary">
+                Email info@chessandtruck.com
+              </a>
+              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Review Events
+              </AppLink>
+            </div>
+          </article>
         </div>
       </section>
     </>
@@ -1297,6 +2417,8 @@ function RegisterPage({
         eyebrow={registerPage.eyebrow}
         title={registerPage.title}
         intro={registerPage.intro}
+        currentPath={currentPath}
+        navigate={navigate}
         portraitCaption="The registration flow should feel just as calm and clear as the event itself."
         actions={
           <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
@@ -2184,25 +3306,50 @@ function ChessTruckApp() {
 
   const pageContent = (() => {
     switch (currentPath) {
-      case "/":
-        return <HomePage currentPath={currentPath} navigate={navigate} />;
-      case "/about":
-        return <AboutPage currentPath={currentPath} navigate={navigate} />;
+        case "/":
+          return <HomePage currentPath={currentPath} navigate={navigate} />;
+        case "/camps":
+          return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
+        case "/camps/training":
+        case "/camps/prep":
+        case "/camps/online":
+          return (
+            <CampDetailPage
+              page={campDetailPages[currentPath]}
+              currentPath={currentPath}
+              navigate={navigate}
+            />
+          );
+        case "/about":
+          return <AboutPage currentPath={currentPath} navigate={navigate} />;
       case "/events":
         return <EventsPage currentPath={currentPath} navigate={navigate} />;
       case "/events/chess-and-truck-tournament":
         return <TournamentDetailPage currentPath={currentPath} navigate={navigate} />;
       case "/private-lessons":
         return <PrivateLessonsPage currentPath={currentPath} navigate={navigate} />;
+      case "/lessons/online":
+      case "/lessons/in-person":
+      case "/lessons/group":
+      case "/lessons/manage":
+        return (
+          <LessonDetailPage
+            page={lessonDetailPages[currentPath]}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+        );
       case "/faq":
-        return <FaqPage />;
+        return <FaqPage currentPath={currentPath} navigate={navigate} />;
       case "/terms":
-        return <LegalPage {...termsPage} />;
+        return <LegalPage {...termsPage} currentPath={currentPath} navigate={navigate} />;
       case "/privacy":
-        return <LegalPage {...privacyPage} />;
+        return <LegalPage {...privacyPage} currentPath={currentPath} navigate={navigate} />;
       case "/contact":
         return (
           <ContactPage
+            currentPath={currentPath}
+            navigate={navigate}
             contactState={contactState}
             contactSubmitState={contactSubmitState}
             updateContactField={updateContactField}
@@ -2264,19 +3411,45 @@ function ChessTruckApp() {
             id="primary-navigation"
             className={`site-nav${isMobileNavOpen ? " is-open" : ""}`}
             aria-label="Primary navigation"
-          >
-            {navigationItems.map((item) => (
-              <AppLink
-                key={item.path}
-                to={item.path}
-                navigate={navigate}
-                currentPath={currentPath}
-                className="nav-link"
-                onNavigate={() => setIsMobileNavOpen(false)}
-              >
-                {item.label}
-              </AppLink>
-            ))}
+            >
+            {navigationItems.map((item) => {
+              if (item.label === "Camps") {
+                return (
+                  <CampsMenu
+                    key={`${item.label}-${currentPath}-${isCompactViewport ? "mobile" : "desktop"}`}
+                    currentPath={currentPath}
+                    navigate={navigate}
+                    isCompactViewport={isCompactViewport}
+                    closeNavigation={() => setIsMobileNavOpen(false)}
+                  />
+                );
+              }
+
+              if (item.label === "Lessons") {
+                return (
+                  <LessonsMenu
+                    key={`${item.label}-${currentPath}-${isCompactViewport ? "mobile" : "desktop"}`}
+                    currentPath={currentPath}
+                    navigate={navigate}
+                    isCompactViewport={isCompactViewport}
+                    closeNavigation={() => setIsMobileNavOpen(false)}
+                  />
+                );
+              }
+
+              return (
+                <AppLink
+                  key={item.path}
+                  to={item.path}
+                  navigate={navigate}
+                  currentPath={currentPath}
+                  className="nav-link"
+                  onNavigate={() => setIsMobileNavOpen(false)}
+                >
+                  {item.label}
+                </AppLink>
+              );
+            })}
           </nav>
 
           <div className="header-actions">
