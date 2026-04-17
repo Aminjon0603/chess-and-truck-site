@@ -513,7 +513,25 @@ function LessonSignalCarousel({ currentPath, navigate, intro = "Lesson launch op
   );
 }
 
-function PageHero({ eyebrow, title, intro, actions, aside, portraitCaption, heroFacts, currentPath, navigate }) {
+function PageHero({ eyebrow, title, intro, actions, aside, asideLink, portraitCaption, heroFacts, currentPath, navigate }) {
+  const asideContent = aside || (
+    <>
+      <span className="mini-tag mini-tag-dark">Event focus</span>
+      <h2>{featuredTournament.title}</h2>
+      <p>{featuredTournament.shortSummary}</p>
+      <div className="fact-list">
+        <div>
+          <span>Location</span>
+          <strong>{featuredTournament.city}</strong>
+        </div>
+        <div>
+          <span>Format</span>
+          <strong>{featuredTournament.formatLabel}</strong>
+        </div>
+      </div>
+    </>
+  );
+
   return (
     <section className="page-hero">
       <div className="shell page-hero-grid">
@@ -534,25 +552,21 @@ function PageHero({ eyebrow, title, intro, actions, aside, portraitCaption, hero
           ) : null}
         </div>
         <div className="hero-visual">
-          <aside className="surface surface-dark hero-aside">
-            {aside || (
-              <>
-                <span className="mini-tag mini-tag-dark">Event focus</span>
-                <h2>{featuredTournament.title}</h2>
-                <p>{featuredTournament.shortSummary}</p>
-                <div className="fact-list">
-                  <div>
-                    <span>Location</span>
-                    <strong>{featuredTournament.city}</strong>
-                  </div>
-                  <div>
-                    <span>Format</span>
-                    <strong>{featuredTournament.formatLabel}</strong>
-                  </div>
-                </div>
-              </>
-            )}
-          </aside>
+          {asideLink ? (
+            <AppLink
+              to={asideLink}
+              navigate={navigate}
+              currentPath={currentPath}
+              className="surface surface-dark hero-aside hero-aside-link"
+              aria-label="Open tournament page"
+            >
+              {asideContent}
+            </AppLink>
+          ) : (
+            <aside className="surface surface-dark hero-aside">
+              {asideContent}
+            </aside>
+          )}
           <LessonSignalCarousel currentPath={currentPath} navigate={navigate} intro={portraitCaption} />
         </div>
       </div>
@@ -883,6 +897,7 @@ function HomePage({ currentPath, navigate }) {
         heroFacts={homePage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
+        asideLink="/events/chess-and-truck-tournament"
         portraitCaption="Young players finishing the morning with something real to celebrate."
         actions={
           <>
