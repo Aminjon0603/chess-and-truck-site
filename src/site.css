@@ -506,6 +506,8 @@ a {
   border: 1px solid transparent;
   font-weight: 700;
   cursor: pointer;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .btn-primary {
@@ -772,6 +774,12 @@ a {
   padding: 16px 18px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.84);
+}
+
+.contact-link strong,
+.footer-contact-link strong,
+.fact-list strong {
+  overflow-wrap: anywhere;
 }
 
 .card-grid > .surface:not(.tournament-slot):not(.dojo-feature):not(.portrait-card),
@@ -2204,6 +2212,19 @@ a {
     flex-direction: column;
   }
 
+  .fact-list-hero {
+    gap: 10px;
+  }
+
+  .fact-list-hero > div {
+    min-height: auto;
+    padding: 14px 16px;
+  }
+
+  .page-hero-facts strong {
+    font-size: 1rem;
+  }
+
   .page-hero {
     padding: 28px 0 10px;
   }
@@ -2339,6 +2360,12 @@ a {
 
   .footer-contact-link {
     padding: 10px 12px;
+  }
+
+  .contact-link strong,
+  .footer-contact-link strong {
+    font-size: 1rem;
+    line-height: 1.35;
   }
 
   .brand-copy small {

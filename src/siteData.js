@@ -170,7 +170,7 @@ export const routeMeta = {
   "/contact": {
     title: "Contact | CHESS AND TRUCK",
     description:
-      "Reach the CHESS AND TRUCK tournament team by email or the contact form before registration or tournament day.",
+      "Reach the CHESS AND TRUCK team by phone, email, or the contact form for tournament, camp, and lesson questions.",
   },
   "/register": {
     title: "Register | CHESS AND TRUCK",
@@ -346,7 +346,7 @@ export const carouselSlides = [
   {
     label: "Family Support",
     title: "Direct support",
-    text: "Email and the contact form stay easy to reach.",
+    text: "Call, text, email, or use the contact form when you need a clear next step.",
   },
 ];
 
@@ -561,7 +561,7 @@ export const campOverviewPage = {
     },
     {
       question: "How do I join early access?",
-      answer: "Use the contact page or email info@chessandtruck.com. Families on the early access list will hear first when dates and enrollment are released.",
+      answer: "Use the contact page, call or text (646) 991-0972, or email info@chessandtruck.com. Families on the early access list will hear first when dates and enrollment are released.",
     },
   ],
   ctaTitle: "Join the camp early access list",
@@ -1063,12 +1063,12 @@ export const contactPage = {
   eyebrow: "Contact",
   title: "Contact the team for events, camps, and lessons.",
   intro:
-    "Use the contact form or email info@chessandtruck.com for early access, section questions, lesson inquiries, camp updates, or help choosing the right program.",
+    "Use the contact form, call or text (646) 991-0972, or email info@chessandtruck.com for early access, section questions, lesson inquiries, camp updates, or help choosing the right program.",
   heroFacts: [
+    { label: "Phone", value: "(646) 991-0972" },
     { label: "Email", value: "info@chessandtruck.com" },
     { label: "Reply type", value: "Direct response" },
     { label: "Best for", value: "Questions + early access" },
-    { label: "Status", value: "Open now" },
   ],
   topicSection: {
     eyebrow: "What to contact us about",
@@ -1130,7 +1130,7 @@ export const contactPage = {
   ],
   ctaTitle: "Need help choosing the right next step?",
   ctaText:
-    "Send one message with the student age, current level, and whether you are looking for events, camps, or lessons. We will point you in the right direction.",
+    "Send one message with the student age, current level, and whether you are looking for events, camps, or lessons. Or call, text, or email if you already know what you need.",
 };
 
 export const privateLessonsPage = {
@@ -1821,7 +1821,13 @@ export const faqItems = [
   },
 ];
 
-export const contactNumbers = [];
+export const contactNumbers = [
+  {
+    label: "Call or text",
+    display: "(646) 991-0972",
+    href: "tel:+16469910972",
+  },
+];
 
 export const contactEmails = [
   {

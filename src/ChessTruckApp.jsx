@@ -6,6 +6,7 @@ import {
   campMenuItems,
   campOverviewPage,
   contactEmails,
+  contactNumbers,
   contactPage,
   eventsPage,
   faqItems,
@@ -47,6 +48,9 @@ import trophyBadge from "./assets/trophy-badge.svg";
 import { validateContactFields, validateRegistrationFields } from "./lib/validation.js";
 
 const REGISTRATION_DRAFT_KEY = "ct-registration-draft-v2";
+const phoneContact = contactNumbers[0];
+const emailContact = contactEmails[0];
+const footerContactMethods = [phoneContact, emailContact].filter(Boolean);
 
 const registrationInitialState = {
   firstName: "",
@@ -729,10 +733,12 @@ function SiteFooter({ currentPath, navigate }) {
             <div className="footer-column">
               <span className="mini-tag">Support</span>
               <div className="footer-contact-stack">
-                <a href={contactEmails[0].href} className="footer-contact-link">
-                  <span>Email</span>
-                  <strong>{contactEmails[0].display}</strong>
-                </a>
+                {footerContactMethods.map((item) => (
+                  <a href={item.href} key={item.display} className="footer-contact-link">
+                    <span>{item.label}</span>
+                    <strong>{item.display}</strong>
+                  </a>
+                ))}
               </div>
             </div>
 
@@ -787,17 +793,32 @@ function LegalPage({ eyebrow, title, intro, sections, currentPath, navigate }) {
 function ContactDirectory() {
   return (
     <div className="stack-grid">
-      <article className="surface">
-        <span className="mini-tag">Email</span>
-        <div className="link-stack">
-          {contactEmails.map((item) => (
-            <a href={item.href} key={item.display} className="contact-link">
-              <span>{item.label}</span>
-              <strong>{item.display}</strong>
-            </a>
-          ))}
-        </div>
-      </article>
+      {contactNumbers.length ? (
+        <article className="surface">
+          <span className="mini-tag">Phone</span>
+          <div className="link-stack">
+            {contactNumbers.map((item) => (
+              <a href={item.href} key={item.display} className="contact-link">
+                <span>{item.label}</span>
+                <strong>{item.display}</strong>
+              </a>
+            ))}
+          </div>
+        </article>
+      ) : null}
+      {contactEmails.length ? (
+        <article className="surface">
+          <span className="mini-tag">Email</span>
+          <div className="link-stack">
+            {contactEmails.map((item) => (
+              <a href={item.href} key={item.display} className="contact-link">
+                <span>{item.label}</span>
+                <strong>{item.display}</strong>
+              </a>
+            ))}
+          </div>
+        </article>
+      ) : null}
     </div>
   );
 }
@@ -1368,8 +1389,8 @@ function PrivateLessonsPage({ currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Contact for Lessons
               </AppLink>
-              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
-                Email info@chessandtruck.com
+              <a href={phoneContact.href} className="btn btn-secondary">
+                Call / Text {phoneContact.display}
               </a>
             </div>
           </article>
@@ -1581,8 +1602,8 @@ function CampsOverviewPage({ currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Join Early Access
               </AppLink>
-              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
-                Email info@chessandtruck.com
+              <a href={phoneContact.href} className="btn btn-secondary">
+                Call / Text {phoneContact.display}
               </a>
             </div>
           </article>
@@ -1720,8 +1741,8 @@ function CampDetailPage({ page, currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Contact Us
               </AppLink>
-              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
-                Email info@chessandtruck.com
+              <a href={phoneContact.href} className="btn btn-secondary">
+                Call / Text {phoneContact.display}
               </a>
             </div>
           </article>
@@ -1812,8 +1833,8 @@ function LessonDetailPage({ page, currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Contact Us
               </AppLink>
-              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
-                Email info@chessandtruck.com
+              <a href={phoneContact.href} className="btn btn-secondary">
+                Call / Text {phoneContact.display}
               </a>
             </div>
           </article>
@@ -2231,8 +2252,8 @@ function FaqPage({ currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Contact Us
               </AppLink>
-              <a href="mailto:info@chessandtruck.com" className="btn btn-secondary">
-                Email info@chessandtruck.com
+              <a href={phoneContact.href} className="btn btn-secondary">
+                Call / Text {phoneContact.display}
               </a>
             </div>
           </article>
@@ -2336,8 +2357,8 @@ function ContactPage({ currentPath, navigate, contactState, contactSubmitState, 
             <h3>{contactPage.ctaTitle}</h3>
             <p>{contactPage.ctaText}</p>
             <div className="cta-row">
-              <a href="mailto:info@chessandtruck.com" className="btn btn-primary">
-                Email info@chessandtruck.com
+              <a href={phoneContact.href} className="btn btn-primary">
+                Call / Text {phoneContact.display}
               </a>
               <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
                 Review Events
