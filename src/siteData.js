@@ -2,9 +2,9 @@ export const siteBrand = {
   name: "CHESS AND TRUCK",
   short: "CT",
   city: "New York City",
-  tagline: "NYC scholastic chess events launching soon",
+  tagline: "NYC scholastic chess camps launching soon",
   footerNote:
-    "Open & Beginner Saturday tournaments for New York City players. First public dates are being finalized now.",
+    "School-break chess camps for New York City families. Daily lessons, guided games, and early access details are opening soon.",
 };
 
 export const navigationItems = [
@@ -98,9 +98,9 @@ export const campMenuFeature = {
 
 export const routeMeta = {
   "/": {
-    title: "CHESS AND TRUCK | NYC Scholastic Chess Tournaments",
+    title: "CHESS AND TRUCK | NYC Chess Camps",
     description:
-      "Open and Beginner scholastic chess tournaments launching soon in New York City, with clear format details and direct family support.",
+      "Structured school-break chess camps in New York City with daily lessons, guided games, and early access for families planning ahead.",
   },
   "/about": {
     title: "About | CHESS AND TRUCK",
@@ -209,75 +209,76 @@ export const footerLegalLinks = [
 ];
 
 export const homePage = {
-  eyebrow: "NYC chess programs",
-  title: "Structured chess programs for NYC students.",
-  intro: "Camps, lessons, and scholastic events with clear format, direct support, and a clean path into real chess improvement.",
+  eyebrow: "NYC chess camps",
+  title: "Structured chess camps for NYC families.",
+  intro: "Daily lessons, guided games, and real chess improvement during school breaks. Built for families who want a clear chess-first camp format from the start.",
   heroFacts: [
     { label: "City", value: "New York City" },
-    { label: "Formats", value: "Camps, lessons, events" },
-    { label: "Launch", value: "Programs opening soon" },
+    { label: "Season", value: "School breaks" },
+    { label: "Format", value: "Half-day and full-day planned" },
+    { label: "Launch", value: "Camp details coming soon" },
   ],
   offerSection: {
-    eyebrow: "What we offer",
-    title: "Three clear ways to work with us",
-    intro: "Families should be able to see the options fast and choose the right starting point.",
+    eyebrow: "What the camp launch includes",
+    title: "Three clear ways to explore the camp release",
+    intro: "The home page should quickly show what the first camp release is being built to offer.",
   },
   offerCards: [
     {
-      title: "Camps",
-      text: "School-break camps with coached lessons, guided games, and a structured daily rhythm.",
+      title: "Camp Overview",
+      text: "See the format, sample day, practical details, and what families can expect before dates go live.",
       path: "/camps",
     },
     {
-      title: "Lessons",
-      text: "Private and group coaching for students who want a more consistent training path.",
-      path: "/private-lessons",
+      title: "Training Camps",
+      text: "Daily camp rhythm built around coached lessons, supervised games, puzzle work, and structured review.",
+      path: "/camps/training",
     },
     {
-      title: "Events",
-      text: "Open and Beginner tournament formats built to be clear and parent-friendly from the start.",
-      path: "/events",
+      title: "Online Camps",
+      text: "Remote camp format for families who want structure and guided chess work without crossing the city.",
+      path: "/camps/online",
     },
   ],
   audienceSection: {
     eyebrow: "Who this is for",
-    title: "Built for students and families who want structure",
-    intro: "Different players start in different places. The format should match the student.",
+    title: "Built for families who want structure during school breaks",
+    intro: "Camp should feel organized, age-appropriate, and clearly built around chess improvement.",
   },
   audienceCards: [
     {
+      title: "School-break families",
+      text: "Parents who want a clear day structure, useful chess work, and a format that fits the New York City calendar.",
+    },
+    {
       title: "Beginners",
-      text: "Students who need a friendlier first step into chess lessons, camps, or tournament play.",
+      text: "Students who need a beginner-friendly camp setting with coaching, guided games, and level-aware pacing.",
     },
     {
       title: "Improving players",
-      text: "Students who already know the basics and want stronger habits, clearer coaching, and better tournament readiness.",
-    },
-    {
-      title: "NYC parents",
-      text: "Families who want concrete details, clear scheduling, and programs that feel organized from the first click.",
+      text: "Students who already know the basics and want stronger habits, better decision-making, and more real chess work.",
     },
   ],
   launchSection: {
-    eyebrow: "What opens first",
-    title: "The first release is being finalized now",
-    intro: "The calendar is still being finalized, but the structure is already visible.",
+    eyebrow: "What to review first",
+    title: "The first camp release is taking shape now",
+    intro: "The dates are still being finalized, but parents can already review the structure and next step.",
   },
   serviceCards: [
     {
-      title: "See Events",
-      text: "Review the tournament structure, sections, schedule, and what is already confirmed.",
-      path: "/events/chess-and-truck-tournament",
-    },
-    {
-      title: "See Camps",
-      text: "Explore the camp format, sample day, practical details, and early access information.",
+      title: "Camp Details",
+      text: "Review the planned location, time windows, ages, format, and launch status before enrollment opens.",
       path: "/camps",
     },
     {
-      title: "See Lessons",
-      text: "Choose the lesson format that fits the student and ask about private coaching launch spots.",
-      path: "/private-lessons",
+      title: "Sample Day",
+      text: "See how a typical camp day can move from puzzles and lessons into guided games, breaks, and review.",
+      path: "/camps",
+    },
+    {
+      title: "Join Early Access",
+      text: "Use Contact now if you want the first dates, enrollment notice, and practical release details as soon as they open.",
+      path: "/contact",
     },
   ],
   processSection: {
@@ -287,44 +288,44 @@ export const homePage = {
   },
   processCards: [
     {
-      title: "Choose the program",
-      text: "Start with camps, lessons, or events based on the student and your schedule.",
+      title: "Check camp fit",
+      text: "Start with the camp overview and see whether the school-break format fits your student and schedule.",
     },
     {
-      title: "Review the details",
-      text: "See format, level fit, launch timing, and the important practical information first.",
+      title: "Review the structure",
+      text: "See the sample day, practical details, and the training areas camp is being designed to cover.",
     },
     {
-      title: "Join early access",
-      text: "Use the contact page to hear first when dates, enrollment, or lesson openings go live.",
+      title: "Join the camp waitlist",
+      text: "Use the contact page to hear first when dates, enrollment, and the first release details go live.",
     },
   ],
   whySection: {
     eyebrow: "Why choose us",
-    title: "What makes the launch feel more trustworthy",
-    intro: "Good chess programs should already feel organized before registration even opens.",
+    title: "Why the camp launch should feel easy to trust",
+    intro: "Parents should be able to understand the camp quickly and decide whether it is the right fit.",
   },
   whyCards: [
     {
-      title: "Clear information first",
-      text: "Pages are built to answer the real questions parents ask before they commit.",
+      title: "Clear camp details",
+      text: "Families should see the format, the day structure, and the next step without digging through vague branding copy.",
     },
     {
-      title: "Chess-first structure",
-      text: "Programs are centered on lessons, games, review, and actual student improvement.",
+      title: "Chess-first schedule",
+      text: "The camp is being built around lessons, games, review, and actual student improvement, not filler time.",
     },
     {
-      title: "Beginner-friendly entry points",
-      text: "Newer players get cleaner starting options instead of being thrown into the wrong environment.",
+      title: "Beginner-friendly launch",
+      text: "Newer players should have a clean first camp experience instead of being dropped into the wrong pace or level.",
     },
     {
       title: "NYC-focused",
-      text: "The site, schedule, and program direction are built around real New York City families and school rhythms.",
+      text: "The camp plan is being shaped around real New York City families, school breaks, and practical day-to-day logistics.",
     },
   ],
-  ctaTitle: "Join the waitlist before the first release opens.",
+  ctaTitle: "Join the camp waitlist before the first release opens.",
   ctaText:
-    "If you want first notice for camps, lessons, or tournament dates, contact us now and we will keep you updated.",
+    "If camp is the main fit for your family, contact us now and we will send the first dates, format details, and enrollment notice as soon as they open.",
 };
 
 export const carouselSlides = [

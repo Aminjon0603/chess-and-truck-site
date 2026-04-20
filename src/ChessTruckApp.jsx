@@ -743,20 +743,20 @@ function SiteFooter({ currentPath, navigate }) {
             </div>
 
             <div className="footer-column footer-event-column">
-              <span className="mini-tag">Featured event</span>
-              <h3>{featuredTournament.title}</h3>
-              <p>{featuredTournament.scheduleLabel}</p>
+              <span className="mini-tag">Featured camps</span>
+              <h3>{campOverviewPage.title}</h3>
+              <p>{campOverviewPage.intro}</p>
               <div className="footer-meta">
-                <span>{featuredTournament.formatLabel}</span>
+                <span>{campOverviewPage.heroFacts.find((item) => item.label === "Location")?.value || "Upper East Side, NYC"}</span>
                 <strong>Dates announced soon</strong>
               </div>
               <AppLink
-                to="/events/chess-and-truck-tournament"
+                to="/camps"
                 navigate={navigate}
                 currentPath={currentPath}
                 className="text-link"
               >
-                View Event Details
+                View Camp Details
               </AppLink>
             </div>
           </div>
@@ -901,7 +901,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
 
       <small className={`status-copy status-${contactSubmitState.status}`} aria-live="polite">
         {contactSubmitState.status === "idle"
-          ? "Messages go directly to the launch and tournament support team."
+          ? "Messages go directly to the launch and program support team."
           : contactSubmitState.message}
       </small>
     </form>
@@ -918,32 +918,30 @@ function HomePage({ currentPath, navigate }) {
         heroFacts={homePage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
-        asideLink="/events/chess-and-truck-tournament"
-        portraitCaption="Young players finishing the morning with something real to celebrate."
+        asideLink="/camps"
+        portraitCaption={campOverviewPage.portraitCaption}
         actions={
           <>
-            <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              See Launch Format
+            <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+              See Camp Overview
             </AppLink>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Get Early Access
+              Join Camp Waitlist
             </AppLink>
           </>
         }
         aside={
           <>
-            <span className="mini-tag mini-tag-dark">Featured event</span>
-            <h2>{featuredTournament.title}</h2>
-            <p>{featuredTournament.shortSummary}</p>
+            <span className="mini-tag mini-tag-dark">{campOverviewPage.asideTag}</span>
+            <h2>{campOverviewPage.asideTitle}</h2>
+            <p>{campOverviewPage.asideText}</p>
             <div className="fact-list fact-list-hero">
-              <div>
-                <span>Format</span>
-                <strong>{featuredTournament.formatLabel}</strong>
-              </div>
-              <div>
-                <span>Schedule</span>
-                <strong>{featuredTournament.scheduleLabel}</strong>
-              </div>
+              {campOverviewPage.asideFacts.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
             </div>
           </>
         }
@@ -995,7 +993,17 @@ function HomePage({ currentPath, navigate }) {
             title={homePage.launchSection.title}
             intro={homePage.launchSection.intro}
           />
-          <UpcomingTournamentList currentPath={currentPath} navigate={navigate} compact />
+          <div className="card-grid card-grid-three">
+            {homePage.serviceCards.map((item) => (
+              <article className="surface card-link-card" key={item.path}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
+                  Open
+                </AppLink>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -1045,10 +1053,10 @@ function HomePage({ currentPath, navigate }) {
             </div>
             <div className="cta-row lesson-cta-actions">
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Join Early Access
+                Join Camp Waitlist
               </AppLink>
-              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Review Events
+              <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                See Camp Details
               </AppLink>
             </div>
           </article>
