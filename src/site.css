@@ -1189,6 +1189,38 @@ a {
   align-items: stretch;
 }
 
+.camp-map-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.88fr) minmax(0, 1.12fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.camp-map-copy,
+.camp-map-card {
+  display: grid;
+  gap: 18px;
+}
+
+.camp-map-meta {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.camp-map-meta strong {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.camp-map-frame {
+  width: 100%;
+  min-height: 360px;
+  border: 0;
+  border-radius: 18px;
+}
+
 .camp-schedule-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2022,6 +2054,7 @@ a {
   .lesson-cta-panel,
   .dojo-feature,
   .tournament-slot-body,
+  .camp-map-grid,
   .camp-schedule-grid {
     grid-template-columns: 1fr;
   }
@@ -2255,6 +2288,10 @@ a {
 
   .hero-visual {
     gap: 14px;
+  }
+
+  .camp-map-frame {
+    min-height: 300px;
   }
 
   .fact-list,

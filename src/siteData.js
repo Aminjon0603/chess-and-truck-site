@@ -2,9 +2,9 @@ export const siteBrand = {
   name: "CHESS AND TRUCK",
   short: "CT",
   city: "New York City",
-  tagline: "NYC scholastic chess camps launching soon",
+  tagline: "NYC summer chess camps at Central Park",
   footerNote:
-    "School-break chess camps for New York City families. Daily lessons, guided games, and early access details are opening soon.",
+    "Summer chess camp runs June 15 to August 21 at the House of Chess and Checkers in Central Park.",
 };
 
 export const navigationItems = [
@@ -60,8 +60,8 @@ export const campMenuItems = [
   {
     label: "Camp Overview",
     path: "/camps",
-    description: "See how the first camp release is being structured for NYC families and school breaks.",
-    signal: "Camp launch",
+    description: "See dates, location, daily format, and how summer camp works before you register.",
+    signal: "Summer 2026",
     imageKey: "overview",
   },
   {
@@ -88,10 +88,10 @@ export const campMenuItems = [
 ];
 
 export const campMenuFeature = {
-  eyebrow: "Camp launch",
-  title: "School-break chess camps, built the clean way.",
+  eyebrow: "Summer camp",
+  title: "Chess camp in Central Park, June 15 to August 21.",
   text:
-    "Training-first camp formats for New York City families who want clear structure before registration opens.",
+    "Structured summer camp for NYC families who want lessons, guided games, and a clear daily rhythm.",
   ctaLabel: "Open camp overview",
   ctaPath: "/camps",
 };
@@ -100,7 +100,7 @@ export const routeMeta = {
   "/": {
     title: "CHESS AND TRUCK | NYC Chess Camps",
     description:
-      "Structured school-break chess camps in New York City with daily lessons, guided games, and early access for families planning ahead.",
+      "NYC summer chess camps at Central Park from June 15 to August 21 with daily lessons, guided games, and practical camp details for families.",
   },
   "/about": {
     title: "About | CHESS AND TRUCK",
@@ -110,7 +110,7 @@ export const routeMeta = {
   "/camps": {
     title: "Camps | CHESS AND TRUCK",
     description:
-      "See the CHESS AND TRUCK camp launch structure, school-break format, and what families can expect before dates go live.",
+      "See summer camp dates, Central Park location, daily format, and what students will do at CHESS AND TRUCK camps.",
   },
   "/camps/training": {
     title: "Training Camps | CHESS AND TRUCK",
@@ -210,18 +210,18 @@ export const footerLegalLinks = [
 
 export const homePage = {
   eyebrow: "NYC chess camps",
-  title: "Structured chess camps for NYC families.",
-  intro: "Daily lessons, guided games, and real chess improvement during school breaks. Built for families who want a clear chess-first camp format from the start.",
+  title: "Summer chess camps in Central Park.",
+  intro: "Daily lessons, guided games, and real chess improvement from June 15 to August 21 at the House of Chess and Checkers.",
   heroFacts: [
-    { label: "City", value: "New York City" },
-    { label: "Season", value: "School breaks" },
-    { label: "Format", value: "Half-day and full-day planned" },
-    { label: "Launch", value: "Camp details coming soon" },
+    { label: "Dates", value: "June 15 - August 21" },
+    { label: "Location", value: "House of Chess and Checkers, Central Park" },
+    { label: "Format", value: "Half-day and full-day camp" },
+    { label: "Levels", value: "Beginner-friendly and improving players" },
   ],
   offerSection: {
-    eyebrow: "What the camp launch includes",
-    title: "Three clear ways to explore the camp release",
-    intro: "The home page should quickly show what the first camp release is being built to offer.",
+    eyebrow: "What we offer",
+    title: "Three clear camp paths",
+    intro: "Parents should be able to see the options quickly.",
   },
   offerCards: [
     {
@@ -231,7 +231,7 @@ export const homePage = {
     },
     {
       title: "Training Camps",
-      text: "Daily camp rhythm built around coached lessons, supervised games, puzzle work, and structured review.",
+      text: "Daily camp rhythm with lessons, supervised games, puzzle work, and review.",
       path: "/camps/training",
     },
     {
@@ -243,7 +243,7 @@ export const homePage = {
   audienceSection: {
     eyebrow: "Who this is for",
     title: "Built for families who want structure during school breaks",
-    intro: "Camp should feel organized, age-appropriate, and clearly built around chess improvement.",
+    intro: "Clear schedule. Real chess work. Easy next step.",
   },
   audienceCards: [
     {
@@ -261,23 +261,23 @@ export const homePage = {
   ],
   launchSection: {
     eyebrow: "What to review first",
-    title: "The first camp release is taking shape now",
-    intro: "The dates are still being finalized, but parents can already review the structure and next step.",
+    title: "The practical camp details",
+    intro: "Dates and location are set. Families can review the format now.",
   },
   serviceCards: [
     {
       title: "Camp Details",
-      text: "Review the planned location, time windows, ages, format, and launch status before enrollment opens.",
+      text: "Review location, dates, time windows, format, and what to expect during the camp day.",
       path: "/camps",
     },
     {
       title: "Sample Day",
-      text: "See how a typical camp day can move from puzzles and lessons into guided games, breaks, and review.",
+      text: "See how a typical day moves from puzzles and lessons into games, lunch, and review.",
       path: "/camps",
     },
     {
-      title: "Join Early Access",
-      text: "Use Contact now if you want the first dates, enrollment notice, and practical release details as soon as they open.",
+      title: "Contact the camp team",
+      text: "Use Contact if you want schedule help, availability updates, or details before registration opens.",
       path: "/contact",
     },
   ],
@@ -289,15 +289,15 @@ export const homePage = {
   processCards: [
     {
       title: "Check camp fit",
-      text: "Start with the camp overview and see whether the school-break format fits your student and schedule.",
+      text: "Start with the camp overview and see whether the summer format fits your student and your schedule.",
     },
     {
       title: "Review the structure",
-      text: "See the sample day, practical details, and the training areas camp is being designed to cover.",
+      text: "See the schedule, daily format, and the training areas students will work on.",
     },
     {
-      title: "Join the camp waitlist",
-      text: "Use the contact page to hear first when dates, enrollment, and the first release details go live.",
+      title: "Ask about registration",
+      text: "Use the contact page if you want availability, program details, and the next step.",
     },
   ],
   whySection: {
@@ -308,11 +308,11 @@ export const homePage = {
   whyCards: [
     {
       title: "Clear camp details",
-      text: "Families should see the format, the day structure, and the next step without digging through vague branding copy.",
+      text: "Families can see the format, the day structure, and the next step without digging through vague copy.",
     },
     {
       title: "Chess-first schedule",
-      text: "The camp is being built around lessons, games, review, and actual student improvement, not filler time.",
+      text: "The camp is built around lessons, games, review, and real student improvement.",
     },
     {
       title: "Beginner-friendly launch",
@@ -320,12 +320,12 @@ export const homePage = {
     },
     {
       title: "NYC-focused",
-      text: "The camp plan is being shaped around real New York City families, school breaks, and practical day-to-day logistics.",
+      text: "The schedule and location are built around real New York City family logistics.",
     },
   ],
-  ctaTitle: "Join the camp waitlist before the first release opens.",
+  ctaTitle: "Ask about summer camp.",
   ctaText:
-    "If camp is the main fit for your family, contact us now and we will send the first dates, format details, and enrollment notice as soon as they open.",
+    "If camp is the right fit for your family, contact us now and we will send availability, format details, and the next step.",
 };
 
 export const carouselSlides = [
@@ -388,25 +388,25 @@ export const lessonCarouselSlides = [
 
 export const campOverviewPage = {
   eyebrow: "Camps",
-  title: "Structured Chess Camps in NYC",
+  title: "Summer Chess Camps in Central Park",
   intro:
-    "Daily lessons, guided games, and real chess improvement during school breaks. Built for NYC families who want an organized chess-first camp day.",
-  chips: ["School-break camps", "Launch soon", "NYC families"],
+    "Daily lessons, guided games, and real chess improvement from June 15 to August 21 at the House of Chess and Checkers.",
+  chips: ["June 15 - August 21", "Central Park", "NYC families"],
   heroFacts: [
-    { label: "Ages", value: "6-14 planned" },
-    { label: "Levels", value: "Beginner-friendly" },
-    { label: "Location", value: "Upper East Side, NYC" },
-    { label: "Format", value: "Half-day and full-day planned" },
+    { label: "Dates", value: "June 15 - August 21" },
+    { label: "Location", value: "House of Chess and Checkers, Central Park" },
+    { label: "Levels", value: "Beginner-friendly and improving players" },
+    { label: "Format", value: "Half-day and full-day camp" },
   ],
   portraitCaption:
     "Camp should feel active, organized, and clearly built around chess improvement from the first day.",
-  asideTag: "Camp snapshot",
-  asideTitle: "A practical first release",
+  asideTag: "Summer 2026",
+  asideTitle: "A practical camp setup",
   asideText:
-    "The first camp launch is being finalized now. Families will get schedule, location, and enrollment details as soon as dates are released.",
+    "The season runs June 15 to August 21 in Central Park. Families can review the structure now and contact the team for the next step.",
   asideFacts: [
-    { label: "Dates", value: "Coming soon" },
-    { label: "Season", value: "School breaks" },
+    { label: "Dates", value: "June 15 - August 21" },
+    { label: "Venue", value: "House of Chess and Checkers" },
     { label: "Enrollment", value: "Early access open" },
   ],
   overviewSection: {
@@ -439,21 +439,32 @@ export const campOverviewPage = {
   detailsSection: {
     eyebrow: "Camp details",
     title: "The practical details parents ask first",
-    intro: "Some details are still being finalized. Here is what is already planned.",
+    intro: "Here is the core information families usually want first.",
   },
   detailsCards: [
-    { title: "Location", text: "Upper East Side, NYC" },
-    { title: "Dates", text: "Dates coming soon" },
-    { title: "Time", text: "Morning and full-day windows planned" },
-    { title: "Format", text: "Half-day and full-day options planned" },
-    { title: "Ages", text: "Ages 6-14 planned" },
+    { title: "Location", text: "House of Chess and Checkers, Central Park" },
+    { title: "Dates", text: "June 15 - August 21" },
+    { title: "Time", text: "Morning, half-day, and full-day options" },
+    { title: "Format", text: "Chess-first summer camp" },
+    { title: "Ages", text: "School-age players" },
     { title: "Skill levels", text: "Beginner-friendly with level grouping" },
-    { title: "Launch status", text: "Early access list open now" },
+    { title: "Enrollment", text: "Contact us for availability and next steps" },
   ],
+  mapSection: {
+    eyebrow: "Camp location",
+    title: "Find us in Central Park",
+    intro: "Camp is based at the House of Chess and Checkers in Central Park.",
+    address: "House of Chess and Checkers, Central Park, New York, NY",
+    directionsLabel: "Open in Google Maps",
+    directionsHref:
+      "https://www.google.com/maps/search/?api=1&query=House%20of%20Chess%20and%20Checkers%20Central%20Park%20New%20York%20NY",
+    embedSrc:
+      "https://www.google.com/maps?q=House%20of%20Chess%20and%20Checkers%20Central%20Park%20New%20York%20NY&output=embed",
+  },
   scheduleSection: {
     eyebrow: "Sample day",
     title: "A sample camp day",
-    intro: "Exact timing may shift slightly by age group, but the structure will stay organized and easy to follow.",
+    intro: "Exact timing may shift by age group or half-day/full-day format.",
   },
   sampleSchedule: [
     {
@@ -473,8 +484,8 @@ export const campOverviewPage = {
     },
     {
       time: "11:30 AM",
-      title: "Break / lunch block",
-      text: "Planned downtime to reset before the next training segment.",
+      title: "Lunch / break",
+      text: "A reset block before the next training segment.",
     },
     {
       time: "12:15 PM",
@@ -490,7 +501,7 @@ export const campOverviewPage = {
   learningSection: {
     eyebrow: "What students learn",
     title: "The main chess areas camp can help build",
-    intro: "The goal is not only to keep students busy. The goal is to help them improve.",
+    intro: "The goal is improvement, not just filling the day.",
   },
   learningCards: [
     { title: "Tactics", text: "Pattern recognition, calculation, and spotting opportunities faster." },
@@ -506,7 +517,7 @@ export const campOverviewPage = {
     intro: "Clear structure matters as much as strong instruction.",
   },
   parentReasons: [
-    { title: "Structured instruction", text: "Each day has a plan instead of filling time with random activities." },
+    { title: "Structured instruction", text: "Each day has a plan instead of random filler." },
     { title: "Small groups planned", text: "The goal is more coaching attention and better pacing, not oversized camp rooms." },
     { title: "Level-based guidance", text: "Students should be challenged at the right level instead of all doing the same thing." },
     { title: "Organized environment", text: "Families should know the schedule, contact path, and expectations before camp begins." },
@@ -532,7 +543,7 @@ export const campOverviewPage = {
   formatSection: {
     eyebrow: "Camp tracks",
     title: "Explore the camp formats in development",
-    intro: "Each track keeps the same organized standard, but the training focus changes.",
+    intro: "Each track keeps the same organized standard, with a different training focus.",
   },
   faqSection: {
     eyebrow: "Camp FAQ",
@@ -550,7 +561,7 @@ export const campOverviewPage = {
     },
     {
       question: "What should students bring?",
-      answer: "Final details will be shared with the first public dates, but families should expect basic camp-day items plus anything needed for lunch or snacks.",
+      answer: "Bring a water bottle, a snack or lunch if needed, and anything the camp team includes in the registration note.",
     },
     {
       question: "Is tournament experience required?",
@@ -558,16 +569,16 @@ export const campOverviewPage = {
     },
     {
       question: "Is lunch included?",
-      answer: "Lunch details are not final yet. The first release will clearly state whether lunch is included or whether students should bring their own.",
+      answer: "Lunch guidance will be confirmed with registration details. Families should expect either a lunch block or a bring-your-own-lunch note.",
     },
     {
       question: "How do I join early access?",
-      answer: "Use the contact page, call or text (646) 991-0972, or email info@chessandtruck.com. Families on the early access list will hear first when dates and enrollment are released.",
+      answer: "Use the contact page, call or text (646) 251-7087 or (646) 494-5363, or email info@chessandtruck.com. Families on the early access list will hear first when dates and enrollment are released.",
     },
   ],
-  ctaTitle: "Join the camp early access list",
+  ctaTitle: "Ask about summer camp",
   ctaText:
-    "If chess camp is part of your plan for the next school break, contact us now and we will send dates, format details, and enrollment information as soon as the first release opens.",
+    "If summer camp is part of your plan, contact us now and we will send availability, format details, and the next step.",
 };
 
 export const campDetailPages = {
@@ -575,8 +586,8 @@ export const campDetailPages = {
     eyebrow: "Training Camps",
     title: "Daily camp rhythm for students who need more than casual chess.",
     intro:
-      "A school-break camp format built around instruction, supervised play, review, and daily habits that actually move a student forward. First training camp release opens soon.",
-    chips: ["Daily rhythm", "School breaks", "Launch soon"],
+      "A summer camp format built around instruction, supervised play, review, and daily habits that actually move a student forward.",
+    chips: ["Daily rhythm", "Summer 2026", "Central Park"],
     portraitCaption:
       "A strong training camp should feel focused and alive, not like a room where chess is just one activity in the background.",
     asideTag: "Training camp fit",
@@ -586,7 +597,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Students building fundamentals" },
       { label: "Daily feel", value: "Coach-led and active" },
-      { label: "Launch status", value: "Opening soon" },
+      { label: "Season", value: "June 15 - August 21" },
     ],
     cards: [
       { title: "Daily instruction", text: "Coach-led camp blocks with a clear training theme instead of random activity shifts." },
@@ -608,7 +619,7 @@ export const campDetailPages = {
           "Useful for students who need structure more than intensity right away",
         ],
         meta: "Founding camp release",
-        note: "First dates announced soon",
+        note: "Runs during the summer season",
         cta: "Ask about intro camp week",
       },
       {
@@ -620,7 +631,7 @@ export const campDetailPages = {
           "Stronger fit for families who want a serious chess week, not generic childcare",
         ],
         meta: "Full training week",
-        note: "Priority notice opens with launch",
+        note: "Ask about current availability",
         cta: "Ask about training blocks",
       },
       {
@@ -632,7 +643,7 @@ export const campDetailPages = {
           "Can sit well before or after an event stretch depending on the student's goals",
         ],
         meta: "Theme-based camp",
-        note: "Released after the first camp week",
+        note: "Added based on demand",
         cta: "Ask about skill camps",
       },
     ],
@@ -643,17 +654,17 @@ export const campDetailPages = {
       "Level-aware pacing so students are challenged without getting lost",
       "Clear communication with families before registration opens",
     ],
-    ctaTitle: "Ask about training camp launch spots",
+    ctaTitle: "Ask about training camp spots",
     ctaText:
-      "If this is the camp format your family wants first, contact us now and we will reply when the first training camp dates go live.",
+      "If this is the camp format your family wants, contact us now and we will reply with availability and next steps.",
     ctaLabel: "Contact about training camps",
   },
   "/camps/prep": {
     eyebrow: "Tournament Prep Camps",
     title: "Shorter, sharper camp blocks for players who already compete.",
     intro:
-      "This camp format is for players who are already in tournament rhythm and want a more focused training week before key events. First prep camp release opens soon.",
-    chips: ["Competitive players", "Event readiness", "Launch soon"],
+      "This camp format is for players who are already in tournament rhythm and want a more focused training week before key events.",
+    chips: ["Competitive players", "Event readiness", "Summer 2026"],
     portraitCaption:
       "Prep camp should feel sharper than general camp: more game review, cleaner goals, and better event focus.",
     asideTag: "Prep camp fit",
@@ -663,7 +674,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Active competitors" },
       { label: "Works well for", value: "Game review and prep" },
-      { label: "Launch status", value: "Opening soon" },
+      { label: "Season", value: "June 15 - August 21" },
     ],
     cards: [
       { title: "Game review first", text: "The week should include real review of practical mistakes, not only abstract instruction." },
@@ -685,7 +696,7 @@ export const campDetailPages = {
           "Useful for families who want something sharper than a general camp week",
         ],
         meta: "Short prep release",
-        note: "First prep dates announced soon",
+        note: "Available during the summer season",
         cta: "Ask about prep blocks",
       },
       {
@@ -697,7 +708,7 @@ export const campDetailPages = {
           "Best for players who already compete and want cleaner preparation",
         ],
         meta: "Competition week",
-        note: "Priority notice opens with launch",
+        note: "Ask about competitive camp dates",
         cta: "Ask about pre-event weeks",
       },
       {
@@ -709,7 +720,7 @@ export const campDetailPages = {
           "Can help reset direction before the next tournament cycle starts",
         ],
         meta: "Post-event training",
-        note: "Released after the first prep cycle",
+        note: "Built around demand and event timing",
         cta: "Ask about review camps",
       },
     ],
@@ -720,17 +731,17 @@ export const campDetailPages = {
       "A sharper room with stronger focus and less filler",
       "Honest positioning before registration opens",
     ],
-    ctaTitle: "Ask about tournament prep camp release",
+    ctaTitle: "Ask about tournament prep camp",
     ctaText:
-      "If competitive camp blocks are what your student needs, contact us now and we will include you in the first prep release.",
+      "If competitive camp blocks are what your student needs, contact us now and we will send details and next steps.",
     ctaLabel: "Contact about prep camps",
   },
   "/camps/online": {
     eyebrow: "Online Camps",
     title: "Remote camp structure for families who still want a serious week.",
     intro:
-      "For students who need a structured chess week without commuting, online camps can still feel focused, coach-led, and worth the time. First online camp release opens soon.",
-    chips: ["Remote format", "Structured days", "Launch soon"],
+      "For students who need a structured chess week without commuting, online camps can still feel focused, coach-led, and worth the time.",
+    chips: ["Remote format", "Structured days", "Summer 2026"],
     portraitCaption:
       "Online camp should not feel passive. The right setup keeps the student engaged, moving, and accountable through the day.",
     asideTag: "Online camp fit",
@@ -740,7 +751,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Remote families" },
       { label: "Works well for", value: "Review and guided practice" },
-      { label: "Launch status", value: "Opening soon" },
+      { label: "Season", value: "June 15 - August 21" },
     ],
     cards: [
       { title: "Cleaner than random online time", text: "A camp week should give students structure, not more disconnected chess activity." },
@@ -762,7 +773,7 @@ export const campDetailPages = {
           "Useful when a student benefits from shorter, more controlled camp blocks",
         ],
         meta: "Short online release",
-        note: "First online camp dates announced soon",
+        note: "Available during the summer season",
         cta: "Ask about mini online camps",
       },
       {
@@ -774,7 +785,7 @@ export const campDetailPages = {
           "Better than random online study because the week actually holds together",
         ],
         meta: "Remote camp week",
-        note: "Priority notice opens with launch",
+        note: "Ask about online availability",
         cta: "Ask about online camp weeks",
       },
       {
@@ -786,7 +797,7 @@ export const campDetailPages = {
           "Can sit well before a tournament stretch or as a mid-season reset",
         ],
         meta: "Theme-based remote camp",
-        note: "Released after the first online format",
+        note: "Added based on family demand",
         cta: "Ask about theme weeks",
       },
     ],
@@ -797,9 +808,9 @@ export const campDetailPages = {
       "Real review and applied work inside the camp day",
       "A format that respects family logistics before launch",
     ],
-    ctaTitle: "Ask about online camp launch spots",
+    ctaTitle: "Ask about online camp spots",
     ctaText:
-      "If remote camp is the best fit for your family, contact us now and we will include you when the first online camp release opens.",
+      "If remote camp is the best fit for your family, contact us now and we will send details and next steps.",
     ctaLabel: "Contact about online camps",
   },
 };
@@ -1064,9 +1075,9 @@ export const contactPage = {
   eyebrow: "Contact",
   title: "Contact the team for events, camps, and lessons.",
   intro:
-    "Use the contact form, call or text (646) 991-0972, or email info@chessandtruck.com for early access, section questions, lesson inquiries, camp updates, or help choosing the right program.",
+    "Use the contact form, call or text (646) 251-7087 or (646) 494-5363, or email info@chessandtruck.com for early access, section questions, lesson inquiries, camp updates, or help choosing the right program.",
   heroFacts: [
-    { label: "Phone", value: "(646) 991-0972" },
+    { label: "Phone lines", value: "(646) 251-7087 / (646) 494-5363" },
     { label: "Email", value: "info@chessandtruck.com" },
     { label: "Reply type", value: "Direct response" },
     { label: "Best for", value: "Questions + early access" },
@@ -1825,8 +1836,13 @@ export const faqItems = [
 export const contactNumbers = [
   {
     label: "Call or text",
-    display: "(646) 991-0972",
-    href: "tel:+16469910972",
+    display: "(646) 251-7087",
+    href: "tel:+16462517087",
+  },
+  {
+    label: "Alternate line",
+    display: "(646) 494-5363",
+    href: "tel:+16464945363",
   },
 ];
 

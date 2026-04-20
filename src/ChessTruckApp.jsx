@@ -50,7 +50,7 @@ import { validateContactFields, validateRegistrationFields } from "./lib/validat
 const REGISTRATION_DRAFT_KEY = "ct-registration-draft-v2";
 const phoneContact = contactNumbers[0];
 const emailContact = contactEmails[0];
-const footerContactMethods = [phoneContact, emailContact].filter(Boolean);
+const footerContactMethods = [...contactNumbers, emailContact].filter(Boolean);
 
 const registrationInitialState = {
   firstName: "",
@@ -562,7 +562,7 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, portraitCa
               navigate={navigate}
               currentPath={currentPath}
               className="surface surface-dark hero-aside hero-aside-link"
-              aria-label="Open tournament page"
+              aria-label="Open featured page"
             >
               {asideContent}
             </AppLink>
@@ -748,7 +748,7 @@ function SiteFooter({ currentPath, navigate }) {
               <p>{campOverviewPage.intro}</p>
               <div className="footer-meta">
                 <span>{campOverviewPage.heroFacts.find((item) => item.label === "Location")?.value || "Upper East Side, NYC"}</span>
-                <strong>Dates announced soon</strong>
+                <strong>{campOverviewPage.heroFacts.find((item) => item.label === "Dates")?.value || "Summer 2026"}</strong>
               </div>
               <AppLink
                 to="/camps"
@@ -926,7 +926,7 @@ function HomePage({ currentPath, navigate }) {
               See Camp Overview
             </AppLink>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Join Camp Waitlist
+              Ask About Summer Camp
             </AppLink>
           </>
         }
@@ -1053,7 +1053,7 @@ function HomePage({ currentPath, navigate }) {
             </div>
             <div className="cta-row lesson-cta-actions">
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Join Camp Waitlist
+                Ask About Summer Camp
               </AppLink>
               <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
                 See Camp Details
@@ -1428,7 +1428,7 @@ function CampsOverviewPage({ currentPath, navigate }) {
 
             <div className="cta-row">
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Join Early Access
+                Ask About Summer Camp
               </AppLink>
               <a href="#camp-details" className="btn btn-secondary">
                 See Camp Details
@@ -1502,6 +1502,36 @@ function CampsOverviewPage({ currentPath, navigate }) {
                 <p>{item.text}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <div className="camp-map-grid">
+            <article className="surface camp-map-copy">
+              <SectionIntro
+                eyebrow={campOverviewPage.mapSection.eyebrow}
+                title={campOverviewPage.mapSection.title}
+                intro={campOverviewPage.mapSection.intro}
+              />
+              <div className="camp-map-meta">
+                <strong>{campOverviewPage.mapSection.address}</strong>
+                <a href={campOverviewPage.mapSection.directionsHref} target="_blank" rel="noreferrer" className="btn btn-secondary">
+                  {campOverviewPage.mapSection.directionsLabel}
+                </a>
+              </div>
+            </article>
+
+            <article className="surface camp-map-card">
+              <iframe
+                title="Chess and Truck camp location map"
+                src={campOverviewPage.mapSection.embedSrc}
+                className="camp-map-frame"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </article>
           </div>
         </div>
       </section>
