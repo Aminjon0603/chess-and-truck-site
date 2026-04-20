@@ -1204,7 +1204,7 @@ a {
 
 .camp-booking-card {
   display: grid;
-  gap: 18px;
+  gap: 14px;
   align-content: start;
 }
 
@@ -1267,6 +1267,14 @@ a {
 
 .summary-card-block p {
   margin: 0;
+}
+
+.summary-list-booking {
+  gap: 14px;
+}
+
+.summary-list-booking > div:last-child {
+  grid-column: 1 / -1;
 }
 
 .booking-support-actions {

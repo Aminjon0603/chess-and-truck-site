@@ -22,6 +22,7 @@ import {
   navigationItems,
   privateLessonsPage,
   privacyPage,
+  registerPage,
   routeMeta,
   serviceLevels,
   siteBrand,
@@ -212,6 +213,13 @@ const readLocation = () => ({
   pathname: normalizePath(window.location.pathname),
   search: window.location.search,
 });
+
+const formatCurrency = (amount) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(amount);
 
 const updateMetaTag = (selector, content) => {
   const element = document.querySelector(selector);
@@ -542,7 +550,7 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, portraitCa
           <strong>{featuredTournament.city}</strong>
         </div>
         <div>
-          <span>Format</span>
+          <span>Service</span>
           <strong>{featuredTournament.formatLabel}</strong>
         </div>
       </div>
@@ -1192,7 +1200,7 @@ function PrivateLessonsPage({ currentPath, navigate }) {
           <LessonSignalCarousel
             currentPath={currentPath}
             navigate={navigate}
-            intro="Online, in-person, and group lesson formats all launch soon."
+            intro="Online, in-person, and group lesson services all launch soon."
           />
         </div>
       </section>
@@ -1218,9 +1226,9 @@ function PrivateLessonsPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow="Lesson formats"
+            eyebrow="Lesson services"
             title="Private coaching should fit the student, not force the same setting every time"
-            intro="Different students focus differently. The format matters."
+            intro="Different students need different lesson services."
           />
           <div className="card-grid card-grid-three lesson-format-grid">
             {privateLessonsPage.formatCards.map((item) => (
@@ -1946,7 +1954,7 @@ function CampBookingPage({
                 <span className="mini-tag">{selectedOption.eyebrow}</span>
                 <h2>{selectedOption.title}</h2>
                 <p className="camp-booking-price">{selectedOption.price}</p>
-                <div className="summary-list">
+                <div className="summary-list summary-list-booking">
                   <div>
                     <span>Dates</span>
                     <strong>June 15 - August 21</strong>
@@ -1956,8 +1964,8 @@ function CampBookingPage({
                     <strong>House of Chess and Checkers, Central Park</strong>
                   </div>
                   <div>
-                    <span>Format</span>
-                    <strong>{selectedOption.id === "full-week" ? "Weekly block" : "Single camp day"}</strong>
+                    <span>Service</span>
+                    <strong>{selectedOption.id === "full-week" ? "Weekly camp block" : "Single camp day"}</strong>
                   </div>
                 </div>
                 <ul className="camp-booking-list">
@@ -2025,7 +2033,7 @@ function CampDetailPage({ page, currentPath, navigate }) {
 
       <section className="page-section">
         <div className="shell">
-          <SectionIntro eyebrow="What matters most" title="What this camp format does well" intro="Fast signals for families deciding which camp path fits best." />
+          <SectionIntro eyebrow="What matters most" title="What this camp service does well" intro="Fast signals for families deciding which camp path fits best." />
           <div className="card-grid card-grid-three">
             {page.cards.map((item) => (
               <article className="surface" key={item.title}>
@@ -2113,7 +2121,7 @@ function LessonDetailPage({ page, currentPath, navigate }) {
 
       <section className="page-section">
         <div className="shell">
-          <SectionIntro eyebrow="What matters most" title="What this format does well" intro="Short, clear signals for families who want the fast version." />
+          <SectionIntro eyebrow="What matters most" title="What this service does well" intro="Short, clear signals for families who want the fast version." />
           <div className="card-grid card-grid-three">
             {page.cards.map((item) => (
               <article className="surface" key={item.title}>
@@ -2418,8 +2426,500 @@ function MobileRegistrationProgress({
 function RegisterPage({
   currentPath,
   navigate,
+  registrationState,
+  registrationErrors,
+  updateRegistrationField,
+  handleRegistrationSubmit,
+  paymentState,
+  selectedServiceLevel,
+  clearRegistrationDraft,
 }) {
-  return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
+  return (
+    <>
+      <PageHero
+        eyebrow={registerPage.eyebrow}
+        title={registerPage.title}
+        intro={registerPage.intro}
+        currentPath={currentPath}
+        navigate={navigate}
+        actions={
+          <>
+            <AppLink
+              to="/contact"
+              navigate={navigate}
+              currentPath={currentPath}
+              className="btn btn-secondary"
+            >
+              Need help before paying?
+            </AppLink>
+            <button type="button" className="btn btn-secondary" onClick={clearRegistrationDraft}>
+              Clear Draft
+            </button>
+          </>
+        }
+      />
+
+      <section className="page-section">
+        <div className="shell">
+          {paymentState.status !== "idle" ? (
+            <article className={`status-banner status-banner-${paymentState.status}`}>
+              <strong>
+                {paymentState.status === "success"
+                  ? "Payment confirmed"
+                  : paymentState.status === "cancelled"
+                    ? "Checkout cancelled"
+                    : paymentState.status === "loading"
+                      ? "Preparing checkout"
+                      : "Registration needs attention"}
+              </strong>
+              <p>
+                {paymentState.status === "success" && paymentState.details
+                  ? `Payment confirmed for ${paymentState.details.playerName}. A Stripe receipt was sent to ${paymentState.details.customerEmail}.`
+                  : paymentState.status === "loading"
+                    ? "Preparing secure Stripe checkout..."
+                    : paymentState.message}
+              </p>
+            </article>
+          ) : null}
+
+          <div className="register-layout">
+            <form className="surface registration-form" onSubmit={handleRegistrationSubmit} noValidate>
+              <div className="form-header">
+                <span className="mini-tag">Tournament registration</span>
+                <h2>Chess &amp; Truck Tournament Registration Form</h2>
+                <p>
+                  Please provide player and parent information. The tournament section and service
+                  level are selected inside this form before payment.
+                </p>
+                <small className="field-note">{registerPage.draftNote}</small>
+              </div>
+
+              <section className="form-section">
+                <div className="form-section-head">
+                  <span className="step-chip">01</span>
+                  <div>
+                    <h3>Contact Information</h3>
+                    <p>The primary account details for the family completing the registration.</p>
+                  </div>
+                </div>
+
+                <div className="field-grid">
+                  <label className="field">
+                    <span>First Name *</span>
+                    <input
+                      name="firstName"
+                      value={registrationState.firstName}
+                      onChange={updateRegistrationField}
+                      placeholder="First name"
+                      autoComplete="given-name"
+                    />
+                    {registrationErrors.firstName ? (
+                      <small className="field-error">{registrationErrors.firstName}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Last Name *</span>
+                    <input
+                      name="lastName"
+                      value={registrationState.lastName}
+                      onChange={updateRegistrationField}
+                      placeholder="Last name"
+                      autoComplete="family-name"
+                    />
+                    {registrationErrors.lastName ? (
+                      <small className="field-error">{registrationErrors.lastName}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Phone *</span>
+                    <input
+                      name="phone"
+                      value={registrationState.phone}
+                      onChange={updateRegistrationField}
+                      placeholder="+1 ..."
+                      autoComplete="tel"
+                    />
+                    {registrationErrors.phone ? (
+                      <small className="field-error">{registrationErrors.phone}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Email *</span>
+                    <input
+                      name="email"
+                      type="email"
+                      value={registrationState.email}
+                      onChange={updateRegistrationField}
+                      placeholder="family@example.com"
+                      autoComplete="email"
+                    />
+                    {registrationErrors.email ? (
+                      <small className="field-error">{registrationErrors.email}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field field-span-2">
+                    <span>Additional Emails</span>
+                    <input
+                      name="additionalEmails"
+                      value={registrationState.additionalEmails}
+                      onChange={updateRegistrationField}
+                      placeholder="Add any other addresses that should receive confirmations"
+                      autoComplete="off"
+                    />
+                    {registrationErrors.additionalEmails ? (
+                      <small className="field-error">{registrationErrors.additionalEmails}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="checkbox-field field-span-2">
+                    <input
+                      name="acceptSms"
+                      type="checkbox"
+                      checked={registrationState.acceptSms}
+                      onChange={updateRegistrationField}
+                    />
+                    <span>
+                      I accept the Terms of Service and Privacy Policy and agree to receive
+                      transactional or informational SMS communications related to reminders,
+                      customer care, and registration follow-up.
+                    </span>
+                  </label>
+                  {registrationErrors.acceptSms ? (
+                    <small className="field-error field-span-2">{registrationErrors.acceptSms}</small>
+                  ) : null}
+                </div>
+              </section>
+
+              <section className="form-section">
+                <div className="form-section-head">
+                  <span className="step-chip">02</span>
+                  <div>
+                    <h3>Player Information</h3>
+                    <p>Choose the correct division and service level for the player.</p>
+                  </div>
+                </div>
+
+                <div className="field-grid">
+                  <label className="field">
+                    <span>Player First Name *</span>
+                    <input
+                      name="playerFirstName"
+                      value={registrationState.playerFirstName}
+                      onChange={updateRegistrationField}
+                      placeholder="Player first name"
+                      autoComplete="off"
+                    />
+                    {registrationErrors.playerFirstName ? (
+                      <small className="field-error">{registrationErrors.playerFirstName}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Player Last Name *</span>
+                    <input
+                      name="playerLastName"
+                      value={registrationState.playerLastName}
+                      onChange={updateRegistrationField}
+                      placeholder="Player last name"
+                      autoComplete="off"
+                    />
+                    {registrationErrors.playerLastName ? (
+                      <small className="field-error">{registrationErrors.playerLastName}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Player Grade *</span>
+                    <input
+                      name="playerGrade"
+                      value={registrationState.playerGrade}
+                      onChange={updateRegistrationField}
+                      placeholder="Grade"
+                      autoComplete="off"
+                    />
+                    {registrationErrors.playerGrade ? (
+                      <small className="field-error">{registrationErrors.playerGrade}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>School Name</span>
+                    <input
+                      name="schoolName"
+                      value={registrationState.schoolName}
+                      onChange={updateRegistrationField}
+                      placeholder="Optional, used for team scoring"
+                      autoComplete="organization"
+                    />
+                  </label>
+
+                  <label className="field">
+                    <span>Section *</span>
+                    <select name="section" value={registrationState.section} onChange={updateRegistrationField}>
+                      <option value="">Select section</option>
+                      <option value="Open">Open</option>
+                      <option value="Beginner">Beginner</option>
+                    </select>
+                    {registrationErrors.section ? (
+                      <small className="field-error">{registrationErrors.section}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Service Level *</span>
+                    <select
+                      name="serviceLevel"
+                      value={registrationState.serviceLevel}
+                      onChange={updateRegistrationField}
+                    >
+                      <option value="">Select service level</option>
+                      {serviceLevels.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.label} - {formatCurrency(item.amount)}
+                        </option>
+                      ))}
+                    </select>
+                    {registrationErrors.serviceLevel ? (
+                      <small className="field-error">{registrationErrors.serviceLevel}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field field-span-2">
+                    <span>USCF ID</span>
+                    <input
+                      name="uscfId"
+                      value={registrationState.uscfId}
+                      onChange={updateRegistrationField}
+                      placeholder="Required for the Open section"
+                      autoComplete="off"
+                    />
+                    <small className="field-note">
+                      Players in the Open section need an active USCF membership. Leave this blank
+                      if the player is registering for Beginner. Join or renew at{" "}
+                      <a href="https://new.uschess.org/" target="_blank" rel="noreferrer">
+                        uschess.org
+                      </a>
+                      .
+                    </small>
+                    {registrationErrors.uscfId ? (
+                      <small className="field-error">{registrationErrors.uscfId}</small>
+                    ) : null}
+                  </label>
+                </div>
+              </section>
+
+              <section className="form-section">
+                <div className="form-section-head">
+                  <span className="step-chip">03</span>
+                  <div>
+                    <h3>Parent / Guardian Information</h3>
+                    <p>The primary adult contact for tournament communications.</p>
+                  </div>
+                </div>
+
+                <div className="field-grid">
+                  <label className="field">
+                    <span>Parent / Guardian Name *</span>
+                    <input
+                      name="parentName"
+                      value={registrationState.parentName}
+                      onChange={updateRegistrationField}
+                      placeholder="Parent or guardian name"
+                      autoComplete="name"
+                    />
+                    {registrationErrors.parentName ? (
+                      <small className="field-error">{registrationErrors.parentName}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Parent Email *</span>
+                    <input
+                      name="parentEmail"
+                      type="email"
+                      value={registrationState.parentEmail}
+                      onChange={updateRegistrationField}
+                      placeholder="parent@example.com"
+                      autoComplete="email"
+                    />
+                    {registrationErrors.parentEmail ? (
+                      <small className="field-error">{registrationErrors.parentEmail}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Parent Phone *</span>
+                    <input
+                      name="parentPhone"
+                      value={registrationState.parentPhone}
+                      onChange={updateRegistrationField}
+                      placeholder="+1 ..."
+                      autoComplete="tel"
+                    />
+                    {registrationErrors.parentPhone ? (
+                      <small className="field-error">{registrationErrors.parentPhone}</small>
+                    ) : null}
+                  </label>
+                </div>
+              </section>
+
+              <section className="form-section">
+                <div className="form-section-head">
+                  <span className="step-chip">04</span>
+                  <div>
+                    <h3>Emergency Contact</h3>
+                    <p>Backup contact details for tournament-day communication.</p>
+                  </div>
+                </div>
+
+                <div className="field-grid">
+                  <label className="field">
+                    <span>Emergency Contact Name *</span>
+                    <input
+                      name="emergencyName"
+                      value={registrationState.emergencyName}
+                      onChange={updateRegistrationField}
+                      placeholder="Emergency contact name"
+                      autoComplete="off"
+                    />
+                    {registrationErrors.emergencyName ? (
+                      <small className="field-error">{registrationErrors.emergencyName}</small>
+                    ) : null}
+                  </label>
+
+                  <label className="field">
+                    <span>Emergency Contact Phone *</span>
+                    <input
+                      name="emergencyPhone"
+                      value={registrationState.emergencyPhone}
+                      onChange={updateRegistrationField}
+                      placeholder="+1 ..."
+                      autoComplete="tel"
+                    />
+                    {registrationErrors.emergencyPhone ? (
+                      <small className="field-error">{registrationErrors.emergencyPhone}</small>
+                    ) : null}
+                  </label>
+                </div>
+              </section>
+
+              <section className="form-section">
+                <div className="form-section-head">
+                  <span className="step-chip">05</span>
+                  <div>
+                    <h3>Medical Information</h3>
+                    <p>List allergies, medications, conditions, or anything staff should know.</p>
+                  </div>
+                </div>
+
+                <div className="field-grid">
+                  <label className="field field-span-2">
+                    <span>Medical Information *</span>
+                    <textarea
+                      name="medicalInfo"
+                      value={registrationState.medicalInfo}
+                      onChange={updateRegistrationField}
+                      rows="4"
+                      placeholder="Allergies, medical conditions, medications, or notes for staff"
+                    />
+                    {registrationErrors.medicalInfo ? (
+                      <small className="field-error">{registrationErrors.medicalInfo}</small>
+                    ) : null}
+                  </label>
+                </div>
+              </section>
+
+              <label className="field honeypot-field" aria-hidden="true" tabIndex="-1">
+                <span>Website</span>
+                <input
+                  name="website"
+                  value={registrationState.website}
+                  onChange={updateRegistrationField}
+                  autoComplete="off"
+                  tabIndex="-1"
+                />
+              </label>
+
+              <button type="submit" className="btn btn-primary btn-full" disabled={paymentState.status === "loading"}>
+                {paymentState.status === "loading" ? "Preparing Checkout..." : "Continue to Secure Payment"}
+              </button>
+
+              <small className={`status-copy status-${paymentState.status}`} aria-live="polite">
+                {paymentState.status === "idle"
+                  ? "Complete the form, then continue to secure payment through Stripe."
+                  : paymentState.status === "loading"
+                    ? "Preparing secure Stripe checkout..."
+                    : paymentState.message}
+              </small>
+            </form>
+
+            <aside className="register-sidebar">
+              <article className="surface summary-card">
+                <span className="mini-tag">Registration summary</span>
+                <h3>{featuredTournament.title}</h3>
+                <p>
+                  {featuredTournament.city}. {featuredTournament.scheduleLabel}. Stripe handles the
+                  final payment step after the form is complete.
+                </p>
+
+                <div className="summary-list">
+                  <div>
+                    <span>Section</span>
+                    <strong>{registrationState.section || "Not selected yet"}</strong>
+                  </div>
+                  <div>
+                    <span>Service level</span>
+                    <strong>{selectedServiceLevel?.label || "Not selected yet"}</strong>
+                  </div>
+                  <div>
+                    <span>Player</span>
+                    <strong>
+                      {registrationState.playerFirstName || registrationState.playerLastName
+                        ? `${registrationState.playerFirstName} ${registrationState.playerLastName}`.trim()
+                        : "Player details pending"}
+                    </strong>
+                  </div>
+                  <div>
+                    <span>Total</span>
+                    <strong>{selectedServiceLevel ? formatCurrency(selectedServiceLevel.amount) : "$0"}</strong>
+                  </div>
+                </div>
+              </article>
+
+              <article className="surface surface-dark sidebar-card">
+                <span className="mini-tag mini-tag-dark">Before you submit</span>
+                <h3>Quick reminders</h3>
+                <ul className="checklist checklist-light">
+                  {registerPage.sidebarNotes.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+
+              <article className="surface">
+                <span className="mini-tag">Service levels</span>
+                <div className="service-stack">
+                  {serviceLevels.map((item) => (
+                    <article className="service-card" key={item.id}>
+                      <div>
+                        <h3>{item.label}</h3>
+                        <p>{item.description}</p>
+                      </div>
+                      <strong>{formatCurrency(item.amount)}</strong>
+                    </article>
+                  ))}
+                </div>
+              </article>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
 
 function NotFoundPage({ currentPath, navigate }) {

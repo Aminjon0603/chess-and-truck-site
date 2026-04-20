@@ -219,7 +219,7 @@ export const homePage = {
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
-    { label: "Format", value: "Half-day and full-day camp" },
+    { label: "Service", value: "Half-day and full-day camp" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
   ],
   offerSection: {
@@ -335,7 +335,7 @@ export const campOverviewPage = {
     { label: "Dates", value: "June 15 - August 21" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
-    { label: "Format", value: "Half-day and full-day camp" },
+    { label: "Service", value: "Half-day and full-day camp" },
   ],
   portraitCaption:
     "A clean camp setup with real chess structure from day one.",
@@ -384,7 +384,7 @@ export const campOverviewPage = {
     { title: "Location", text: "House of Chess and Checkers, Central Park" },
     { title: "Dates", text: "June 15 - August 21" },
     { title: "Time", text: "Morning, half-day, and full-day options" },
-    { title: "Format", text: "Chess-first summer camp" },
+    { title: "Service", text: "Chess-first summer camp" },
     { title: "Ages", text: "School-age players" },
     { title: "Skill levels", text: "Beginner-friendly with level grouping" },
     { title: "Enrollment", text: "Contact us for availability and next steps" },
@@ -885,12 +885,12 @@ export const aboutPage = {
 
 export const eventsPage = {
   eyebrow: "Events & Tournaments",
-  title: "NYC scholastic tournaments with a clear Saturday format.",
+  title: "NYC scholastic tournaments with a clear Saturday service.",
   intro:
     "Open and Beginner sections, a 9:00 AM start, and a morning schedule that wraps by lunch. Families can review the structure now and join early access before dates go live.",
   heroFacts: [
     { label: "Location", value: "Brick Church, 62 E 92nd Street" },
-    { label: "Format", value: "Open + Beginner" },
+    { label: "Service", value: "Open + Beginner" },
     { label: "Status", value: "First dates coming soon" },
   ],
   offerSection: {
@@ -921,7 +921,7 @@ export const eventsPage = {
     { title: "Location", text: "Brick Church, 62 E 92nd Street" },
     { title: "Dates", text: "Dates coming soon" },
     { title: "Time", text: "Saturday mornings, 9:00 AM to lunch" },
-    { title: "Format", text: "Rated and beginner-friendly divisions" },
+    { title: "Service", text: "Rated and beginner-friendly divisions" },
     { title: "Entry", text: "Registration from $55 planned" },
     { title: "Enrollment", text: "Early access list open now" },
   ],
@@ -977,7 +977,7 @@ export const tournamentPage = {
   intro: "The format is set. The first public tournament date is being finalized now.",
   atAGlance: [
     { label: "Location", value: "Brick Church, 62 E 92nd Street" },
-    { label: "Format", value: "Open & Beginner sections" },
+    { label: "Service", value: "Open & Beginner sections" },
     { label: "Schedule", value: "Saturday mornings, 9:00 AM to lunch" },
     { label: "Launch status", value: "First dates announced soon" },
   ],
