@@ -11,7 +11,6 @@ export const navigationItems = [
   { label: "Home", path: "/" },
   { label: "Camps", path: "/camps" },
   { label: "Lessons", path: "/private-lessons" },
-  { label: "Events", path: "/events" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
 ];
@@ -72,10 +71,10 @@ export const campMenuItems = [
     imageKey: "training",
   },
   {
-    label: "Tournament Prep Camps",
+    label: "Advanced Training Camps",
     path: "/camps/prep",
-    description: "Sharper camp blocks for players who already compete and want stronger event preparation.",
-    signal: "Competitive focus",
+    description: "Sharper camp blocks for students who want deeper review, stronger habits, and more focused work.",
+    signal: "Advanced focus",
     imageKey: "prep",
   },
   {
@@ -105,12 +104,17 @@ export const routeMeta = {
   "/about": {
     title: "About | CHESS AND TRUCK",
     description:
-      "Learn why CHESS AND TRUCK is being built for NYC families, what experience shapes the program, and how camps, lessons, and events are being structured.",
+      "Learn why CHESS AND TRUCK is being built for NYC families and how camps, lessons, and direct parent communication are being structured.",
   },
   "/camps": {
     title: "Camps | CHESS AND TRUCK",
     description:
       "See summer camp dates, Central Park location, daily format, and what students will do at CHESS AND TRUCK camps.",
+  },
+  "/camps/book": {
+    title: "Camp Booking | CHESS AND TRUCK",
+    description:
+      "Choose a summer camp option, add family details, and continue to secure checkout for CHESS AND TRUCK camps in Central Park.",
   },
   "/camps/training": {
     title: "Training Camps | CHESS AND TRUCK",
@@ -118,9 +122,9 @@ export const routeMeta = {
       "Daily training camp format for students who want structured chess work, strong rhythm, and coach-led practice.",
   },
   "/camps/prep": {
-    title: "Tournament Prep Camps | CHESS AND TRUCK",
+    title: "Advanced Training Camps | CHESS AND TRUCK",
     description:
-      "Tournament prep camp blocks for competitive players who want sharper game review, calculation, and event readiness.",
+      "Advanced training camp blocks for students who want sharper game review, stronger calculation, and more focused summer work.",
   },
   "/camps/online": {
     title: "Online Camps | CHESS AND TRUCK",
@@ -128,19 +132,19 @@ export const routeMeta = {
       "Online camp format for students who want a structured remote chess week with clear coaching and daily direction.",
   },
   "/events": {
-    title: "Events | CHESS AND TRUCK",
+    title: "Camps | CHESS AND TRUCK",
     description:
-      "NYC scholastic chess tournaments with Open and Beginner sections, a Saturday morning format, and clear early-access details before dates go live.",
+      "NYC summer chess camps in Central Park with dates, format, daily structure, and clear next steps for families.",
   },
   "/events/chess-and-truck-tournament": {
-    title: "Chess & Truck Tournament | CHESS AND TRUCK",
+    title: "Summer Camp | CHESS AND TRUCK",
     description:
-      "See the confirmed format, Saturday schedule, sections, and launch details for the Chess & Truck Tournament.",
+      "See the summer camp format, Central Park location, daily structure, and camp details for CHESS AND TRUCK.",
   },
   "/private-lessons": {
     title: "Lessons | CHESS AND TRUCK",
     description:
-      "Chess lessons in NYC and online with game review, structured coaching, and clear lesson options for beginner and tournament-ready students.",
+      "Chess lessons in NYC and online with game review, structured coaching, and clear lesson options for beginner and improving students.",
   },
   "/lessons/online": {
     title: "Online Lessons | CHESS AND TRUCK",
@@ -165,42 +169,42 @@ export const routeMeta = {
   "/faq": {
     title: "FAQ | CHESS AND TRUCK",
     description:
-      "Get answers about USCF requirements, Open and Beginner sections, payment, medical details, and tournament support.",
+      "Get answers about summer camp, lessons, student fit, what to bring, and how to get the next step.",
   },
   "/contact": {
     title: "Contact | CHESS AND TRUCK",
     description:
-      "Reach the CHESS AND TRUCK team by phone, email, or the contact form for tournament, camp, and lesson questions.",
+      "Reach the CHESS AND TRUCK team by phone, email, or the contact form for camp and lesson questions.",
   },
   "/register": {
-    title: "Register | CHESS AND TRUCK",
+    title: "Contact | CHESS AND TRUCK",
     description:
-      "Complete player, parent, emergency, and medical details first, then continue to secure Stripe checkout for CHESS AND TRUCK.",
+      "Contact CHESS AND TRUCK for camp availability, lesson openings, pricing, and the next step.",
   },
   "/terms": {
     title: "Terms of Service | CHESS AND TRUCK",
     description:
-      "Review tournament registration terms, payment terms, cancellations, transfers, and event participation rules for CHESS AND TRUCK.",
+      "Review CHESS AND TRUCK terms covering camp and lesson inquiries, payments, cancellations, and program participation.",
   },
   "/privacy": {
     title: "Privacy Policy | CHESS AND TRUCK",
     description:
-      "See how CHESS AND TRUCK uses registration, contact, and payment-related information for tournament operations and family communication.",
+      "See how CHESS AND TRUCK uses contact and payment-related information for camp, lesson, and family communication.",
   },
 };
 
 export const featuredTournament = {
-  slug: "chess-and-truck-tournament",
-  title: "Chess & Truck Tournament",
-  city: "Brick Church, 62 E 92nd Street",
-  scheduleLabel: "Saturday mornings, 9:00 AM to lunch",
-  formatLabel: "Open & Beginner",
-  pricingLabel: "Registration from $55",
-  venueLabel: "Brick Church, 62 E 92nd Street",
-  shortSummary: "Open & Beginner. Saturday mornings. First dates announced soon.",
-  longSummary: "The format is locked in. The first public release is next.",
-  basePrice: 55,
-  dojoPrice: 155,
+  slug: "summer-camp",
+  title: "Summer Chess Camp",
+  city: "House of Chess and Checkers, Central Park",
+  scheduleLabel: "June 15 - August 21",
+  formatLabel: "Half-day and full-day camp",
+  pricingLabel: "Camp details available now",
+  venueLabel: "House of Chess and Checkers, Central Park",
+  shortSummary: "Central Park summer camp. Daily lessons, guided games, and clear structure.",
+  longSummary: "Summer camp runs June 15 to August 21 at the House of Chess and Checkers in Central Park.",
+  basePrice: 0,
+  dojoPrice: 0,
 };
 
 export const footerLegalLinks = [
@@ -211,7 +215,7 @@ export const footerLegalLinks = [
 export const homePage = {
   eyebrow: "NYC chess camps",
   title: "Summer chess camps in Central Park.",
-  intro: "Daily lessons, guided games, and real chess improvement from June 15 to August 21 at the House of Chess and Checkers.",
+  intro: "June 15 to August 21. Daily lessons, guided games, and a clear chess-first camp day.",
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
@@ -219,113 +223,48 @@ export const homePage = {
     { label: "Levels", value: "Beginner-friendly and improving players" },
   ],
   offerSection: {
-    eyebrow: "What we offer",
-    title: "Three clear camp paths",
-    intro: "Parents should be able to see the options quickly.",
+    eyebrow: "What camp includes",
+    title: "The essentials, fast",
+    intro: "Only the details families need first.",
   },
   offerCards: [
     {
-      title: "Camp Overview",
-      text: "See the format, sample day, practical details, and what families can expect before dates go live.",
-      path: "/camps",
-    },
-    {
-      title: "Training Camps",
-      text: "Daily camp rhythm with lessons, supervised games, puzzle work, and review.",
-      path: "/camps/training",
-    },
-    {
-      title: "Online Camps",
-      text: "Remote camp format for families who want structure and guided chess work without crossing the city.",
-      path: "/camps/online",
-    },
-  ],
-  audienceSection: {
-    eyebrow: "Who this is for",
-    title: "Built for families who want structure during school breaks",
-    intro: "Clear schedule. Real chess work. Easy next step.",
-  },
-  audienceCards: [
-    {
-      title: "School-break families",
-      text: "Parents who want a clear day structure, useful chess work, and a format that fits the New York City calendar.",
-    },
-    {
-      title: "Beginners",
-      text: "Students who need a beginner-friendly camp setting with coaching, guided games, and level-aware pacing.",
-    },
-    {
-      title: "Improving players",
-      text: "Students who already know the basics and want stronger habits, better decision-making, and more real chess work.",
-    },
-  ],
-  launchSection: {
-    eyebrow: "What to review first",
-    title: "The practical camp details",
-    intro: "Dates and location are set. Families can review the format now.",
-  },
-  serviceCards: [
-    {
       title: "Camp Details",
-      text: "Review location, dates, time windows, format, and what to expect during the camp day.",
+      text: "Dates, location, daily format, and the practical details parents usually ask first.",
       path: "/camps",
     },
     {
       title: "Sample Day",
-      text: "See how a typical day moves from puzzles and lessons into games, lunch, and review.",
-      path: "/camps",
+      text: "A simple day rhythm with lessons, games, breaks, lunch, and review.",
+      path: "/camps/training",
     },
     {
-      title: "Contact the camp team",
-      text: "Use Contact if you want schedule help, availability updates, or details before registration opens.",
+      title: "Contact the Team",
+      text: "Ask about availability, pricing, or which camp format fits your family best.",
       path: "/contact",
     },
   ],
   processSection: {
-    eyebrow: "How it works",
-    title: "A simple way to get started",
-    intro: "The next step should always be obvious.",
+    eyebrow: "How to join",
+    title: "Three simple steps",
+    intro: "Keep the next step obvious.",
   },
   processCards: [
     {
-      title: "Check camp fit",
-      text: "Start with the camp overview and see whether the summer format fits your student and your schedule.",
+      title: "Review the camp page",
+      text: "Start with dates, location, schedule, and what students will do each day.",
     },
     {
-      title: "Review the structure",
-      text: "See the schedule, daily format, and the training areas students will work on.",
+      title: "Ask about fit and pricing",
+      text: "Send one message and we will tell you what fits your student and what is available.",
     },
     {
-      title: "Ask about registration",
-      text: "Use the contact page if you want availability, program details, and the next step.",
-    },
-  ],
-  whySection: {
-    eyebrow: "Why choose us",
-    title: "Why the camp launch should feel easy to trust",
-    intro: "Parents should be able to understand the camp quickly and decide whether it is the right fit.",
-  },
-  whyCards: [
-    {
-      title: "Clear camp details",
-      text: "Families can see the format, the day structure, and the next step without digging through vague copy.",
-    },
-    {
-      title: "Chess-first schedule",
-      text: "The camp is built around lessons, games, review, and real student improvement.",
-    },
-    {
-      title: "Beginner-friendly launch",
-      text: "Newer players should have a clean first camp experience instead of being dropped into the wrong pace or level.",
-    },
-    {
-      title: "NYC-focused",
-      text: "The schedule and location are built around real New York City family logistics.",
+      title: "Get the next step",
+      text: "We will send the right follow-up for registration, schedule, or program details.",
     },
   ],
   ctaTitle: "Ask about summer camp.",
-  ctaText:
-    "If camp is the right fit for your family, contact us now and we will send availability, format details, and the next step.",
+  ctaText: "Use Contact for pricing, availability, and the next step.",
 };
 
 export const carouselSlides = [
@@ -390,7 +329,7 @@ export const campOverviewPage = {
   eyebrow: "Camps",
   title: "Summer Chess Camps in Central Park",
   intro:
-    "Daily lessons, guided games, and real chess improvement from June 15 to August 21 at the House of Chess and Checkers.",
+    "June 15 to August 21. Lessons, games, and a clear chess-first camp day at the House of Chess and Checkers.",
   chips: ["June 15 - August 21", "Central Park", "NYC families"],
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21" },
@@ -399,11 +338,11 @@ export const campOverviewPage = {
     { label: "Format", value: "Half-day and full-day camp" },
   ],
   portraitCaption:
-    "Camp should feel active, organized, and clearly built around chess improvement from the first day.",
+    "A clean camp setup with real chess structure from day one.",
   asideTag: "Summer 2026",
-  asideTitle: "A practical camp setup",
+  asideTitle: "Camp at a glance",
   asideText:
-    "The season runs June 15 to August 21 in Central Park. Families can review the structure now and contact the team for the next step.",
+    "Central Park, June 15 to August 21. Review the basics, choose an option, and contact us for availability.",
   asideFacts: [
     { label: "Dates", value: "June 15 - August 21" },
     { label: "Venue", value: "House of Chess and Checkers" },
@@ -411,35 +350,35 @@ export const campOverviewPage = {
   ],
   overviewSection: {
     eyebrow: "What camp includes",
-    title: "What students do during the day",
-    intro: "A clear camp rhythm built around learning, playing, and improving.",
+    title: "What students do",
+    intro: "The essentials.",
   },
   overviewPoints: [
     {
       title: "Daily coached lessons",
-      text: "Students work with a coach each day instead of being left with unstructured chess time.",
+      text: "Coach-led instruction every day.",
     },
     {
-      title: "Supervised practice games",
-      text: "Games are part of the program, with guidance and review built in.",
+      title: "Practice games",
+      text: "Guided play with review built in.",
     },
     {
       title: "Puzzle solving",
-      text: "Tactics, calculation, and pattern work are part of the daily warm-up and lesson flow.",
+      text: "Daily tactics and calculation work.",
     },
     {
       title: "Mini tournament play",
-      text: "Students get used to clock play, focus, and game-day habits in a camp setting.",
+      text: "Clock play and game-day habits.",
     },
     {
       title: "Structured day rhythm",
-      text: "The day is organized in blocks so students know when they learn, play, break, and review.",
+      text: "Learn, play, break, review.",
     },
   ],
   detailsSection: {
     eyebrow: "Camp details",
-    title: "The practical details parents ask first",
-    intro: "Here is the core information families usually want first.",
+    title: "The details parents ask first",
+    intro: "Quick facts.",
   },
   detailsCards: [
     { title: "Location", text: "House of Chess and Checkers, Central Park" },
@@ -450,10 +389,44 @@ export const campOverviewPage = {
     { title: "Skill levels", text: "Beginner-friendly with level grouping" },
     { title: "Enrollment", text: "Contact us for availability and next steps" },
   ],
+  bookingSection: {
+    eyebrow: "Camp booking",
+    title: "Choose your camp option",
+    intro: "Simple checkout.",
+    note: "Booking for siblings? Adjust quantity in checkout.",
+  },
+  bookingCards: [
+    {
+      id: "full-week",
+      eyebrow: "Weekly camp",
+      title: "Full Week Camp",
+      price: "$450 per week",
+      details: [
+        "Five camp days in one week",
+        "Best value for families booking a full block",
+        "Built around lessons, coached games, and outdoor breaks in Central Park",
+      ],
+      availability: "Limited group size",
+      cta: "Reserve Your Week",
+    },
+    {
+      id: "single-day",
+      eyebrow: "Flexible option",
+      title: "Single Day",
+      price: "$100 per day",
+      details: [
+        "Join for one camp day at a time",
+        "Good fit for families building around a changing summer schedule",
+        "Same chess-first structure in a shorter commitment",
+      ],
+      availability: "Limited group size",
+      cta: "Book a Day",
+    },
+  ],
   mapSection: {
     eyebrow: "Camp location",
     title: "Find us in Central Park",
-    intro: "Camp is based at the House of Chess and Checkers in Central Park.",
+    intro: "House of Chess and Checkers, Central Park.",
     address: "House of Chess and Checkers, Central Park, New York, NY",
     directionsLabel: "Open in Google Maps",
     directionsHref:
@@ -464,64 +437,52 @@ export const campOverviewPage = {
   scheduleSection: {
     eyebrow: "Sample day",
     title: "A sample camp day",
-    intro: "Exact timing may shift by age group or half-day/full-day format.",
+    intro: "Timing may shift by group.",
   },
   sampleSchedule: [
     {
       time: "9:00 AM",
       title: "Warm-up puzzles",
-      text: "Short tactical work to settle in and switch into chess mode.",
+      text: "Short tactical warm-up.",
     },
     {
       time: "9:30 AM",
       title: "Group lesson",
-      text: "Coach-led instruction built around one clear theme for the day.",
+      text: "Coach-led lesson.",
     },
     {
       time: "10:30 AM",
       title: "Practice games",
-      text: "Students apply the lesson in guided games instead of just listening all morning.",
+      text: "Apply the lesson in games.",
     },
     {
       time: "11:30 AM",
       title: "Lunch / break",
-      text: "A reset block before the next training segment.",
+      text: "Reset before the next block.",
     },
     {
       time: "12:15 PM",
       title: "Mini tournament",
-      text: "Short competitive rounds to build focus, clock habits, and confidence.",
+      text: "Short competitive rounds.",
     },
     {
       time: "1:15 PM",
       title: "Endgame or game review",
-      text: "The day closes with review so students leave with something concrete learned.",
+      text: "Review before dismissal.",
     },
   ],
   learningSection: {
     eyebrow: "What students learn",
-    title: "The main chess areas camp can help build",
-    intro: "The goal is improvement, not just filling the day.",
+    title: "What students work on",
+    intro: "Core chess areas.",
   },
   learningCards: [
-    { title: "Tactics", text: "Pattern recognition, calculation, and spotting opportunities faster." },
-    { title: "Opening fundamentals", text: "Simple setup ideas, development habits, and cleaner early-game decisions." },
-    { title: "Strategy", text: "Piece activity, planning, and understanding what the position needs." },
-    { title: "Endgames", text: "Basic winning methods, key techniques, and confidence in simpler positions." },
-    { title: "Tournament habits", text: "Clock use, notation awareness, focus, and how to recover after mistakes." },
-    { title: "Thinking process", text: "Slowing down, checking candidate moves, and making better decisions move by move." },
-  ],
-  parentSection: {
-    eyebrow: "Why parents choose it",
-    title: "Why this camp format works for families",
-    intro: "Clear structure matters as much as strong instruction.",
-  },
-  parentReasons: [
-    { title: "Structured instruction", text: "Each day has a plan instead of random filler." },
-    { title: "Small groups planned", text: "The goal is more coaching attention and better pacing, not oversized camp rooms." },
-    { title: "Level-based guidance", text: "Students should be challenged at the right level instead of all doing the same thing." },
-    { title: "Organized environment", text: "Families should know the schedule, contact path, and expectations before camp begins." },
-    { title: "Chess-first program", text: "This is a chess camp with real learning goals, not a general camp with some chess added in." },
+    { title: "Tactics", text: "Patterns and calculation." },
+    { title: "Openings", text: "Clean development habits." },
+    { title: "Strategy", text: "Planning and piece activity." },
+    { title: "Endgames", text: "Core winning methods." },
+    { title: "Tournament habits", text: "Clock use and focus." },
+    { title: "Thinking process", text: "Slower, better decisions." },
   ],
   cards: [
     {
@@ -540,36 +501,31 @@ export const campOverviewPage = {
       path: "/camps/online",
     },
   ],
-  formatSection: {
-    eyebrow: "Camp tracks",
-    title: "Explore the camp formats in development",
-    intro: "Each track keeps the same organized standard, with a different training focus.",
-  },
   faqSection: {
     eyebrow: "Camp FAQ",
-    title: "Quick answers before dates go live",
-    intro: "Short answers to the most common parent questions.",
+    title: "Quick answers",
+    intro: "The basics.",
   },
   faqs: [
     {
       question: "Is this good for beginners?",
-      answer: "Yes. The plan is to make the first release beginner-friendly while still giving stronger students enough challenge through grouping and coaching adjustments.",
+      answer: "Yes. The camp is beginner-friendly, with grouping to keep stronger students challenged.",
     },
     {
       question: "Are students grouped by level?",
-      answer: "That is the plan. Students should be grouped as cleanly as possible so the lesson pace and game level make sense.",
+      answer: "Yes. We group as cleanly as possible so lesson pace and game level make sense.",
     },
     {
       question: "What should students bring?",
-      answer: "Bring a water bottle, a snack or lunch if needed, and anything the camp team includes in the registration note.",
+      answer: "Bring a water bottle, a snack or lunch if needed, and anything listed in the registration note.",
     },
     {
       question: "Is tournament experience required?",
-      answer: "No. General camp should work for students who are still building fundamentals. Tournament-prep camp is the more competitive option.",
+      answer: "No. General camp works for students still building fundamentals.",
     },
     {
       question: "Is lunch included?",
-      answer: "Lunch guidance will be confirmed with registration details. Families should expect either a lunch block or a bring-your-own-lunch note.",
+      answer: "Lunch guidance comes with registration details. Expect either a lunch block or a bring-your-own-lunch note.",
     },
     {
       question: "How do I join early access?",
@@ -577,8 +533,36 @@ export const campOverviewPage = {
     },
   ],
   ctaTitle: "Ask about summer camp",
-  ctaText:
-    "If summer camp is part of your plan, contact us now and we will send availability, format details, and the next step.",
+  ctaText: "Contact us for availability, pricing, and the next step.",
+};
+
+export const campBookingPage = {
+  eyebrow: "Camp booking",
+  title: "Choose an option and continue to secure checkout",
+  intro:
+    "Pick a camp option, add the family details we need, and continue to Stripe to reserve a spot.",
+  chips: ["June 15 - August 21", "Central Park", "Secure checkout"],
+  formTitle: "Camp booking details",
+  formIntro:
+    "This short step helps us know who the student is before you continue to payment.",
+  sections: [
+    {
+      title: "Parent contact",
+      intro: "Who should we email and text about camp details?",
+    },
+    {
+      title: "Student details",
+      intro: "A few basics so we know who the camp spot is for.",
+    },
+    {
+      title: "Camp preference",
+      intro: "Tell us which week or day you want first.",
+    },
+  ],
+  supportTitle: "Need help before checkout?",
+  supportText:
+    "Call, text, or email if you want to confirm fit, availability, or the best camp option before paying.",
+  siblingNote: "Booking for siblings? You can increase quantity during Stripe checkout.",
 };
 
 export const campDetailPages = {
@@ -660,17 +644,17 @@ export const campDetailPages = {
     ctaLabel: "Contact about training camps",
   },
   "/camps/prep": {
-    eyebrow: "Tournament Prep Camps",
-    title: "Shorter, sharper camp blocks for players who already compete.",
+    eyebrow: "Advanced Training Camps",
+    title: "Shorter, sharper camp blocks for students who want deeper work.",
     intro:
-      "This camp format is for players who are already in tournament rhythm and want a more focused training week before key events.",
-    chips: ["Competitive players", "Event readiness", "Summer 2026"],
+      "This camp format is for students who already know the basics and want a more focused training week with stronger review and cleaner habits.",
+    chips: ["Advanced players", "Focused training", "Summer 2026"],
     portraitCaption:
-      "Prep camp should feel sharper than general camp: more game review, cleaner goals, and better event focus.",
+      "Advanced camp should feel sharper than general camp: more game review, cleaner goals, and stronger daily focus.",
     asideTag: "Prep camp fit",
     asideTitle: "This is for players who already care about performance",
     asideText:
-      "The goal is not to keep the room busy. The goal is to help players walk into events feeling more prepared, more accurate, and more stable.",
+      "The goal is not to keep the room busy. The goal is to help students leave camp more prepared, more accurate, and more stable over the board.",
     asideFacts: [
       { label: "Best for", value: "Active competitors" },
       { label: "Works well for", value: "Game review and prep" },
@@ -678,12 +662,12 @@ export const campDetailPages = {
     ],
     cards: [
       { title: "Game review first", text: "The week should include real review of practical mistakes, not only abstract instruction." },
-      { title: "Better tournament habits", text: "Useful for pacing, notation, decision-making, and pre-event discipline." },
-      { title: "Sharper themes", text: "Calculation, openings, endgames, and competitive habits can be trained more directly here." },
+      { title: "Better game habits", text: "Useful for pacing, notation, decision-making, and more disciplined play." },
+      { title: "Sharper themes", text: "Calculation, openings, endgames, and practical habits can be trained more directly here." },
     ],
     pathSection: {
       eyebrow: "Prep tracks",
-      title: "Three ways tournament camp can open",
+      title: "Three ways advanced camp can open",
       intro: "Competitive families usually want the fast version: what it is, who it is for, and how it starts.",
     },
     pathCards: [
@@ -703,8 +687,8 @@ export const campDetailPages = {
         eyebrow: "Core rhythm",
         title: "Pre-Event Camp Week",
         bullets: [
-          "Focused week ahead of a competitive stretch or key tournament window",
-          "Can center around game review, openings, calculation, and practical tournament habits",
+          "Focused week ahead of an important training stretch",
+          "Can center around game review, openings, calculation, and practical game habits",
           "Best for players who already compete and want cleaner preparation",
         ],
         meta: "Competition week",
@@ -717,21 +701,21 @@ export const campDetailPages = {
         bullets: [
           "Camp block after an event stretch to review games and clean up recurring mistakes",
           "Useful when a player needs clarity more than volume",
-          "Can help reset direction before the next tournament cycle starts",
+          "Can help reset direction before the next training cycle starts",
         ],
         meta: "Post-event training",
         note: "Built around demand and event timing",
         cta: "Ask about review camps",
       },
     ],
-    checklistTitle: "What tournament prep camp should include",
+    checklistTitle: "What advanced camp should include",
     checklist: [
       "Practical game review tied to the student's actual competitive level",
       "Clear training themes instead of generic camp rotation",
       "A sharper room with stronger focus and less filler",
       "Honest positioning before registration opens",
     ],
-    ctaTitle: "Ask about tournament prep camp",
+    ctaTitle: "Ask about advanced training camp",
     ctaText:
       "If competitive camp blocks are what your student needs, contact us now and we will send details and next steps.",
     ctaLabel: "Contact about prep camps",
@@ -792,9 +776,9 @@ export const campDetailPages = {
         eyebrow: "Focused push",
         title: "Theme Week Online",
         bullets: [
-          "Remote camp built around one training theme such as tactics, endgames, or tournament review",
+          "Remote camp built around one training theme such as tactics, endgames, or game review",
           "Good for students who need one sharper training direction instead of a broad camp mix",
-          "Can sit well before a tournament stretch or as a mid-season reset",
+          "Can sit well before a busy training stretch or as a mid-season reset",
         ],
         meta: "Theme-based remote camp",
         note: "Added based on family demand",
@@ -817,13 +801,13 @@ export const campDetailPages = {
 
 export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
-  title: "A New York City chess business being built around clarity.",
+  title: "A New York City chess program built around clarity.",
   intro:
-    "CHESS AND TRUCK is being built for families who want organized chess programs, clear communication, and a practical path into camps, lessons, and tournaments.",
+    "CHESS AND TRUCK is being built for families who want organized chess camps, useful lessons, and direct communication.",
   heroFacts: [
     { label: "Focus", value: "Scholastic chess" },
     { label: "City", value: "New York City" },
-    { label: "Programs", value: "Events, camps, lessons" },
+    { label: "Programs", value: "Camps + lessons" },
     { label: "Status", value: "Launching soon" },
   ],
   introSection: {
@@ -833,8 +817,8 @@ export const aboutPage = {
   },
   pillars: [
     {
-      title: "Events with visible structure",
-      text: "Tournament pages should show sections, schedule, level fit, and next steps before registration opens.",
+      title: "Camps with visible structure",
+      text: "Parents should be able to see dates, location, schedule, and what the day includes before reaching out.",
     },
     {
       title: "Lessons with real coaching value",
@@ -857,7 +841,7 @@ export const aboutPage = {
     },
     {
       title: "Why CHESS AND TRUCK exists",
-      text: "This brand is being built so camps, lessons, and events feel organized before a family ever commits time, money, or a weekend.",
+      text: "This brand is being built so camps and lessons feel organized before a family ever commits time, money, or a week of summer.",
     },
     {
       title: "What families should get",
@@ -871,8 +855,8 @@ export const aboutPage = {
   },
   experienceCards: [
     {
-      title: "Tournament organization",
-      text: "The event side is built around what a real scholastic tournament day needs: clear sections, visible rules, and a morning schedule parents can actually plan around.",
+      title: "Program structure",
+      text: "The program is being built around the details parents look for first: dates, location, schedule, fit, and next step.",
     },
     {
       title: "Coaching standards",
@@ -896,7 +880,7 @@ export const aboutPage = {
   ],
   ctaTitle: "Want to see the first launch updates as they open?",
   ctaText:
-    "Use Contact now if you want early access notices for events, lessons, or camps as the first public openings go live.",
+    "Use Contact now if you want early access notices for camps or lessons as the first public openings go live.",
 };
 
 export const eventsPage = {
@@ -1007,22 +991,22 @@ export const tournamentPage = {
 
 export const faqPage = {
   eyebrow: "FAQ",
-  title: "Clear answers before registration opens.",
-  intro: "Beginner fit, USCF, what to bring, and how sign-up will work.",
+  title: "Clear answers before registration.",
+  intro: "Camp fit, lesson options, what to bring, and how sign-up works.",
   heroFacts: [
-    { label: "Open section", value: "USCF required" },
-    { label: "Beginner section", value: "No USCF needed" },
-    { label: "Payment", value: "Form first, Stripe after" },
+    { label: "Camp dates", value: "June 15 - August 21" },
+    { label: "Location", value: "Central Park" },
+    { label: "Lessons", value: "Online + in person" },
     { label: "Support", value: "Contact is open now" },
   ],
   quickCards: [
     {
       title: "Beginner friendly?",
-      text: "Yes. Beginner section is the easier first step for players who are not ready for rated play yet.",
+      text: "Yes. Camp and lesson formats are being built to work for beginners and improving players.",
     },
     {
       title: "Grouped by level?",
-      text: "Yes. Open and Beginner are separated clearly so families can choose the right fit before registering.",
+      text: "Yes. Students are grouped by level so the day and the coaching pace make sense.",
     },
     {
       title: "Need help first?",
@@ -1037,15 +1021,15 @@ export const faqPage = {
   prepCards: [
     {
       title: "Who can join?",
-      text: "School-age players, with a clearer fit depending on whether they belong in Open or Beginner.",
+      text: "School-age players who want camp, lessons, or a stronger summer chess routine.",
     },
     {
       title: "What should students bring?",
-      text: "A water bottle, anything staff should know medically, and any day-of items listed in the final event note.",
+      text: "A water bottle, lunch or snack if needed, and anything staff should know medically.",
     },
     {
-      title: "Is tournament experience required?",
-      text: "No. Beginner section is there for players who need a cleaner first tournament step.",
+      title: "Is prior experience required?",
+      text: "No. Beginners are welcome, and we will help point families to the right starting format.",
     },
   ],
   flowSection: {
@@ -1055,16 +1039,16 @@ export const faqPage = {
   },
   flowSteps: [
     {
-      title: "Check the section fit",
-      text: "Review Open vs Beginner first, or contact us if you want help choosing.",
+      title: "Review the right page",
+      text: "Start with camps or lessons first so you can see the format, schedule, and fit.",
     },
     {
-      title: "Fill out the player form",
-      text: "Parent, player, emergency, and medical details are collected before payment.",
+      title: "Send one message",
+      text: "Tell us the student age, current level, and whether you want camp or lessons.",
     },
     {
-      title: "Complete payment after release",
-      text: "Once dates go live, checkout moves to Stripe after the registration form is complete.",
+      title: "Get the next step",
+      text: "We reply with availability, pricing, and the cleanest next move for your family.",
     },
   ],
   ctaTitle: "Still have a question before launch?",
@@ -1073,9 +1057,9 @@ export const faqPage = {
 
 export const contactPage = {
   eyebrow: "Contact",
-  title: "Contact the team for events, camps, and lessons.",
+  title: "Contact the team for camps and lessons.",
   intro:
-    "Use the contact form, call or text (646) 251-7087 or (646) 494-5363, or email info@chessandtruck.com for early access, section questions, lesson inquiries, camp updates, or help choosing the right program.",
+    "Use the contact form, call or text (646) 251-7087 or (646) 494-5363, or email info@chessandtruck.com for camp questions, lesson inquiries, pricing, or help choosing the right program.",
   heroFacts: [
     { label: "Phone lines", value: "(646) 251-7087 / (646) 494-5363" },
     { label: "Email", value: "info@chessandtruck.com" },
@@ -1089,8 +1073,8 @@ export const contactPage = {
   },
   topicCards: [
     {
-      title: "Event questions",
-      text: "Ask about Open vs Beginner, USCF, launch timing, event format, or early access for the first tournament release.",
+      title: "Camp questions",
+      text: "Ask about dates, Central Park location, daily format, pricing, or whether camp fits your family.",
     },
     {
       title: "Lesson inquiries",
@@ -1123,7 +1107,7 @@ export const contactPage = {
   responseSteps: [
     {
       title: "We read the question first",
-      text: "Messages are reviewed for fit, timing, and whether your question is really about events, camps, or lessons.",
+      text: "Messages are reviewed for fit, timing, and whether your question is really about camp or lessons.",
     },
     {
       title: "We point you to the right next step",
@@ -1136,13 +1120,12 @@ export const contactPage = {
   ],
   messageChecklist: [
     "Student age and current level",
-    "Whether you want tournaments, camps, or lessons",
-    "Open / Beginner question if relevant",
+    "Whether you want camp or lessons",
     "Your preferred format: online, in person, or school-break camp",
   ],
   ctaTitle: "Need help choosing the right next step?",
   ctaText:
-    "Send one message with the student age, current level, and whether you are looking for events, camps, or lessons. Or call, text, or email if you already know what you need.",
+    "Send one message with the student age, current level, and whether you are looking for camp or lessons. Or call, text, or email if you already know what you need.",
 };
 
 export const privateLessonsPage = {
@@ -1152,7 +1135,7 @@ export const privateLessonsPage = {
     "Lesson formats for NYC students who need real improvement, not random chess activity. Private coaching, small-group training, and online formats are opening soon.",
   heroChips: ["Private coaching", "Small-group options", "Online + in person"],
   quickFacts: [
-    { label: "Levels", value: "Beginner to tournament-ready" },
+    { label: "Levels", value: "Beginner to advanced" },
     { label: "Formats", value: "Private, group, online" },
     { label: "Includes", value: "Game + analysis" },
     { label: "Pricing", value: "Shared before first booking window" },
@@ -1165,7 +1148,7 @@ export const privateLessonsPage = {
     intro: "The lesson release is still opening, but the core structure is already clear.",
   },
   detailsCards: [
-    { title: "Who it is for", text: "Students ages 6-14, from beginners to players already entering tournaments." },
+    { title: "Who it is for", text: "School-age students from beginners to advanced players who need clearer structure and real improvement." },
     { title: "Formats", text: "Private lessons, small-group coaching, and online options are all part of the lesson release." },
     { title: "Session flow", text: "Lesson time can include a real game, guided analysis, and targeted training work." },
     { title: "Game format", text: "Practice games can use 10+10 or 15+10 once the student is ready for clock work." },
@@ -1243,17 +1226,17 @@ export const privateLessonsPage = {
       note: "Priority scheduling opens with launch",
       cta: "Ask about weekly coaching",
     },
-    {
-      eyebrow: "Competitive focus",
-      title: "Tournament Prep Block",
-      bullets: [
-        "A short focused run of lessons built around event readiness",
-        "Can center around game review, calculation, openings, and tournament habits",
-        "Best for players who already compete and want sharper preparation before key events",
-      ],
-      meta: "Pre-event coaching track",
-      note: "Available after the first lesson release",
-      cta: "Ask about prep coaching",
+      {
+        eyebrow: "Competitive focus",
+        title: "Focused Improvement Block",
+        bullets: [
+          "A short focused run of lessons built around recent games and recurring weaknesses",
+          "Can center around game review, calculation, openings, and decision-making",
+          "Best for players who want sharper preparation before the next training stretch",
+        ],
+        meta: "Pre-event coaching track",
+        note: "Available after the first lesson release",
+        cta: "Ask about prep coaching",
     },
   ],
   fitCards: [
@@ -1263,7 +1246,7 @@ export const privateLessonsPage = {
     },
     {
       title: "Developing players who need game review",
-      text: "Strong fit for students already playing serious games and needing clearer analysis, calculation, and tournament habits.",
+      text: "Strong fit for students already playing serious games and needing clearer analysis, calculation, and decision-making habits.",
     },
     {
       title: "Families who want consistency",
@@ -1373,7 +1356,7 @@ export const lessonDetailPages = {
         title: "Game Review Intensive",
         bullets: [
           "Short run of lessons centered on recent games and recurring mistakes",
-          "Useful for players who need clarity before the next tournament stretch",
+          "Useful for players who need clarity before the next training stretch",
           "Can sharpen openings, decision-making, and post-game understanding fast",
         ],
         meta: "Targeted online block",
@@ -1455,11 +1438,11 @@ export const lessonDetailPages = {
       },
       {
         eyebrow: "Competitive focus",
-        title: "Tournament Prep Block",
+        title: "Focused Improvement Block",
         bullets: [
-          "Short focused run of lessons built around event readiness",
-          "Can center on game review, openings, calculation, and tournament habits",
-          "Best for players who already compete and want sharper preparation",
+          "Short focused run of lessons built around recent games and specific weaknesses",
+          "Can center on game review, openings, calculation, and board habits",
+          "Best for players who want sharper preparation and cleaner follow-up work",
         ],
         meta: "Pre-event in-person track",
         note: "Available after the first live lesson release",
@@ -1540,15 +1523,15 @@ export const lessonDetailPages = {
       },
       {
         eyebrow: "Competitive focus",
-        title: "Tournament Squad",
+        title: "Advanced Training Group",
         bullets: [
-          "Short group block around event preparation and post-game discussion",
-          "Can emphasize openings, calculation themes, and tournament habits",
+          "Short group block around deeper review and post-game discussion",
+          "Can emphasize openings, calculation themes, and stronger game habits",
           "Best for players who benefit from training beside motivated peers",
         ],
         meta: "Event-focused group track",
         note: "Released after the first group launch",
-        cta: "Ask about tournament squads",
+        cta: "Ask about advanced groups",
       },
     ],
     checklistTitle: "What a strong group format needs",
@@ -1784,52 +1767,47 @@ export const faqItems = [
   {
     question: "Is this good for beginners?",
     answer:
-      "Yes. Beginner section is designed for players who are newer to tournament chess and need a more comfortable first event.",
-  },
-  {
-    question: "Do I need a USCF rating or membership?",
-    answer:
-      "Only players in the Open section need an active USCF membership. Beginner section players do not need one.",
+      "Yes. Camp and lesson formats are being built to work for beginners as well as improving students.",
   },
   {
     question: "Are students grouped by level?",
     answer:
-      "Yes. Open and Beginner are split clearly so families can choose a better fit before registering.",
-  },
-  {
-    question: "How do I choose between Open and Beginner?",
-    answer:
-      "Choose Open if the player is already ready for rated competition and has an active USCF ID. Choose Beginner if the player is newer to tournament chess and needs an easier first step.",
+      "Yes. Students are grouped by level so the coaching pace and the work make sense for the room.",
   },
   {
     question: "What should my child bring?",
     answer:
-      "Bring a water bottle, anything the team should know medically, and any day-of items listed in the final event note.",
+      "Bring a water bottle, lunch or snack if needed, and anything staff should know medically.",
   },
   {
-    question: "Is tournament experience required?",
+    question: "Is prior experience required?",
     answer:
-      "No. Beginner section is built for players who are still getting used to tournament play.",
+      "No. Beginners are welcome, and we can help point families to the right camp or lesson format.",
+  },
+  {
+    question: "How do lessons work?",
+    answer:
+      "Lessons can be online, in person, or in small groups. Most sessions are built around real games, analysis, and a clear next step.",
   },
   {
     question: "Is lunch included?",
     answer:
-      "This is planned as a morning event that wraps around lunch, so families should not expect a full-day schedule. Final day-of notes will clarify snack, water, and any lunch-related logistics.",
+      "Families should plan for lunch or snack needs during camp. Final day notes will confirm the exact schedule and lunch handling.",
   },
   {
     question: "How do I register?",
     answer:
-      "When the first event date goes live, families complete the registration form first and then continue to Stripe for payment.",
+      "Use the Contact page now and we will reply with availability, pricing, and the cleanest next step for your family.",
   },
   {
     question: "How do I join early access?",
     answer:
-      "Use the Contact page now and ask for early access. We will send the first release information as soon as it opens.",
+      "Use the Contact page and ask for camp or lesson early access. We will send the next release information as soon as it opens.",
   },
   {
-    question: "What should I include in medical information?",
+    question: "What should I include in my message?",
     answer:
-      "Include allergies, medical conditions, medications, or anything tournament staff should know to support the player responsibly.",
+      "Include the student age, current level, and whether you are asking about camp or lessons.",
   },
 ];
 
@@ -1856,39 +1834,39 @@ export const contactEmails = [
 
 export const termsPage = {
   eyebrow: "Terms of Service",
-  title: "Tournament registration terms for families and players",
+  title: "Program terms for families and students",
   intro:
-    "These terms explain how CHESS AND TRUCK handles event registration, payment, cancellations, and participation expectations.",
+    "These terms explain how CHESS AND TRUCK handles camp and lesson inquiries, payments, cancellations, and participation expectations.",
   sections: [
     {
-      title: "Registration accuracy",
+      title: "Inquiry accuracy",
       body:
-        "Families are responsible for submitting accurate player, parent, emergency, and medical information. Open section players must provide a valid active USCF ID at registration time.",
+        "Families are responsible for submitting accurate student, parent, contact, and any relevant medical information when making an inquiry or registering for a program.",
     },
     {
       title: "Payment and confirmation",
       body:
-        "Registration is submitted through the website first and payment is completed through Stripe. A registration is treated as paid only after Stripe confirms payment successfully.",
+        "Any payment handled through the website is completed through Stripe. A program booking or payment is treated as confirmed only after Stripe confirms it successfully.",
     },
     {
-      title: "Section placement",
+      title: "Program fit",
       body:
-        "Families should choose the most appropriate section before paying. CHESS AND TRUCK may contact a family if the selected section appears inconsistent with the player's tournament readiness or eligibility.",
+        "Families should choose the most appropriate camp or lesson format before paying. CHESS AND TRUCK may contact a family if a selected option appears inconsistent with the student's level, age, or program fit.",
     },
     {
       title: "Cancellations and changes",
       body:
-        "Requests to cancel or change a registration should be sent to the tournament team as early as possible. Approved changes depend on timing, event capacity, and operational feasibility.",
+        "Requests to cancel or change a booking should be sent as early as possible. Approved changes depend on timing, program capacity, and operational feasibility.",
     },
     {
-      title: "Tournament conduct",
+      title: "Program conduct",
       body:
-        "Players, parents, and guests are expected to follow event-day instructions, respect tournament staff, and maintain an environment that supports fair competition and player focus.",
+        "Students, parents, and guests are expected to follow staff instructions, respect the learning environment, and support a safe, focused program experience.",
     },
     {
       title: "Contact",
       body:
-        "Questions about registration, eligibility, or tournament terms may be sent through the Contact page before payment is made.",
+        "Questions about program fit, payment, or terms may be sent through the Contact page before payment is made.",
     },
   ],
 };
@@ -1897,17 +1875,17 @@ export const privacyPage = {
   eyebrow: "Privacy Policy",
   title: "How registration and contact information is used",
   intro:
-    "CHESS AND TRUCK collects only the information needed to operate tournaments, communicate with families, and process secure payments.",
+    "CHESS AND TRUCK collects only the information needed to operate camps and lessons, communicate with families, and process secure payments.",
   sections: [
     {
       title: "Information collected",
       body:
-        "The site may collect contact details, player information, parent and emergency contact information, and medical notes that are relevant to tournament-day safety and communication.",
+        "The site may collect contact details, student information, parent and emergency contact information, and medical notes that are relevant to safety and communication.",
     },
     {
       title: "How information is used",
       body:
-        "Registration information is used for event operations, support, eligibility review, emergency readiness, and tournament communication. Contact form submissions are used to respond to family questions and support needs.",
+        "Registration and inquiry information is used for program operations, support, eligibility review, emergency readiness, and family communication. Contact form submissions are used to respond to questions and support needs.",
     },
     {
       title: "Payments",
@@ -1922,7 +1900,7 @@ export const privacyPage = {
     {
       title: "Retention and review",
       body:
-        "Registration and contact records may be retained for tournament operations, support follow-up, and event administration. Families can contact the tournament team if they need help reviewing or correcting submitted information.",
+        "Registration and contact records may be retained for program operations, support follow-up, and administration. Families can contact the team if they need help reviewing or correcting submitted information.",
     },
   ],
 };

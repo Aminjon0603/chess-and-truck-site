@@ -98,3 +98,29 @@ export function validateContactFields(state) {
 
   return errors;
 }
+
+export function validateCampBookingFields(state) {
+  const errors = {};
+
+  if (!cleanText(state.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
+  if (!cleanText(state.parentLastName)) errors.parentLastName = "Parent last name is required.";
+
+  if (!cleanText(state.email)) {
+    errors.email = "Email is required.";
+  } else if (!isValidEmail(state.email)) {
+    errors.email = "Enter a valid email address.";
+  }
+
+  if (!cleanText(state.phone)) {
+    errors.phone = "Phone is required.";
+  } else if (!isValidPhone(state.phone)) {
+    errors.phone = "Enter a valid phone number.";
+  }
+
+  if (!cleanText(state.studentName)) errors.studentName = "Student name is required.";
+  if (!cleanText(state.studentAge)) errors.studentAge = "Student age or grade is required.";
+  if (!cleanText(state.studentLevel)) errors.studentLevel = "Please add the student level.";
+  if (!cleanText(state.schedulePreference)) errors.schedulePreference = "Please add your preferred week or day.";
+
+  return errors;
+}

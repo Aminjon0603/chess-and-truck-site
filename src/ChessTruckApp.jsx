@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
+  campBookingPage,
   campDetailPages,
   campMenuFeature,
   campMenuItems,
@@ -8,7 +9,6 @@ import {
   contactEmails,
   contactNumbers,
   contactPage,
-  eventsPage,
   faqItems,
   faqPage,
   featuredTournament,
@@ -20,20 +20,15 @@ import {
   lessonMenuItems,
   masterTrainingDojo,
   navigationItems,
-  policyItems,
   privateLessonsPage,
   privacyPage,
-  registerPage,
   routeMeta,
-  scheduleItems,
-  sectionOptions,
   serviceLevels,
   siteBrand,
   termsPage,
-  tournamentPage,
   upcomingTournaments,
 } from "./siteData";
-import brandLogo from "./assets/chess-truck-logo.svg";
+import brandLogo from "./assets/chess-truck-logo.png";
 import campOnlineVisual from "./assets/camp-online.svg";
 import campOverviewVisual from "./assets/camp-overview.svg";
 import campPrepVisual from "./assets/camp-prep.svg";
@@ -45,7 +40,11 @@ import lessonOnlineVisual from "./assets/lesson-online.svg";
 import lessonPhoto from "./assets/private-lesson-visual.svg";
 import dojoMark from "./assets/dojo-mark.svg";
 import trophyBadge from "./assets/trophy-badge.svg";
-import { validateContactFields, validateRegistrationFields } from "./lib/validation.js";
+import {
+  validateCampBookingFields,
+  validateContactFields,
+  validateRegistrationFields,
+} from "./lib/validation.js";
 
 const REGISTRATION_DRAFT_KEY = "ct-registration-draft-v2";
 const phoneContact = contactNumbers[0];
@@ -80,6 +79,26 @@ const contactInitialState = {
   email: "",
   phone: "",
   message: "",
+  website: "",
+};
+
+const campCheckoutInitialState = {
+  status: "idle",
+  message: "",
+  details: null,
+  activeOption: "",
+};
+
+const campBookingInitialState = {
+  parentFirstName: "",
+  parentLastName: "",
+  email: "",
+  phone: "",
+  studentName: "",
+  studentAge: "",
+  studentLevel: "",
+  schedulePreference: "",
+  notes: "",
   website: "",
 };
 
@@ -145,6 +164,7 @@ const findFirstStepWithErrors = (errors) =>
 const knownRoutes = new Set([
   "/",
   "/camps",
+  "/camps/book",
   "/camps/training",
   "/camps/prep",
   "/camps/online",
@@ -165,13 +185,6 @@ const knownRoutes = new Set([
 
 const isCampsPath = (path) => path === "/camps" || path.startsWith("/camps/");
 const isLessonsPath = (path) => path === "/private-lessons" || path.startsWith("/lessons/");
-
-const formatCurrency = (amount) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(amount);
 
 const normalizePath = (path) => {
   if (!path || path === "/") {
@@ -520,7 +533,7 @@ function LessonSignalCarousel({ currentPath, navigate, intro = "Lesson launch op
 function PageHero({ eyebrow, title, intro, actions, aside, asideLink, portraitCaption, heroFacts, currentPath, navigate }) {
   const asideContent = aside || (
     <>
-      <span className="mini-tag mini-tag-dark">Event focus</span>
+      <span className="mini-tag mini-tag-dark">Camp focus</span>
       <h2>{featuredTournament.title}</h2>
       <p>{featuredTournament.shortSummary}</p>
       <div className="fact-list">
@@ -674,11 +687,7 @@ function SiteFooter({ currentPath, navigate }) {
             <div className="footer-brand-block">
               <div className="footer-brand-row">
                 <div className="footer-logo-wrap">
-                  <img src={brandLogo} alt="" className="footer-logo" />
-                </div>
-                <div className="footer-brand-text">
-                  <strong>{siteBrand.name}</strong>
-                  <span>{siteBrand.tagline}</span>
+                  <img src={brandLogo} alt={`${siteBrand.name} logo`} className="footer-logo" />
                 </div>
               </div>
               <p>{siteBrand.footerNote}</p>
@@ -971,45 +980,6 @@ function HomePage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow={homePage.audienceSection.eyebrow}
-            title={homePage.audienceSection.title}
-            intro={homePage.audienceSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {homePage.audienceCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={homePage.launchSection.eyebrow}
-            title={homePage.launchSection.title}
-            intro={homePage.launchSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {homePage.serviceCards.map((item) => (
-              <article className="surface card-link-card" key={item.path}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
-                  Open
-                </AppLink>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
             eyebrow={homePage.processSection.eyebrow}
             title={homePage.processSection.title}
             intro={homePage.processSection.intro}
@@ -1017,24 +987,6 @@ function HomePage({ currentPath, navigate }) {
           <div className="card-grid card-grid-three">
             {homePage.processCards.map((item) => (
               <article className="surface stat-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={homePage.whySection.eyebrow}
-            title={homePage.whySection.title}
-            intro={homePage.whySection.intro}
-          />
-          <div className="card-grid card-grid-two">
-            {homePage.whyCards.map((item) => (
-              <article className="surface" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
@@ -1076,11 +1028,11 @@ function AboutPage({ currentPath, navigate }) {
         heroFacts={aboutPage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
-        portraitCaption="A tournament should leave players proud and parents confident in how the day was run."
+        portraitCaption="Families should understand the offer quickly and know the next step without digging."
         actions={
           <>
-            <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              View Event Format
+            <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+              View Camps
             </AppLink>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
               Get Early Access
@@ -1171,8 +1123,8 @@ function AboutPage({ currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Join Early Access
               </AppLink>
-              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Review Events
+              <AppLink to="/private-lessons" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Review Lessons
               </AppLink>
             </div>
           </article>
@@ -1204,8 +1156,8 @@ function PrivateLessonsPage({ currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Ask About Lessons
               </AppLink>
-              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                See Tournament Side
+              <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                See Summer Camp
               </AppLink>
             </div>
           </div>
@@ -1408,7 +1360,12 @@ function PrivateLessonsPage({ currentPath, navigate }) {
   );
 }
 
-function CampsOverviewPage({ currentPath, navigate }) {
+function CampsOverviewPage({
+  currentPath,
+  navigate,
+  campCheckoutState = campCheckoutInitialState,
+  openCampBooking = () => {},
+}) {
   return (
     <>
       <section className="page-hero lesson-page-hero">
@@ -1508,6 +1465,58 @@ function CampsOverviewPage({ currentPath, navigate }) {
 
       <section className="page-section">
         <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.bookingSection.eyebrow}
+            title={campOverviewPage.bookingSection.title}
+            intro={campOverviewPage.bookingSection.intro}
+          />
+          <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
+
+          {campCheckoutState.status !== "idle" && (
+            <article className={`surface status-banner status-banner-${campCheckoutState.status}`}>
+              <strong>
+                {campCheckoutState.status === "loading" && "Opening secure checkout"}
+                {campCheckoutState.status === "success" && "Payment confirmed"}
+                {campCheckoutState.status === "cancelled" && "Checkout cancelled"}
+                {campCheckoutState.status === "error" && "Camp checkout could not start"}
+              </strong>
+              <p>{campCheckoutState.message}</p>
+            </article>
+          )}
+
+          <div className="camp-booking-grid">
+            {campOverviewPage.bookingCards.map((item) => {
+              const isLoading =
+                campCheckoutState.status === "loading" && campCheckoutState.activeOption === item.id;
+
+              return (
+                <article className="surface camp-booking-card" key={item.id}>
+                  <span className="mini-tag">{item.eyebrow}</span>
+                  <h3>{item.title}</h3>
+                  <p className="camp-booking-price">{item.price}</p>
+                  <ul className="camp-booking-list">
+                    {item.details.map((detail) => (
+                      <li key={detail}>{detail}</li>
+                    ))}
+                  </ul>
+                  <p className="camp-booking-availability">{item.availability}</p>
+                  <button
+                    type="button"
+                    className="btn btn-primary camp-booking-button"
+                    onClick={() => openCampBooking(item.id)}
+                    disabled={campCheckoutState.status === "loading"}
+                  >
+                    {isLoading ? "Opening checkout..." : item.cta}
+                  </button>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
           <div className="camp-map-grid">
             <article className="surface camp-map-copy">
               <SectionIntro
@@ -1576,45 +1585,6 @@ function CampsOverviewPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow={campOverviewPage.parentSection.eyebrow}
-            title={campOverviewPage.parentSection.title}
-            intro={campOverviewPage.parentSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {campOverviewPage.parentReasons.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={campOverviewPage.formatSection.eyebrow}
-            title={campOverviewPage.formatSection.title}
-            intro={campOverviewPage.formatSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {campOverviewPage.cards.map((item) => (
-              <article className="surface card-link-card" key={item.path}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
-                  Explore this format
-                </AppLink>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
             eyebrow={campOverviewPage.faqSection.eyebrow}
             title={campOverviewPage.faqSection.title}
             intro={campOverviewPage.faqSection.intro}
@@ -1654,7 +1624,7 @@ function CampsOverviewPage({ currentPath, navigate }) {
 function CampDetailHero({ page, currentPath, navigate }) {
   const heroImageMap = {
     "Training Camps": campTrainingVisual,
-    "Tournament Prep Camps": campPrepVisual,
+    "Advanced Training Camps": campPrepVisual,
     "Online Camps": campOnlineVisual,
   };
 
@@ -1708,6 +1678,314 @@ function CampDetailHero({ page, currentPath, navigate }) {
         </article>
       </div>
     </section>
+  );
+}
+
+function CampBookingPage({
+  currentPath,
+  navigate,
+  routeSearch,
+  campBookingState,
+  campBookingErrors,
+  updateCampBookingField,
+  handleCampBookingSubmit,
+  campCheckoutState,
+}) {
+  const searchParams = new URLSearchParams(routeSearch);
+  const requestedOptionId = searchParams.get("option");
+  const selectedOption =
+    campOverviewPage.bookingCards.find((item) => item.id === requestedOptionId) ||
+    campOverviewPage.bookingCards[0];
+
+  const selectedLabel =
+    selectedOption.id === "full-week" ? "Preferred week" : "Preferred day";
+  const selectedPlaceholder =
+    selectedOption.id === "full-week"
+      ? "Example: Week of June 16"
+      : "Example: June 18";
+
+  return (
+    <>
+      <section className="page-hero lesson-page-hero">
+        <div className="shell booking-page-hero">
+          <div className="booking-page-copy">
+            <span className="section-tag">{campBookingPage.eyebrow}</span>
+            <h1>{campBookingPage.title}</h1>
+            <p className="page-intro">{campBookingPage.intro}</p>
+            <div className="lesson-chip-row">
+              {campBookingPage.chips.map((item) => (
+                <span key={item} className="lesson-chip">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="cta-row">
+            {campOverviewPage.bookingCards.map((item) => (
+              <AppLink
+                key={item.id}
+                to={`/camps/book?option=${item.id}`}
+                navigate={navigate}
+                currentPath={currentPath}
+                className={`btn ${
+                  selectedOption.id === item.id ? "btn-primary" : "btn-secondary"
+                }`}
+              >
+                {item.cta}
+              </AppLink>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell register-layout camp-booking-layout">
+          <form
+            className="surface registration-form camp-booking-form"
+            onSubmit={(event) => handleCampBookingSubmit(event, selectedOption.id)}
+          >
+            <div className="form-header">
+              <span className="mini-tag">{selectedOption.eyebrow}</span>
+              <h2>{campBookingPage.formTitle}</h2>
+              <p>{campBookingPage.formIntro}</p>
+            </div>
+
+            {campCheckoutState.status !== "idle" && (
+              <article className={`surface status-banner status-banner-${campCheckoutState.status}`}>
+                <strong>
+                  {campCheckoutState.status === "loading" && "Opening secure checkout"}
+                  {campCheckoutState.status === "success" && "Payment confirmed"}
+                  {campCheckoutState.status === "cancelled" && "Checkout cancelled"}
+                  {campCheckoutState.status === "error" && "Camp checkout could not start"}
+                </strong>
+                <p>{campCheckoutState.message}</p>
+              </article>
+            )}
+
+            <div className="form-section">
+              <div className="form-section-head">
+                <div className="section-count">01</div>
+                <div>
+                  <h3>{campBookingPage.sections[0].title}</h3>
+                  <p>{campBookingPage.sections[0].intro}</p>
+                </div>
+              </div>
+              <div className="field-grid">
+                <label className="field">
+                  <span>Parent first name</span>
+                  <input
+                    type="text"
+                    name="parentFirstName"
+                    value={campBookingState.parentFirstName}
+                    onChange={(event) => updateCampBookingField("parentFirstName", event.target.value)}
+                    autoComplete="given-name"
+                  />
+                  {campBookingErrors.parentFirstName ? (
+                    <span className="field-error">{campBookingErrors.parentFirstName}</span>
+                  ) : null}
+                </label>
+                <label className="field">
+                  <span>Parent last name</span>
+                  <input
+                    type="text"
+                    name="parentLastName"
+                    value={campBookingState.parentLastName}
+                    onChange={(event) => updateCampBookingField("parentLastName", event.target.value)}
+                    autoComplete="family-name"
+                  />
+                  {campBookingErrors.parentLastName ? (
+                    <span className="field-error">{campBookingErrors.parentLastName}</span>
+                  ) : null}
+                </label>
+                <label className="field">
+                  <span>Email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={campBookingState.email}
+                    onChange={(event) => updateCampBookingField("email", event.target.value)}
+                    autoComplete="email"
+                    inputMode="email"
+                  />
+                  {campBookingErrors.email ? (
+                    <span className="field-error">{campBookingErrors.email}</span>
+                  ) : null}
+                </label>
+                <label className="field">
+                  <span>Phone</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={campBookingState.phone}
+                    onChange={(event) => updateCampBookingField("phone", event.target.value)}
+                    autoComplete="tel"
+                    inputMode="tel"
+                  />
+                  {campBookingErrors.phone ? (
+                    <span className="field-error">{campBookingErrors.phone}</span>
+                  ) : null}
+                </label>
+              </div>
+            </div>
+
+            <div className="form-section">
+              <div className="form-section-head">
+                <div className="section-count">02</div>
+                <div>
+                  <h3>{campBookingPage.sections[1].title}</h3>
+                  <p>{campBookingPage.sections[1].intro}</p>
+                </div>
+              </div>
+              <div className="field-grid">
+                <label className="field">
+                  <span>Student name</span>
+                  <input
+                    type="text"
+                    name="studentName"
+                    value={campBookingState.studentName}
+                    onChange={(event) => updateCampBookingField("studentName", event.target.value)}
+                    autoComplete="off"
+                  />
+                  {campBookingErrors.studentName ? (
+                    <span className="field-error">{campBookingErrors.studentName}</span>
+                  ) : null}
+                </label>
+                <label className="field">
+                  <span>Student age or grade</span>
+                  <input
+                    type="text"
+                    name="studentAge"
+                    value={campBookingState.studentAge}
+                    onChange={(event) => updateCampBookingField("studentAge", event.target.value)}
+                    placeholder="Example: Age 9 or Grade 4"
+                    autoComplete="off"
+                  />
+                  {campBookingErrors.studentAge ? (
+                    <span className="field-error">{campBookingErrors.studentAge}</span>
+                  ) : null}
+                </label>
+                <label className="field field-span-2">
+                  <span>Current level</span>
+                  <input
+                    type="text"
+                    name="studentLevel"
+                    value={campBookingState.studentLevel}
+                    onChange={(event) => updateCampBookingField("studentLevel", event.target.value)}
+                    placeholder="Example: Beginner, improving, tournament player"
+                    autoComplete="off"
+                  />
+                  {campBookingErrors.studentLevel ? (
+                    <span className="field-error">{campBookingErrors.studentLevel}</span>
+                  ) : null}
+                </label>
+              </div>
+            </div>
+
+            <div className="form-section">
+              <div className="form-section-head">
+                <div className="section-count">03</div>
+                <div>
+                  <h3>{campBookingPage.sections[2].title}</h3>
+                  <p>{campBookingPage.sections[2].intro}</p>
+                </div>
+              </div>
+              <div className="field-grid">
+                <label className="field">
+                  <span>{selectedLabel}</span>
+                  <input
+                    type="text"
+                    name="schedulePreference"
+                    value={campBookingState.schedulePreference}
+                    onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
+                    placeholder={selectedPlaceholder}
+                    autoComplete="off"
+                  />
+                  {campBookingErrors.schedulePreference ? (
+                    <span className="field-error">{campBookingErrors.schedulePreference}</span>
+                  ) : null}
+                </label>
+                <label className="field field-span-2">
+                  <span>Notes</span>
+                  <textarea
+                    name="notes"
+                    value={campBookingState.notes}
+                    onChange={(event) => updateCampBookingField("notes", event.target.value)}
+                    placeholder="Anything we should know before you continue to payment?"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <label className="honeypot-field" aria-hidden="true">
+              Website
+              <input
+                type="text"
+                tabIndex="-1"
+                autoComplete="off"
+                value={campBookingState.website}
+                onChange={(event) => updateCampBookingField("website", event.target.value)}
+              />
+            </label>
+
+            <div className="submit-actions">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={campCheckoutState.status === "loading"}
+              >
+                {campCheckoutState.status === "loading" ? "Opening checkout..." : "Continue to secure checkout"}
+              </button>
+              <p className="field-note">{campBookingPage.siblingNote}</p>
+            </div>
+          </form>
+
+          <aside className="register-sidebar">
+            <div className="summary-card">
+              <article className="surface summary-card-block">
+                <span className="mini-tag">{selectedOption.eyebrow}</span>
+                <h2>{selectedOption.title}</h2>
+                <p className="camp-booking-price">{selectedOption.price}</p>
+                <div className="summary-list">
+                  <div>
+                    <span>Dates</span>
+                    <strong>June 15 - August 21</strong>
+                  </div>
+                  <div>
+                    <span>Location</span>
+                    <strong>House of Chess and Checkers, Central Park</strong>
+                  </div>
+                  <div>
+                    <span>Format</span>
+                    <strong>{selectedOption.id === "full-week" ? "Weekly block" : "Single camp day"}</strong>
+                  </div>
+                </div>
+                <ul className="camp-booking-list">
+                  {selectedOption.details.map((detail) => (
+                    <li key={detail}>{detail}</li>
+                  ))}
+                </ul>
+                <p className="camp-booking-availability">{selectedOption.availability}</p>
+              </article>
+
+              <article className="surface summary-card-block">
+                <span className="mini-tag">{campBookingPage.supportTitle}</span>
+                <p>{campBookingPage.supportText}</p>
+                <div className="summary-list">
+                  <div>
+                    <span>Call or text</span>
+                    <strong>{contactNumbers.join(" / ")}</strong>
+                  </div>
+                  <div>
+                    <span>Email</span>
+                    <strong>{emailContact}</strong>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -1883,321 +2161,11 @@ function LessonDetailPage({ page, currentPath, navigate }) {
 }
 
 function EventsPage({ currentPath, navigate }) {
-  return (
-    <>
-      <PageHero
-        eyebrow={eventsPage.eyebrow}
-        title={eventsPage.title}
-        intro={eventsPage.intro}
-        heroFacts={eventsPage.heroFacts}
-        currentPath={currentPath}
-        navigate={navigate}
-        portraitCaption="The event should feel welcoming for newer players and serious enough for experienced competitors."
-        actions={
-          <>
-            <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              Review Tournament Format
-            </AppLink>
-            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Join Early Access
-            </AppLink>
-          </>
-        }
-      />
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={eventsPage.offerSection.eyebrow}
-            title={eventsPage.offerSection.title}
-            intro={eventsPage.offerSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {eventsPage.offerCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={eventsPage.detailSection.eyebrow}
-            title={eventsPage.detailSection.title}
-            intro={eventsPage.detailSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {eventsPage.detailCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell two-column">
-          <article className="surface feature-event-card">
-            <span className="mini-tag">Featured event</span>
-            <h3>{featuredTournament.title}</h3>
-            <p>{featuredTournament.shortSummary}</p>
-            <div className="fact-list fact-list-compact">
-              <div>
-                <span>Location</span>
-                <strong>{featuredTournament.city}</strong>
-              </div>
-              <div>
-                <span>Schedule</span>
-                <strong>{featuredTournament.scheduleLabel}</strong>
-              </div>
-              <div>
-                <span>Launch status</span>
-                <strong>First dates announced soon</strong>
-              </div>
-            </div>
-            <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="text-link">
-              Open event page
-            </AppLink>
-          </article>
-
-          <article className="surface">
-            <span className="mini-tag">Before registration opens</span>
-            <h3>What families can already confirm now</h3>
-            <ul className="checklist">
-              {policyItems.slice(0, 4).map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={eventsPage.sampleSection.eyebrow}
-            title={eventsPage.sampleSection.title}
-            intro={eventsPage.sampleSection.intro}
-          />
-          <div className="camp-schedule-grid">
-            {eventsPage.sampleSchedule.map((item) => (
-              <article className="surface camp-schedule-item" key={`${item.time}-${item.title}`}>
-                <span className="camp-schedule-time">{item.time}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Launch board"
-            title="What opens first"
-            intro="The format is already clear. The first public release is next."
-          />
-          <UpcomingTournamentList currentPath={currentPath} navigate={navigate} />
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Divisions"
-            title="A clear difference between Open and Beginner"
-            intro="Know the fit before the first date goes live."
-          />
-          <div className="card-grid card-grid-two">
-            {sectionOptions.map((item) => (
-              <article className="surface" key={item.id}>
-                <span className="mini-tag">{item.badge}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <ul className="checklist">
-                  {item.bullets.map((bullet) => (
-                    <li key={bullet}>{bullet}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Why parents move early"
-            title="Why this page is already useful before dates go live"
-            intro="Parents should be able to judge fit, format, and next step before registration opens."
-          />
-          <div className="card-grid card-grid-three">
-            {eventsPage.supportCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <article className="surface lesson-detail-cta">
-            <span className="section-tag">Ready for the first release?</span>
-            <h3>{eventsPage.ctaTitle}</h3>
-            <p>{eventsPage.ctaText}</p>
-            <div className="cta-row">
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Join Early Access
-              </AppLink>
-              <AppLink to="/events/chess-and-truck-tournament" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Review Event Format
-              </AppLink>
-            </div>
-          </article>
-        </div>
-      </section>
-    </>
-  );
+  return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
 }
 
 function TournamentDetailPage({ currentPath, navigate }) {
-  return (
-    <>
-      <PageHero
-        eyebrow={tournamentPage.eyebrow}
-        title={tournamentPage.title}
-        intro={tournamentPage.intro}
-        currentPath={currentPath}
-        navigate={navigate}
-        portraitCaption="Tournament mornings should end with real energy, earned confidence, and memorable moments for players."
-        actions={
-          <>
-            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              Get Early Access
-            </AppLink>
-            <AppLink to="/faq" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Review FAQ
-            </AppLink>
-          </>
-        }
-        aside={
-          <>
-            <span className="mini-tag mini-tag-dark">At a glance</span>
-            <h2>Event overview</h2>
-            <p>{featuredTournament.longSummary}</p>
-            <div className="fact-list">
-              {tournamentPage.atAGlance.map((item) => (
-                <div key={item.label}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              ))}
-            </div>
-          </>
-        }
-      />
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Sections"
-            title="Two divisions, explained clearly"
-            intro="Know the right fit first."
-          />
-          <div className="card-grid card-grid-two">
-            {sectionOptions.map((item) => (
-              <article className="surface" key={item.id}>
-                <span className="mini-tag">{item.badge}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <ul className="checklist">
-                  {item.bullets.map((bullet) => (
-                    <li key={bullet}>{bullet}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Tournament morning"
-            title="The Saturday flow is already clear"
-            intro="The first public date is pending. The structure is not."
-          />
-          <div className="card-grid card-grid-two">
-            {scheduleItems.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow="Training add-on"
-            title="Master Training Dojo"
-            intro="Extra coaching around tournament day."
-          />
-          <DojoFeature currentPath={currentPath} navigate={navigate} />
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell two-column">
-          <article className="surface">
-            <SectionIntro
-              eyebrow="Service levels"
-              title="Pricing before checkout"
-              intro="See the price before you pay."
-            />
-            <div className="service-stack">
-              {serviceLevels.map((item) => (
-                <article className="service-card" key={item.id}>
-                  <div>
-                    <h3>{item.label}</h3>
-                    <p>{item.description}</p>
-                  </div>
-                  <strong>{formatCurrency(item.amount)}</strong>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <article className="surface">
-            <SectionIntro
-              eyebrow="Registration checklist"
-              title="What to have ready"
-              intro="Have this ready before you start."
-            />
-            <ul className="checklist">
-              {tournamentPage.checklist.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-        </div>
-      </section>
-    </>
-  );
+  return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
 }
 
 function FaqPage({ currentPath, navigate }) {
@@ -2311,7 +2279,7 @@ function ContactPage({ currentPath, navigate, contactState, contactSubmitState, 
         heroFacts={contactPage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
-        portraitCaption="Quick, direct support helps families feel ready before launch and before tournament day."
+        portraitCaption="Quick, direct support helps families feel ready before camp starts and before lessons open."
       />
 
       <section className="page-section">
@@ -2398,8 +2366,8 @@ function ContactPage({ currentPath, navigate, contactState, contactSubmitState, 
               <a href={phoneContact.href} className="btn btn-primary">
                 Call / Text {phoneContact.display}
               </a>
-              <AppLink to="/events" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Review Events
+              <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Review Camps
               </AppLink>
             </div>
           </article>
@@ -2451,512 +2419,8 @@ function MobileRegistrationProgress({
 function RegisterPage({
   currentPath,
   navigate,
-  registrationState,
-  registrationErrors,
-  updateRegistrationField,
-  handleRegistrationSubmit,
-  paymentState,
-  selectedServiceLevel,
-  clearRegistrationDraft,
-  isCompactViewport,
-  activeRegistrationStep,
-  setActiveRegistrationStep,
-  goToNextRegistrationStep,
-  goToPreviousRegistrationStep,
 }) {
-  const isMobileRegistrationFlow = isCompactViewport;
-
-  const renderSectionActions = (stepIndex) => {
-    if (!isMobileRegistrationFlow || stepIndex === registrationStepDefinitions.length - 1) {
-      return null;
-    }
-
-    return (
-      <div className="mobile-step-actions">
-        {stepIndex > 0 ? (
-          <button type="button" className="btn btn-secondary" onClick={goToPreviousRegistrationStep}>
-            Back
-          </button>
-        ) : null}
-        <button type="button" className="btn btn-primary" onClick={goToNextRegistrationStep}>
-          Continue to {registrationStepDefinitions[stepIndex + 1].shortTitle}
-        </button>
-      </div>
-    );
-  };
-
-  return (
-    <>
-      <PageHero
-        eyebrow={registerPage.eyebrow}
-        title={registerPage.title}
-        intro={registerPage.intro}
-        currentPath={currentPath}
-        navigate={navigate}
-        portraitCaption="The registration flow should feel just as calm and clear as the event itself."
-        actions={
-          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-            Need help before paying?
-          </AppLink>
-        }
-      />
-
-      <section className="page-section">
-        <div className="shell">
-          {paymentState.status !== "idle" ? (
-            <article className={`status-banner status-banner-${paymentState.status}`}>
-              <strong>
-                {paymentState.status === "success"
-                  ? "Payment confirmed"
-                  : paymentState.status === "cancelled"
-                    ? "Checkout cancelled"
-                    : paymentState.status === "loading"
-                      ? "Preparing checkout"
-                      : "Registration needs attention"}
-              </strong>
-              <p>
-                {paymentState.status === "success" && paymentState.details
-                  ? `Payment confirmed for ${paymentState.details.playerName}. Reference ${paymentState.details.reference}. A Stripe receipt was sent to ${paymentState.details.customerEmail}.`
-                  : paymentState.status === "loading"
-                    ? "Preparing secure Stripe checkout..."
-                    : paymentState.message}
-              </p>
-            </article>
-          ) : null}
-
-          <div className="register-layout">
-            <form className="surface registration-form" onSubmit={handleRegistrationSubmit} noValidate>
-              <div className="form-header">
-                <span className="mini-tag">Tournament registration</span>
-                <h2>Chess &amp; Truck Tournament Registration Form</h2>
-                <p>
-                  Please provide player and parent information. The tournament section and service
-                  level are selected inside this form before payment.
-                </p>
-                <small className="status-copy">{registerPage.draftNote}</small>
-              </div>
-
-              {isMobileRegistrationFlow ? (
-                <MobileRegistrationProgress
-                  activeRegistrationStep={activeRegistrationStep}
-                  setActiveRegistrationStep={setActiveRegistrationStep}
-                  registrationErrors={registrationErrors}
-                />
-              ) : null}
-
-              {!isMobileRegistrationFlow || activeRegistrationStep === 0 ? (
-              <section className="form-section">
-                <div className="form-section-head">
-                  <span className="step-chip">01</span>
-                  <div>
-                    <h3>Contact Information</h3>
-                    <p>The primary account details for the family completing the registration.</p>
-                  </div>
-                </div>
-
-                <div className="field-grid">
-                  <label className="field">
-                    <span>First Name *</span>
-                    <input
-                      name="firstName"
-                      value={registrationState.firstName}
-                      onChange={updateRegistrationField}
-                      placeholder="First name"
-                      autoComplete="given-name"
-                    />
-                    {registrationErrors.firstName ? <small className="field-error">{registrationErrors.firstName}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Last Name *</span>
-                    <input
-                      name="lastName"
-                      value={registrationState.lastName}
-                      onChange={updateRegistrationField}
-                      placeholder="Last name"
-                      autoComplete="family-name"
-                    />
-                    {registrationErrors.lastName ? <small className="field-error">{registrationErrors.lastName}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Phone *</span>
-                    <input
-                      name="phone"
-                      type="tel"
-                      value={registrationState.phone}
-                      onChange={updateRegistrationField}
-                      placeholder="+1 ..."
-                      autoComplete="tel"
-                      inputMode="tel"
-                    />
-                    {registrationErrors.phone ? <small className="field-error">{registrationErrors.phone}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Email *</span>
-                    <input
-                      name="email"
-                      type="email"
-                      value={registrationState.email}
-                      onChange={updateRegistrationField}
-                      placeholder="family@example.com"
-                      autoComplete="email"
-                    />
-                    {registrationErrors.email ? <small className="field-error">{registrationErrors.email}</small> : null}
-                  </label>
-
-                  <label className="field field-span-2">
-                    <span>Additional Emails</span>
-                    <input
-                      name="additionalEmails"
-                      value={registrationState.additionalEmails}
-                      onChange={updateRegistrationField}
-                      placeholder="Add any other addresses that should receive confirmations"
-                      autoComplete="off"
-                    />
-                    {registrationErrors.additionalEmails ? <small className="field-error">{registrationErrors.additionalEmails}</small> : null}
-                  </label>
-
-                  <label className="field field-span-2 honeypot-field" aria-hidden="true" tabIndex="-1">
-                    <span>Website</span>
-                    <input
-                      name="website"
-                      value={registrationState.website}
-                      onChange={updateRegistrationField}
-                      autoComplete="off"
-                      tabIndex="-1"
-                    />
-                  </label>
-
-                  <label className="checkbox-field field-span-2">
-                    <input
-                      name="acceptSms"
-                      type="checkbox"
-                      checked={registrationState.acceptSms}
-                      onChange={updateRegistrationField}
-                    />
-                    <span>
-                      I accept the{" "}
-                      <AppLink to="/terms" navigate={navigate} currentPath={currentPath} className="inline-link">
-                        Terms of Service
-                      </AppLink>{" "}
-                      and{" "}
-                      <AppLink to="/privacy" navigate={navigate} currentPath={currentPath} className="inline-link">
-                        Privacy Policy
-                      </AppLink>{" "}
-                      and agree to receive transactional or informational SMS communications related
-                      to reminders, customer care, and registration follow-up.
-                    </span>
-                  </label>
-                  {registrationErrors.acceptSms ? <small className="field-error field-span-2">{registrationErrors.acceptSms}</small> : null}
-                </div>
-                {renderSectionActions(0)}
-              </section>
-              ) : null}
-
-              {!isMobileRegistrationFlow || activeRegistrationStep === 1 ? (
-              <section className="form-section">
-                <div className="form-section-head">
-                  <span className="step-chip">02</span>
-                  <div>
-                    <h3>Player Information</h3>
-                    <p>Choose the correct division and service level for the player.</p>
-                  </div>
-                </div>
-
-                <div className="field-grid">
-                  <label className="field">
-                    <span>Player First Name *</span>
-                    <input
-                      name="playerFirstName"
-                      value={registrationState.playerFirstName}
-                      onChange={updateRegistrationField}
-                      placeholder="Player first name"
-                      autoComplete="given-name"
-                    />
-                    {registrationErrors.playerFirstName ? <small className="field-error">{registrationErrors.playerFirstName}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Player Last Name *</span>
-                    <input
-                      name="playerLastName"
-                      value={registrationState.playerLastName}
-                      onChange={updateRegistrationField}
-                      placeholder="Player last name"
-                      autoComplete="family-name"
-                    />
-                    {registrationErrors.playerLastName ? <small className="field-error">{registrationErrors.playerLastName}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Player Grade *</span>
-                    <input name="playerGrade" value={registrationState.playerGrade} onChange={updateRegistrationField} placeholder="Grade" />
-                    {registrationErrors.playerGrade ? <small className="field-error">{registrationErrors.playerGrade}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>School Name</span>
-                    <input name="schoolName" value={registrationState.schoolName} onChange={updateRegistrationField} placeholder="Optional, used for team scoring" />
-                  </label>
-
-                  <label className="field">
-                    <span>Section *</span>
-                    <select name="section" value={registrationState.section} onChange={updateRegistrationField}>
-                      <option value="">Select section</option>
-                      <option value="Open">Open</option>
-                      <option value="Beginner">Beginner</option>
-                    </select>
-                    {registrationErrors.section ? <small className="field-error">{registrationErrors.section}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Service Level *</span>
-                    <select name="serviceLevel" value={registrationState.serviceLevel} onChange={updateRegistrationField}>
-                      <option value="">Select service level</option>
-                      {serviceLevels.map((item) => (
-                        <option key={item.id} value={item.id}>
-                          {item.label} - {formatCurrency(item.amount)}
-                        </option>
-                      ))}
-                    </select>
-                    {registrationErrors.serviceLevel ? <small className="field-error">{registrationErrors.serviceLevel}</small> : null}
-                  </label>
-
-                  <label className="field field-span-2">
-                    <span>USCF ID</span>
-                    <input
-                      name="uscfId"
-                      value={registrationState.uscfId}
-                      onChange={updateRegistrationField}
-                      placeholder="Required for the Open section"
-                      autoComplete="off"
-                    />
-                    <small className="field-note">
-                      Players in the Open section need an active USCF membership. Leave this blank
-                      if the player is registering for Beginner. Join or renew at{" "}
-                      <a href="https://new.uschess.org/" target="_blank" rel="noreferrer">
-                        uschess.org
-                      </a>
-                      .
-                    </small>
-                    {registrationErrors.uscfId ? <small className="field-error">{registrationErrors.uscfId}</small> : null}
-                  </label>
-                </div>
-                {renderSectionActions(1)}
-              </section>
-              ) : null}
-
-              {!isMobileRegistrationFlow || activeRegistrationStep === 2 ? (
-              <section className="form-section">
-                <div className="form-section-head">
-                  <span className="step-chip">03</span>
-                  <div>
-                    <h3>Parent / Guardian Information</h3>
-                    <p>The primary adult contact for tournament communications.</p>
-                  </div>
-                </div>
-
-                <div className="field-grid">
-                  <label className="field">
-                    <span>Parent / Guardian Name *</span>
-                    <input
-                      name="parentName"
-                      value={registrationState.parentName}
-                      onChange={updateRegistrationField}
-                      placeholder="Parent or guardian name"
-                      autoComplete="name"
-                    />
-                    {registrationErrors.parentName ? <small className="field-error">{registrationErrors.parentName}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Parent Email *</span>
-                    <input
-                      name="parentEmail"
-                      type="email"
-                      value={registrationState.parentEmail}
-                      onChange={updateRegistrationField}
-                      placeholder="parent@example.com"
-                      autoComplete="email"
-                    />
-                    {registrationErrors.parentEmail ? <small className="field-error">{registrationErrors.parentEmail}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Parent Phone *</span>
-                    <input
-                      name="parentPhone"
-                      type="tel"
-                      value={registrationState.parentPhone}
-                      onChange={updateRegistrationField}
-                      placeholder="+1 ..."
-                      autoComplete="tel"
-                      inputMode="tel"
-                    />
-                    {registrationErrors.parentPhone ? <small className="field-error">{registrationErrors.parentPhone}</small> : null}
-                  </label>
-                </div>
-                {renderSectionActions(2)}
-              </section>
-              ) : null}
-
-              {!isMobileRegistrationFlow || activeRegistrationStep === 3 ? (
-              <section className="form-section">
-                <div className="form-section-head">
-                  <span className="step-chip">04</span>
-                  <div>
-                    <h3>Emergency Contact</h3>
-                    <p>Backup contact details for tournament-day communication.</p>
-                  </div>
-                </div>
-
-                <div className="field-grid">
-                  <label className="field">
-                    <span>Emergency Contact Name *</span>
-                    <input
-                      name="emergencyName"
-                      value={registrationState.emergencyName}
-                      onChange={updateRegistrationField}
-                      placeholder="Emergency contact name"
-                      autoComplete="name"
-                    />
-                    {registrationErrors.emergencyName ? <small className="field-error">{registrationErrors.emergencyName}</small> : null}
-                  </label>
-
-                  <label className="field">
-                    <span>Emergency Contact Phone *</span>
-                    <input
-                      name="emergencyPhone"
-                      type="tel"
-                      value={registrationState.emergencyPhone}
-                      onChange={updateRegistrationField}
-                      placeholder="+1 ..."
-                      autoComplete="tel"
-                      inputMode="tel"
-                    />
-                    {registrationErrors.emergencyPhone ? <small className="field-error">{registrationErrors.emergencyPhone}</small> : null}
-                  </label>
-                </div>
-                {renderSectionActions(3)}
-              </section>
-              ) : null}
-
-              {!isMobileRegistrationFlow || activeRegistrationStep === 4 ? (
-              <section className="form-section">
-                <div className="form-section-head">
-                  <span className="step-chip">05</span>
-                  <div>
-                    <h3>Medical Information</h3>
-                    <p>List allergies, medications, conditions, or anything staff should know.</p>
-                  </div>
-                </div>
-
-                <div className="field-grid">
-                  <label className="field field-span-2">
-                    <span>Medical Information *</span>
-                    <textarea
-                      name="medicalInfo"
-                      value={registrationState.medicalInfo}
-                      onChange={updateRegistrationField}
-                      rows="4"
-                      placeholder="Allergies, medical conditions, medications, or notes for staff"
-                    />
-                    {registrationErrors.medicalInfo ? <small className="field-error">{registrationErrors.medicalInfo}</small> : null}
-                  </label>
-                </div>
-              </section>
-              ) : null}
-
-              {!isMobileRegistrationFlow || activeRegistrationStep === registrationStepDefinitions.length - 1 ? (
-              <div className={`submit-actions${isMobileRegistrationFlow ? " submit-actions-mobile" : ""}`}>
-                {isMobileRegistrationFlow && activeRegistrationStep > 0 ? (
-                  <button type="button" className="btn btn-secondary" onClick={goToPreviousRegistrationStep}>
-                    Back
-                  </button>
-                ) : null}
-                <button type="submit" className="btn btn-primary btn-full" disabled={paymentState.status === "loading"}>
-                  {paymentState.status === "loading" ? "Preparing Checkout..." : "Continue to Secure Payment"}
-                </button>
-              </div>
-              ) : null}
-
-              <small className={`status-copy status-${paymentState.status}`} aria-live="polite">
-                {paymentState.status === "idle"
-                  ? "Complete the form, then continue to secure payment through Stripe."
-                  : paymentState.status === "loading"
-                    ? "Preparing secure Stripe checkout..."
-                    : paymentState.message}
-              </small>
-            </form>
-
-            <aside className="register-sidebar">
-              <article className="surface summary-card">
-                <span className="mini-tag">Registration summary</span>
-                <h3>{featuredTournament.title}</h3>
-                <p>
-                  {featuredTournament.city}. {featuredTournament.scheduleLabel}. Stripe handles the
-                  final payment step after the form is complete.
-                </p>
-
-                <div className="summary-list">
-                  <div>
-                    <span>Section</span>
-                    <strong>{registrationState.section || "Not selected yet"}</strong>
-                  </div>
-                  <div>
-                    <span>Service level</span>
-                    <strong>{selectedServiceLevel?.label || "Not selected yet"}</strong>
-                  </div>
-                  <div>
-                    <span>Player</span>
-                    <strong>
-                      {registrationState.playerFirstName || registrationState.playerLastName
-                        ? `${registrationState.playerFirstName} ${registrationState.playerLastName}`.trim()
-                        : "Player details pending"}
-                    </strong>
-                  </div>
-                  <div>
-                    <span>Total</span>
-                    <strong>{selectedServiceLevel ? formatCurrency(selectedServiceLevel.amount) : "$0"}</strong>
-                  </div>
-                </div>
-                <button type="button" className="btn btn-secondary btn-full" onClick={clearRegistrationDraft}>
-                  Clear Saved Draft
-                </button>
-              </article>
-
-              <article className="surface surface-dark sidebar-card">
-                <span className="mini-tag mini-tag-dark">Before you submit</span>
-                <h3>Quick reminders</h3>
-                <ul className="checklist checklist-light">
-                  {registerPage.sidebarNotes.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-
-              <article className="surface">
-                <span className="mini-tag">Service levels</span>
-                <div className="service-stack">
-                  {serviceLevels.map((item) => (
-                    <article className="service-card" key={item.id}>
-                      <div>
-                        <h3>{item.label}</h3>
-                        <p>{item.description}</p>
-                      </div>
-                      <strong>{formatCurrency(item.amount)}</strong>
-                    </article>
-                  ))}
-                </div>
-              </article>
-            </aside>
-          </div>
-        </div>
-      </section>
-    </>
-  );
+  return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
 }
 
 function NotFoundPage({ currentPath, navigate }) {
@@ -2982,6 +2446,9 @@ function ChessTruckApp() {
   const [registrationState, setRegistrationState] = useState(registrationInitialState);
   const [registrationErrors, setRegistrationErrors] = useState({});
   const [paymentState, setPaymentState] = useState({ status: "idle", message: "", details: null });
+  const [campCheckoutState, setCampCheckoutState] = useState(campCheckoutInitialState);
+  const [campBookingState, setCampBookingState] = useState(campBookingInitialState);
+  const [campBookingErrors, setCampBookingErrors] = useState({});
   const [contactState, setContactState] = useState(contactInitialState);
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
   const [hasLoadedRegistrationDraft, setHasLoadedRegistrationDraft] = useState(false);
@@ -3111,6 +2578,76 @@ function ChessTruckApp() {
 
     return () => window.cancelAnimationFrame(focusTimer);
   }, [currentPath]);
+
+  useEffect(() => {
+    if (currentPath !== "/camps" && currentPath !== "/camps/book") {
+      return;
+    }
+
+    const currentUrl = new URL(window.location.href);
+    const payment = currentUrl.searchParams.get("payment");
+    const sessionId = currentUrl.searchParams.get("session_id");
+
+    if (!payment) {
+      return;
+    }
+
+    currentUrl.searchParams.delete("payment");
+    currentUrl.searchParams.delete("session_id");
+    const cleanedSearch = currentUrl.searchParams.toString();
+    const cleanedUrl = `${currentPath}${cleanedSearch ? `?${cleanedSearch}` : ""}`;
+
+    window.history.replaceState({}, "", cleanedUrl);
+    setRoute({ pathname: currentPath, search: cleanedSearch ? `?${cleanedSearch}` : "" });
+
+    if (payment === "cancel") {
+      setCampCheckoutState({
+        status: "cancelled",
+        message:
+          "Checkout was cancelled. You can return to camp booking whenever you are ready.",
+        details: null,
+        activeOption: "",
+      });
+      return;
+    }
+
+    if (payment === "success" && sessionId) {
+      setCampCheckoutState({ status: "loading", message: "", details: null, activeOption: "" });
+
+      fetch("/api/checkout-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      })
+        .then(async (response) => {
+          const payload = await response.json().catch(() => ({}));
+
+          if (!response.ok || payload.status !== "paid") {
+            throw new Error(payload.error || "Payment confirmation could not be verified yet.");
+          }
+
+          setCampCheckoutState({
+            status: "success",
+            message:
+              payload.message ||
+              "Camp payment confirmed. We will follow up with the next registration details.",
+            details: payload,
+            activeOption: "",
+          });
+        })
+        .catch((error) => {
+          setCampCheckoutState({
+            status: "error",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Payment confirmation could not be verified yet.",
+            details: null,
+            activeOption: "",
+          });
+        });
+    }
+  }, [currentPath, route.search]);
 
   useEffect(() => {
     if (currentPath !== "/register") {
@@ -3244,6 +2781,20 @@ function ChessTruckApp() {
     }
   };
 
+  const updateCampBookingField = (name, value) => {
+    setCampBookingState((current) => ({ ...current, [name]: value }));
+
+    setCampBookingErrors((current) => {
+      const next = { ...current };
+      delete next[name];
+      return next;
+    });
+
+    if (campCheckoutState.status !== "idle") {
+      setCampCheckoutState(campCheckoutInitialState);
+    }
+  };
+
   const validateRegistration = () => {
     const errors = validateRegistrationFields(registrationState);
     setRegistrationErrors(errors);
@@ -3332,6 +2883,60 @@ function ChessTruckApp() {
     }
   };
 
+  const openCampBooking = (optionId) => {
+    navigate(`/camps/book?option=${optionId}`);
+  };
+
+  const handleCampBookingSubmit = async (event, optionId) => {
+    event.preventDefault();
+
+    const nextErrors = validateCampBookingFields(campBookingState);
+    setCampBookingErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      setCampCheckoutState({
+        status: "error",
+        message: "Please review the booking details before continuing to checkout.",
+        details: null,
+        activeOption: "",
+      });
+      return;
+    }
+
+    setCampCheckoutState({ status: "loading", message: "", details: null, activeOption: optionId });
+
+    try {
+      const response = await fetch("/api/create-camp-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          optionId,
+          returnPath: `/camps/book?option=${optionId}`,
+          ...campBookingState,
+        }),
+      });
+
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload.url) {
+        if (payload.fieldErrors) {
+          setCampBookingErrors(payload.fieldErrors);
+        }
+        throw new Error(payload.error || "Camp checkout could not be created.");
+      }
+
+      window.location.assign(payload.url);
+    } catch (error) {
+      setCampCheckoutState({
+        status: "error",
+        message:
+          error instanceof Error ? error.message : "Camp checkout could not be created.",
+        details: null,
+        activeOption: "",
+      });
+    }
+  };
+
   const handleContactSubmit = async (event) => {
     event.preventDefault();
     const contactErrors = validateContactFields(contactState);
@@ -3381,9 +2986,36 @@ function ChessTruckApp() {
   const pageContent = (() => {
     switch (currentPath) {
         case "/":
-          return <HomePage currentPath={currentPath} navigate={navigate} />;
+          return (
+            <CampsOverviewPage
+              currentPath={currentPath}
+              navigate={navigate}
+              campCheckoutState={campCheckoutState}
+              openCampBooking={openCampBooking}
+            />
+          );
         case "/camps":
-          return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
+          return (
+            <CampsOverviewPage
+              currentPath={currentPath}
+              navigate={navigate}
+              campCheckoutState={campCheckoutState}
+              openCampBooking={openCampBooking}
+            />
+          );
+        case "/camps/book":
+          return (
+            <CampBookingPage
+              currentPath={currentPath}
+              navigate={navigate}
+              routeSearch={route.search}
+              campBookingState={campBookingState}
+              campBookingErrors={campBookingErrors}
+              updateCampBookingField={updateCampBookingField}
+              handleCampBookingSubmit={handleCampBookingSubmit}
+              campCheckoutState={campCheckoutState}
+            />
+          );
         case "/camps/training":
         case "/camps/prep":
         case "/camps/online":
@@ -3473,11 +3105,7 @@ function ChessTruckApp() {
             onNavigate={() => setIsMobileNavOpen(false)}
           >
             <span className="brand-mark">
-              <img src={brandLogo} alt="" className="brand-mark-image" />
-            </span>
-            <span className="brand-copy">
-              <strong>{siteBrand.name}</strong>
-              <small>{siteBrand.tagline}</small>
+              <img src={brandLogo} alt={`${siteBrand.name} logo`} className="brand-mark-image" />
             </span>
           </AppLink>
 

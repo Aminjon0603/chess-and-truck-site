@@ -70,17 +70,21 @@ export default {
     }
 
     const metadata = stripePayload.metadata || {};
+    const isCamp = metadata.booking_type === "camp";
 
     return Response.json(
       {
         status: "paid",
-        message: "Payment confirmed successfully.",
+        message: isCamp
+          ? "Camp payment confirmed successfully."
+          : "Payment confirmed successfully.",
         customerEmail: stripePayload.customer_details?.email || stripePayload.customer_email || "",
         reference:
           metadata.registration_reference || stripePayload.client_reference_id || stripePayload.id,
         playerName: metadata.player_name || "the registered player",
         section: metadata.section || "",
         serviceLevel: metadata.service_level || "",
+        bookingType: metadata.booking_type || "",
         amountTotal:
           typeof stripePayload.amount_total === "number"
             ? stripePayload.amount_total / 100

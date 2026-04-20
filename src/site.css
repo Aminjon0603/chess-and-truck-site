@@ -180,20 +180,21 @@ a {
 
 .brand-mark {
   display: inline-flex;
-  width: 60px;
-  height: 60px;
+  width: clamp(170px, 19vw, 260px);
+  height: auto;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 10px 22px rgba(17, 29, 25, 0.06);
-  border: 1px solid rgba(23, 34, 30, 0.1);
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
 }
 
 .brand-mark-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .brand-copy strong,
@@ -1189,6 +1190,85 @@ a {
   align-items: stretch;
 }
 
+.camp-booking-note {
+  margin: -6px 0 22px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.camp-booking-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.camp-booking-card {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.camp-booking-card h3 {
+  font-size: clamp(1.6rem, 3.2vw, 2rem);
+}
+
+.camp-booking-price {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--accent-deep);
+}
+
+.camp-booking-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.camp-booking-availability {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.camp-booking-button {
+  width: 100%;
+  justify-content: center;
+}
+
+.booking-page-hero,
+.booking-page-copy,
+.camp-booking-form,
+.summary-card-block {
+  display: grid;
+  gap: 18px;
+}
+
+.booking-page-hero {
+  gap: 22px;
+}
+
+.booking-page-copy h1 {
+  max-width: 11ch;
+}
+
+.camp-booking-layout {
+  align-items: start;
+}
+
+.camp-booking-form {
+  padding: 30px;
+}
+
+.summary-card-block p {
+  margin: 0;
+}
+
 .camp-map-grid {
   display: grid;
   grid-template-columns: minmax(280px, 0.88fr) minmax(0, 1.12fr);
@@ -1878,20 +1958,16 @@ a {
 }
 
 .footer-logo-wrap {
-  width: 64px;
-  height: 64px;
+  width: clamp(180px, 20vw, 260px);
+  height: auto;
   flex: 0 0 auto;
 }
 
 .footer-logo {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.footer-brand-text {
-  display: grid;
-  gap: 4px;
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .footer-brand-text strong,
@@ -2059,6 +2135,10 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .camp-booking-grid {
+    grid-template-columns: 1fr;
+  }
+
   .register-sidebar {
     position: static;
   }
@@ -2090,12 +2170,11 @@ a {
   .brand-link {
     grid-area: brand;
     min-width: 0;
-    gap: 10px;
+    gap: 0;
   }
 
   .brand-mark {
-    width: 52px;
-    height: 52px;
+    width: clamp(150px, 42vw, 220px);
   }
 
   .brand-copy strong {

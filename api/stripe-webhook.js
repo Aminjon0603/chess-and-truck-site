@@ -63,15 +63,26 @@ const formatAmount = (amountTotal, currency = "usd") => {
   }).format(amountTotal / 100);
 };
 
-const buildInternalText = (session) => {
+const getProgramLabel = (session) => {
   const metadata = session.metadata || {};
 
+  if (metadata.booking_type === "camp") {
+    return metadata.program_name || "CHESS AND TRUCK Summer Camp";
+  }
+
+  return "CHESS AND TRUCK";
+};
+
+const buildInternalText = (session) => {
+  const metadata = session.metadata || {};
+  const isCamp = metadata.booking_type === "camp";
+
   return [
-    "Stripe payment confirmed for CHESS AND TRUCK.",
+    `Stripe payment confirmed for ${getProgramLabel(session)}.`,
     "",
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
-    `Player: ${metadata.player_name || "-"}`,
-    `Section: ${metadata.section || "-"}`,
+    isCamp ? `Camp option: ${metadata.service_level || "-"}` : `Player: ${metadata.player_name || "-"}`,
+    isCamp ? `Location: ${metadata.location || "-"}` : `Section: ${metadata.section || "-"}`,
     `Service level: ${metadata.service_level || "-"}`,
     `Parent email: ${metadata.parent_email || session.customer_details?.email || "-"}`,
     `Amount: ${formatAmount(session.amount_total, session.currency)}`,
@@ -81,17 +92,20 @@ const buildInternalText = (session) => {
 
 const buildCustomerText = (session) => {
   const metadata = session.metadata || {};
+  const isCamp = metadata.booking_type === "camp";
 
   return [
-    "Your CHESS AND TRUCK registration payment has been confirmed.",
+    `Your payment for ${getProgramLabel(session)} has been confirmed.`,
     "",
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
-    `Player: ${metadata.player_name || "Registered player"}`,
-    `Section: ${metadata.section || "-"}`,
+    isCamp ? `Camp option: ${metadata.service_level || "-"}` : `Player: ${metadata.player_name || "Registered player"}`,
+    isCamp ? `Location: ${metadata.location || "-"}` : `Section: ${metadata.section || "-"}`,
     `Service level: ${metadata.service_level || "-"}`,
     `Amount paid: ${formatAmount(session.amount_total, session.currency)}`,
     "",
-    "The tournament team can follow up using the registration details you submitted before checkout.",
+    isCamp
+      ? "The camp team can follow up with schedule and registration details using the contact information you entered in Stripe."
+      : "The program team can follow up using the registration details you submitted before checkout.",
   ].join("\n");
 };
 
@@ -164,7 +178,7 @@ export default {
 
     await sendResendEmail({
       to: internalRecipients,
-      subject: `Payment confirmed - ${metadata.player_name || "Registered player"} (${metadata.registration_reference || session.client_reference_id || session.id})`,
+      subject: `Payment confirmed - ${metadata.service_level || metadata.player_name || "Checkout payment"} (${metadata.registration_reference || session.client_reference_id || session.id})`,
       text: buildInternalText(session),
       replyTo,
     }).catch(() => null);
@@ -174,7 +188,7 @@ export default {
     if (customerEmail) {
       await sendResendEmail({
         to: [customerEmail],
-        subject: "CHESS AND TRUCK payment confirmed",
+        subject: `${getProgramLabel(session)} payment confirmed`,
         text: buildCustomerText(session),
       }).catch(() => null);
     }
