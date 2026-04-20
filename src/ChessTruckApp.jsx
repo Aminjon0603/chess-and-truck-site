@@ -1973,11 +1973,11 @@ function CampBookingPage({
                 <div className="summary-list">
                   <div>
                     <span>Call or text</span>
-                    <strong>{contactNumbers.join(" / ")}</strong>
+                    <strong>{contactNumbers.map((item) => item.display).join(" / ")}</strong>
                   </div>
                   <div>
                     <span>Email</span>
-                    <strong>{emailContact}</strong>
+                    <strong>{emailContact.display}</strong>
                   </div>
                 </div>
               </article>
