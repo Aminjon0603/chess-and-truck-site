@@ -1269,6 +1269,34 @@ a {
   margin: 0;
 }
 
+.booking-support-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.booking-support-action {
+  min-height: 0;
+  padding: 16px 18px;
+  justify-items: start;
+  justify-content: start;
+  text-align: left;
+  gap: 6px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.booking-support-action span {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.booking-support-action strong {
+  font-size: 1.02rem;
+  line-height: 1.45;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
 .camp-map-grid {
   display: grid;
   grid-template-columns: minmax(280px, 0.88fr) minmax(0, 1.12fr);

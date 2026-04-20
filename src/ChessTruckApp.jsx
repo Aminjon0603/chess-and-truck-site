@@ -1703,6 +1703,7 @@ function CampBookingPage({
     selectedOption.id === "full-week"
       ? "Example: Week of June 16"
       : "Example: June 18";
+  const bookingSupportMethods = [...contactNumbers, emailContact].filter(Boolean);
 
   return (
     <>
@@ -1970,15 +1971,13 @@ function CampBookingPage({
               <article className="surface summary-card-block">
                 <span className="mini-tag">{campBookingPage.supportTitle}</span>
                 <p>{campBookingPage.supportText}</p>
-                <div className="summary-list">
-                  <div>
-                    <span>Call or text</span>
-                    <strong>{contactNumbers.map((item) => item.display).join(" / ")}</strong>
-                  </div>
-                  <div>
-                    <span>Email</span>
-                    <strong>{emailContact.display}</strong>
-                  </div>
+                <div className="booking-support-actions">
+                  {bookingSupportMethods.map((item) => (
+                    <a key={item.display} href={item.href} className="btn btn-secondary btn-full booking-support-action">
+                      <span>{item.label}</span>
+                      <strong>{item.display}</strong>
+                    </a>
+                  ))}
                 </div>
               </article>
             </div>
