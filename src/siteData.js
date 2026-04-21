@@ -4,7 +4,7 @@ export const siteBrand = {
   city: "New York City",
   tagline: "NYC summer chess camps at Central Park",
   footerNote:
-    "Summer chess camp runs during the August 15 to August 21 week on weekdays at the House of Chess and Checkers in Central Park.",
+    "Summer chess camp runs June 15 to August 21 on weekdays at the House of Chess and Checkers in Central Park.",
 };
 
 export const navigationItems = [
@@ -88,7 +88,7 @@ export const campMenuItems = [
 
 export const campMenuFeature = {
   eyebrow: "Summer camp",
-  title: "Chess camp in Central Park, August 15 to August 21.",
+  title: "Chess camp in Central Park, June 15 to August 21.",
   text:
     "Structured summer camp for NYC families who want lessons, guided games, and a clear daily rhythm.",
   ctaLabel: "Open camp overview",
@@ -99,7 +99,7 @@ export const routeMeta = {
   "/": {
     title: "CHESS AND TRUCK | NYC Chess Camps",
     description:
-      "NYC summer chess camps in Central Park during the August 15 to August 21 week, with weekday half-day sessions and practical details for families.",
+      "NYC summer chess camps in Central Park from June 15 to August 21, with weekday half-day sessions and practical details for families.",
   },
   "/about": {
     title: "About | CHESS AND TRUCK",
@@ -197,12 +197,12 @@ export const featuredTournament = {
   slug: "summer-camp",
   title: "Summer Chess Camp",
   city: "House of Chess and Checkers, Central Park",
-  scheduleLabel: "August 15 - August 21 (weekdays)",
+  scheduleLabel: "June 15 - August 21 (weekdays)",
   formatLabel: "Half-day camp",
   pricingLabel: "Camp details available now",
   venueLabel: "House of Chess and Checkers, Central Park",
   shortSummary: "Central Park summer camp. Daily lessons, guided games, and clear structure.",
-  longSummary: "Summer camp runs during the August 15 to August 21 week on weekdays at the House of Chess and Checkers in Central Park.",
+  longSummary: "Summer camp runs June 15 to August 21 on weekdays at the House of Chess and Checkers in Central Park.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -215,9 +215,9 @@ export const footerLegalLinks = [
 export const homePage = {
   eyebrow: "NYC chess camps",
   title: "Summer chess camps in Central Park.",
-  intro: "August 15 to August 21. Weekdays only. Half-day camp with FIDE Masters in Central Park.",
+  intro: "June 15 to August 21. Weekdays only. Half-day camp with FIDE Masters in Central Park.",
   heroFacts: [
-    { label: "Dates", value: "August 15 - August 21 (weekdays)" },
+    { label: "Dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
     { label: "Service", value: "Half-day camp" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
@@ -328,10 +328,10 @@ export const lessonCarouselSlides = [
 export const campOverviewPage = {
   eyebrow: "Camps",
   title: "Summer Chess Camps in Central Park",
-  intro: "August 15 to August 21. Weekdays only. Central Park. Half-day camp. Book a day or a full week.",
-  chips: ["August 15 - August 21", "Weekdays only", "Half-day camp"],
+  intro: "June 15 to August 21. Weekdays only. Central Park. Half-day camp. Book a day or a full week.",
+  chips: ["June 15 - August 21", "Weekdays only", "Half-day camp"],
   heroFacts: [
-    { label: "Dates", value: "August 15 - August 21 (weekdays)" },
+    { label: "Dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
     { label: "Service", value: "Half-day camp" },
@@ -380,7 +380,7 @@ export const campOverviewPage = {
   },
   detailsCards: [
     { title: "Location", text: "House of Chess and Checkers, Central Park" },
-    { title: "Dates", text: "August 15 - August 21 (weekdays)" },
+    { title: "Dates", text: "June 15 - August 21 (weekdays)" },
     { title: "Time", text: "9:00 AM to 12:00 PM" },
     { title: "Service", text: "Half-day camp" },
     { title: "Ages", text: "School-age players" },
@@ -399,7 +399,7 @@ export const campOverviewPage = {
       eyebrow: "Weekly camp",
       title: "Full Week Camp",
       price: "$450 per week",
-      defaultSchedulePreference: "Week of August 17",
+      defaultSchedulePreference: "Week of June 15",
       details: [
         "Five half-day camp sessions in one week",
         "Best value for a full block",
@@ -413,7 +413,7 @@ export const campOverviewPage = {
       eyebrow: "Flexible option",
       title: "Single Day",
       price: "$100 per day",
-      defaultSchedulePreference: "Monday, August 17",
+      defaultSchedulePreference: "Monday, June 15",
       details: [
         "Join for one half-day camp session",
         "Easy for changing summer schedules",
@@ -426,7 +426,7 @@ export const campOverviewPage = {
   bookingSchedule: [
     {
       id: "camp-day-1",
-      date: "Monday, August 17th, 2026",
+      date: "Monday, June 15th, 2026",
       relativeLabel: "Weekday session",
       time: "9:00 AM",
       title: "Summer Camp Day",
@@ -434,11 +434,11 @@ export const campOverviewPage = {
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Monday, August 17",
+      schedulePreference: "Monday, June 15",
     },
     {
       id: "camp-day-2",
-      date: "Tuesday, August 18th, 2026",
+      date: "Tuesday, June 16th, 2026",
       relativeLabel: "Day 2",
       time: "9:00 AM",
       title: "Summer Camp Day",
@@ -446,11 +446,11 @@ export const campOverviewPage = {
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Tuesday, August 18",
+      schedulePreference: "Tuesday, June 16",
     },
     {
       id: "camp-day-3",
-      date: "Wednesday, August 19th, 2026",
+      date: "Wednesday, June 17th, 2026",
       relativeLabel: "Midweek session",
       time: "9:00 AM",
       title: "Summer Camp Day",
@@ -458,11 +458,11 @@ export const campOverviewPage = {
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Wednesday, August 19",
+      schedulePreference: "Wednesday, June 17",
     },
     {
       id: "camp-day-4",
-      date: "Thursday, August 20th, 2026",
+      date: "Thursday, June 18th, 2026",
       relativeLabel: "Late-week session",
       time: "9:00 AM",
       title: "Summer Camp Day",
@@ -470,11 +470,11 @@ export const campOverviewPage = {
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Thursday, August 20",
+      schedulePreference: "Thursday, June 18",
     },
     {
       id: "camp-day-5",
-      date: "Friday, August 21st, 2026",
+      date: "Friday, June 19th, 2026",
       relativeLabel: "Wrap-up day",
       time: "9:00 AM",
       title: "Summer Camp Day",
@@ -482,7 +482,7 @@ export const campOverviewPage = {
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Friday, August 21",
+      schedulePreference: "Friday, June 19",
     },
   ],
   mapSection: {
@@ -589,7 +589,7 @@ export const campBookingPage = {
   eyebrow: "Camp booking",
   title: "Choose an option and continue to secure checkout",
   intro: "Pick an option, add family details, and continue to Stripe.",
-  chips: ["August 15 - August 21", "Weekdays only", "Secure checkout"],
+  chips: ["June 15 - August 21", "Weekdays only", "Secure checkout"],
   formTitle: "Camp booking details",
   formIntro: "A quick step before payment.",
   sections: [
@@ -627,7 +627,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Students building fundamentals" },
       { label: "Daily feel", value: "Coach-led and active" },
-      { label: "Season", value: "August 15 - August 21" },
+      { label: "Season", value: "June 15 - August 21" },
     ],
     cards: [
       { title: "Daily instruction", text: "Coach-led camp blocks with a clear training theme instead of random activity shifts." },
@@ -704,7 +704,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Active competitors" },
       { label: "Works well for", value: "Game review and prep" },
-      { label: "Season", value: "August 15 - August 21" },
+      { label: "Season", value: "June 15 - August 21" },
     ],
     cards: [
       { title: "Game review first", text: "The week should include real review of practical mistakes, not only abstract instruction." },
@@ -781,7 +781,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Remote families" },
       { label: "Works well for", value: "Review and guided practice" },
-      { label: "Season", value: "August 15 - August 21" },
+      { label: "Season", value: "June 15 - August 21" },
     ],
     cards: [
       { title: "Cleaner than random online time", text: "A camp week should give students structure, not more disconnected chess activity." },
@@ -847,9 +847,9 @@ export const campDetailPages = {
 
 export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
-  title: "A New York City chess program built around clarity.",
+  title: "A New York City chess program built for families.",
   intro:
-    "CHESS AND TRUCK is being built for families who want organized chess camps, useful lessons, and direct communication.",
+    "CHESS AND TRUCK gives NYC families clear camp and lesson options, simple communication, and real coaching value.",
   heroFacts: [
     { label: "Focus", value: "Scholastic chess" },
     { label: "City", value: "New York City" },
@@ -857,66 +857,28 @@ export const aboutPage = {
     { label: "Status", value: "Launching soon" },
   ],
   introSection: {
-    eyebrow: "What this is",
-    title: "A chess-first program, not a vague concept site",
-    intro: "Parents should understand what is being built and why it matters before they ever register.",
+    eyebrow: "What matters",
+    title: "What families should know right away",
+    intro: "No vague promises. Just the information parents actually look for first.",
   },
   pillars: [
     {
-      title: "Camps with visible structure",
-      text: "Parents should be able to see dates, location, schedule, and what the day includes before reaching out.",
+      title: "Clear camp structure",
+      text: "Dates, location, schedule, and daily flow should be easy to see before a parent reaches out.",
     },
     {
-      title: "Lessons with real coaching value",
-      text: "Lessons should feel specific, practical, and tied to actual improvement instead of generic chess activity.",
+      title: "Real lesson value",
+      text: "Lessons should lead to real improvement, not random chess activity.",
     },
     {
-      title: "Camps with a chess-first rhythm",
-      text: "School-break camps should look organized from day one, with clear schedule, training blocks, and level guidance.",
-    },
-  ],
-  founderSection: {
-    eyebrow: "Why this exists",
-    title: "Why this business is being built this way",
-    intro: "The goal is simple: parents should understand the offer quickly and know the next step without chasing details.",
-  },
-  founderCards: [
-    {
-      title: "What kept getting in the way",
-      text: "Too many chess pages sounded polished but still made parents dig for the basics: fit, schedule, level, and what to do next.",
-    },
-    {
-      title: "Why CHESS AND TRUCK exists",
-      text: "This brand is being built so camps and lessons feel organized before a family ever commits time, money, or a week of summer.",
-    },
-    {
-      title: "What families should get",
-      text: "Parents should know what the program is, who it fits, and how to move forward without sending three emails first.",
-    },
-  ],
-  experienceSection: {
-    eyebrow: "What shapes the standards",
-    title: "The standards behind the program",
-    intro: "The business is being shaped around the things that matter most on event day, in coaching, and in parent communication.",
-  },
-  experienceCards: [
-    {
-      title: "Program structure",
-      text: "The program is being built around the details parents look for first: dates, location, schedule, fit, and next step.",
-    },
-    {
-      title: "Coaching standards",
-      text: "The lesson side is shaped around game review, level-appropriate work, and training that connects from one session to the next.",
-    },
-    {
-      title: "Parent communication",
-      text: "Important details should be visible before sign-up, so families do not have to chase timing, fit, or next steps by email.",
+      title: "Direct communication",
+      text: "Families should know the next step fast without chasing details by email.",
     },
   ],
   whySection: {
-    eyebrow: "Why families care",
-    title: "What this should lead to for NYC parents and students",
-    intro: "The standard is simple: practical information, organized programs, and direct communication.",
+    eyebrow: "Why parents trust it",
+    title: "What the standard should feel like",
+    intro: "Parents should feel clarity, trust, and a simple next step.",
   },
   standards: [
     "Clear level fit before sign-up",
@@ -1040,7 +1002,7 @@ export const faqPage = {
   title: "Clear answers before registration.",
   intro: "Camp fit, lesson options, what to bring, and how sign-up works.",
   heroFacts: [
-    { label: "Camp dates", value: "August 15 - August 21 (weekdays)" },
+    { label: "Camp dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "Central Park" },
     { label: "Lessons", value: "Online + in person" },
     { label: "Support", value: "Contact is open now" },
@@ -1175,19 +1137,19 @@ export const contactPage = {
 };
 
 export const privateLessonsPage = {
-  eyebrow: "Lesson programs",
+  eyebrow: "Services",
   title: "Chess lessons in NYC: private, small-group, and online.",
   intro:
-    "Lesson formats for NYC students who need real improvement, not random chess activity. Private coaching, small-group training, and online formats are opening soon.",
+    "Private, group, and online chess lessons for families who want clear coaching and a simple next step.",
   heroChips: ["Private coaching", "Small-group options", "Online + in person"],
   quickFacts: [
     { label: "Levels", value: "Beginner to advanced" },
     { label: "Formats", value: "Private, group, online" },
     { label: "Includes", value: "Game + analysis" },
-    { label: "Pricing", value: "Shared before first booking window" },
+    { label: "Contact", value: "Ask for openings" },
   ],
   heroNote:
-    "Parents should know quickly which lesson path fits the student, what happens in a session, and how to ask for the first opening.",
+    "Pick the format that fits your student and contact us for the next opening.",
   detailsSection: {
     eyebrow: "Lesson details",
     title: "The practical details families ask first",
@@ -1205,17 +1167,17 @@ export const privateLessonsPage = {
     {
       eyebrow: "Remote",
       title: "Online lessons",
-      text: "Weekly coaching, game review, and clear training structure without crossing the city.",
+      text: "Remote coaching with game review and a clean weekly rhythm.",
     },
     {
       eyebrow: "Face to face",
       title: "In-person lessons",
-      text: "Board-first coaching for students who focus better live and learn faster over the board.",
+      text: "Board-first coaching for students who focus better live.",
     },
     {
       eyebrow: "Shared training",
       title: "Group lessons",
-      text: "Small groups with better level matching, stronger pace, and cleaner coaching than generic classes.",
+      text: "Small groups with stronger pace and better level matching.",
     },
   ],
   getSection: {
@@ -1307,18 +1269,18 @@ export const privateLessonsPage = {
   processSteps: [
     {
       step: "01",
-      title: "Tell us the student and the goal",
-      text: "Age, level, schedule, and whether you want online or in person are enough to start the conversation well.",
+      title: "Tell us the student and format",
+      text: "Send age, level, and whether you want private, group, online, or in-person lessons.",
     },
     {
       step: "02",
-      title: "We point you to the cleanest format",
-      text: "Some students need a starter lesson first. Others are ready for weekly coaching or a short prep block.",
+      title: "We point you to the best fit",
+      text: "We will recommend the cleanest service for your student.",
     },
     {
       step: "03",
-      title: "You get the first opening notice",
-      text: "When the next lesson openings go live, families on the list hear first and can move quickly.",
+      title: "You get the next opening",
+      text: "We send the next available lesson opening or update.",
     },
   ],
   highlightTitle: "What strong coaching should feel like",
@@ -1330,9 +1292,9 @@ export const privateLessonsPage = {
     "Real analysis after games, not only move-by-move correction",
     "A clean parent contact path before lessons begin",
   ],
-  ctaTitle: "Tell us the student, the level, and the format you want.",
+  ctaTitle: "Tell us the student, level, and lesson format.",
   ctaText:
-    "Send age, current level, and whether you want online, in-person, or group lessons. We will point you to the cleanest starting path when openings go live.",
+    "Send age, level, and whether you want private, group, online, or in-person lessons.",
 };
 
 export const lessonDetailPages = {
@@ -1656,7 +1618,7 @@ export const lessonDetailPages = {
         eyebrow: "Program support",
         title: "Coaching Direction Check-In",
         bullets: [
-          "Use this when the family wants to talk about pace, fit, or lesson direction",
+      "Use this when the family wants to talk about pace, fit, or lesson service",
           "Good for players moving between formats or preparing for a new training phase",
           "Lets us point the family to the right coach path before things get messy",
         ],

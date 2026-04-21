@@ -503,7 +503,7 @@ function LessonSignalCarousel({ currentPath, navigate, intro = "Lesson launch op
   return (
     <article className="surface carousel-card lesson-signal-carousel">
       <div className="carousel-copy">
-        <span className="mini-tag">Lesson direction</span>
+            <span className="mini-tag">Services</span>
         <h3>{activeSlide.title}</h3>
         <p>{activeSlide.text}</p>
         <small className="carousel-intro">{intro}</small>
@@ -1275,7 +1275,7 @@ function CampBookingFormPanel({
             <div className="summary-list summary-list-booking">
               <div>
                 <span>Dates</span>
-                <strong>August 15 - August 21 (weekdays)</strong>
+                <strong>June 15 - August 21 (weekdays)</strong>
               </div>
               <div>
                 <span>Location</span>
@@ -1348,43 +1348,6 @@ function AboutPage({ currentPath, navigate }) {
           />
           <div className="card-grid card-grid-three">
             {aboutPage.pillars.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={aboutPage.founderSection.eyebrow}
-            title={aboutPage.founderSection.title}
-            intro={aboutPage.founderSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {aboutPage.founderCards.map((item) => (
-            <article className="surface" key={item.title}>
-              <span className="mini-tag">Why it matters</span>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={aboutPage.experienceSection.eyebrow}
-            title={aboutPage.experienceSection.title}
-            intro={aboutPage.experienceSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {aboutPage.experienceCards.map((item) => (
               <article className="surface" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
@@ -1498,24 +1461,6 @@ function PrivateLessonsPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <SectionIntro
-            eyebrow={privateLessonsPage.detailsSection.eyebrow}
-            title={privateLessonsPage.detailsSection.title}
-            intro={privateLessonsPage.detailsSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {privateLessonsPage.detailsCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
             eyebrow="Lesson services"
             title="Private coaching should fit the student, not force the same setting every time"
             intro="Different students need different lesson services."
@@ -1524,90 +1469,6 @@ function PrivateLessonsPage({ currentPath, navigate }) {
             {privateLessonsPage.formatCards.map((item) => (
               <article className="surface lesson-format-card" key={item.title}>
                 <span className="mini-tag">{item.eyebrow}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={privateLessonsPage.getSection.eyebrow}
-            title={privateLessonsPage.getSection.title}
-            intro={privateLessonsPage.getSection.intro}
-          />
-          <div className="card-grid card-grid-two">
-            {privateLessonsPage.getCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={privateLessonsPage.pathSection.eyebrow}
-            title={privateLessonsPage.pathSection.title}
-            intro={privateLessonsPage.pathSection.intro}
-          />
-          <div className="card-grid card-grid-three lesson-plan-grid">
-            {privateLessonsPage.pathCards.map((item) => (
-              <article className="surface lesson-plan-card" key={item.title}>
-                <div className="lesson-plan-top">
-                  <span className="mini-tag">{item.eyebrow}</span>
-                  <h3>{item.title}</h3>
-                </div>
-                <ul className="checklist lesson-plan-list">
-                  {item.bullets.map((bullet) => (
-                    <li key={bullet}>{bullet}</li>
-                  ))}
-                </ul>
-                <div className="lesson-plan-footer">
-                  <strong>{item.meta}</strong>
-                  <span>{item.note}</span>
-                </div>
-                <AppLink
-                  to="/contact"
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  className="btn btn-primary lesson-plan-button"
-                >
-                  {item.cta}
-                </AppLink>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell lesson-story-grid">
-          <article className="surface surface-dark lesson-highlight-card">
-            <span className="mini-tag mini-tag-dark">Lesson standard</span>
-            <h3>{privateLessonsPage.highlightTitle}</h3>
-            <p>{privateLessonsPage.highlightBody}</p>
-            <ul className="checklist checklist-light">
-              {privateLessonsPage.checklist.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-
-          <div className="stack-grid">
-            <SectionIntro
-              eyebrow={privateLessonsPage.fitSection.eyebrow}
-              title={privateLessonsPage.fitSection.title}
-              intro={privateLessonsPage.fitSection.intro}
-            />
-            {privateLessonsPage.fitCards.map((item) => (
-              <article className="surface lesson-fit-card" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
@@ -1730,10 +1591,17 @@ function CampsOverviewPage({
 
             <div className="fact-list lesson-fact-grid">
               {campOverviewPage.asideFacts.map((item) => (
-                <div key={item.label}>
+                <AppLink
+                  key={item.label}
+                  to="/contact"
+                  navigate={navigate}
+                  currentPath={currentPath}
+                  className="fact-list-card-link"
+                  aria-label={`Contact us about ${item.label.toLowerCase()}`}
+                >
                   <span>{item.label}</span>
                   <strong>{item.value}</strong>
-                </div>
+                </AppLink>
               ))}
             </div>
           </article>
@@ -2238,7 +2106,7 @@ function CampBookingPage({
                 <div className="summary-list summary-list-booking">
                   <div>
                     <span>Dates</span>
-                    <strong>August 15 - August 21 (weekdays)</strong>
+                    <strong>June 15 - August 21 (weekdays)</strong>
                   </div>
                   <div>
                     <span>Location</span>
@@ -3359,7 +3227,7 @@ function ChessTruckApp() {
 
   useEffect(() => {
     const focusTimer = window.requestAnimationFrame(() => {
-      mainRef.current?.focus();
+      mainRef.current?.focus({ preventScroll: true });
     });
 
     return () => window.cancelAnimationFrame(focusTimer);
