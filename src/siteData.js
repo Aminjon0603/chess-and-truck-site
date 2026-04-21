@@ -4,7 +4,7 @@ export const siteBrand = {
   city: "New York City",
   tagline: "NYC summer chess camps at Central Park",
   footerNote:
-    "Summer chess camp runs June 15 to August 21 at the House of Chess and Checkers in Central Park.",
+    "Summer chess camp runs during the August 15 to August 21 week on weekdays at the House of Chess and Checkers in Central Park.",
 };
 
 export const navigationItems = [
@@ -88,7 +88,7 @@ export const campMenuItems = [
 
 export const campMenuFeature = {
   eyebrow: "Summer camp",
-  title: "Chess camp in Central Park, June 15 to August 21.",
+  title: "Chess camp in Central Park, August 15 to August 21.",
   text:
     "Structured summer camp for NYC families who want lessons, guided games, and a clear daily rhythm.",
   ctaLabel: "Open camp overview",
@@ -99,7 +99,7 @@ export const routeMeta = {
   "/": {
     title: "CHESS AND TRUCK | NYC Chess Camps",
     description:
-      "NYC summer chess camps at Central Park from June 15 to August 21 with daily lessons, guided games, and practical camp details for families.",
+      "NYC summer chess camps in Central Park during the August 15 to August 21 week, with weekday half-day sessions and practical details for families.",
   },
   "/about": {
     title: "About | CHESS AND TRUCK",
@@ -197,12 +197,12 @@ export const featuredTournament = {
   slug: "summer-camp",
   title: "Summer Chess Camp",
   city: "House of Chess and Checkers, Central Park",
-  scheduleLabel: "June 15 - August 21",
-  formatLabel: "Half-day and full-day camp",
+  scheduleLabel: "August 15 - August 21 (weekdays)",
+  formatLabel: "Half-day camp",
   pricingLabel: "Camp details available now",
   venueLabel: "House of Chess and Checkers, Central Park",
   shortSummary: "Central Park summer camp. Daily lessons, guided games, and clear structure.",
-  longSummary: "Summer camp runs June 15 to August 21 at the House of Chess and Checkers in Central Park.",
+  longSummary: "Summer camp runs during the August 15 to August 21 week on weekdays at the House of Chess and Checkers in Central Park.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -215,11 +215,11 @@ export const footerLegalLinks = [
 export const homePage = {
   eyebrow: "NYC chess camps",
   title: "Summer chess camps in Central Park.",
-  intro: "June 15 to August 21. Daily lessons, guided games, and a clear chess-first camp day.",
+  intro: "August 15 to August 21. Weekdays only. Half-day camp with FIDE Masters in Central Park.",
   heroFacts: [
-    { label: "Dates", value: "June 15 - August 21" },
+    { label: "Dates", value: "August 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
-    { label: "Service", value: "Half-day and full-day camp" },
+    { label: "Service", value: "Half-day camp" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
   ],
   offerSection: {
@@ -328,13 +328,13 @@ export const lessonCarouselSlides = [
 export const campOverviewPage = {
   eyebrow: "Camps",
   title: "Summer Chess Camps in Central Park",
-  intro: "June 15 to August 21. Central Park. Beginner-friendly. Book a day or a full week.",
-  chips: ["June 15 - August 21", "Central Park", "NYC families"],
+  intro: "August 15 to August 21. Weekdays only. Central Park. Half-day camp. Book a day or a full week.",
+  chips: ["August 15 - August 21", "Weekdays only", "Half-day camp"],
   heroFacts: [
-    { label: "Dates", value: "June 15 - August 21" },
+    { label: "Dates", value: "August 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
-    { label: "Service", value: "Half-day and full-day camp" },
+    { label: "Service", value: "Half-day camp" },
   ],
   portraitCaption: "Simple camp booking with real chess structure.",
   asideTag: "Summer 2026",
@@ -342,9 +342,9 @@ export const campOverviewPage = {
   asideText:
     "Morning camp in Central Park with FIDE Masters, warm-up games, park play, snack time, and rated chess activities.",
   asideFacts: [
-    { label: "Schedule", value: "9:00 AM to 11:15 AM+" },
+    { label: "Schedule", value: "9:00 AM to 12:00 PM" },
     { label: "Coaches", value: "FIDE Masters" },
-    { label: "Booking", value: "Day and week options open" },
+    { label: "Contact", value: "Contact us" },
   ],
   overviewSection: {
     eyebrow: "What camp includes",
@@ -380,12 +380,12 @@ export const campOverviewPage = {
   },
   detailsCards: [
     { title: "Location", text: "House of Chess and Checkers, Central Park" },
-    { title: "Dates", text: "June 15 - August 21" },
-    { title: "Time", text: "Morning, half-day, and full-day options" },
-    { title: "Service", text: "Chess-first summer camp" },
+    { title: "Dates", text: "August 15 - August 21 (weekdays)" },
+    { title: "Time", text: "9:00 AM to 12:00 PM" },
+    { title: "Service", text: "Half-day camp" },
     { title: "Ages", text: "School-age players" },
     { title: "Skill levels", text: "Beginner-friendly with level grouping" },
-    { title: "Enrollment", text: "Contact us for availability and next steps" },
+    { title: "Contact", text: "Contact us for availability and next steps" },
   ],
   bookingSection: {
     eyebrow: "Camp booking",
@@ -399,9 +399,9 @@ export const campOverviewPage = {
       eyebrow: "Weekly camp",
       title: "Full Week Camp",
       price: "$450 per week",
-      defaultSchedulePreference: "Week of June 15",
+      defaultSchedulePreference: "Week of August 17",
       details: [
-        "Five camp days in one week",
+        "Five half-day camp sessions in one week",
         "Best value for a full block",
         "Lessons, games, and breaks in Central Park",
       ],
@@ -413,9 +413,9 @@ export const campOverviewPage = {
       eyebrow: "Flexible option",
       title: "Single Day",
       price: "$100 per day",
-      defaultSchedulePreference: "Monday, June 15",
+      defaultSchedulePreference: "Monday, August 17",
       details: [
-        "Join for one camp day at a time",
+        "Join for one half-day camp session",
         "Easy for changing summer schedules",
         "Same camp structure in a shorter commitment",
       ],
@@ -426,63 +426,63 @@ export const campOverviewPage = {
   bookingSchedule: [
     {
       id: "camp-day-1",
-      date: "Monday, June 15th, 2026",
-      relativeLabel: "Opening week",
+      date: "Monday, August 17th, 2026",
+      relativeLabel: "Weekday session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours in Central Park",
+      subtitle: "Half day in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Monday, June 15",
+      schedulePreference: "Monday, August 17",
     },
     {
       id: "camp-day-2",
-      date: "Tuesday, June 16th, 2026",
+      date: "Tuesday, August 18th, 2026",
       relativeLabel: "Day 2",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours in Central Park",
+      subtitle: "Half day in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Tuesday, June 16",
+      schedulePreference: "Tuesday, August 18",
     },
     {
       id: "camp-day-3",
-      date: "Wednesday, June 17th, 2026",
+      date: "Wednesday, August 19th, 2026",
       relativeLabel: "Midweek session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours in Central Park",
+      subtitle: "Half day in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Wednesday, June 17",
+      schedulePreference: "Wednesday, August 19",
     },
     {
       id: "camp-day-4",
-      date: "Thursday, June 18th, 2026",
+      date: "Thursday, August 20th, 2026",
       relativeLabel: "Late-week session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours in Central Park",
+      subtitle: "Half day in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Thursday, June 18",
+      schedulePreference: "Thursday, August 20",
     },
     {
       id: "camp-day-5",
-      date: "Friday, June 19th, 2026",
+      date: "Friday, August 21st, 2026",
       relativeLabel: "Wrap-up day",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours in Central Park",
+      subtitle: "Half day in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
-      schedulePreference: "Friday, June 19",
+      schedulePreference: "Friday, August 21",
     },
   ],
   mapSection: {
@@ -499,7 +499,7 @@ export const campOverviewPage = {
   scheduleSection: {
     eyebrow: "Sample day",
     title: "Schedule",
-    intro: "Morning structure for camp days.",
+    intro: "Morning half-day structure for camp days.",
   },
   sampleSchedule: [
     {
@@ -525,7 +525,7 @@ export const campOverviewPage = {
     {
       time: "11:15 AM",
       title: "Chess lessons, rated games, and chess activities",
-      text: "Lessons with FIDE Masters, rated games, puzzles, bughouse, and online play.",
+      text: "Lessons with FIDE Masters, rated games, puzzles, bughouse, and online play through 12:00 PM.",
     },
   ],
   learningSection: {
@@ -589,7 +589,7 @@ export const campBookingPage = {
   eyebrow: "Camp booking",
   title: "Choose an option and continue to secure checkout",
   intro: "Pick an option, add family details, and continue to Stripe.",
-  chips: ["June 15 - August 21", "Central Park", "Secure checkout"],
+  chips: ["August 15 - August 21", "Weekdays only", "Secure checkout"],
   formTitle: "Camp booking details",
   formIntro: "A quick step before payment.",
   sections: [
@@ -627,7 +627,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Students building fundamentals" },
       { label: "Daily feel", value: "Coach-led and active" },
-      { label: "Season", value: "June 15 - August 21" },
+      { label: "Season", value: "August 15 - August 21" },
     ],
     cards: [
       { title: "Daily instruction", text: "Coach-led camp blocks with a clear training theme instead of random activity shifts." },
@@ -704,7 +704,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Active competitors" },
       { label: "Works well for", value: "Game review and prep" },
-      { label: "Season", value: "June 15 - August 21" },
+      { label: "Season", value: "August 15 - August 21" },
     ],
     cards: [
       { title: "Game review first", text: "The week should include real review of practical mistakes, not only abstract instruction." },
@@ -781,7 +781,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Remote families" },
       { label: "Works well for", value: "Review and guided practice" },
-      { label: "Season", value: "June 15 - August 21" },
+      { label: "Season", value: "August 15 - August 21" },
     ],
     cards: [
       { title: "Cleaner than random online time", text: "A camp week should give students structure, not more disconnected chess activity." },
@@ -924,16 +924,16 @@ export const aboutPage = {
     "Honest launch updates instead of vague promises",
     "Programs that feel structured from the first page",
   ],
-  ctaTitle: "Want to see the first launch updates as they open?",
+  ctaTitle: "Need details before openings go live?",
   ctaText:
-    "Use Contact now if you want early access notices for camps or lessons as the first public openings go live.",
+    "Use Contact us if you want camp or lesson details as the first public openings go live.",
 };
 
 export const eventsPage = {
   eyebrow: "Events & Tournaments",
   title: "NYC scholastic tournaments with a clear Saturday service.",
   intro:
-    "Open and Beginner sections, a 9:00 AM start, and a morning schedule that wraps by lunch. Families can review the structure now and join early access before dates go live.",
+    "Open and Beginner sections, a 9:00 AM start, and a morning schedule that wraps by lunch. Families can review the structure now and contact us before dates go live.",
   heroFacts: [
     { label: "Location", value: "Brick Church, 62 E 92nd Street" },
     { label: "Service", value: "Open + Beginner" },
@@ -969,7 +969,7 @@ export const eventsPage = {
     { title: "Time", text: "Saturday mornings, 9:00 AM to lunch" },
     { title: "Service", text: "Rated and beginner-friendly divisions" },
     { title: "Entry", text: "Registration from $55 planned" },
-    { title: "Enrollment", text: "Early access list open now" },
+    { title: "Contact", text: "Contact us now" },
   ],
   sampleSection: {
     eyebrow: "Sample event morning",
@@ -1009,12 +1009,12 @@ export const eventsPage = {
     },
     {
       title: "Simple next step",
-      text: "Families can use Contact now and get the first release notice as soon as the opening date goes live.",
+      text: "Families can use Contact us now and get the first release notice as soon as the opening date goes live.",
     },
   ],
   ctaTitle: "Want the first tournament date as soon as it drops?",
   ctaText:
-    "Join early access now and we will send the first event release, section guidance, and registration details as soon as public enrollment opens.",
+    "Contact us now and we will send the first event release, section guidance, and registration details as soon as public enrollment opens.",
 };
 
 export const tournamentPage = {
@@ -1040,7 +1040,7 @@ export const faqPage = {
   title: "Clear answers before registration.",
   intro: "Camp fit, lesson options, what to bring, and how sign-up works.",
   heroFacts: [
-    { label: "Camp dates", value: "June 15 - August 21" },
+    { label: "Camp dates", value: "August 15 - August 21 (weekdays)" },
     { label: "Location", value: "Central Park" },
     { label: "Lessons", value: "Online + in person" },
     { label: "Support", value: "Contact is open now" },
@@ -1056,7 +1056,7 @@ export const faqPage = {
     },
     {
       title: "Need help first?",
-      text: "Use Contact if you want section guidance or launch updates before the first dates go live.",
+      text: "Use Contact us if you want section guidance or updates before the first dates go live.",
     },
   ],
   prepSection: {
@@ -1110,7 +1110,7 @@ export const contactPage = {
     { label: "Phone lines", value: "(646) 251-7087 / (646) 494-5363" },
     { label: "Email", value: "info@chessandtruck.com" },
     { label: "Reply type", value: "Direct response" },
-    { label: "Best for", value: "Questions + early access" },
+    { label: "Best for", value: "Questions + contact requests" },
   ],
   topicSection: {
     eyebrow: "What to contact us about",
@@ -1157,11 +1157,11 @@ export const contactPage = {
     },
     {
       title: "We point you to the right next step",
-      text: "That may mean a direct answer, the right page, or early access for the next release that fits your student best.",
+      text: "That may mean a direct answer, the right page, or the best next opening that fits your student.",
     },
     {
       title: "You hear when the right opening goes live",
-      text: "If you ask for early access, we keep your message tied to the correct release instead of making you start over later.",
+      text: "If you contact us early, we keep your message tied to the correct opening instead of making you start over later.",
     },
   ],
   messageChecklist: [
@@ -1757,14 +1757,14 @@ export const upcomingTournaments = [
     path: "/contact",
   },
   {
-    id: "early-access",
-    dateLabel: "Early access",
+    id: "contact-us",
+    dateLabel: "Contact us",
     statusLabel: "Priority list",
     timeLabel: "9:00 AM to lunch",
     title: "Launch notice for first families",
     meta: "Direct update before the public drop",
-    summary: "If you want first notice before the public announcement, contact the team now and we will put you on the early list.",
-    availabilityLabel: "Early list open",
+    summary: "If you want first notice before the public announcement, contact the team now and we will keep you updated.",
+    availabilityLabel: "Contact open now",
     ctaLabel: "Contact Team",
     path: "/contact",
   },
@@ -1805,7 +1805,7 @@ export const policyItems = [
   "Open section players will need an active USCF membership.",
   "Beginner section players will not need a USCF membership.",
   "The Saturday morning structure is already set before the dates go public.",
-  "Families can use Contact now if they want first notice when launch opens.",
+  "Families can use Contact us now if they want first notice when launch opens.",
   "Full registration and payment happen after the first date release.",
 ];
 
@@ -1846,9 +1846,9 @@ export const faqItems = [
       "Use the Contact page now and we will reply with availability, pricing, and the cleanest next step for your family.",
   },
   {
-    question: "How do I join early access?",
+    question: "How do I contact the team?",
     answer:
-      "Use the Contact page and ask for camp or lesson early access. We will send the next release information as soon as it opens.",
+      "Use the Contact page and ask about camp or lessons. We will send the next release information as soon as it opens.",
   },
   {
     question: "What should I include in my message?",

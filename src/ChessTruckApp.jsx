@@ -705,7 +705,7 @@ function SiteFooter({ currentPath, navigate }) {
                 currentPath={currentPath}
                 className="btn btn-primary footer-cta"
               >
-                Get early access
+                Contact us
               </AppLink>
             </div>
 
@@ -729,7 +729,7 @@ function SiteFooter({ currentPath, navigate }) {
                   currentPath={currentPath}
                   className="footer-link"
                 >
-                  Early Access
+                  Contact us
                 </AppLink>
               </div>
               <div className="footer-legal-links">
@@ -1275,7 +1275,7 @@ function CampBookingFormPanel({
             <div className="summary-list summary-list-booking">
               <div>
                 <span>Dates</span>
-                <strong>June 15 - August 21</strong>
+                <strong>August 15 - August 21 (weekdays)</strong>
               </div>
               <div>
                 <span>Location</span>
@@ -1287,7 +1287,7 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Service</span>
-                <strong>{selectedOption.id === "full-week" ? "Weekly camp block" : "Single camp day"}</strong>
+                <strong>{selectedOption.id === "full-week" ? "Half-day camp week" : "Half-day camp session"}</strong>
               </div>
             </div>
             <ul className="camp-booking-list">
@@ -1332,9 +1332,9 @@ function AboutPage({ currentPath, navigate }) {
             <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
               View Camps
             </AppLink>
-            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Get Early Access
-            </AppLink>
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Contact us
+              </AppLink>
           </>
         }
       />
@@ -1414,12 +1414,12 @@ function AboutPage({ currentPath, navigate }) {
       <section className="page-section">
         <div className="shell">
           <article className="surface lesson-detail-cta">
-            <span className="section-tag">Early access</span>
+            <span className="section-tag">Contact us</span>
             <h3>{aboutPage.ctaTitle}</h3>
             <p>{aboutPage.ctaText}</p>
             <div className="cta-row">
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Join Early Access
+                Contact us
               </AppLink>
               <AppLink to="/private-lessons" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
                 Review Lessons
@@ -1667,6 +1667,7 @@ function CampsOverviewPage({
   updateCampBookingField = () => {},
   handleCampBookingSubmit = () => {},
   selectedCampOptionId = campOverviewPage.bookingCards[0]?.id,
+  isCampBookingFormVisible = false,
   openCampBooking = () => {},
 }) {
   const selectedOption =
@@ -1816,16 +1817,26 @@ function CampsOverviewPage({
             </article>
           </div>
 
-          <CampCheckoutStatusBanner campCheckoutState={campCheckoutState} />
-          <CampBookingFormPanel
-            selectedOption={selectedOption}
-            campBookingState={campBookingState}
-            campBookingErrors={campBookingErrors}
-            updateCampBookingField={updateCampBookingField}
-            handleCampBookingSubmit={handleCampBookingSubmit}
-            campCheckoutState={campCheckoutState}
-            openCampBooking={openCampBooking}
-          />
+          {isCampBookingFormVisible || campCheckoutState.status !== "idle" ? (
+            <>
+              <CampCheckoutStatusBanner campCheckoutState={campCheckoutState} />
+              <CampBookingFormPanel
+                selectedOption={selectedOption}
+                campBookingState={campBookingState}
+                campBookingErrors={campBookingErrors}
+                updateCampBookingField={updateCampBookingField}
+                handleCampBookingSubmit={handleCampBookingSubmit}
+                campCheckoutState={campCheckoutState}
+                openCampBooking={openCampBooking}
+              />
+            </>
+          ) : (
+            <article className="surface camp-booking-hint" id="camp-booking-form">
+              <span className="mini-tag">Registration form</span>
+              <h3>Click Book to open the registration form.</h3>
+              <p>Choose any day or the full week option above and the form will open here.</p>
+            </article>
+          )}
         </div>
       </section>
 
@@ -2227,7 +2238,7 @@ function CampBookingPage({
                 <div className="summary-list summary-list-booking">
                   <div>
                     <span>Dates</span>
-                    <strong>June 15 - August 21</strong>
+                    <strong>August 15 - August 21 (weekdays)</strong>
                   </div>
                   <div>
                     <span>Location</span>
@@ -2235,7 +2246,7 @@ function CampBookingPage({
                   </div>
                   <div>
                     <span>Service</span>
-                    <strong>{selectedOption.id === "full-week" ? "Weekly camp block" : "Single camp day"}</strong>
+                    <strong>{selectedOption.id === "full-week" ? "Half-day camp week" : "Half-day camp session"}</strong>
                   </div>
                 </div>
                 <ul className="camp-booking-list">
@@ -3218,6 +3229,7 @@ function ChessTruckApp() {
   const [campCheckoutState, setCampCheckoutState] = useState(campCheckoutInitialState);
   const [campBookingState, setCampBookingState] = useState(campBookingInitialState);
   const [campBookingErrors, setCampBookingErrors] = useState({});
+  const [isCampBookingFormVisible, setIsCampBookingFormVisible] = useState(false);
   const [selectedCampOptionId, setSelectedCampOptionId] = useState(
     campOverviewPage.bookingCards.find((item) => item.id === "single-day")?.id ||
       campOverviewPage.bookingCards[0]?.id ||
@@ -3375,6 +3387,7 @@ function ChessTruckApp() {
     setRoute({ pathname: currentPath, search: cleanedSearch ? `?${cleanedSearch}` : "" });
 
     if (payment === "cancel") {
+      setIsCampBookingFormVisible(true);
       setCampCheckoutState({
         status: "cancelled",
         message:
@@ -3386,6 +3399,7 @@ function ChessTruckApp() {
     }
 
     if (payment === "success" && sessionId) {
+      setIsCampBookingFormVisible(true);
       setCampCheckoutState({ status: "loading", message: "", details: null, activeOption: "" });
 
       fetch("/api/checkout-status", {
@@ -3436,6 +3450,7 @@ function ChessTruckApp() {
     }
 
     setSelectedCampOptionId(matchedOption.id);
+    setIsCampBookingFormVisible(true);
 
     if (!campBookingState.schedulePreference.trim() && matchedOption.defaultSchedulePreference) {
       setCampBookingState((current) => ({
@@ -3682,6 +3697,7 @@ function ChessTruckApp() {
   const openCampBooking = (optionId, schedulePreference = "") => {
     const selectedOption = campOverviewPage.bookingCards.find((item) => item.id === optionId);
     setSelectedCampOptionId(optionId);
+    setIsCampBookingFormVisible(true);
 
     const nextSchedulePreference = schedulePreference || selectedOption?.defaultSchedulePreference || "";
 
@@ -3808,6 +3824,7 @@ function ChessTruckApp() {
               updateCampBookingField={updateCampBookingField}
               handleCampBookingSubmit={handleCampBookingSubmit}
               selectedCampOptionId={selectedCampOptionId}
+              isCampBookingFormVisible={isCampBookingFormVisible}
               openCampBooking={openCampBooking}
             />
           );
@@ -3822,6 +3839,7 @@ function ChessTruckApp() {
               updateCampBookingField={updateCampBookingField}
               handleCampBookingSubmit={handleCampBookingSubmit}
               selectedCampOptionId={selectedCampOptionId}
+              isCampBookingFormVisible={isCampBookingFormVisible}
               openCampBooking={openCampBooking}
             />
           );
@@ -3836,6 +3854,7 @@ function ChessTruckApp() {
               updateCampBookingField={updateCampBookingField}
               handleCampBookingSubmit={handleCampBookingSubmit}
               selectedCampOptionId={selectedCampOptionId}
+              isCampBookingFormVisible={isCampBookingFormVisible}
               openCampBooking={openCampBooking}
             />
           );
@@ -3985,7 +4004,7 @@ function ChessTruckApp() {
               className="btn btn-primary header-button"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Early Access
+              Contact us
             </AppLink>
             <button
               type="button"

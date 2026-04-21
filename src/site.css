@@ -1415,6 +1415,18 @@ a {
   padding: 30px;
 }
 
+.camp-booking-hint {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 26px 30px;
+}
+
+.camp-booking-hint h3,
+.camp-booking-hint p {
+  margin: 0;
+}
+
 .booking-option-switcher {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
