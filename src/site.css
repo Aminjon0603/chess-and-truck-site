@@ -2469,11 +2469,11 @@ a {
     flex: 0 1 calc(100% - 56px);
     min-width: 0;
     gap: 0;
-    max-width: calc(100% - 48px);
+    max-width: calc(100% - 44px);
   }
 
   .brand-mark {
-    width: clamp(156px, 46vw, 210px);
+    width: clamp(192px, 58vw, 260px);
   }
 
   .brand-copy strong {
