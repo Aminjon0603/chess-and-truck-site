@@ -85,6 +85,11 @@ const buildReference = () => {
   return `CT-CAMP-${dateCode}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 };
 
+const appendRawQueryParam = (url, key, value) => {
+  const separator = url.search ? "&" : "?";
+  return `${url.toString()}${separator}${key}=${value}`;
+};
+
 export const runtime = "nodejs";
 
 export default {
@@ -144,7 +149,7 @@ export default {
     const returnPath = normalizeReturnPath(payload.returnPath, optionId);
     const successUrl = new URL(returnPath, getBaseUrl(request));
     successUrl.searchParams.set("payment", "success");
-    successUrl.searchParams.set("session_id", "{CHECKOUT_SESSION_ID}");
+    const successUrlString = appendRawQueryParam(successUrl, "session_id", "{CHECKOUT_SESSION_ID}");
 
     const cancelUrl = new URL(returnPath, getBaseUrl(request));
     cancelUrl.searchParams.set("payment", "cancel");
@@ -162,7 +167,7 @@ export default {
     const params = new URLSearchParams();
 
     params.set("mode", "payment");
-    params.set("success_url", successUrl.toString());
+    params.set("success_url", successUrlString);
     params.set("cancel_url", cancelUrl.toString());
     params.set("allow_promotion_codes", "true");
     params.set("billing_address_collection", "auto");
