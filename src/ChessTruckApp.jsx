@@ -48,6 +48,7 @@ import {
 } from "./lib/validation.js";
 
 const REGISTRATION_DRAFT_KEY = "ct-registration-draft-v2";
+const CAMP_CONFIRMATION_STORAGE_KEY = "ct-camp-confirmation-v1";
 const phoneContact = contactNumbers[0];
 const emailContact = contactEmails[0];
 const footerContactMethods = [...contactNumbers, emailContact].filter(Boolean);
@@ -166,6 +167,7 @@ const knownRoutes = new Set([
   "/",
   "/camps",
   "/camps/book",
+  "/camps/confirmed",
   "/camps/training",
   "/camps/prep",
   "/camps/online",
@@ -2145,6 +2147,103 @@ function CampBookingPage({
   );
 }
 
+function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
+  const isSuccess = campCheckoutState.status === "success" && campCheckoutState.details;
+  const isLoading = campCheckoutState.status === "loading";
+  const isError = campCheckoutState.status === "error";
+
+  const title = isSuccess
+    ? "Thank you. Your camp spot is confirmed."
+    : isLoading
+      ? "Confirming your camp payment..."
+      : isError
+        ? "We could not confirm the camp payment yet."
+        : "Camp confirmation";
+
+  const intro = isSuccess
+    ? `A Stripe receipt was sent to ${campCheckoutState.details.customerEmail || "your email"}. We will follow up with the next camp details shortly.`
+    : isLoading
+      ? "Please wait a moment while we verify the Stripe checkout session."
+      : isError
+        ? campCheckoutState.message || "Please contact us if you were charged but do not see a confirmation."
+        : "This page shows your camp confirmation after checkout finishes.";
+
+  return (
+    <>
+      <section className="page-hero lesson-page-hero">
+        <div className="shell">
+          <article className="surface camp-confirmation-card">
+            <span className="section-tag">{isSuccess ? "Camp confirmed" : "Camp checkout"}</span>
+            <h1>{title}</h1>
+            <p className="page-intro">{intro}</p>
+
+            {campCheckoutState.status !== "idle" ? (
+              <article className={`status-banner status-banner-${campCheckoutState.status}`}>
+                <strong>
+                  {isSuccess && "Payment confirmed"}
+                  {isLoading && "Checking payment"}
+                  {isError && "Confirmation needs attention"}
+                </strong>
+                <p>{campCheckoutState.message || intro}</p>
+              </article>
+            ) : null}
+
+            {isSuccess ? (
+              <div className="fact-list fact-list-hero camp-confirmation-facts">
+                <div>
+                  <span>Reference</span>
+                  <strong>{campCheckoutState.details.reference}</strong>
+                </div>
+                <div>
+                  <span>Amount</span>
+                  <strong>
+                    {typeof campCheckoutState.details.amountTotal === "number"
+                      ? formatCurrency(campCheckoutState.details.amountTotal)
+                      : "$100"}
+                  </strong>
+                </div>
+                <div>
+                  <span>Receipt email</span>
+                  <strong>{campCheckoutState.details.customerEmail || "Sent by Stripe"}</strong>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="cta-row">
+              <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Back to Camps
+              </AppLink>
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Contact us
+              </AppLink>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell card-grid card-grid-three">
+          <article className="surface">
+            <h3>What happens next</h3>
+            <p>We will review the booking and send the next camp details after the Stripe confirmation.</p>
+          </article>
+          <article className="surface">
+            <h3>Need to change something?</h3>
+            <p>Reply to the receipt email or use the contact page if you need to update the day, week, or family details.</p>
+          </article>
+          <article className="surface">
+            <h3>Prefer direct contact?</h3>
+            <p>
+              Call or text <a href={phoneContact.href} className="inline-link">{phoneContact.display}</a> or email{" "}
+              <a href={emailContact.href} className="inline-link">{emailContact.display}</a>.
+            </p>
+          </article>
+        </div>
+      </section>
+    </>
+  );
+}
+
 function CampDetailPage({ page, currentPath, navigate }) {
   return (
     <>
@@ -3234,7 +3333,12 @@ function ChessTruckApp() {
   }, [currentPath]);
 
   useEffect(() => {
-    if (currentPath !== "/" && currentPath !== "/camps" && currentPath !== "/camps/book") {
+    if (
+      currentPath !== "/" &&
+      currentPath !== "/camps" &&
+      currentPath !== "/camps/book" &&
+      currentPath !== "/camps/confirmed"
+    ) {
       return;
     }
 
@@ -3255,6 +3359,7 @@ function ChessTruckApp() {
     setRoute({ pathname: currentPath, search: cleanedSearch ? `?${cleanedSearch}` : "" });
 
     if (payment === "cancel") {
+      window.sessionStorage.removeItem(CAMP_CONFIRMATION_STORAGE_KEY);
       setIsCampBookingFormVisible(true);
       setCampCheckoutState({
         status: "cancelled",
@@ -3267,7 +3372,6 @@ function ChessTruckApp() {
     }
 
     if (payment === "success" && sessionId) {
-      setIsCampBookingFormVisible(true);
       setCampCheckoutState({ status: "loading", message: "", details: null, activeOption: "" });
 
       fetch("/api/checkout-status", {
@@ -3290,8 +3394,20 @@ function ChessTruckApp() {
             details: payload,
             activeOption: "",
           });
+          window.sessionStorage.setItem(
+            CAMP_CONFIRMATION_STORAGE_KEY,
+            JSON.stringify({
+              status: "success",
+              message:
+                payload.message ||
+                "Camp payment confirmed. We will follow up with the next registration details.",
+              details: payload,
+              activeOption: "",
+            })
+          );
         })
         .catch((error) => {
+          window.sessionStorage.removeItem(CAMP_CONFIRMATION_STORAGE_KEY);
           setCampCheckoutState({
             status: "error",
             message:
@@ -3304,6 +3420,37 @@ function ChessTruckApp() {
         });
     }
   }, [currentPath, route.search]);
+
+  useEffect(() => {
+    if (currentPath !== "/camps/confirmed" || campCheckoutState.status !== "idle") {
+      return;
+    }
+
+    try {
+      const storedConfirmation = window.sessionStorage.getItem(CAMP_CONFIRMATION_STORAGE_KEY);
+
+      if (!storedConfirmation) {
+        return;
+      }
+
+      const parsedConfirmation = JSON.parse(storedConfirmation);
+
+      if (
+        parsedConfirmation &&
+        typeof parsedConfirmation === "object" &&
+        parsedConfirmation.status === "success"
+      ) {
+        setCampCheckoutState({
+          status: parsedConfirmation.status,
+          message: parsedConfirmation.message || "",
+          details: parsedConfirmation.details || null,
+          activeOption: "",
+        });
+      }
+    } catch {
+      window.sessionStorage.removeItem(CAMP_CONFIRMATION_STORAGE_KEY);
+    }
+  }, [currentPath, campCheckoutState.status]);
 
   useEffect(() => {
     if (currentPath !== "/" && currentPath !== "/camps" && currentPath !== "/camps/book") {
@@ -3724,6 +3871,14 @@ function ChessTruckApp() {
               selectedCampOptionId={selectedCampOptionId}
               isCampBookingFormVisible={isCampBookingFormVisible}
               openCampBooking={openCampBooking}
+            />
+          );
+        case "/camps/confirmed":
+          return (
+            <CampConfirmationPage
+              currentPath={currentPath}
+              navigate={navigate}
+              campCheckoutState={campCheckoutState}
             />
           );
         case "/camps/training":

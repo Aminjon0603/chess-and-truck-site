@@ -147,7 +147,7 @@ export default {
 
     const reference = buildReference();
     const returnPath = normalizeReturnPath(payload.returnPath, optionId);
-    const successUrl = new URL(returnPath, getBaseUrl(request));
+    const successUrl = new URL("/camps/confirmed", getBaseUrl(request));
     successUrl.searchParams.set("payment", "success");
     const successUrlString = appendRawQueryParam(successUrl, "session_id", "{CHECKOUT_SESSION_ID}");
 

@@ -28,6 +28,11 @@ const getBaseUrl = (request) => {
   return request.headers.get("origin") || url.origin;
 };
 
+const appendRawQueryParam = (url, key, value) => {
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}${key}=${value}`;
+};
+
 const buildRegistrationReference = () => {
   const dateCode = new Date().toISOString().slice(0, 10).replaceAll("-", "");
   return `CT-${dateCode}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
@@ -164,11 +169,13 @@ export default {
     }).catch(() => null);
 
     const params = new URLSearchParams();
-    params.set("mode", "payment");
-    params.set(
-      "success_url",
-      `${getBaseUrl(request)}/register?payment=success&session_id={CHECKOUT_SESSION_ID}`
+    const successUrl = appendRawQueryParam(
+      `${getBaseUrl(request)}/register?payment=success`,
+      "session_id",
+      "{CHECKOUT_SESSION_ID}"
     );
+    params.set("mode", "payment");
+    params.set("success_url", successUrl);
     params.set("cancel_url", `${getBaseUrl(request)}/register?payment=cancel`);
     params.set("customer_email", data.parentEmail || data.email);
     params.set("client_reference_id", registrationReference);

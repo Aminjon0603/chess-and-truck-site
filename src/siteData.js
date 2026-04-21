@@ -116,6 +116,11 @@ export const routeMeta = {
     description:
       "Choose a summer camp option, add family details, and continue to secure checkout for CHESS AND TRUCK camps in Central Park.",
   },
+  "/camps/confirmed": {
+    title: "Camp Confirmation | CHESS AND TRUCK",
+    description:
+      "Review your CHESS AND TRUCK camp payment confirmation, receipt details, and the next step after Stripe checkout.",
+  },
   "/camps/training": {
     title: "Training Camps | CHESS AND TRUCK",
     description:

@@ -1211,6 +1211,19 @@ a {
   align-content: start;
 }
 
+.camp-confirmation-card {
+  display: grid;
+  gap: 22px;
+}
+
+.camp-confirmation-card h1 {
+  max-width: 14ch;
+}
+
+.camp-confirmation-facts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .camp-hero-facts {
   margin-top: 4px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
