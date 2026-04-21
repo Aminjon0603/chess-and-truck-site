@@ -1026,6 +1026,296 @@ function HomePage({ currentPath, navigate }) {
   );
 }
 
+function CampCheckoutStatusBanner({ campCheckoutState }) {
+  if (campCheckoutState.status === "idle") {
+    return null;
+  }
+
+  return (
+    <article className={`surface status-banner status-banner-${campCheckoutState.status}`}>
+      <strong>
+        {campCheckoutState.status === "loading" && "Opening secure checkout"}
+        {campCheckoutState.status === "success" && "Payment confirmed"}
+        {campCheckoutState.status === "cancelled" && "Checkout cancelled"}
+        {campCheckoutState.status === "error" && "Camp checkout could not start"}
+      </strong>
+      <p>{campCheckoutState.message}</p>
+    </article>
+  );
+}
+
+function CampBookingFormPanel({
+  selectedOption,
+  campBookingState,
+  campBookingErrors,
+  updateCampBookingField,
+  handleCampBookingSubmit,
+  campCheckoutState,
+  openCampBooking,
+}) {
+  const selectedLabel =
+    selectedOption.id === "full-week" ? "Preferred week" : "Preferred day";
+  const selectedPlaceholder =
+    selectedOption.id === "full-week"
+      ? "Example: Week of June 15"
+      : "Example: June 18";
+  const selectedSchedule =
+    campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
+  const bookingSupportMethods = [...contactNumbers, emailContact].filter(Boolean);
+
+  return (
+    <div className="register-layout camp-booking-layout" id="camp-booking-form">
+      <form
+        className="surface registration-form camp-booking-form"
+        onSubmit={(event) => handleCampBookingSubmit(event, selectedOption.id)}
+      >
+        <div className="form-header">
+          <span className="mini-tag">{selectedOption.eyebrow}</span>
+          <h2>{campBookingPage.formTitle}</h2>
+          <p>{campBookingPage.formIntro}</p>
+        </div>
+
+        <div className="booking-option-switcher" aria-label="Camp booking options">
+          {campOverviewPage.bookingCards.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`booking-option-chip${selectedOption.id === item.id ? " is-active" : ""}`}
+              onClick={() => openCampBooking(item.id, item.defaultSchedulePreference)}
+            >
+              <span>{item.eyebrow}</span>
+              <strong>{item.title}</strong>
+            </button>
+          ))}
+        </div>
+
+        <div className="form-section">
+          <div className="form-section-head">
+            <div className="section-count">01</div>
+            <div>
+              <h3>{campBookingPage.sections[0].title}</h3>
+              <p>{campBookingPage.sections[0].intro}</p>
+            </div>
+          </div>
+          <div className="field-grid">
+            <label className="field">
+              <span>Parent first name</span>
+              <input
+                type="text"
+                name="parentFirstName"
+                value={campBookingState.parentFirstName}
+                onChange={(event) => updateCampBookingField("parentFirstName", event.target.value)}
+                autoComplete="given-name"
+              />
+              {campBookingErrors.parentFirstName ? (
+                <span className="field-error">{campBookingErrors.parentFirstName}</span>
+              ) : null}
+            </label>
+            <label className="field">
+              <span>Parent last name</span>
+              <input
+                type="text"
+                name="parentLastName"
+                value={campBookingState.parentLastName}
+                onChange={(event) => updateCampBookingField("parentLastName", event.target.value)}
+                autoComplete="family-name"
+              />
+              {campBookingErrors.parentLastName ? (
+                <span className="field-error">{campBookingErrors.parentLastName}</span>
+              ) : null}
+            </label>
+            <label className="field">
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                value={campBookingState.email}
+                onChange={(event) => updateCampBookingField("email", event.target.value)}
+                autoComplete="email"
+                inputMode="email"
+              />
+              {campBookingErrors.email ? (
+                <span className="field-error">{campBookingErrors.email}</span>
+              ) : null}
+            </label>
+            <label className="field">
+              <span>Phone</span>
+              <input
+                type="tel"
+                name="phone"
+                value={campBookingState.phone}
+                onChange={(event) => updateCampBookingField("phone", event.target.value)}
+                autoComplete="tel"
+                inputMode="tel"
+              />
+              {campBookingErrors.phone ? (
+                <span className="field-error">{campBookingErrors.phone}</span>
+              ) : null}
+            </label>
+          </div>
+        </div>
+
+        <div className="form-section">
+          <div className="form-section-head">
+            <div className="section-count">02</div>
+            <div>
+              <h3>{campBookingPage.sections[1].title}</h3>
+              <p>{campBookingPage.sections[1].intro}</p>
+            </div>
+          </div>
+          <div className="field-grid">
+            <label className="field">
+              <span>Student name</span>
+              <input
+                type="text"
+                name="studentName"
+                value={campBookingState.studentName}
+                onChange={(event) => updateCampBookingField("studentName", event.target.value)}
+                autoComplete="off"
+              />
+              {campBookingErrors.studentName ? (
+                <span className="field-error">{campBookingErrors.studentName}</span>
+              ) : null}
+            </label>
+            <label className="field">
+              <span>Student age or grade</span>
+              <input
+                type="text"
+                name="studentAge"
+                value={campBookingState.studentAge}
+                onChange={(event) => updateCampBookingField("studentAge", event.target.value)}
+                placeholder="Example: Age 9 or Grade 4"
+                autoComplete="off"
+              />
+              {campBookingErrors.studentAge ? (
+                <span className="field-error">{campBookingErrors.studentAge}</span>
+              ) : null}
+            </label>
+            <label className="field field-span-2">
+              <span>Current level</span>
+              <input
+                type="text"
+                name="studentLevel"
+                value={campBookingState.studentLevel}
+                onChange={(event) => updateCampBookingField("studentLevel", event.target.value)}
+                placeholder="Example: Beginner, improving, tournament player"
+                autoComplete="off"
+              />
+              {campBookingErrors.studentLevel ? (
+                <span className="field-error">{campBookingErrors.studentLevel}</span>
+              ) : null}
+            </label>
+          </div>
+        </div>
+
+        <div className="form-section">
+          <div className="form-section-head">
+            <div className="section-count">03</div>
+            <div>
+              <h3>{campBookingPage.sections[2].title}</h3>
+              <p>{campBookingPage.sections[2].intro}</p>
+            </div>
+          </div>
+          <div className="field-grid">
+            <label className="field">
+              <span>{selectedLabel}</span>
+              <input
+                type="text"
+                name="schedulePreference"
+                value={campBookingState.schedulePreference}
+                onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
+                placeholder={selectedPlaceholder}
+                autoComplete="off"
+              />
+              {campBookingErrors.schedulePreference ? (
+                <span className="field-error">{campBookingErrors.schedulePreference}</span>
+              ) : null}
+            </label>
+            <label className="field field-span-2">
+              <span>Notes</span>
+              <textarea
+                name="notes"
+                value={campBookingState.notes}
+                onChange={(event) => updateCampBookingField("notes", event.target.value)}
+                placeholder="Anything we should know before you continue to payment?"
+              />
+            </label>
+          </div>
+        </div>
+
+        <label className="honeypot-field" aria-hidden="true">
+          Website
+          <input
+            type="text"
+            tabIndex="-1"
+            autoComplete="off"
+            value={campBookingState.website}
+            onChange={(event) => updateCampBookingField("website", event.target.value)}
+          />
+        </label>
+
+        <div className="submit-actions">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={campCheckoutState.status === "loading"}
+          >
+            {campCheckoutState.status === "loading" ? "Opening checkout..." : "Continue to secure checkout"}
+          </button>
+          <p className="field-note">{campBookingPage.siblingNote}</p>
+        </div>
+      </form>
+
+      <aside className="register-sidebar">
+        <div className="summary-card">
+          <article className="surface summary-card-block">
+            <span className="mini-tag">{selectedOption.eyebrow}</span>
+            <h2>{selectedOption.title}</h2>
+            <p className="camp-booking-price">{selectedOption.price}</p>
+            <div className="summary-list summary-list-booking">
+              <div>
+                <span>Dates</span>
+                <strong>June 15 - August 21</strong>
+              </div>
+              <div>
+                <span>Location</span>
+                <strong>House of Chess and Checkers, Central Park</strong>
+              </div>
+              <div>
+                <span>Selected slot</span>
+                <strong>{selectedSchedule || "Choose a day above"}</strong>
+              </div>
+              <div>
+                <span>Service</span>
+                <strong>{selectedOption.id === "full-week" ? "Weekly camp block" : "Single camp day"}</strong>
+              </div>
+            </div>
+            <ul className="camp-booking-list">
+              {selectedOption.details.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
+            <p className="camp-booking-availability">{selectedOption.availability}</p>
+          </article>
+
+          <article className="surface summary-card-block">
+            <span className="mini-tag">{campBookingPage.supportTitle}</span>
+            <p>{campBookingPage.supportText}</p>
+            <div className="booking-support-actions">
+              {bookingSupportMethods.map((item) => (
+                <a key={item.display} href={item.href} className="btn btn-secondary btn-full booking-support-action">
+                  <span>{item.label}</span>
+                  <strong>{item.display}</strong>
+                </a>
+              ))}
+            </div>
+          </article>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 function AboutPage({ currentPath, navigate }) {
   return (
     <>
@@ -1372,8 +1662,22 @@ function CampsOverviewPage({
   currentPath,
   navigate,
   campCheckoutState = campCheckoutInitialState,
+  campBookingState = campBookingInitialState,
+  campBookingErrors = {},
+  updateCampBookingField = () => {},
+  handleCampBookingSubmit = () => {},
+  selectedCampOptionId = campOverviewPage.bookingCards[0]?.id,
   openCampBooking = () => {},
 }) {
+  const selectedOption =
+    campOverviewPage.bookingCards.find((item) => item.id === selectedCampOptionId) ||
+    campOverviewPage.bookingCards[0];
+  const weeklyOption =
+    campOverviewPage.bookingCards.find((item) => item.id === "full-week") ||
+    campOverviewPage.bookingCards[0];
+  const activeSchedulePreference =
+    campBookingState.schedulePreference?.trim() || selectedOption?.defaultSchedulePreference || "";
+
   return (
     <>
       <section className="page-hero lesson-page-hero">
@@ -1392,12 +1696,12 @@ function CampsOverviewPage({
             </div>
 
             <div className="cta-row">
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Ask About Summer Camp
-              </AppLink>
-              <a href="#camp-details" className="btn btn-secondary">
-                See Camp Details
+              <a href="#camp-booking" className="btn btn-primary">
+                Book Camp
               </a>
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Ask a Question
+              </AppLink>
             </div>
 
             <div className="fact-list fact-list-hero camp-hero-facts">
@@ -1435,43 +1739,7 @@ function CampsOverviewPage({
         </div>
       </section>
 
-      <section className="page-section" id="camp-overview">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={campOverviewPage.overviewSection.eyebrow}
-            title={campOverviewPage.overviewSection.title}
-            intro={campOverviewPage.overviewSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {campOverviewPage.overviewPoints.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section" id="camp-details">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={campOverviewPage.detailsSection.eyebrow}
-            title={campOverviewPage.detailsSection.title}
-            intro={campOverviewPage.detailsSection.intro}
-          />
-          <div className="card-grid card-grid-three camp-detail-grid">
-            {campOverviewPage.detailsCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
+      <section className="page-section" id="camp-booking">
         <div className="shell">
           <SectionIntro
             eyebrow={campOverviewPage.bookingSection.eyebrow}
@@ -1479,47 +1747,85 @@ function CampsOverviewPage({
             intro={campOverviewPage.bookingSection.intro}
           />
           <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
+          <div className="camp-booking-board">
+            <div className="camp-booking-days">
+              {campOverviewPage.bookingSchedule.map((item) => {
+                const isLoading =
+                  campCheckoutState.status === "loading" && campCheckoutState.activeOption === item.optionId;
+                const isSelected =
+                  selectedCampOptionId === item.optionId && activeSchedulePreference === item.schedulePreference;
 
-          {campCheckoutState.status !== "idle" && (
-            <article className={`surface status-banner status-banner-${campCheckoutState.status}`}>
-              <strong>
-                {campCheckoutState.status === "loading" && "Opening secure checkout"}
-                {campCheckoutState.status === "success" && "Payment confirmed"}
-                {campCheckoutState.status === "cancelled" && "Checkout cancelled"}
-                {campCheckoutState.status === "error" && "Camp checkout could not start"}
-              </strong>
-              <p>{campCheckoutState.message}</p>
+                return (
+                  <article className={`surface camp-booking-slot${isSelected ? " is-selected" : ""}`} key={item.id}>
+                    <div className="camp-booking-slot-header">
+                      <strong>{item.date}</strong>
+                      <span>{item.relativeLabel}</span>
+                    </div>
+                    <div className="camp-booking-slot-body">
+                      <div className="camp-booking-slot-media">
+                        <img src={campOverviewVisual} alt={item.title} className="camp-booking-slot-image" />
+                      </div>
+                      <div className="camp-booking-slot-copy">
+                        <strong className="camp-booking-slot-time">{item.time}</strong>
+                        <h3>{item.title}</h3>
+                        <p>
+                          {item.subtitle} @ {item.price}
+                        </p>
+                      </div>
+                      <div className="camp-booking-slot-side">
+                        <button
+                          type="button"
+                          className="btn btn-primary camp-booking-button camp-booking-slot-button"
+                          onClick={() => openCampBooking(item.optionId, item.schedulePreference)}
+                          disabled={campCheckoutState.status === "loading"}
+                        >
+                          {isLoading ? "Opening..." : "Book"}
+                        </button>
+                        <span>{item.spotsLeft}</span>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            <article
+              className={`surface surface-dark camp-booking-week-card${
+                selectedCampOptionId === weeklyOption.id ? " is-selected" : ""
+              }`}
+            >
+              <span className="mini-tag mini-tag-dark">{weeklyOption.eyebrow}</span>
+              <h3>{weeklyOption.title}</h3>
+              <p className="camp-booking-price">{weeklyOption.price}</p>
+              <ul className="camp-booking-list">
+                {weeklyOption.details.map((detail) => (
+                  <li key={detail}>{detail}</li>
+                ))}
+              </ul>
+              <p className="camp-booking-availability">{weeklyOption.availability}</p>
+              <button
+                type="button"
+                className="btn btn-primary camp-booking-button"
+                onClick={() => openCampBooking(weeklyOption.id, weeklyOption.defaultSchedulePreference)}
+                disabled={campCheckoutState.status === "loading"}
+              >
+                {campCheckoutState.status === "loading" && campCheckoutState.activeOption === weeklyOption.id
+                  ? "Opening checkout..."
+                  : weeklyOption.cta}
+              </button>
             </article>
-          )}
-
-          <div className="camp-booking-grid">
-            {campOverviewPage.bookingCards.map((item) => {
-              const isLoading =
-                campCheckoutState.status === "loading" && campCheckoutState.activeOption === item.id;
-
-              return (
-                <article className="surface camp-booking-card" key={item.id}>
-                  <span className="mini-tag">{item.eyebrow}</span>
-                  <h3>{item.title}</h3>
-                  <p className="camp-booking-price">{item.price}</p>
-                  <ul className="camp-booking-list">
-                    {item.details.map((detail) => (
-                      <li key={detail}>{detail}</li>
-                    ))}
-                  </ul>
-                  <p className="camp-booking-availability">{item.availability}</p>
-                  <button
-                    type="button"
-                    className="btn btn-primary camp-booking-button"
-                    onClick={() => openCampBooking(item.id)}
-                    disabled={campCheckoutState.status === "loading"}
-                  >
-                    {isLoading ? "Opening checkout..." : item.cta}
-                  </button>
-                </article>
-              );
-            })}
           </div>
+
+          <CampCheckoutStatusBanner campCheckoutState={campCheckoutState} />
+          <CampBookingFormPanel
+            selectedOption={selectedOption}
+            campBookingState={campBookingState}
+            campBookingErrors={campBookingErrors}
+            updateCampBookingField={updateCampBookingField}
+            handleCampBookingSubmit={handleCampBookingSubmit}
+            campCheckoutState={campCheckoutState}
+            openCampBooking={openCampBooking}
+          />
         </div>
       </section>
 
@@ -1569,60 +1875,6 @@ function CampsOverviewPage({
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={campOverviewPage.learningSection.eyebrow}
-            title={campOverviewPage.learningSection.title}
-            intro={campOverviewPage.learningSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {campOverviewPage.learningCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={campOverviewPage.faqSection.eyebrow}
-            title={campOverviewPage.faqSection.title}
-            intro={campOverviewPage.faqSection.intro}
-          />
-          <div className="faq-stack">
-            {campOverviewPage.faqs.map((item) => (
-              <details className="faq-item" key={item.question}>
-                <summary>{item.question}</summary>
-                <p>{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <article className="surface lesson-detail-cta surface-dark camp-final-cta">
-            <span className="section-tag">Launch soon</span>
-            <h3>{campOverviewPage.ctaTitle}</h3>
-            <p>{campOverviewPage.ctaText}</p>
-            <div className="cta-row">
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Join Early Access
-              </AppLink>
-              <a href={phoneContact.href} className="btn btn-secondary">
-                Call / Text {phoneContact.display}
-              </a>
-            </div>
-          </article>
         </div>
       </section>
     </>
@@ -2948,6 +3200,11 @@ function ChessTruckApp() {
   const [campCheckoutState, setCampCheckoutState] = useState(campCheckoutInitialState);
   const [campBookingState, setCampBookingState] = useState(campBookingInitialState);
   const [campBookingErrors, setCampBookingErrors] = useState({});
+  const [selectedCampOptionId, setSelectedCampOptionId] = useState(
+    campOverviewPage.bookingCards.find((item) => item.id === "single-day")?.id ||
+      campOverviewPage.bookingCards[0]?.id ||
+      ""
+  );
   const [contactState, setContactState] = useState(contactInitialState);
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
   const [hasLoadedRegistrationDraft, setHasLoadedRegistrationDraft] = useState(false);
@@ -3079,7 +3336,7 @@ function ChessTruckApp() {
   }, [currentPath]);
 
   useEffect(() => {
-    if (currentPath !== "/camps" && currentPath !== "/camps/book") {
+    if (currentPath !== "/" && currentPath !== "/camps" && currentPath !== "/camps/book") {
       return;
     }
 
@@ -3147,6 +3404,28 @@ function ChessTruckApp() {
         });
     }
   }, [currentPath, route.search]);
+
+  useEffect(() => {
+    if (currentPath !== "/" && currentPath !== "/camps" && currentPath !== "/camps/book") {
+      return;
+    }
+
+    const requestedOptionId = new URLSearchParams(route.search).get("option");
+    const matchedOption = campOverviewPage.bookingCards.find((item) => item.id === requestedOptionId);
+
+    if (!matchedOption) {
+      return;
+    }
+
+    setSelectedCampOptionId(matchedOption.id);
+
+    if (!campBookingState.schedulePreference.trim() && matchedOption.defaultSchedulePreference) {
+      setCampBookingState((current) => ({
+        ...current,
+        schedulePreference: matchedOption.defaultSchedulePreference,
+      }));
+    }
+  }, [currentPath, route.search, campBookingState.schedulePreference]);
 
   useEffect(() => {
     if (currentPath !== "/register") {
@@ -3382,8 +3661,22 @@ function ChessTruckApp() {
     }
   };
 
-  const openCampBooking = (optionId) => {
-    navigate(`/camps/book?option=${optionId}`);
+  const openCampBooking = (optionId, schedulePreference = "") => {
+    const selectedOption = campOverviewPage.bookingCards.find((item) => item.id === optionId);
+    setSelectedCampOptionId(optionId);
+
+    const nextSchedulePreference = schedulePreference || selectedOption?.defaultSchedulePreference || "";
+
+    if (nextSchedulePreference) {
+      updateCampBookingField("schedulePreference", nextSchedulePreference);
+    }
+
+    window.requestAnimationFrame(() => {
+      document.getElementById("camp-booking-form")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
   };
 
   const handleCampBookingSubmit = async (event, optionId) => {
@@ -3405,12 +3698,14 @@ function ChessTruckApp() {
     setCampCheckoutState({ status: "loading", message: "", details: null, activeOption: optionId });
 
     try {
+      const bookingBasePath = currentPath === "/" ? "/" : "/camps";
+      const returnPath = `${bookingBasePath}?option=${optionId}`;
       const response = await fetch("/api/create-camp-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           optionId,
-          returnPath: `/camps/book?option=${optionId}`,
+          returnPath,
           ...campBookingState,
         }),
       });
@@ -3490,6 +3785,11 @@ function ChessTruckApp() {
               currentPath={currentPath}
               navigate={navigate}
               campCheckoutState={campCheckoutState}
+              campBookingState={campBookingState}
+              campBookingErrors={campBookingErrors}
+              updateCampBookingField={updateCampBookingField}
+              handleCampBookingSubmit={handleCampBookingSubmit}
+              selectedCampOptionId={selectedCampOptionId}
               openCampBooking={openCampBooking}
             />
           );
@@ -3499,20 +3799,26 @@ function ChessTruckApp() {
               currentPath={currentPath}
               navigate={navigate}
               campCheckoutState={campCheckoutState}
+              campBookingState={campBookingState}
+              campBookingErrors={campBookingErrors}
+              updateCampBookingField={updateCampBookingField}
+              handleCampBookingSubmit={handleCampBookingSubmit}
+              selectedCampOptionId={selectedCampOptionId}
               openCampBooking={openCampBooking}
             />
           );
         case "/camps/book":
           return (
-            <CampBookingPage
+            <CampsOverviewPage
               currentPath={currentPath}
               navigate={navigate}
-              routeSearch={route.search}
+              campCheckoutState={campCheckoutState}
               campBookingState={campBookingState}
               campBookingErrors={campBookingErrors}
               updateCampBookingField={updateCampBookingField}
               handleCampBookingSubmit={handleCampBookingSubmit}
-              campCheckoutState={campCheckoutState}
+              selectedCampOptionId={selectedCampOptionId}
+              openCampBooking={openCampBooking}
             />
           );
         case "/camps/training":

@@ -328,8 +328,7 @@ export const lessonCarouselSlides = [
 export const campOverviewPage = {
   eyebrow: "Camps",
   title: "Summer Chess Camps in Central Park",
-  intro:
-    "June 15 to August 21. Lessons, games, and a clear chess-first camp day at the House of Chess and Checkers.",
+  intro: "June 15 to August 21. Central Park. Beginner-friendly. Book a day or a full week.",
   chips: ["June 15 - August 21", "Central Park", "NYC families"],
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21" },
@@ -337,12 +336,10 @@ export const campOverviewPage = {
     { label: "Levels", value: "Beginner-friendly and improving players" },
     { label: "Service", value: "Half-day and full-day camp" },
   ],
-  portraitCaption:
-    "A clean camp setup with real chess structure from day one.",
+  portraitCaption: "Simple camp booking with real chess structure.",
   asideTag: "Summer 2026",
-  asideTitle: "Camp at a glance",
-  asideText:
-    "Central Park, June 15 to August 21. Review the basics, choose an option, and contact us for availability.",
+  asideTitle: "Fast facts",
+  asideText: "Choose a slot, pay securely, and we will send the next details.",
   asideFacts: [
     { label: "Dates", value: "June 15 - August 21" },
     { label: "Venue", value: "House of Chess and Checkers" },
@@ -391,9 +388,9 @@ export const campOverviewPage = {
   ],
   bookingSection: {
     eyebrow: "Camp booking",
-    title: "Choose your camp option",
-    intro: "Simple checkout.",
-    note: "Booking for siblings? Adjust quantity in checkout.",
+    title: "Book in one screen",
+    intro: "Pick a day or full week and continue to secure checkout.",
+    note: "Add the family details once. Need help first? Call, text, or email us.",
   },
   bookingCards: [
     {
@@ -401,10 +398,11 @@ export const campOverviewPage = {
       eyebrow: "Weekly camp",
       title: "Full Week Camp",
       price: "$450 per week",
+      defaultSchedulePreference: "Week of June 15",
       details: [
         "Five camp days in one week",
-        "Best value for families booking a full block",
-        "Built around lessons, coached games, and outdoor breaks in Central Park",
+        "Best value for a full block",
+        "Lessons, games, and breaks in Central Park",
       ],
       availability: "Limited group size",
       cta: "Reserve Your Week",
@@ -414,18 +412,81 @@ export const campOverviewPage = {
       eyebrow: "Flexible option",
       title: "Single Day",
       price: "$100 per day",
+      defaultSchedulePreference: "Monday, June 15",
       details: [
         "Join for one camp day at a time",
-        "Good fit for families building around a changing summer schedule",
-        "Same chess-first structure in a shorter commitment",
+        "Easy for changing summer schedules",
+        "Same camp structure in a shorter commitment",
       ],
       availability: "Limited group size",
       cta: "Book a Day",
     },
   ],
+  bookingSchedule: [
+    {
+      id: "camp-day-1",
+      date: "Monday, June 15th, 2026",
+      relativeLabel: "Opening week",
+      time: "9:00 AM",
+      title: "Summer Camp Day",
+      subtitle: "3 hours in Central Park",
+      price: "$100.00",
+      spotsLeft: "12 spots left",
+      optionId: "single-day",
+      schedulePreference: "Monday, June 15",
+    },
+    {
+      id: "camp-day-2",
+      date: "Tuesday, June 16th, 2026",
+      relativeLabel: "Day 2",
+      time: "9:00 AM",
+      title: "Summer Camp Day",
+      subtitle: "3 hours in Central Park",
+      price: "$100.00",
+      spotsLeft: "12 spots left",
+      optionId: "single-day",
+      schedulePreference: "Tuesday, June 16",
+    },
+    {
+      id: "camp-day-3",
+      date: "Wednesday, June 17th, 2026",
+      relativeLabel: "Midweek session",
+      time: "9:00 AM",
+      title: "Summer Camp Day",
+      subtitle: "3 hours in Central Park",
+      price: "$100.00",
+      spotsLeft: "12 spots left",
+      optionId: "single-day",
+      schedulePreference: "Wednesday, June 17",
+    },
+    {
+      id: "camp-day-4",
+      date: "Thursday, June 18th, 2026",
+      relativeLabel: "Late-week session",
+      time: "9:00 AM",
+      title: "Summer Camp Day",
+      subtitle: "3 hours in Central Park",
+      price: "$100.00",
+      spotsLeft: "12 spots left",
+      optionId: "single-day",
+      schedulePreference: "Thursday, June 18",
+    },
+    {
+      id: "camp-day-5",
+      date: "Friday, June 19th, 2026",
+      relativeLabel: "Wrap-up day",
+      time: "9:00 AM",
+      title: "Summer Camp Day",
+      subtitle: "3 hours in Central Park",
+      price: "$100.00",
+      spotsLeft: "12 spots left",
+      optionId: "single-day",
+      schedulePreference: "Friday, June 19",
+    },
+  ],
   mapSection: {
     eyebrow: "Camp location",
-    title: "Find us in Central Park",
+    title: "Location",
     intro: "House of Chess and Checkers, Central Park.",
     address: "House of Chess and Checkers, Central Park, New York, NY",
     directionsLabel: "Open in Google Maps",
@@ -436,8 +497,8 @@ export const campOverviewPage = {
   },
   scheduleSection: {
     eyebrow: "Sample day",
-    title: "A sample camp day",
-    intro: "Timing may shift by group.",
+    title: "Sample day",
+    intro: "Simple, chess-first structure.",
   },
   sampleSchedule: [
     {
@@ -539,12 +600,10 @@ export const campOverviewPage = {
 export const campBookingPage = {
   eyebrow: "Camp booking",
   title: "Choose an option and continue to secure checkout",
-  intro:
-    "Pick a camp option, add the family details we need, and continue to Stripe to reserve a spot.",
+  intro: "Pick an option, add family details, and continue to Stripe.",
   chips: ["June 15 - August 21", "Central Park", "Secure checkout"],
   formTitle: "Camp booking details",
-  formIntro:
-    "This short step helps us know who the student is before you continue to payment.",
+  formIntro: "A quick step before payment.",
   sections: [
     {
       title: "Parent contact",
@@ -560,9 +619,8 @@ export const campBookingPage = {
     },
   ],
   supportTitle: "Need help before checkout?",
-  supportText:
-    "Call, text, or email if you want to confirm fit, availability, or the best camp option before paying.",
-  siblingNote: "Booking for siblings? You can increase quantity during Stripe checkout.",
+  supportText: "Call, text, or email if you want to confirm fit or availability first.",
+  siblingNote: "Booking for siblings? Increase quantity during Stripe checkout.",
 };
 
 export const campDetailPages = {

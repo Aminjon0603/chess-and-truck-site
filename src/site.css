@@ -1196,6 +1196,142 @@ a {
   line-height: 1.6;
 }
 
+.camp-booking-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.camp-booking-days {
+  display: grid;
+  gap: 16px;
+}
+
+.camp-booking-slot,
+.camp-booking-week-card {
+  display: grid;
+  gap: 18px;
+}
+
+.camp-booking-slot {
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(25, 42, 50, 0.1);
+}
+
+.camp-booking-slot.is-selected,
+.camp-booking-week-card.is-selected {
+  border-color: rgba(196, 149, 73, 0.55);
+  box-shadow: 0 22px 48px rgba(18, 30, 36, 0.12);
+}
+
+.camp-booking-slot-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  background: rgba(21, 39, 47, 0.05);
+  border-bottom: 1px solid rgba(25, 42, 50, 0.08);
+}
+
+.camp-booking-slot-header strong,
+.camp-booking-slot-header span {
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.camp-booking-slot-header span {
+  color: var(--accent-deep);
+}
+
+.camp-booking-slot-body {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 22px;
+}
+
+.camp-booking-slot-media {
+  display: grid;
+  place-items: center;
+  min-height: 164px;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(248, 243, 232, 0.95), rgba(255, 251, 244, 0.98));
+  border-radius: 22px;
+}
+
+.camp-booking-slot-image {
+  width: min(100%, 150px);
+  height: auto;
+  object-fit: contain;
+}
+
+.camp-booking-slot-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.camp-booking-slot-time {
+  font-family: var(--display);
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  color: var(--ink);
+}
+
+.camp-booking-slot-copy h3 {
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+}
+
+.camp-booking-slot-copy p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.camp-booking-slot-side {
+  display: grid;
+  justify-items: end;
+  gap: 14px;
+  min-width: 126px;
+}
+
+.camp-booking-slot-side span {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.camp-booking-slot-button {
+  min-width: 92px;
+  min-height: 46px;
+  padding: 0.78rem 1.15rem;
+}
+
+.camp-booking-week-card {
+  align-content: start;
+  background:
+    radial-gradient(circle at top right, rgba(196, 149, 73, 0.18), transparent 34%),
+    var(--surface-dark);
+}
+
+.camp-booking-week-card .camp-booking-price {
+  color: var(--gold);
+}
+
+.camp-booking-week-card .camp-booking-availability {
+  color: rgba(255, 248, 236, 0.92);
+}
+
+.camp-booking-week-card .camp-booking-list {
+  color: rgba(242, 239, 231, 0.84);
+}
+
 .camp-booking-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1263,6 +1399,50 @@ a {
 
 .camp-booking-form {
   padding: 30px;
+}
+
+.booking-option-switcher {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.booking-option-chip {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(25, 42, 50, 0.12);
+  background: rgba(248, 243, 232, 0.65);
+  text-align: left;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.booking-option-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(196, 149, 73, 0.5);
+}
+
+.booking-option-chip span {
+  font-size: 0.83rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.booking-option-chip strong {
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.booking-option-chip.is-active {
+  background: rgba(196, 149, 73, 0.16);
+  border-color: rgba(196, 149, 73, 0.65);
+  box-shadow: 0 18px 36px rgba(19, 33, 39, 0.08);
 }
 
 .summary-card-block p {
@@ -2167,12 +2347,21 @@ a {
   .dojo-feature,
   .tournament-slot-body,
   .camp-map-grid,
+  .camp-booking-board,
   .camp-schedule-grid {
     grid-template-columns: 1fr;
   }
 
   .camp-booking-grid {
     grid-template-columns: 1fr;
+  }
+
+  .camp-booking-slot-body {
+    grid-template-columns: 1fr;
+  }
+
+  .camp-booking-slot-side {
+    justify-items: start;
   }
 
   .register-sidebar {
@@ -2191,6 +2380,15 @@ a {
 
   .site-header {
     backdrop-filter: blur(14px);
+  }
+
+  .camp-booking-slot-header {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .booking-option-switcher {
+    grid-template-columns: 1fr;
   }
 
   .header-row {
