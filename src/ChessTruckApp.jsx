@@ -3872,7 +3872,7 @@ function ChessTruckApp() {
               className="btn btn-primary header-button"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Contact us
+              {isCompactViewport ? "Contact" : "Contact us"}
             </AppLink>
             <button
               type="button"

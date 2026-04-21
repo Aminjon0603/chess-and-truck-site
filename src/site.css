@@ -2444,23 +2444,23 @@ a {
   }
 
   .header-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "brand actions"
-      "nav nav";
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 14px 12px;
     padding: 12px 0;
     align-items: center;
   }
 
   .brand-link {
-    grid-area: brand;
+    flex: 0 1 calc(100% - 56px);
     min-width: 0;
     gap: 0;
+    max-width: calc(100% - 56px);
   }
 
   .brand-mark {
-    width: clamp(150px, 42vw, 220px);
+    width: clamp(118px, 34vw, 156px);
   }
 
   .brand-copy strong {
@@ -2472,13 +2472,14 @@ a {
   }
 
   .header-actions {
-    grid-area: actions;
-    gap: 8px;
+    position: static;
+    flex: 0 0 auto;
+    gap: 6px;
   }
 
   .site-nav {
     display: none;
-    grid-area: nav;
+    width: 100%;
     flex-direction: column;
     gap: 8px;
     padding: 14px;
@@ -2587,10 +2588,7 @@ a {
   }
 
   .header-button {
-    min-height: 44px;
-    padding: 0 14px;
-    width: auto;
-    font-size: 0.94rem;
+    display: none;
   }
 
   .nav-toggle {
@@ -2598,6 +2596,13 @@ a {
     display: inline-flex;
     width: 44px;
     height: 44px;
+    border-color: rgba(17, 69, 60, 0.92);
+    background: rgba(17, 69, 60, 0.96);
+    box-shadow: 0 12px 24px rgba(17, 69, 60, 0.2);
+  }
+
+  .nav-toggle span {
+    background: #fff;
   }
 
   .cta-row .btn,
