@@ -338,12 +338,13 @@ export const campOverviewPage = {
   ],
   portraitCaption: "Simple camp booking with real chess structure.",
   asideTag: "Summer 2026",
-  asideTitle: "Fast facts",
-  asideText: "Choose a slot, pay securely, and we will send the next details.",
+  asideTitle: "Camp plan",
+  asideText:
+    "Morning camp in Central Park with FIDE Masters, warm-up games, park play, snack time, and rated chess activities.",
   asideFacts: [
-    { label: "Dates", value: "June 15 - August 21" },
-    { label: "Venue", value: "House of Chess and Checkers" },
-    { label: "Enrollment", value: "Early access open" },
+    { label: "Schedule", value: "9:00 AM to 11:15 AM+" },
+    { label: "Coaches", value: "FIDE Masters" },
+    { label: "Booking", value: "Day and week options open" },
   ],
   overviewSection: {
     eyebrow: "What camp includes",
@@ -497,39 +498,34 @@ export const campOverviewPage = {
   },
   scheduleSection: {
     eyebrow: "Sample day",
-    title: "Sample day",
-    intro: "Simple, chess-first structure.",
+    title: "Schedule",
+    intro: "Morning structure for camp days.",
   },
   sampleSchedule: [
     {
       time: "9:00 AM",
-      title: "Warm-up puzzles",
-      text: "Short tactical warm-up.",
+      title: "Drop off and warm up games",
+      text: "Students arrive, settle in, and start with warm-up games.",
     },
     {
       time: "9:30 AM",
-      title: "Group lesson",
-      text: "Coach-led lesson.",
+      title: "Chess lesson with FIDE Masters",
+      text: "Coach-led instruction with FIDE Masters.",
     },
     {
-      time: "10:30 AM",
-      title: "Practice games",
-      text: "Apply the lesson in games.",
+      time: "10:15 AM",
+      title: "Playground and park play / activities",
+      text: "Outdoor break with playground and park activities.",
     },
     {
-      time: "11:30 AM",
-      title: "Lunch / break",
-      text: "Reset before the next block.",
+      time: "11:00 AM",
+      title: "Snack time",
+      text: "Quick reset and snack break.",
     },
     {
-      time: "12:15 PM",
-      title: "Mini tournament",
-      text: "Short competitive rounds.",
-    },
-    {
-      time: "1:15 PM",
-      title: "Endgame or game review",
-      text: "Review before dismissal.",
+      time: "11:15 AM",
+      title: "Chess lessons, rated games, and chess activities",
+      text: "Lessons with FIDE Masters, rated games, puzzles, bughouse, and online play.",
     },
   ],
   learningSection: {
@@ -565,32 +561,24 @@ export const campOverviewPage = {
   faqSection: {
     eyebrow: "Camp FAQ",
     title: "Quick answers",
-    intro: "The basics.",
+    intro: "The basics parents ask first.",
   },
   faqs: [
     {
       question: "Is this good for beginners?",
-      answer: "Yes. The camp is beginner-friendly, with grouping to keep stronger students challenged.",
+      answer: "Yes. Beginners are welcome, and students are grouped as cleanly as possible by level.",
     },
     {
-      question: "Are students grouped by level?",
-      answer: "Yes. We group as cleanly as possible so lesson pace and game level make sense.",
+      question: "Who teaches the camp?",
+      answer: "Chess lessons are taught with FIDE Masters.",
     },
     {
       question: "What should students bring?",
-      answer: "Bring a water bottle, a snack or lunch if needed, and anything listed in the registration note.",
+      answer: "Bring a water bottle, a snack, and anything listed in the registration note.",
     },
     {
-      question: "Is tournament experience required?",
-      answer: "No. General camp works for students still building fundamentals.",
-    },
-    {
-      question: "Is lunch included?",
-      answer: "Lunch guidance comes with registration details. Expect either a lunch block or a bring-your-own-lunch note.",
-    },
-    {
-      question: "How do I join early access?",
-      answer: "Use the contact page, call or text (646) 251-7087 or (646) 494-5363, or email info@chessandtruck.com. Families on the early access list will hear first when dates and enrollment are released.",
+      question: "Can I book one day instead of a full week?",
+      answer: "Yes. You can book a single day or reserve a full week directly on the page.",
     },
   ],
   ctaTitle: "Ask about summer camp",

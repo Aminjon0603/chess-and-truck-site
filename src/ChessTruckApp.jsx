@@ -1717,7 +1717,7 @@ function CampsOverviewPage({
           <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel">
             <div className="lesson-hero-top">
               <div className="lesson-photo-shell">
-                <img src={campOverviewVisual} alt="Camp Overview" className="lesson-photo lesson-detail-photo" />
+                <img src={brandLogo} alt={`${siteBrand.name} logo`} className="lesson-photo lesson-detail-photo camp-logo-photo" />
               </div>
 
               <div className="lesson-hero-note">
@@ -1763,7 +1763,7 @@ function CampsOverviewPage({
                     </div>
                     <div className="camp-booking-slot-body">
                       <div className="camp-booking-slot-media">
-                        <img src={campOverviewVisual} alt={item.title} className="camp-booking-slot-image" />
+                        <img src={brandLogo} alt={`${siteBrand.name} logo`} className="camp-booking-slot-image camp-booking-slot-logo" />
                       </div>
                       <div className="camp-booking-slot-copy">
                         <strong className="camp-booking-slot-time">{item.time}</strong>
@@ -1873,6 +1873,24 @@ function CampsOverviewPage({
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={campOverviewPage.faqSection.eyebrow}
+            title={campOverviewPage.faqSection.title}
+            intro={campOverviewPage.faqSection.intro}
+          />
+          <div className="faq-stack">
+            {campOverviewPage.faqs.map((item) => (
+              <details className="faq-item" key={item.question}>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
             ))}
           </div>
         </div>
