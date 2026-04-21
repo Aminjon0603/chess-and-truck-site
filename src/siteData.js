@@ -394,9 +394,9 @@ export const campOverviewPage = {
   ],
   bookingSection: {
     eyebrow: "Camp booking",
-    title: "Book in one screen",
+    title: "Book now",
     intro: "Pick a day or full week and continue to secure checkout.",
-    note: "Add the family details once. Need help first? Call, text, or email us.",
+    note: "Contact us if you have any questions, reservations or concerns.",
   },
   bookingCards: [
     {
@@ -612,7 +612,7 @@ export const campBookingPage = {
     },
   ],
   supportTitle: "Need help before checkout?",
-  supportText: "Call, text, or email if you want to confirm fit or availability first.",
+  supportText: "Contact us if you have any questions, reservations or concerns.",
   siblingNote: "Booking for siblings? Increase quantity during Stripe checkout.",
 };
 

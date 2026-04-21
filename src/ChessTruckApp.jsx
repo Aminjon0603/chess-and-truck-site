@@ -1234,12 +1234,12 @@ function CampBookingFormPanel({
               ) : null}
             </label>
             <label className="field field-span-2">
-              <span>Notes</span>
+              <span>Allergies/anything we need to know</span>
               <textarea
                 name="notes"
                 value={campBookingState.notes}
                 onChange={(event) => updateCampBookingField("notes", event.target.value)}
-                placeholder="Anything we should know before you continue to payment?"
+                placeholder="Allergies/anything we need to know"
               />
             </label>
           </div>
@@ -1563,6 +1563,9 @@ function CampsOverviewPage({
               <a href="#camp-booking" className="btn btn-primary">
                 Book Camp
               </a>
+              <a href="#camp-schedule" className="btn btn-secondary">
+                Camp Schedule
+              </a>
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
                 Ask a Question
               </AppLink>
@@ -1740,7 +1743,7 @@ function CampsOverviewPage({
         </div>
       </section>
 
-      <section className="page-section">
+      <section className="page-section" id="camp-schedule">
         <div className="shell">
           <SectionIntro
             eyebrow={campOverviewPage.scheduleSection.eyebrow}
@@ -2065,12 +2068,12 @@ function CampBookingPage({
                   ) : null}
                 </label>
                 <label className="field field-span-2">
-                  <span>Notes</span>
+                  <span>Allergies/anything we need to know</span>
                   <textarea
                     name="notes"
                     value={campBookingState.notes}
                     onChange={(event) => updateCampBookingField("notes", event.target.value)}
-                    placeholder="Anything we should know before you continue to payment?"
+                    placeholder="Allergies/anything we need to know"
                   />
                 </label>
               </div>
