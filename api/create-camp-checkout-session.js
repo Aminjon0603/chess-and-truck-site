@@ -169,6 +169,7 @@ export default {
     params.set("mode", "payment");
     params.set("success_url", successUrlString);
     params.set("cancel_url", cancelUrl.toString());
+    params.set("adaptive_pricing[enabled]", "false");
     params.set("allow_promotion_codes", "true");
     params.set("billing_address_collection", "auto");
     params.set("phone_number_collection[enabled]", "true");

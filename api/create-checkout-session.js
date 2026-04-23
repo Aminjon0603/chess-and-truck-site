@@ -177,6 +177,7 @@ export default {
     params.set("mode", "payment");
     params.set("success_url", successUrl);
     params.set("cancel_url", `${getBaseUrl(request)}/register?payment=cancel`);
+    params.set("adaptive_pricing[enabled]", "false");
     params.set("customer_email", data.parentEmail || data.email);
     params.set("client_reference_id", registrationReference);
     params.set("allow_promotion_codes", "true");
