@@ -10,33 +10,12 @@ export const siteBrand = {
 export const navigationItems = [
   { label: "Home", path: "/" },
   { label: "Camps", path: "/camps" },
-  { label: "Lessons", path: "/private-lessons" },
+  { label: "Lessons", path: "/lessons/manage" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
 ];
 
 export const lessonMenuItems = [
-  {
-    label: "Online Lessons",
-    path: "/lessons/online",
-    description: "Remote coaching with structure, game review, and a cleaner weekly rhythm.",
-    signal: "Remote coaching",
-    imageKey: "online",
-  },
-  {
-    label: "In Person Lessons",
-    path: "/lessons/in-person",
-    description: "Face-to-face coaching in New York City for students who learn better over the board.",
-    signal: "NYC live coaching",
-    imageKey: "inperson",
-  },
-  {
-    label: "Group Lessons",
-    path: "/lessons/group",
-    description: "Small-group training with smarter pacing, better grouping, and more energy in the room.",
-    signal: "Small training groups",
-    imageKey: "group",
-  },
   {
     label: "Manage Your Lessons",
     path: "/lessons/manage",
@@ -48,11 +27,11 @@ export const lessonMenuItems = [
 
 export const lessonMenuFeature = {
   eyebrow: "Lesson launch",
-  title: "Choose the right lesson path fast.",
+  title: "Manage your lessons fast.",
   text:
-    "Online, in-person, group, and support pages built for New York City families who want clarity before lessons open.",
-  ctaLabel: "Open lesson overview",
-  ctaPath: "/private-lessons",
+    "Open the lesson desk for scheduling help, lesson changes, and direct support.",
+  ctaLabel: "Manage your lessons",
+  ctaPath: "/lessons/manage",
 };
 
 export const campMenuItems = [
@@ -62,27 +41,6 @@ export const campMenuItems = [
     description: "See dates, location, daily format, and how summer camp works before you register.",
     signal: "Summer 2026",
     imageKey: "overview",
-  },
-  {
-    label: "Training Camps",
-    path: "/camps/training",
-    description: "Daily chess camp format built around rhythm, coaching, and real over-the-board work.",
-    signal: "Daily training",
-    imageKey: "training",
-  },
-  {
-    label: "Advanced Training Camps",
-    path: "/camps/prep",
-    description: "Sharper camp blocks for students who want deeper review, stronger habits, and more focused work.",
-    signal: "Advanced focus",
-    imageKey: "prep",
-  },
-  {
-    label: "Online Camps",
-    path: "/camps/online",
-    description: "Remote camp format for families who want structure without crossing the city.",
-    signal: "Remote camp",
-    imageKey: "online",
   },
 ];
 
@@ -225,7 +183,7 @@ export const homePage = {
     { label: "Dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
     { label: "Age range", value: "Ages 4 - 17" },
-    { label: "Levels", value: "Beginner-friendly and improving players" },
+    { label: "Levels", value: "Beginner and Advance Players" },
   ],
   offerSection: {
     eyebrow: "What camp includes",
@@ -241,7 +199,7 @@ export const homePage = {
     {
       title: "Sample Day",
       text: "A simple day rhythm with lessons, games, breaks, lunch, and review.",
-      path: "/camps/training",
+      path: "/camps",
     },
     {
       title: "Contact the Team",
@@ -302,7 +260,7 @@ export const lessonCarouselSlides = [
     title: "Remote coaching with a real weekly rhythm",
     text: "Best for families who want structure, game review, and no commute.",
     imageKey: "online",
-    path: "/lessons/online",
+    path: "/lessons/manage",
   },
   {
     key: "inperson",
@@ -310,7 +268,7 @@ export const lessonCarouselSlides = [
     title: "Face-to-face board work in New York City",
     text: "For students who focus better live and learn faster over the board.",
     imageKey: "inperson",
-    path: "/lessons/in-person",
+    path: "/lessons/manage",
   },
   {
     key: "group",
@@ -318,7 +276,7 @@ export const lessonCarouselSlides = [
     title: "Small groups with cleaner level matching",
     text: "Shared pace, stronger energy, and less wasted time than oversized classes.",
     imageKey: "group",
-    path: "/lessons/group",
+    path: "/lessons/manage",
   },
   {
     key: "manage",
@@ -338,7 +296,7 @@ export const campOverviewPage = {
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
-    { label: "Levels", value: "Beginner-friendly and improving players" },
+    { label: "Levels", value: "Beginner and Advance Players" },
     { label: "Age range", value: "Ages 4 - 17" },
   ],
   portraitCaption: "Simple camp booking with real chess structure.",
@@ -395,8 +353,8 @@ export const campOverviewPage = {
   bookingSection: {
     eyebrow: "Camp booking",
     title: "Book now",
-    intro: "Choose an option, pick a date, and continue to secure checkout.",
-    note: "Contact us if you have any questions, reservations or concerns.",
+    intro: "",
+    note: "",
   },
   bookingCards: [
     {
@@ -550,17 +508,17 @@ export const campOverviewPage = {
     {
       title: "Training Camps",
       text: "Daily school-break camps with lessons, practice games, puzzle work, and coach-led review.",
-      path: "/camps/training",
+      path: "/camps",
     },
     {
       title: "Tournament Prep Camps",
       text: "Shorter competitive camp blocks for players getting ready for rated events and stronger tournament habits.",
-      path: "/camps/prep",
+      path: "/camps",
     },
     {
       title: "Online Camps",
       text: "Remote training format for families who want camp structure without commuting across the city.",
-      path: "/camps/online",
+      path: "/camps",
     },
   ],
   faqSection: {
@@ -607,8 +565,8 @@ export const campBookingPage = {
       intro: "A few basics so we know who the camp spot is for.",
     },
     {
-      title: "Camp preference",
-      intro: "Tell us which week or day you want first.",
+      title: "Additional details",
+      intro: "Add anything we should know before checkout.",
     },
   ],
   supportTitle: "Need help before checkout?",
@@ -1557,87 +1515,41 @@ export const lessonDetailPages = {
   },
   "/lessons/manage": {
     eyebrow: "Manage Your Lessons",
-    title: "Current-family lesson support starts here.",
+    title: "Lesson support starts here.",
     intro:
-      "We are still in launch mode, so the lesson desk is being built now. Until the full system opens, this page is the cleanest path for scheduling, support, and next-step questions.",
-    chips: ["Schedule help", "Support requests", "Launch desk soon"],
+      "Use this page for lesson scheduling, questions, and next steps.",
+    chips: ["Schedule help", "Lesson questions", "Direct support"],
     portraitCaption:
-      "A lesson program feels stronger when support is easy to reach before things become messy.",
+      "Fast lesson support for scheduling, questions, and next steps.",
     asideTag: "Lesson desk",
-    asideTitle: "Direct support first. Full portal after launch.",
+    asideTitle: "Simple support for families.",
     asideText:
-      "Until the dedicated lesson management system opens, current and incoming families can use direct support for scheduling changes, coach questions, and coordination.",
+      "Contact us for lesson scheduling, coach questions, or help choosing the right next step.",
     asideFacts: [
-      { label: "For", value: "Current and incoming families" },
-      { label: "Use it for", value: "Schedule and support" },
-      { label: "Launch status", value: "Desk expanding soon" },
+      { label: "For", value: "Current and new families" },
+      { label: "Best for", value: "Scheduling and support" },
+      { label: "Reply", value: "Direct contact" },
     ],
     cards: [
       {
-        title: "Scheduling requests",
-        text: "Need to ask about lesson timing, availability, or a future slot? This is the right contact path.",
+        title: "Scheduling",
+        text: "Ask about lesson times, availability, or changes to an existing plan.",
       },
       {
-        title: "Coach-fit questions",
-        text: "If a family needs to talk through lesson style, level fit, or the right format, support should be easy to reach.",
+        title: "Lesson fit",
+        text: "Tell us the student's age, level, and goals so we can guide you to the right lesson setup.",
       },
       {
-        title: "Program next steps",
-        text: "Use this path for launch questions, continuing lesson interest, or help understanding the best next move.",
+        title: "Next step",
+        text: "Use this page when you want the fastest path to start or continue lessons.",
       },
     ],
-    pathSection: {
-      eyebrow: "Support paths",
-      title: "Three clean ways to use the lesson desk",
-      intro: "Support should feel direct, useful, and easy to route before the full portal opens.",
-    },
-    pathCards: [
-      {
-        eyebrow: "New family",
-        title: "First Lesson Inquiry",
-        bullets: [
-          "Use this path if you are choosing between online, in-person, or group lessons",
-          "Best for families who want help picking the cleanest starting format",
-          "Send age, level, and preferred schedule window to speed up the reply",
-        ],
-        meta: "New family support",
-        note: "Best first contact while lessons are still launching",
-        cta: "Ask about lesson fit",
-      },
-      {
-        eyebrow: "Current family",
-        title: "Schedule & Coordination",
-        bullets: [
-          "Use this for timing questions, upcoming availability, and lesson logistics",
-          "Helpful when a family needs clarity before the lesson desk fully expands",
-          "Strongest path for practical coordination and next-step questions",
-        ],
-        meta: "Lesson desk support",
-        note: "Direct scheduling help available now",
-        cta: "Ask about scheduling",
-      },
-      {
-        eyebrow: "Program support",
-        title: "Coaching Direction Check-In",
-        bullets: [
-      "Use this when the family wants to talk about pace, fit, or lesson service",
-          "Good for players moving between formats or preparing for a new training phase",
-          "Lets us point the family to the right coach path before things get messy",
-        ],
-        meta: "Guidance and next steps",
-        note: "Support desk continues expanding with launch",
-        cta: "Ask for guidance",
-      },
-    ],
-    checklistTitle: "Best use of the lesson support page",
-    checklist: [
-      "Send the student's age and level",
-      "Mention whether the question is about online, in-person, or group lessons",
-      "Include scheduling constraints if timing matters",
-      "Use Contact and we will route the request properly",
-    ],
+    pathSection: null,
+    pathCards: [],
+    checklistTitle: "",
+    checklist: [],
     ctaTitle: "Contact the lesson desk",
-    ctaText: "Use the contact page and tell us whether you need scheduling help, launch information, or private lesson guidance.",
+    ctaText: "Use the contact page or call/text us for scheduling help, lesson questions, or the next step.",
     ctaLabel: "Contact lesson support",
   },
 };

@@ -251,6 +251,16 @@ const knownRoutes = new Set([
   "/privacy",
 ]);
 
+const legacyRouteRedirects = {
+  "/private-lessons": "/lessons/manage",
+  "/lessons/online": "/lessons/manage",
+  "/lessons/in-person": "/lessons/manage",
+  "/lessons/group": "/lessons/manage",
+  "/camps/training": "/camps",
+  "/camps/prep": "/camps",
+  "/camps/online": "/camps",
+};
+
 const isCampsPath = (path) => path === "/camps" || path.startsWith("/camps/");
 const isLessonsPath = (path) => path === "/private-lessons" || path.startsWith("/lessons/");
 
@@ -516,8 +526,8 @@ function LessonDetailHero({ page, currentPath, navigate }) {
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
               {page.ctaLabel}
             </AppLink>
-            <AppLink to="/private-lessons" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-              Lesson Overview
+            <AppLink to="/lessons/manage" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+              Manage Lessons
             </AppLink>
           </div>
         </div>
@@ -575,8 +585,8 @@ function LessonSignalCarousel({ currentPath, navigate, intro = "Lesson launch op
         <p>{activeSlide.text}</p>
         <small className="carousel-intro">{intro}</small>
         <div className="cta-row">
-          <AppLink to={activeSlide.path} navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-            Open {activeSlide.label}
+          <AppLink to="/lessons/manage" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+            Manage Your Lessons
           </AppLink>
           <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="text-link">
             Ask About Lessons
@@ -1166,6 +1176,29 @@ function CampBookingFormPanel({
           ))}
         </div>
 
+        <div className="field-grid camp-date-picker-grid">
+          <label className="field field-span-2">
+            <span>{selectedLabel}</span>
+            <select
+              name="schedulePreference"
+              value={campBookingState.schedulePreference}
+              onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
+            >
+              <option value="">
+                {selectedOption.id === "full-week" ? "Select week" : "Select date"}
+              </option>
+              {selectedScheduleOptions.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+            {campBookingErrors.schedulePreference ? (
+              <span className="field-error">{campBookingErrors.schedulePreference}</span>
+            ) : null}
+          </label>
+        </div>
+
         <div className="form-section">
           <div className="form-section-head">
             <div className="section-count">01</div>
@@ -1294,26 +1327,6 @@ function CampBookingFormPanel({
             </div>
           </div>
           <div className="field-grid">
-            <label className="field">
-              <span>{selectedLabel}</span>
-              <select
-                name="schedulePreference"
-                value={campBookingState.schedulePreference}
-                onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
-              >
-                <option value="">
-                  {selectedOption.id === "full-week" ? "Select week" : "Select date"}
-                </option>
-                {selectedScheduleOptions.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-              {campBookingErrors.schedulePreference ? (
-                <span className="field-error">{campBookingErrors.schedulePreference}</span>
-              ) : null}
-            </label>
             <label className="field field-span-2">
               <span>Allergies/anything we need to know</span>
               <textarea
@@ -1509,8 +1522,8 @@ function AboutPage({ currentPath, navigate }) {
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
                 Contact us
               </AppLink>
-              <AppLink to="/private-lessons" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Review Lessons
+              <AppLink to="/lessons/manage" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+                Manage Lessons
               </AppLink>
             </div>
           </article>
@@ -1686,9 +1699,6 @@ function CampsOverviewPage({
               <a href="#camp-schedule" className="btn btn-secondary">
                 Camp Schedule
               </a>
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Ask a Question
-              </AppLink>
             </div>
 
             <div className="fact-list fact-list-hero camp-hero-facts">
@@ -1740,7 +1750,9 @@ function CampsOverviewPage({
             title={campOverviewPage.bookingSection.title}
             intro={campOverviewPage.bookingSection.intro}
           />
-          <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
+          {campOverviewPage.bookingSection.note ? (
+            <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
+          ) : null}
           <div className="camp-booking-grid">
             {campOverviewPage.bookingCards.map((item) => {
               const isSelected = selectedCampOptionId === item.id;
@@ -2219,50 +2231,76 @@ function LessonDetailPage({ page, currentPath, navigate }) {
         </section>
       ) : null}
 
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro eyebrow="What matters most" title="What this service does well" intro="Short, clear signals for families who want the fast version." />
-          <div className="card-grid card-grid-three">
-            {page.cards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell two-column">
-          <article className="surface surface-dark">
+      {page.cards?.length ? (
+        <section className="page-section">
+          <div className="shell">
             <SectionIntro
-              eyebrow={page.eyebrow}
-              title={page.checklistTitle}
-              intro="This is the standard we want families to feel when lessons open."
+              eyebrow="What matters most"
+              title="What matters most"
+              intro="Short, clear signals for families who want the fast version."
             />
-            <ul className="checklist checklist-light">
-              {page.checklist.map((item) => (
-                <li key={item}>{item}</li>
+            <div className="card-grid card-grid-three">
+              {page.cards.map((item) => (
+                <article className="surface" key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
               ))}
-            </ul>
-          </article>
-
-          <article className="surface lesson-detail-cta">
-            <span className="section-tag">Launch soon</span>
-            <h3>{page.ctaTitle}</h3>
-            <p>{page.ctaText}</p>
-            <div className="cta-row">
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Contact Us
-              </AppLink>
-              <a href={phoneContact.href} className="btn btn-secondary">
-                Call / Text {phoneContact.display}
-              </a>
             </div>
-          </article>
-        </div>
-      </section>
+          </div>
+        </section>
+      ) : null}
+
+      {page.checklist?.length ? (
+        <section className="page-section">
+          <div className="shell two-column">
+            <article className="surface surface-dark">
+              <SectionIntro
+                eyebrow={page.eyebrow}
+                title={page.checklistTitle}
+                intro="This is the standard we want families to feel when lessons open."
+              />
+              <ul className="checklist checklist-light">
+                {page.checklist.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+
+            <article className="surface lesson-detail-cta">
+              <span className="section-tag">Launch soon</span>
+              <h3>{page.ctaTitle}</h3>
+              <p>{page.ctaText}</p>
+              <div className="cta-row">
+                <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                  Contact Us
+                </AppLink>
+                <a href={phoneContact.href} className="btn btn-secondary">
+                  Call / Text {phoneContact.display}
+                </a>
+              </div>
+            </article>
+          </div>
+        </section>
+      ) : (
+        <section className="page-section">
+          <div className="shell">
+            <article className="surface lesson-detail-cta">
+              <span className="section-tag">Lessons</span>
+              <h3>{page.ctaTitle}</h3>
+              <p>{page.ctaText}</p>
+              <div className="cta-row">
+                <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                  Contact Us
+                </AppLink>
+                <a href={phoneContact.href} className="btn btn-secondary">
+                  Call / Text {phoneContact.display}
+                </a>
+              </div>
+            </article>
+          </div>
+        </section>
+      )}
     </>
   );
 }
@@ -3092,6 +3130,17 @@ function ChessTruckApp() {
   }, [isCompactViewport]);
 
   useEffect(() => {
+    const redirectPath = legacyRouteRedirects[currentPath];
+
+    if (!redirectPath) {
+      return;
+    }
+
+    window.history.replaceState({}, "", redirectPath);
+    setRoute({ pathname: redirectPath, search: "" });
+  }, [currentPath]);
+
+  useEffect(() => {
     setIsMobileNavOpen(false);
   }, [currentPath]);
 
@@ -3413,14 +3462,48 @@ function ChessTruckApp() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const focusRegistrationField = (fieldName) => {
-    window.requestAnimationFrame(() => {
+  const focusFieldByName = (fieldName, frameCount = 1) => {
+    const tryFocus = () => {
       const field = document.querySelector(`[name="${fieldName}"]`);
 
       if (field instanceof HTMLElement) {
-        field.focus();
+        field.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+        field.focus({ preventScroll: true });
       }
-    });
+    };
+
+    const scheduleFocus = (remainingFrames) => {
+      if (remainingFrames <= 0) {
+        tryFocus();
+        return;
+      }
+
+      window.requestAnimationFrame(() => scheduleFocus(remainingFrames - 1));
+    };
+
+    scheduleFocus(frameCount);
+  };
+
+  const focusFirstErrorField = (errors, options = {}) => {
+    const firstField = Object.keys(errors)[0];
+
+    if (!firstField) {
+      return;
+    }
+
+    if (options.stepAware) {
+      const matchingStepIndex = registrationStepDefinitions.findIndex((stepDefinition) =>
+        stepDefinition.fields.includes(firstField)
+      );
+
+      if (matchingStepIndex >= 0) {
+        setActiveRegistrationStep(matchingStepIndex);
+        focusFieldByName(firstField, 2);
+        return;
+      }
+    }
+
+    focusFieldByName(firstField, 1);
   };
 
   const updateRegistrationField = ({ target }) => {
@@ -3488,7 +3571,7 @@ function ChessTruckApp() {
       }
     }
 
-    return Object.keys(errors).length === 0;
+    return errors;
   };
 
   const goToPreviousRegistrationStep = () => {
@@ -3513,8 +3596,7 @@ function ChessTruckApp() {
     });
 
     if (Object.keys(stepErrors).length > 0) {
-      const firstField = Object.keys(stepErrors)[0];
-      focusRegistrationField(firstField);
+      focusFirstErrorField(stepErrors, { stepAware: isCompactViewport });
       return;
     }
 
@@ -3526,7 +3608,10 @@ function ChessTruckApp() {
   const handleRegistrationSubmit = async (event) => {
     event.preventDefault();
 
-    if (!validateRegistration()) {
+    const nextErrors = validateRegistration();
+
+    if (Object.keys(nextErrors).length > 0) {
+      focusFirstErrorField(nextErrors, { stepAware: isCompactViewport });
       setPaymentState({
         status: "error",
         message: "Please fix the highlighted fields before continuing to payment.",
@@ -3549,6 +3634,7 @@ function ChessTruckApp() {
       if (!response.ok || !payload.url) {
         if (payload.fieldErrors) {
           setRegistrationErrors(payload.fieldErrors);
+          focusFirstErrorField(payload.fieldErrors, { stepAware: isCompactViewport });
         }
         throw new Error(payload.error || "Stripe checkout could not be created.");
       }
@@ -3600,6 +3686,7 @@ function ChessTruckApp() {
     setCampBookingErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
+      focusFirstErrorField(nextErrors);
       setCampCheckoutState({
         status: "error",
         message: "Please review the booking details before continuing to checkout.",
@@ -3629,6 +3716,7 @@ function ChessTruckApp() {
       if (!response.ok || !payload.url) {
         if (payload.fieldErrors) {
           setCampBookingErrors(payload.fieldErrors);
+          focusFirstErrorField(payload.fieldErrors);
         }
         throw new Error(payload.error || "Camp checkout could not be created.");
       }
@@ -3650,6 +3738,7 @@ function ChessTruckApp() {
     const contactErrors = validateContactFields(contactState);
 
     if (Object.keys(contactErrors).length > 0) {
+      focusFirstErrorField(contactErrors);
       setContactSubmitState({
         status: "error",
         message: Object.values(contactErrors)[0] || "Please review the contact form and try again.",
@@ -3750,10 +3839,17 @@ function ChessTruckApp() {
         case "/camps/prep":
         case "/camps/online":
           return (
-            <CampDetailPage
-              page={campDetailPages[currentPath]}
+            <CampsOverviewPage
               currentPath={currentPath}
               navigate={navigate}
+              campCheckoutState={campCheckoutState}
+              campBookingState={campBookingState}
+              campBookingErrors={campBookingErrors}
+              updateCampBookingField={updateCampBookingField}
+              handleCampBookingSubmit={handleCampBookingSubmit}
+              selectedCampOptionId={selectedCampOptionId}
+              isCampBookingFormVisible={isCampBookingFormVisible}
+              openCampBooking={openCampBooking}
             />
           );
         case "/about":
@@ -3763,14 +3859,13 @@ function ChessTruckApp() {
       case "/events/chess-and-truck-tournament":
         return <TournamentDetailPage currentPath={currentPath} navigate={navigate} />;
       case "/private-lessons":
-        return <PrivateLessonsPage currentPath={currentPath} navigate={navigate} />;
       case "/lessons/online":
       case "/lessons/in-person":
       case "/lessons/group":
       case "/lessons/manage":
         return (
           <LessonDetailPage
-            page={lessonDetailPages[currentPath]}
+            page={lessonDetailPages["/lessons/manage"]}
             currentPath={currentPath}
             navigate={navigate}
           />

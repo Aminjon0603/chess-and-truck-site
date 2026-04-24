@@ -1483,6 +1483,10 @@ a {
   gap: 12px;
 }
 
+.camp-date-picker-grid {
+  margin-top: 6px;
+}
+
 .booking-option-chip {
   display: grid;
   gap: 4px;
