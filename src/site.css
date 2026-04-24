@@ -1027,31 +1027,31 @@ a {
 }
 
 .camp-overview-hero {
-  padding-top: 28px;
-  padding-bottom: 12px;
+  padding-top: 18px;
+  padding-bottom: 8px;
 }
 
 .camp-overview-hero-grid {
   grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
-  gap: 22px;
+  gap: 18px;
 }
 
 .camp-overview-hero-copy {
-  gap: 16px;
+  gap: 12px;
 }
 
 .camp-overview-hero-copy h1 {
   max-width: 10.8ch;
-  font-size: clamp(2.8rem, 4.8vw, 4.3rem);
+  font-size: clamp(2.45rem, 4.2vw, 3.85rem);
   line-height: 0.9;
 }
 
 .camp-overview-hero-copy .cta-row {
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .camp-overview-hero-panel {
-  padding: 24px;
+  padding: 20px;
 }
 
 .lesson-detail-hero-panel {
@@ -1260,11 +1260,11 @@ a {
 .camp-hero-facts {
   margin-top: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .camp-hero-facts > div {
-  min-height: 86px;
+  min-height: 74px;
 }
 
 .camp-detail-grid {
