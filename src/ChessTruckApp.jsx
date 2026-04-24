@@ -15,7 +15,6 @@ import {
   footerLegalLinks,
   homePage,
   lessonDetailPages,
-  lessonCarouselSlides,
   lessonMenuFeature,
   lessonMenuItems,
   masterTrainingDojo,
@@ -556,66 +555,11 @@ function LessonDetailHero({ page, currentPath, navigate }) {
         </article>
       </div>
 
-      <div className="shell lesson-hero-carousel-wrap">
-        <LessonSignalCarousel currentPath={currentPath} navigate={navigate} intro={page.portraitCaption} />
-      </div>
     </section>
   );
 }
 
-function LessonSignalCarousel({ currentPath, navigate, intro = "Lesson launch opens soon." }) {
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActiveSlideIndex((current) => (current + 1) % lessonCarouselSlides.length);
-    }, 4200);
-
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const activeSlide = lessonCarouselSlides[activeSlideIndex];
-  const activeImage = lessonCarouselImages[activeSlide.imageKey];
-
-  return (
-    <article className="surface carousel-card lesson-signal-carousel">
-      <div className="carousel-copy">
-            <span className="mini-tag">Services</span>
-        <h3>{activeSlide.title}</h3>
-        <p>{activeSlide.text}</p>
-        <small className="carousel-intro">{intro}</small>
-        <div className="cta-row">
-          <AppLink to="/lessons/manage" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-            Manage Your Lessons
-          </AppLink>
-          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="text-link">
-            Ask About Lessons
-          </AppLink>
-        </div>
-        <div className="carousel-dots" role="tablist" aria-label="Lesson formats">
-          {lessonCarouselSlides.map((slide, index) => (
-            <button
-              key={slide.key}
-              type="button"
-              className={`carousel-dot${index === activeSlideIndex ? " is-active" : ""}`}
-              aria-label={`Show ${slide.label}`}
-              aria-selected={index === activeSlideIndex}
-              onClick={() => setActiveSlideIndex(index)}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="carousel-side">
-        <div className="carousel-image-frame">
-          <img src={activeImage} alt={activeSlide.label} className="carousel-image lesson-carousel-image" />
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function PageHero({ eyebrow, title, intro, actions, aside, asideLink, portraitCaption, heroFacts, currentPath, navigate }) {
+function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts, currentPath, navigate }) {
   const asideContent = aside || (
     <>
       <span className="mini-tag mini-tag-dark">Camp focus</span>
@@ -669,7 +613,6 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, portraitCa
               {asideContent}
             </aside>
           )}
-          <LessonSignalCarousel currentPath={currentPath} navigate={navigate} intro={portraitCaption} />
         </div>
       </div>
     </section>
@@ -1013,7 +956,6 @@ function HomePage({ currentPath, navigate }) {
         currentPath={currentPath}
         navigate={navigate}
         asideLink="/camps"
-        portraitCaption={campOverviewPage.portraitCaption}
         actions={
           <>
             <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
@@ -1464,7 +1406,6 @@ function AboutPage({ currentPath, navigate }) {
         heroFacts={aboutPage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
-        portraitCaption="Families should understand the offer quickly and know the next step without digging."
         actions={
           <>
             <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
@@ -1586,13 +1527,6 @@ function PrivateLessonsPage({ currentPath, navigate }) {
               ))}
             </div>
           </article>
-        </div>
-        <div className="shell lesson-hero-carousel-wrap">
-          <LessonSignalCarousel
-            currentPath={currentPath}
-            navigate={navigate}
-            intro="Online, in-person, and group lesson services all launch soon."
-          />
         </div>
       </section>
 
@@ -2323,7 +2257,6 @@ function FaqPage({ currentPath, navigate }) {
         heroFacts={faqPage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
-        portraitCaption="Families ask better questions when the launch already feels thoughtful, organized, and player-centered."
         actions={
           <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
             Ask a Question
@@ -2424,7 +2357,6 @@ function ContactPage({ currentPath, navigate, contactState, contactSubmitState, 
         heroFacts={contactPage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
-        portraitCaption="Quick, direct support helps families feel ready before camp starts and before lessons open."
       />
 
       <section className="page-section">

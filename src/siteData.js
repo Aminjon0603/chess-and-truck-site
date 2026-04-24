@@ -253,41 +253,6 @@ export const carouselSlides = [
   },
 ];
 
-export const lessonCarouselSlides = [
-  {
-    key: "online",
-    label: "Online Lessons",
-    title: "Remote coaching with a real weekly rhythm",
-    text: "Best for families who want structure, game review, and no commute.",
-    imageKey: "online",
-    path: "/lessons/manage",
-  },
-  {
-    key: "inperson",
-    label: "In Person Lessons",
-    title: "Face-to-face board work in New York City",
-    text: "For students who focus better live and learn faster over the board.",
-    imageKey: "inperson",
-    path: "/lessons/manage",
-  },
-  {
-    key: "group",
-    label: "Group Lessons",
-    title: "Small groups with cleaner level matching",
-    text: "Shared pace, stronger energy, and less wasted time than oversized classes.",
-    imageKey: "group",
-    path: "/lessons/manage",
-  },
-  {
-    key: "manage",
-    label: "Lesson Desk",
-    title: "Schedule, support, and launch updates",
-    text: "Use this path for lesson questions while the full lesson system opens soon.",
-    imageKey: "manage",
-    path: "/lessons/manage",
-  },
-];
-
 export const campOverviewPage = {
   eyebrow: "Camps",
   title: "Summer Chess Camps in Central Park",
