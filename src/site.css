@@ -1514,6 +1514,50 @@ a {
   margin-top: 6px;
 }
 
+.camp-week-preview {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 20px 22px;
+  border: 1px solid rgba(25, 42, 50, 0.12);
+  background: rgba(248, 243, 232, 0.56);
+}
+
+.camp-week-preview-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.camp-week-preview-head h3 {
+  margin: 8px 0 0;
+}
+
+.camp-week-preview-head strong {
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.camp-week-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.camp-week-day-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(25, 42, 50, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  font-weight: 600;
+}
+
 .booking-option-chip {
   display: grid;
   gap: 4px;
@@ -1610,6 +1654,14 @@ a {
 .summary-addon-list {
   display: grid;
   gap: 6px;
+  margin: 10px 0 0;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+}
+
+.summary-weekday-list {
+  display: grid;
+  gap: 4px;
   margin: 10px 0 0;
   padding-left: 1.1rem;
   color: var(--ink-soft);

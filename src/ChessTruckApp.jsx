@@ -128,6 +128,11 @@ const campDayFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
 });
 
+const campShortDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+});
+
 const buildCampDayOptions = () => {
   const options = [];
   const endDate = new Date(2026, 7, 21);
@@ -139,6 +144,8 @@ const buildCampDayOptions = () => {
         value: label,
         label,
         dayOfWeek: current.getDay(),
+        shortLabel: campShortDateFormatter.format(current),
+        isoDate: current.toISOString().slice(0, 10),
       });
     }
 
@@ -149,13 +156,25 @@ const buildCampDayOptions = () => {
 };
 
 const CAMP_DAY_OPTIONS = buildCampDayOptions();
-const CAMP_WEEK_OPTIONS = CAMP_DAY_OPTIONS.filter((item) => item.dayOfWeek === 1).map((item) => ({
-  value: `Week of ${item.label.replace(/^[^,]+,\s*/, "")}`,
-  label: `Week of ${item.label.replace(/^[^,]+,\s*/, "")}`,
-}));
+const CAMP_WEEK_OPTIONS = CAMP_DAY_OPTIONS.filter((item) => item.dayOfWeek === 1).map((item) => {
+  const startIndex = CAMP_DAY_OPTIONS.findIndex((day) => day.isoDate === item.isoDate);
+  const weekDays = CAMP_DAY_OPTIONS.slice(startIndex, startIndex + 5);
+  const weekLabel = `Week of ${item.label.replace(/^[^,]+,\s*/, "")}`;
+  const rangeLabel = `${weekDays[0]?.shortLabel || ""} - ${weekDays[weekDays.length - 1]?.shortLabel || ""}`;
+
+  return {
+    value: weekLabel,
+    label: `${weekLabel} (${rangeLabel})`,
+    rangeLabel,
+    days: weekDays.map((day) => day.label),
+  };
+});
 
 const getCampScheduleOptions = (optionId) =>
   optionId === "full-week" ? CAMP_WEEK_OPTIONS : CAMP_DAY_OPTIONS;
+
+const getSelectedCampWeekOption = (schedulePreference) =>
+  CAMP_WEEK_OPTIONS.find((item) => item.value === schedulePreference) || null;
 
 const calculateCampAddOnTotal = (addOnIds = []) =>
   CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).reduce(
@@ -1080,10 +1099,12 @@ function CampBookingFormPanel({
   campCheckoutState,
   openCampBooking,
 }) {
-  const selectedLabel = selectedOption.id === "full-week" ? "Date" : "Date";
+  const selectedLabel = selectedOption.id === "full-week" ? "Week" : "Date";
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
+  const selectedWeekOption =
+    selectedOption.id === "full-week" ? getSelectedCampWeekOption(selectedSchedule) : null;
   const selectedAddOns = Array.isArray(campBookingState.addOns) ? campBookingState.addOns : [];
   const addOnTotal = calculateCampAddOnTotal(selectedAddOns);
   const baseAmount = CAMP_OPTION_BASE_AMOUNTS[selectedOption.id] || 0;
@@ -1147,6 +1168,25 @@ function CampBookingFormPanel({
             ) : null}
           </label>
         </div>
+
+        {selectedOption.id === "full-week" && selectedWeekOption ? (
+          <article className="surface camp-week-preview">
+            <div className="camp-week-preview-head">
+              <div>
+                <span className="mini-tag">Selected week</span>
+                <h3>{selectedWeekOption.value}</h3>
+              </div>
+              <strong>{selectedWeekOption.rangeLabel}</strong>
+            </div>
+            <div className="camp-week-days">
+              {selectedWeekOption.days.map((day) => (
+                <span key={day} className="camp-week-day-chip">
+                  {day}
+                </span>
+              ))}
+            </div>
+          </article>
+        ) : null}
 
         <div className="form-section">
           <div className="form-section-head">
@@ -1360,8 +1400,15 @@ function CampBookingFormPanel({
                 <strong>House of Chess and Checkers, Central Park</strong>
               </div>
               <div>
-                <span>Date</span>
-                <strong>{selectedSchedule || "Choose a date above"}</strong>
+                <span>{selectedOption.id === "full-week" ? "Week" : "Date"}</span>
+                <strong>{selectedSchedule || (selectedOption.id === "full-week" ? "Choose a week above" : "Choose a date above")}</strong>
+                {selectedWeekOption ? (
+                  <ul className="summary-weekday-list">
+                    {selectedWeekOption.days.map((day) => (
+                      <li key={day}>{day}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
               <div>
                 <span>Camp time</span>
