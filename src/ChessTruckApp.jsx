@@ -99,6 +99,7 @@ const campBookingInitialState = {
   studentAge: "",
   studentLevel: "",
   schedulePreference: "",
+  selectedDays: [],
   addOns: [],
   notes: "",
   website: "",
@@ -175,6 +176,9 @@ const getCampScheduleOptions = (optionId) =>
 
 const getSelectedCampWeekOption = (schedulePreference) =>
   CAMP_WEEK_OPTIONS.find((item) => item.value === schedulePreference) || null;
+
+const getWeekDaysForSchedulePreference = (schedulePreference) =>
+  getSelectedCampWeekOption(schedulePreference)?.days || [];
 
 const calculateCampAddOnTotal = (addOnIds = []) =>
   CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).reduce(
@@ -1105,6 +1109,12 @@ function CampBookingFormPanel({
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
   const selectedWeekOption =
     selectedOption.id === "full-week" ? getSelectedCampWeekOption(selectedSchedule) : null;
+  const selectedWeekDays =
+    selectedOption.id === "full-week"
+      ? Array.isArray(campBookingState.selectedDays) && campBookingState.selectedDays.length
+        ? campBookingState.selectedDays
+        : selectedWeekOption?.days || []
+      : [];
   const selectedAddOns = Array.isArray(campBookingState.addOns) ? campBookingState.addOns : [];
   const addOnTotal = calculateCampAddOnTotal(selectedAddOns);
   const baseAmount = CAMP_OPTION_BASE_AMOUNTS[selectedOption.id] || 0;
@@ -1118,6 +1128,15 @@ function CampBookingFormPanel({
       : [...currentAddOns, addOnId];
 
     updateCampBookingField("addOns", nextAddOns);
+  };
+
+  const toggleSelectedWeekDay = (day) => {
+    const currentDays = Array.isArray(campBookingState.selectedDays) ? campBookingState.selectedDays : [];
+    const nextDays = currentDays.includes(day)
+      ? currentDays.filter((item) => item !== day)
+      : [...currentDays, day];
+
+    updateCampBookingField("selectedDays", nextDays);
   };
 
   return (
@@ -1152,7 +1171,14 @@ function CampBookingFormPanel({
             <select
               name="schedulePreference"
               value={campBookingState.schedulePreference}
-              onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
+              onChange={(event) => {
+                const nextValue = event.target.value;
+                updateCampBookingField("schedulePreference", nextValue);
+
+                if (selectedOption.id === "full-week") {
+                  updateCampBookingField("selectedDays", getWeekDaysForSchedulePreference(nextValue));
+                }
+              }}
             >
               <option value="">
                 {selectedOption.id === "full-week" ? "Select week" : "Select date"}
@@ -1179,12 +1205,27 @@ function CampBookingFormPanel({
               <strong>{selectedWeekOption.rangeLabel}</strong>
             </div>
             <div className="camp-week-days">
-              {selectedWeekOption.days.map((day) => (
-                <span key={day} className="camp-week-day-chip">
-                  {day}
-                </span>
-              ))}
+              {selectedWeekOption.days.map((day) => {
+                const isSelected = selectedWeekDays.includes(day);
+
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    className={`camp-week-day-chip${isSelected ? " is-selected" : ""}`}
+                    onClick={() => toggleSelectedWeekDay(day)}
+                  >
+                    {day}
+                  </button>
+                );
+              })}
             </div>
+            <p className="field-note">
+              Click the weekdays your student plans to attend during this selected week.
+            </p>
+            {campBookingErrors.selectedDays ? (
+              <span className="field-error">{campBookingErrors.selectedDays}</span>
+            ) : null}
           </article>
         ) : null}
 
@@ -1404,9 +1445,11 @@ function CampBookingFormPanel({
                 <strong>{selectedSchedule || (selectedOption.id === "full-week" ? "Choose a week above" : "Choose a date above")}</strong>
                 {selectedWeekOption ? (
                   <ul className="summary-weekday-list">
-                    {selectedWeekOption.days.map((day) => (
-                      <li key={day}>{day}</li>
-                    ))}
+                    {selectedWeekDays.length ? (
+                      selectedWeekDays.map((day) => <li key={day}>{day}</li>)
+                    ) : (
+                      <li>No camp days selected yet</li>
+                    )}
                   </ul>
                 ) : null}
               </div>
@@ -3356,6 +3399,10 @@ function ChessTruckApp() {
       setCampBookingState((current) => ({
         ...current,
         schedulePreference: fallbackSchedule,
+        selectedDays:
+          matchedOption.id === "full-week"
+            ? getWeekDaysForSchedulePreference(fallbackSchedule)
+            : current.selectedDays,
       }));
     }
   }, [currentPath, route.search, campBookingState.schedulePreference]);
@@ -3643,11 +3690,16 @@ function ChessTruckApp() {
     setCampBookingState((current) => ({
       ...current,
       schedulePreference: nextSchedulePreference || current.schedulePreference,
+      selectedDays:
+        optionId === "full-week"
+          ? getWeekDaysForSchedulePreference(nextSchedulePreference || current.schedulePreference)
+          : [],
       addOns: current.addOns || [],
     }));
     setCampBookingErrors((current) => {
       const next = { ...current };
       delete next.schedulePreference;
+      delete next.selectedDays;
       delete next.addOns;
       return next;
     });
@@ -3663,7 +3715,7 @@ function ChessTruckApp() {
   const handleCampBookingSubmit = async (event, optionId) => {
     event.preventDefault();
 
-    const nextErrors = validateCampBookingFields(campBookingState);
+    const nextErrors = validateCampBookingFields(campBookingState, optionId);
     setCampBookingErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {

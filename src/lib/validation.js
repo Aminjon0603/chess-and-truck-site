@@ -99,7 +99,7 @@ export function validateContactFields(state) {
   return errors;
 }
 
-export function validateCampBookingFields(state) {
+export function validateCampBookingFields(state, optionId = "") {
   const errors = {};
 
   if (!cleanText(state.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
@@ -121,6 +121,13 @@ export function validateCampBookingFields(state) {
   if (!cleanText(state.studentAge)) errors.studentAge = "Student age or grade is required.";
   if (!cleanText(state.studentLevel)) errors.studentLevel = "Please add the student level.";
   if (!cleanText(state.schedulePreference)) errors.schedulePreference = "Please add your preferred week or day.";
+
+  if (
+    optionId === "full-week" &&
+    (!Array.isArray(state.selectedDays) || state.selectedDays.length === 0)
+  ) {
+    errors.selectedDays = "Please choose at least one camp day in the selected week.";
+  }
 
   return errors;
 }

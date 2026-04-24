@@ -1556,6 +1556,24 @@ a {
   background: rgba(255, 255, 255, 0.92);
   color: var(--ink);
   font-weight: 600;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.camp-week-day-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(47, 116, 104, 0.4);
+  box-shadow: 0 10px 18px rgba(19, 33, 39, 0.06);
+}
+
+.camp-week-day-chip.is-selected {
+  border-color: rgba(47, 116, 104, 0.72);
+  background: rgba(47, 116, 104, 0.14);
 }
 
 .booking-option-chip {

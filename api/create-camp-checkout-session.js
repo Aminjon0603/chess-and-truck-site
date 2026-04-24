@@ -43,6 +43,16 @@ const sanitizeAddOns = (value) => {
     .filter((item, index, list) => item && list.indexOf(item) === index && campAddOns[item]);
 };
 
+const sanitizeSelectedDays = (value) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((item) => sanitize(item, 120))
+    .filter((item, index, list) => item && list.indexOf(item) === index);
+};
+
 const normalizeReturnPath = (value, optionId) => {
   const fallback = `/camps/book?option=${optionId}`;
 
@@ -59,7 +69,7 @@ const normalizeReturnPath = (value, optionId) => {
   return trimmed.slice(0, 200);
 };
 
-const validateCampBookingPayload = (payload) => {
+const validateCampBookingPayload = (payload, optionId) => {
   const errors = {};
 
   if (!sanitize(payload.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
@@ -84,6 +94,9 @@ const validateCampBookingPayload = (payload) => {
   if (!sanitize(payload.studentLevel)) errors.studentLevel = "Student level is required.";
   if (!sanitize(payload.schedulePreference, 140)) {
     errors.schedulePreference = "Preferred week or day is required.";
+  }
+  if (optionId === "full-week" && sanitizeSelectedDays(payload.selectedDays).length === 0) {
+    errors.selectedDays = "Please choose at least one camp day in the selected week.";
   }
 
   return errors;
@@ -148,7 +161,7 @@ export default {
       return Response.json({ error: "Invalid request." }, { status: 400 });
     }
 
-    const fieldErrors = validateCampBookingPayload(payload);
+    const fieldErrors = validateCampBookingPayload(payload, optionId);
 
     if (Object.keys(fieldErrors).length > 0) {
       return Response.json(
@@ -183,6 +196,8 @@ export default {
     const studentAge = sanitize(payload.studentAge, 80);
     const studentLevel = sanitize(payload.studentLevel, 120);
     const schedulePreference = sanitize(payload.schedulePreference, 140);
+    const selectedDays = sanitizeSelectedDays(payload.selectedDays);
+    const selectedDaysSummary = selectedDays.join(", ");
     const selectedAddOns = sanitizeAddOns(payload.addOns);
     const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
     const totalAmount =
@@ -209,7 +224,9 @@ export default {
     params.set("line_items[0][price_data][product_data][name]", "Chess and Truck Summer Camp");
     params.set(
       "line_items[0][price_data][product_data][description]",
-      `${selectedOption.label} | ${schedulePreference} | House of Chess and Checkers, Central Park${
+      `${selectedOption.label} | ${schedulePreference}${
+        selectedDaysSummary ? ` | ${selectedDaysSummary}` : ""
+      } | House of Chess and Checkers, Central Park${
         addOnSummary ? ` | ${addOnSummary}` : ""
       }`
     );
@@ -230,6 +247,7 @@ export default {
     params.set("metadata[student_age]", studentAge);
     params.set("metadata[student_level]", studentLevel);
     params.set("metadata[schedule_preference]", schedulePreference);
+    params.set("metadata[selected_days]", selectedDaysSummary || "None");
     params.set("metadata[add_ons]", addOnSummary || "None");
     params.set("metadata[add_ons_total]", String(selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0)));
     params.set("metadata[notes]", notes);

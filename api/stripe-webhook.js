@@ -77,12 +77,14 @@ const buildCampReceiptLines = (session) => {
   const metadata = session.metadata || {};
   const addOns = metadata.add_ons || "None";
   const addOnsTotal = Number(metadata.add_ons_total || 0);
+  const selectedDays = metadata.selected_days || "";
 
   return [
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
     `Camp option: ${metadata.service_level || "-"}`,
     `Location: ${metadata.location || "-"}`,
     `Date: ${metadata.schedule_preference || "-"}`,
+    selectedDays && selectedDays !== "None" ? `Selected days: ${selectedDays}` : null,
     `Camp time: ${metadata.camp_time || "9:00 AM - 12:00 PM"}`,
     `Parent name: ${metadata.parent_name || "-"}`,
     `Parent email: ${metadata.parent_email || session.customer_details?.email || "-"}`,

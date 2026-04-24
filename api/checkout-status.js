@@ -85,6 +85,7 @@ export default {
         section: metadata.section || "",
         serviceLevel: metadata.service_level || "",
         bookingType: metadata.booking_type || "",
+        selectedDays: metadata.selected_days || "",
         amountTotal:
           typeof stripePayload.amount_total === "number"
             ? stripePayload.amount_total / 100
