@@ -1076,8 +1076,7 @@ function CampBookingFormPanel({
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
-  const selectedAddOns =
-    selectedOption.id === "single-day" ? campBookingState.addOns || [] : [];
+  const selectedAddOns = Array.isArray(campBookingState.addOns) ? campBookingState.addOns : [];
   const addOnTotal = calculateCampAddOnTotal(selectedAddOns);
   const baseAmount = CAMP_OPTION_BASE_AMOUNTS[selectedOption.id] || 0;
   const totalAmount = baseAmount + addOnTotal;
@@ -1281,36 +1280,38 @@ function CampBookingFormPanel({
           </div>
         </div>
 
-        {selectedOption.id === "single-day" ? (
-          <div className="form-section">
-            <div className="form-section-head">
-              <div className="section-count">04</div>
-              <div>
-                <h3>Add to class</h3>
-                <p>Optional add-ons for the selected camp day.</p>
-              </div>
-            </div>
-            <div className="camp-addons-grid">
-              {CAMP_ADD_ONS.map((item) => {
-                const isChecked = selectedAddOns.includes(item.id);
-
-                return (
-                  <label className={`camp-addon-option${isChecked ? " is-selected" : ""}`} key={item.id}>
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => toggleCampAddOn(item.id)}
-                    />
-                    <span className="camp-addon-copy">
-                      <strong>{item.label}</strong>
-                    </span>
-                    <span className="camp-addon-price">+ {formatCurrency(item.amount)}</span>
-                  </label>
-                );
-              })}
+        <div className="form-section">
+          <div className="form-section-head">
+            <div className="section-count">04</div>
+            <div>
+              <h3>Additional services</h3>
+              <p>
+                {selectedOption.id === "full-week"
+                  ? "Optional add-ons for the selected camp week."
+                  : "Optional add-ons for the selected camp day."}
+              </p>
             </div>
           </div>
-        ) : null}
+          <div className="camp-addons-grid">
+            {CAMP_ADD_ONS.map((item) => {
+              const isChecked = selectedAddOns.includes(item.id);
+
+              return (
+                <label className={`camp-addon-option${isChecked ? " is-selected" : ""}`} key={item.id}>
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() => toggleCampAddOn(item.id)}
+                  />
+                  <span className="camp-addon-copy">
+                    <strong>{item.label}</strong>
+                  </span>
+                  <span className="camp-addon-price">+ {formatCurrency(item.amount)}</span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
 
         <label className="honeypot-field" aria-hidden="true">
           Website
@@ -1372,7 +1373,7 @@ function CampBookingFormPanel({
                 <li key={detail}>{detail}</li>
               ))}
             </ul>
-            {selectedOption.id === "single-day" && selectedAddOns.length ? (
+            {selectedAddOns.length ? (
               <p className="camp-booking-availability">Additional services total: {formatCurrency(addOnTotal)}</p>
             ) : null}
             <p className="camp-booking-availability">{selectedOption.availability}</p>
@@ -3594,7 +3595,7 @@ function ChessTruckApp() {
     setCampBookingState((current) => ({
       ...current,
       schedulePreference: nextSchedulePreference || current.schedulePreference,
-      addOns: optionId === "single-day" ? current.addOns : [],
+      addOns: current.addOns || [],
     }));
     setCampBookingErrors((current) => {
       const next = { ...current };
