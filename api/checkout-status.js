@@ -6,6 +6,17 @@ const sanitize = (value, limit = 180) => {
   return value.trim().slice(0, limit);
 };
 
+const parseSelectedDays = (value) => {
+  if (typeof value !== "string") {
+    return [];
+  }
+
+  return value
+    .split(" | ")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
 export const runtime = "nodejs";
 
 export default {
@@ -71,6 +82,9 @@ export default {
 
     const metadata = stripePayload.metadata || {};
     const isCamp = metadata.booking_type === "camp";
+    const selectedDays = parseSelectedDays(metadata.selected_days);
+    const daysRequired = Number(metadata.days_required || 0);
+    const daySelectionRequired = isCamp && metadata.camp_option === "full-week";
 
     return Response.json(
       {
@@ -81,10 +95,18 @@ export default {
         customerEmail: stripePayload.customer_details?.email || stripePayload.customer_email || "",
         reference:
           metadata.registration_reference || stripePayload.client_reference_id || stripePayload.id,
+        sessionId: stripePayload.id,
         playerName: metadata.player_name || "the registered player",
         section: metadata.section || "",
         serviceLevel: metadata.service_level || "",
         bookingType: metadata.booking_type || "",
+        campOption: metadata.camp_option || "",
+        schedulePreference: metadata.schedule_preference || "",
+        selectedDays,
+        daysRequired,
+        daySelectionRequired,
+        daySelectionComplete:
+          !daySelectionRequired || metadata.day_selection_status === "confirmed",
         amountTotal:
           typeof stripePayload.amount_total === "number"
             ? stripePayload.amount_total / 100

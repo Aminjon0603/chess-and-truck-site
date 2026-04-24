@@ -325,17 +325,17 @@ export const campOverviewPage = {
   bookingCards: [
     {
       id: "full-week",
-      eyebrow: "Weekly camp",
-      title: "Full Week Camp",
-      price: "$450 per week",
-      defaultSchedulePreference: "Week of June 15",
+      eyebrow: "Flexible pack",
+      title: "Flexible 5-Day Pack",
+      price: "$450 per pack",
+      defaultSchedulePreference: "",
       details: [
-        "Five camp days from 9:00 AM to 12:00 PM",
-        "Best value for a full block",
+        "Five camp days to use on any available weekdays",
+        "Choose non-consecutive dates after checkout",
         "Lessons, rated matches, and park activities in Central Park",
       ],
       availability: "Limited group size",
-      cta: "Book full week",
+      cta: "Buy 5-Day Pack",
     },
     {
       id: "single-day",
@@ -507,7 +507,7 @@ export const campOverviewPage = {
     },
     {
       question: "Can I book one day instead of a full week?",
-      answer: "Yes. You can book a single day or reserve a full week directly on the page.",
+      answer: "Yes. You can book a single day or buy a flexible 5-day pack and choose your weekdays later.",
     },
   ],
   ctaTitle: "Ask about summer camp",

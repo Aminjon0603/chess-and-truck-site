@@ -3,9 +3,9 @@ import { applyRateLimit } from "./_lib/rate-limit.js";
 
 const campOptions = {
   "full-week": {
-    label: "Full Week Camp",
+    label: "Flexible 5-Day Pack",
     amount: 45000,
-    description: "Five camp days in one week at the House of Chess and Checkers, Central Park.",
+    description: "Five flexible camp days to use on any available weekdays at the House of Chess and Checkers, Central Park.",
   },
   "single-day": {
     label: "Single Day",
@@ -59,7 +59,7 @@ const normalizeReturnPath = (value, optionId) => {
   return trimmed.slice(0, 200);
 };
 
-const validateCampBookingPayload = (payload) => {
+const validateCampBookingPayload = (payload, optionId) => {
   const errors = {};
 
   if (!sanitize(payload.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
@@ -82,8 +82,8 @@ const validateCampBookingPayload = (payload) => {
   if (!sanitize(payload.studentName)) errors.studentName = "Student name is required.";
   if (!sanitize(payload.studentAge)) errors.studentAge = "Student age or grade is required.";
   if (!sanitize(payload.studentLevel)) errors.studentLevel = "Student level is required.";
-  if (!sanitize(payload.schedulePreference, 140)) {
-    errors.schedulePreference = "Preferred week or day is required.";
+  if (optionId !== "full-week" && !sanitize(payload.schedulePreference, 140)) {
+    errors.schedulePreference = "Preferred day is required.";
   }
 
   return errors;
@@ -148,7 +148,7 @@ export default {
       return Response.json({ error: "Invalid request." }, { status: 400 });
     }
 
-    const fieldErrors = validateCampBookingPayload(payload);
+    const fieldErrors = validateCampBookingPayload(payload, optionId);
 
     if (Object.keys(fieldErrors).length > 0) {
       return Response.json(
@@ -182,7 +182,10 @@ export default {
     const studentName = sanitize(payload.studentName, 120);
     const studentAge = sanitize(payload.studentAge, 80);
     const studentLevel = sanitize(payload.studentLevel, 120);
-    const schedulePreference = sanitize(payload.schedulePreference, 140);
+    const schedulePreference =
+      optionId === "full-week"
+        ? "Choose 5 camp days after purchase"
+        : sanitize(payload.schedulePreference, 140);
     const selectedAddOns = sanitizeAddOns(payload.addOns);
     const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
     const totalAmount =
@@ -221,6 +224,9 @@ export default {
     params.set("metadata[program_name]", "Chess and Truck Summer Camp");
     params.set("metadata[location]", "House of Chess and Checkers, Central Park");
     params.set("metadata[camp_time]", "9:00 AM - 12:00 PM");
+    params.set("metadata[days_required]", optionId === "full-week" ? "5" : "1");
+    params.set("metadata[selected_days]", optionId === "full-week" ? "" : schedulePreference);
+    params.set("metadata[day_selection_status]", optionId === "full-week" ? "pending" : "confirmed");
     params.set("metadata[parent_name]", `${parentFirstName} ${parentLastName}`.trim());
     params.set("metadata[parent_first_name]", parentFirstName);
     params.set("metadata[parent_last_name]", parentLastName);

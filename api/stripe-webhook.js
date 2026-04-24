@@ -73,16 +73,36 @@ const getProgramLabel = (session) => {
   return "CHESS AND TRUCK";
 };
 
+const parseSelectedDays = (value) => {
+  if (typeof value !== "string") {
+    return [];
+  }
+
+  return value
+    .split(" | ")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const isFlexibleCampPack = (metadata = {}) => metadata.booking_type === "camp" && metadata.camp_option === "full-week";
+
 const buildCampReceiptLines = (session) => {
   const metadata = session.metadata || {};
   const addOns = metadata.add_ons || "None";
   const addOnsTotal = Number(metadata.add_ons_total || 0);
+  const selectedDays = parseSelectedDays(metadata.selected_days);
+  const dateLabel = isFlexibleCampPack(metadata) ? "Selected camp days" : "Date";
+  const dateValue = isFlexibleCampPack(metadata)
+    ? selectedDays.length
+      ? selectedDays.join(", ")
+      : "To be selected after purchase"
+    : metadata.schedule_preference || "-";
 
   return [
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
     `Camp option: ${metadata.service_level || "-"}`,
     `Location: ${metadata.location || "-"}`,
-    `Date: ${metadata.schedule_preference || "-"}`,
+    `${dateLabel}: ${dateValue}`,
     `Camp time: ${metadata.camp_time || "9:00 AM - 12:00 PM"}`,
     `Parent name: ${metadata.parent_name || "-"}`,
     `Parent email: ${metadata.parent_email || session.customer_details?.email || "-"}`,
@@ -98,7 +118,9 @@ const buildCampReceiptLines = (session) => {
   ].filter(Boolean);
 };
 
-const buildInternalText = (session) => {
+const buildManageDaysUrl = (origin, session) => `${origin}/camps/confirmed?session_id=${encodeURIComponent(session.id)}`;
+
+const buildInternalText = (session, origin) => {
   const metadata = session.metadata || {};
   const isCamp = metadata.booking_type === "camp";
 
@@ -107,6 +129,9 @@ const buildInternalText = (session) => {
       `Stripe payment confirmed for ${getProgramLabel(session)}.`,
       "",
       ...buildCampReceiptLines(session),
+      isFlexibleCampPack(metadata)
+        ? `Manage days: ${buildManageDaysUrl(origin, session)}`
+        : null,
     ].join("\n");
   }
 
@@ -122,7 +147,7 @@ const buildInternalText = (session) => {
     .join("\n");
 };
 
-const buildCustomerText = (session) => {
+const buildCustomerText = (session, origin) => {
   const metadata = session.metadata || {};
   const isCamp = metadata.booking_type === "camp";
 
@@ -131,6 +156,12 @@ const buildCustomerText = (session) => {
       `Your payment for ${getProgramLabel(session)} has been confirmed.`,
       "",
       ...buildCampReceiptLines(session).filter((line) => !line.startsWith("Stripe session ID:")),
+      isFlexibleCampPack(metadata)
+        ? ""
+        : null,
+      isFlexibleCampPack(metadata)
+        ? `Choose your camp days here: ${buildManageDaysUrl(origin, session)}`
+        : null,
       "",
       "The camp team can follow up with schedule and registration details using the contact information from your booking.",
     ].join("\n");
@@ -214,11 +245,12 @@ export default {
     const metadata = session.metadata || {};
     const internalRecipients = getNotificationRecipients();
     const replyTo = metadata.parent_email || session.customer_details?.email || "";
+    const origin = new URL(request.url).origin;
 
     await sendResendEmail({
       to: internalRecipients,
       subject: `Payment confirmed - ${metadata.service_level || metadata.player_name || "Checkout payment"} (${metadata.registration_reference || session.client_reference_id || session.id})`,
-      text: buildInternalText(session),
+      text: buildInternalText(session, origin),
       replyTo,
     }).catch(() => null);
 
@@ -228,7 +260,7 @@ export default {
       await sendResendEmail({
         to: [customerEmail],
         subject: `${getProgramLabel(session)} payment confirmed`,
-        text: buildCustomerText(session),
+        text: buildCustomerText(session, origin),
       }).catch(() => null);
     }
 
