@@ -157,6 +157,7 @@ const buildCampDayOptions = () => {
 };
 
 const CAMP_DAY_OPTIONS = buildCampDayOptions();
+const CAMP_DAY_ORDER = new Map(CAMP_DAY_OPTIONS.map((item, index) => [item.value, index]));
 const CAMP_WEEK_OPTIONS = CAMP_DAY_OPTIONS.filter((item) => item.dayOfWeek === 1).map((item) => {
   const startIndex = CAMP_DAY_OPTIONS.findIndex((day) => day.isoDate === item.isoDate);
   const weekDays = CAMP_DAY_OPTIONS.slice(startIndex, startIndex + 5);
@@ -179,6 +180,9 @@ const getSelectedCampWeekOption = (schedulePreference) =>
 
 const getWeekDaysForSchedulePreference = (schedulePreference) =>
   getSelectedCampWeekOption(schedulePreference)?.days || [];
+
+const sortCampDays = (days = []) =>
+  [...days].sort((left, right) => (CAMP_DAY_ORDER.get(left) ?? 0) - (CAMP_DAY_ORDER.get(right) ?? 0));
 
 const calculateCampAddOnTotal = (addOnIds = []) =>
   CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).reduce(
@@ -1103,14 +1107,19 @@ function CampBookingFormPanel({
   campCheckoutState,
   openCampBooking,
 }) {
-  const selectedLabel = selectedOption.id === "full-week" ? "Week" : "Date";
+  const selectedLabel = selectedOption.id === "full-week" ? "Week" : "Dates";
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
-  const selectedDayOption =
+  const selectedDayOption = CAMP_DAY_OPTIONS.find((item) => item.value === selectedSchedule) || null;
+  const selectedSingleDays =
     selectedOption.id === "single-day"
-      ? CAMP_DAY_OPTIONS.find((item) => item.value === selectedSchedule) || null
-      : null;
+      ? Array.isArray(campBookingState.selectedDays) && campBookingState.selectedDays.length
+        ? sortCampDays(campBookingState.selectedDays)
+        : selectedDayOption
+          ? [selectedDayOption.value]
+          : []
+      : [];
   const selectedWeekOption =
     selectedOption.id === "full-week" ? getSelectedCampWeekOption(selectedSchedule) : null;
   const selectedWeekDays =
@@ -1120,8 +1129,16 @@ function CampBookingFormPanel({
         : selectedWeekOption?.days || []
       : [];
   const selectedAddOns = Array.isArray(campBookingState.addOns) ? campBookingState.addOns : [];
-  const addOnTotal = calculateCampAddOnTotal(selectedAddOns);
-  const baseAmount = CAMP_OPTION_BASE_AMOUNTS[selectedOption.id] || 0;
+  const addOnUnitTotal = calculateCampAddOnTotal(selectedAddOns);
+  const selectedDayCount =
+    selectedOption.id === "single-day"
+      ? selectedSingleDays.length
+      : selectedWeekDays.length || 1;
+  const baseAmount =
+    (CAMP_OPTION_BASE_AMOUNTS[selectedOption.id] || 0) *
+    (selectedOption.id === "single-day" ? selectedDayCount : 1);
+  const addOnTotal =
+    selectedOption.id === "single-day" ? addOnUnitTotal * selectedDayCount : addOnUnitTotal;
   const totalAmount = baseAmount + addOnTotal;
   const bookingSupportMethods = [...contactNumbers, emailContact].filter(Boolean);
 
@@ -1138,9 +1155,19 @@ function CampBookingFormPanel({
     const currentDays = Array.isArray(campBookingState.selectedDays) ? campBookingState.selectedDays : [];
     const nextDays = currentDays.includes(day)
       ? currentDays.filter((item) => item !== day)
-      : [...currentDays, day];
+      : sortCampDays([...currentDays, day]);
 
     updateCampBookingField("selectedDays", nextDays);
+  };
+
+  const toggleSelectedSingleDay = (day) => {
+    const currentDays = Array.isArray(campBookingState.selectedDays) ? campBookingState.selectedDays : [];
+    const nextDays = currentDays.includes(day)
+      ? currentDays.filter((item) => item !== day)
+      : sortCampDays([...currentDays, day]);
+
+    updateCampBookingField("selectedDays", nextDays);
+    updateCampBookingField("schedulePreference", nextDays[0] || "");
   };
 
   return (
@@ -1169,26 +1196,36 @@ function CampBookingFormPanel({
           ))}
         </div>
 
-        <div className="field-grid camp-date-picker-grid">
-          <label className="field field-span-2">
-            <span>{selectedLabel}</span>
-            <select
-              name="schedulePreference"
-              value={campBookingState.schedulePreference}
-              onChange={(event) => {
-                const nextValue = event.target.value;
-                updateCampBookingField("schedulePreference", nextValue);
+          <div className="field-grid camp-date-picker-grid">
+            <label className="field field-span-2">
+              <span>{selectedLabel}</span>
+              <select
+                name="schedulePreference"
+                value={campBookingState.schedulePreference}
+                onChange={(event) => {
+                  const nextValue = event.target.value;
+                  if (selectedOption.id === "full-week") {
+                    updateCampBookingField("schedulePreference", nextValue);
+                    updateCampBookingField("selectedDays", getWeekDaysForSchedulePreference(nextValue));
+                    return;
+                  }
 
-                if (selectedOption.id === "full-week") {
-                  updateCampBookingField("selectedDays", getWeekDaysForSchedulePreference(nextValue));
-                }
-              }}
-            >
-              <option value="">
-                {selectedOption.id === "full-week" ? "Select week" : "Select date"}
-              </option>
-              {selectedScheduleOptions.map((item) => (
-                <option key={item.value} value={item.value}>
+                  const currentDays = Array.isArray(campBookingState.selectedDays) ? campBookingState.selectedDays : [];
+                  const nextDays = nextValue
+                    ? currentDays.includes(nextValue)
+                      ? currentDays
+                      : sortCampDays([...currentDays, nextValue])
+                    : currentDays;
+
+                  updateCampBookingField("schedulePreference", nextValue);
+                  updateCampBookingField("selectedDays", nextDays);
+                }}
+              >
+                <option value="">
+                  {selectedOption.id === "full-week" ? "Select week" : "Add date"}
+                </option>
+                {selectedScheduleOptions.map((item) => (
+                  <option key={item.value} value={item.value}>
                   {item.label}
                 </option>
               ))}
@@ -1237,28 +1274,36 @@ function CampBookingFormPanel({
           <article className="surface camp-week-preview camp-day-preview">
             <div className="camp-week-preview-head">
               <div>
-                <span className="mini-tag">Selected day</span>
-                <h3>{selectedDayOption?.value || "Choose a camp day"}</h3>
+                <span className="mini-tag">Selected days</span>
+                <h3>
+                  {selectedSingleDays.length
+                    ? `${selectedSingleDays.length} ${selectedSingleDays.length === 1 ? "day" : "days"} selected`
+                    : "Choose one or more camp days"}
+                </h3>
               </div>
-              <strong>{selectedDayOption?.shortLabel || "Weekdays only"}</strong>
+              <strong>{selectedSingleDays.length ? "Weekdays only" : "No dates selected yet"}</strong>
             </div>
             <div className="camp-week-days camp-day-chip-grid">
               {CAMP_DAY_OPTIONS.map((day) => {
-                const isSelected = selectedSchedule === day.value;
+                const isSelected = selectedSingleDays.includes(day.value);
 
                 return (
                   <button
                     key={day.value}
                     type="button"
                     className={`camp-week-day-chip${isSelected ? " is-selected" : ""}`}
-                    onClick={() => updateCampBookingField("schedulePreference", day.value)}
+                    onClick={() => toggleSelectedSingleDay(day.value)}
                   >
                     {day.value}
                   </button>
                 );
               })}
             </div>
-            <p className="field-note">Click any available weekday to set the camp date instantly.</p>
+            <input type="hidden" name="selectedDays" value={selectedSingleDays.join(", ")} />
+            <p className="field-note">Click every weekday you want to book. We will charge $100 for each selected day.</p>
+            {campBookingErrors.selectedDays ? (
+              <span className="field-error">{campBookingErrors.selectedDays}</span>
+            ) : null}
           </article>
         ) : null}
 
@@ -1410,7 +1455,7 @@ function CampBookingFormPanel({
               <p>
                 {selectedOption.id === "full-week"
                   ? "Optional add-ons for the selected camp week."
-                  : "Optional add-ons for the selected camp day."}
+                  : "Optional add-ons for each selected camp day."}
               </p>
             </div>
           </div>
@@ -1474,12 +1519,27 @@ function CampBookingFormPanel({
                 <strong>House of Chess and Checkers, Central Park</strong>
               </div>
               <div>
-                <span>{selectedOption.id === "full-week" ? "Week" : "Date"}</span>
-                <strong>{selectedSchedule || (selectedOption.id === "full-week" ? "Choose a week above" : "Choose a date above")}</strong>
+                <span>{selectedOption.id === "full-week" ? "Week" : "Dates"}</span>
+                <strong>
+                  {selectedOption.id === "full-week"
+                    ? selectedSchedule || "Choose a week above"
+                    : selectedSingleDays.length
+                      ? `${selectedSingleDays.length} selected camp ${selectedSingleDays.length === 1 ? "day" : "days"}`
+                      : "Choose dates above"}
+                </strong>
                 {selectedWeekOption ? (
                   <ul className="summary-weekday-list">
                     {selectedWeekDays.length ? (
                       selectedWeekDays.map((day) => <li key={day}>{day}</li>)
+                    ) : (
+                      <li>No camp days selected yet</li>
+                    )}
+                  </ul>
+                ) : null}
+                {selectedOption.id === "single-day" ? (
+                  <ul className="summary-weekday-list">
+                    {selectedSingleDays.length ? (
+                      selectedSingleDays.map((day) => <li key={day}>{day}</li>)
                     ) : (
                       <li>No camp days selected yet</li>
                     )}
@@ -1496,7 +1556,13 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Additional services</span>
-                <strong>{selectedAddOns.length ? "Selected below" : "Available add-ons"}</strong>
+                <strong>
+                  {selectedAddOns.length
+                    ? selectedOption.id === "single-day"
+                      ? "Selected for each chosen day"
+                      : "Selected below"
+                    : "Available add-ons"}
+                </strong>
                 <ul className="summary-addon-list">
                   {CAMP_ADD_ONS.map((item) => {
                     const isSelected = selectedAddOns.includes(item.id);
@@ -3435,7 +3501,9 @@ function ChessTruckApp() {
         selectedDays:
           matchedOption.id === "full-week"
             ? getWeekDaysForSchedulePreference(fallbackSchedule)
-            : current.selectedDays,
+            : current.selectedDays.length
+              ? current.selectedDays
+              : [fallbackSchedule],
       }));
     }
   }, [currentPath, route.search, campBookingState.schedulePreference]);
@@ -3726,7 +3794,9 @@ function ChessTruckApp() {
       selectedDays:
         optionId === "full-week"
           ? getWeekDaysForSchedulePreference(nextSchedulePreference || current.schedulePreference)
-          : [],
+          : nextSchedulePreference
+            ? [nextSchedulePreference]
+            : [],
       addOns: current.addOns || [],
     }));
     setCampBookingErrors((current) => {

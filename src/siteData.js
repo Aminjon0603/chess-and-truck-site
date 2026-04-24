@@ -537,7 +537,7 @@ export const campBookingPage = {
   ],
   supportTitle: "Need help before checkout?",
   supportText: "Contact us if you have any questions, reservations or concerns.",
-  siblingNote: "Booking for siblings? Increase quantity during Stripe checkout.",
+  siblingNote: "Booking for more than one student? Please submit a separate booking for each child.",
 };
 
 export const campDetailPages = {

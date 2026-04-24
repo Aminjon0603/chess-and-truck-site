@@ -71,6 +71,7 @@ const normalizeReturnPath = (value, optionId) => {
 
 const validateCampBookingPayload = (payload, optionId) => {
   const errors = {};
+  const selectedDays = sanitizeSelectedDays(payload.selectedDays);
 
   if (!sanitize(payload.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
   if (!sanitize(payload.parentLastName)) errors.parentLastName = "Parent last name is required.";
@@ -92,11 +93,14 @@ const validateCampBookingPayload = (payload, optionId) => {
   if (!sanitize(payload.studentName)) errors.studentName = "Student name is required.";
   if (!sanitize(payload.studentAge)) errors.studentAge = "Student age or grade is required.";
   if (!sanitize(payload.studentLevel)) errors.studentLevel = "Student level is required.";
-  if (!sanitize(payload.schedulePreference, 140)) {
-    errors.schedulePreference = "Preferred week or day is required.";
+  if (optionId === "full-week" && !sanitize(payload.schedulePreference, 140)) {
+    errors.schedulePreference = "Preferred week is required.";
   }
-  if (optionId === "full-week" && sanitizeSelectedDays(payload.selectedDays).length === 0) {
+  if (optionId === "full-week" && selectedDays.length === 0) {
     errors.selectedDays = "Please choose at least one camp day in the selected week.";
+  }
+  if (optionId === "single-day" && selectedDays.length === 0) {
+    errors.selectedDays = "Please choose at least one camp day.";
   }
 
   return errors;
@@ -200,9 +204,19 @@ export default {
     const selectedDaysSummary = selectedDays.join(", ");
     const selectedAddOns = sanitizeAddOns(payload.addOns);
     const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
+    const dayQuantity = optionId === "single-day" ? selectedDays.length : 1;
+    const addOnUnitTotal = selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0);
+    const addOnTotal = optionId === "single-day" ? addOnUnitTotal * dayQuantity : addOnUnitTotal;
     const totalAmount =
-      selectedOption.amount +
-      selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0);
+      optionId === "single-day"
+        ? selectedOption.amount * dayQuantity + addOnTotal
+        : selectedOption.amount + addOnTotal;
+    const scheduleSummary =
+      optionId === "single-day"
+        ? selectedDays.length === 1
+          ? selectedDays[0]
+          : `${selectedDays.length} selected camp days`
+        : schedulePreference;
     const notes = sanitize(payload.notes, 300);
 
     const params = new URLSearchParams();
@@ -215,16 +229,21 @@ export default {
     params.set("billing_address_collection", "auto");
     params.set("phone_number_collection[enabled]", "true");
     params.set("customer_email", email);
-    params.set("line_items[0][quantity]", "1");
-    params.set("line_items[0][adjustable_quantity][enabled]", "true");
-    params.set("line_items[0][adjustable_quantity][minimum]", "1");
-    params.set("line_items[0][adjustable_quantity][maximum]", "6");
+    params.set("line_items[0][quantity]", String(dayQuantity));
     params.set("line_items[0][price_data][currency]", "usd");
-    params.set("line_items[0][price_data][unit_amount]", String(totalAmount));
-    params.set("line_items[0][price_data][product_data][name]", "Chess and Truck Summer Camp");
+    params.set(
+      "line_items[0][price_data][unit_amount]",
+      String(optionId === "single-day" ? selectedOption.amount + addOnUnitTotal : totalAmount)
+    );
+    params.set(
+      "line_items[0][price_data][product_data][name]",
+      optionId === "single-day" && dayQuantity > 1
+        ? "Chess and Truck Summer Camp Days"
+        : "Chess and Truck Summer Camp"
+    );
     params.set(
       "line_items[0][price_data][product_data][description]",
-      `${selectedOption.label} | ${schedulePreference}${
+      `${selectedOption.label} | ${scheduleSummary}${
         selectedDaysSummary ? ` | ${selectedDaysSummary}` : ""
       } | House of Chess and Checkers, Central Park${
         addOnSummary ? ` | ${addOnSummary}` : ""
@@ -246,10 +265,10 @@ export default {
     params.set("metadata[student_name]", studentName);
     params.set("metadata[student_age]", studentAge);
     params.set("metadata[student_level]", studentLevel);
-    params.set("metadata[schedule_preference]", schedulePreference);
+    params.set("metadata[schedule_preference]", scheduleSummary);
     params.set("metadata[selected_days]", selectedDaysSummary || "None");
     params.set("metadata[add_ons]", addOnSummary || "None");
-    params.set("metadata[add_ons_total]", String(selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0)));
+    params.set("metadata[add_ons_total]", String(addOnTotal));
     params.set("metadata[notes]", notes);
 
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
