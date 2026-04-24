@@ -48,7 +48,6 @@ import {
 
 const REGISTRATION_DRAFT_KEY = "ct-registration-draft-v2";
 const CAMP_CONFIRMATION_STORAGE_KEY = "ct-camp-confirmation-v1";
-const FLEX_PACK_DAYS_REQUIRED = 5;
 const phoneContact = contactNumbers[0];
 const emailContact = contactEmails[0];
 const footerContactMethods = [...contactNumbers, emailContact].filter(Boolean);
@@ -157,8 +156,6 @@ const CAMP_WEEK_OPTIONS = CAMP_DAY_OPTIONS.filter((item) => item.dayOfWeek === 1
 
 const getCampScheduleOptions = (optionId) =>
   optionId === "full-week" ? CAMP_WEEK_OPTIONS : CAMP_DAY_OPTIONS;
-
-const isFlexibleCampPack = (optionId) => optionId === "full-week";
 
 const calculateCampAddOnTotal = (addOnIds = []) =>
   CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).reduce(
@@ -1083,7 +1080,7 @@ function CampBookingFormPanel({
   campCheckoutState,
   openCampBooking,
 }) {
-  const selectedLabel = "Date";
+  const selectedLabel = selectedOption.id === "full-week" ? "Date" : "Date";
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
@@ -1128,36 +1125,28 @@ function CampBookingFormPanel({
           ))}
         </div>
 
-        {isFlexibleCampPack(selectedOption.id) ? (
-          <div className="surface camp-flex-pack-note">
-            <strong>Choose your 5 camp days after checkout.</strong>
-            <p>
-              Buy the flexible pack first, then select any {FLEX_PACK_DAYS_REQUIRED} available
-              weekdays like June 11, 23, 24, or 30 on the confirmation page.
-            </p>
-          </div>
-        ) : (
-          <div className="field-grid camp-date-picker-grid">
-            <label className="field field-span-2">
-              <span>{selectedLabel}</span>
-              <select
-                name="schedulePreference"
-                value={campBookingState.schedulePreference}
-                onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
-              >
-                <option value="">Select date</option>
-                {selectedScheduleOptions.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-              {campBookingErrors.schedulePreference ? (
-                <span className="field-error">{campBookingErrors.schedulePreference}</span>
-              ) : null}
-            </label>
-          </div>
-        )}
+        <div className="field-grid camp-date-picker-grid">
+          <label className="field field-span-2">
+            <span>{selectedLabel}</span>
+            <select
+              name="schedulePreference"
+              value={campBookingState.schedulePreference}
+              onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
+            >
+              <option value="">
+                {selectedOption.id === "full-week" ? "Select week" : "Select date"}
+              </option>
+              {selectedScheduleOptions.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+            {campBookingErrors.schedulePreference ? (
+              <span className="field-error">{campBookingErrors.schedulePreference}</span>
+            ) : null}
+          </label>
+        </div>
 
         <div className="form-section">
           <div className="form-section-head">
@@ -1306,7 +1295,7 @@ function CampBookingFormPanel({
               <h3>Additional services</h3>
               <p>
                 {selectedOption.id === "full-week"
-                  ? "Optional add-ons that apply to your flexible pack."
+                  ? "Optional add-ons for the selected camp week."
                   : "Optional add-ons for the selected camp day."}
               </p>
             </div>
@@ -1372,11 +1361,7 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Date</span>
-                <strong>
-                  {isFlexibleCampPack(selectedOption.id)
-                    ? `Choose ${FLEX_PACK_DAYS_REQUIRED} days after purchase`
-                    : selectedSchedule || "Choose a date above"}
-                </strong>
+                <strong>{selectedSchedule || "Choose a date above"}</strong>
               </div>
               <div>
                 <span>Camp time</span>
@@ -1755,7 +1740,7 @@ function CampsOverviewPage({
             <article className="surface camp-booking-hint" id="camp-booking-form">
               <span className="mini-tag">Registration form</span>
               <h3>Click Book to open the registration form.</h3>
-              <p>Choose a single day or the flexible 5-day pack above and the form will open here.</p>
+              <p>Choose any day or the full week option above and the form will open here.</p>
             </article>
           )}
         </div>
@@ -1963,118 +1948,12 @@ function CampBookingPage({
 }
 
 function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
-  const [localDetails, setLocalDetails] = useState(campCheckoutState.details);
-  const [selectedFlexibleDays, setSelectedFlexibleDays] = useState(
-    campCheckoutState.details?.selectedDays || []
-  );
-  const [daySaveState, setDaySaveState] = useState({ status: "idle", message: "" });
-  const isSuccess = campCheckoutState.status === "success" && localDetails;
+  const isSuccess = campCheckoutState.status === "success" && campCheckoutState.details;
   const isLoading = campCheckoutState.status === "loading";
   const isError = campCheckoutState.status === "error";
-  const isFlexiblePack = Boolean(localDetails?.daySelectionRequired);
-  const isDaySelectionComplete = Boolean(localDetails?.daySelectionComplete);
-
-  useEffect(() => {
-    setLocalDetails(campCheckoutState.details);
-    setSelectedFlexibleDays(campCheckoutState.details?.selectedDays || []);
-    setDaySaveState({ status: "idle", message: "" });
-  }, [campCheckoutState.details]);
-
-  const toggleFlexibleDay = (day) => {
-    if (daySaveState.status === "loading") {
-      return;
-    }
-
-    setSelectedFlexibleDays((current) => {
-      if (current.includes(day)) {
-        return current.filter((item) => item !== day);
-      }
-
-      if (current.length >= FLEX_PACK_DAYS_REQUIRED) {
-        return current;
-      }
-
-      return [...current, day];
-    });
-  };
-
-  const handleFlexibleDaySave = async () => {
-    if (!localDetails?.sessionId) {
-      setDaySaveState({
-        status: "error",
-        message: "This confirmation is missing the Stripe session ID.",
-      });
-      return;
-    }
-
-    if (selectedFlexibleDays.length !== FLEX_PACK_DAYS_REQUIRED) {
-      setDaySaveState({
-        status: "error",
-        message: `Choose exactly ${FLEX_PACK_DAYS_REQUIRED} weekdays before saving.`,
-      });
-      return;
-    }
-
-    setDaySaveState({ status: "loading", message: "" });
-
-    try {
-      const response = await fetch("/api/update-flex-camp-days", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: localDetails.sessionId,
-          selectedDays: selectedFlexibleDays,
-        }),
-      });
-
-      const payload = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(payload.error || "Camp days could not be saved.");
-      }
-
-      const nextDetails = {
-        ...localDetails,
-        selectedDays: payload.selectedDays || selectedFlexibleDays,
-        daySelectionComplete: true,
-        schedulePreference: (payload.selectedDays || selectedFlexibleDays).join(", "),
-      };
-
-      setLocalDetails(nextDetails);
-      setSelectedFlexibleDays(payload.selectedDays || selectedFlexibleDays);
-      setDaySaveState({
-        status: "success",
-        message: payload.message || "Your camp days have been saved.",
-      });
-
-      try {
-        const storedConfirmation = window.sessionStorage.getItem(CAMP_CONFIRMATION_STORAGE_KEY);
-
-        if (storedConfirmation) {
-          const parsedConfirmation = JSON.parse(storedConfirmation);
-          window.sessionStorage.setItem(
-            CAMP_CONFIRMATION_STORAGE_KEY,
-            JSON.stringify({
-              ...parsedConfirmation,
-              details: nextDetails,
-            })
-          );
-        }
-      } catch {
-        // Ignore storage sync issues.
-      }
-    } catch (error) {
-      setDaySaveState({
-        status: "error",
-        message: error instanceof Error ? error.message : "Camp days could not be saved.",
-      });
-    }
-  };
 
   const title = isSuccess
-    ? isFlexiblePack && !isDaySelectionComplete
-      ? "Choose your 5 camp days."
-      : "Thank you. Your camp spot is confirmed."
+    ? "Thank you. Your camp spot is confirmed."
     : isLoading
       ? "Confirming your camp payment..."
       : isError
@@ -2082,9 +1961,7 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
         : "Camp confirmation";
 
   const intro = isSuccess
-    ? isFlexiblePack && !isDaySelectionComplete
-      ? `A Stripe receipt was sent to ${localDetails.customerEmail || "your email"}. Now choose any ${FLEX_PACK_DAYS_REQUIRED} weekdays from June 15 to August 21.`
-      : `A Stripe receipt was sent to ${localDetails.customerEmail || "your email"}. We will follow up with the next camp details shortly.`
+    ? `A Stripe receipt was sent to ${campCheckoutState.details.customerEmail || "your email"}. We will follow up with the next camp details shortly.`
     : isLoading
       ? "Please wait a moment while we verify the Stripe checkout session."
       : isError
@@ -2115,81 +1992,21 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
               <div className="fact-list fact-list-hero camp-confirmation-facts">
                 <div>
                   <span>Reference</span>
-                  <strong>{localDetails.reference}</strong>
+                  <strong>{campCheckoutState.details.reference}</strong>
                 </div>
                 <div>
                   <span>Amount</span>
                   <strong>
-                    {typeof localDetails.amountTotal === "number"
-                      ? formatCurrency(localDetails.amountTotal)
+                    {typeof campCheckoutState.details.amountTotal === "number"
+                      ? formatCurrency(campCheckoutState.details.amountTotal)
                       : "$100"}
                   </strong>
                 </div>
                 <div>
                   <span>Receipt email</span>
-                  <strong>{localDetails.customerEmail || "Sent by Stripe"}</strong>
+                  <strong>{campCheckoutState.details.customerEmail || "Sent by Stripe"}</strong>
                 </div>
               </div>
-            ) : null}
-
-            {isSuccess && isFlexiblePack ? (
-              <article className="surface flex-pack-picker">
-                <span className="mini-tag">Choose your weekdays</span>
-                <h3>Select {FLEX_PACK_DAYS_REQUIRED} non-consecutive camp days</h3>
-                <p>
-                  Pick any available weekdays. You can mix dates like June 11, 23, 24, and 30 as
-                  long as you save exactly {FLEX_PACK_DAYS_REQUIRED} days.
-                </p>
-                <div className="flex-pack-counter">
-                  <strong>{selectedFlexibleDays.length}</strong>
-                  <span>of {FLEX_PACK_DAYS_REQUIRED} days selected</span>
-                </div>
-                <div className="flex-pack-days-grid">
-                  {CAMP_DAY_OPTIONS.map((item) => {
-                    const isSelected = selectedFlexibleDays.includes(item.value);
-
-                    return (
-                      <button
-                        key={item.value}
-                        type="button"
-                        className={`flex-pack-day-button${isSelected ? " is-selected" : ""}`}
-                        onClick={() => toggleFlexibleDay(item.value)}
-                        disabled={
-                          daySaveState.status === "loading" ||
-                          (!isSelected && selectedFlexibleDays.length >= FLEX_PACK_DAYS_REQUIRED)
-                        }
-                      >
-                        {item.label}
-                      </button>
-                    );
-                  })}
-                </div>
-                {daySaveState.message ? (
-                  <article className={`status-banner status-banner-${daySaveState.status}`}>
-                    <strong>
-                      {daySaveState.status === "success"
-                        ? "Camp days saved"
-                        : daySaveState.status === "loading"
-                          ? "Saving your dates"
-                          : "Selection needs attention"}
-                    </strong>
-                    <p>{daySaveState.message}</p>
-                  </article>
-                ) : null}
-                {isDaySelectionComplete && localDetails.selectedDays?.length ? (
-                  <p className="field-note">
-                    Saved dates: {localDetails.selectedDays.join(", ")}
-                  </p>
-                ) : null}
-                <button
-                  type="button"
-                  className="btn btn-primary btn-full"
-                  onClick={handleFlexibleDaySave}
-                  disabled={daySaveState.status === "loading"}
-                >
-                  {daySaveState.status === "loading" ? "Saving your camp days..." : "Save My 5 Days"}
-                </button>
-              </article>
             ) : null}
 
             <div className="cta-row">
@@ -3364,7 +3181,7 @@ function ChessTruckApp() {
     const payment = currentUrl.searchParams.get("payment");
     const sessionId = currentUrl.searchParams.get("session_id");
 
-    if (!payment && !(currentPath === "/camps/confirmed" && sessionId)) {
+    if (!payment) {
       return;
     }
 
@@ -3389,7 +3206,7 @@ function ChessTruckApp() {
       return;
     }
 
-    if (sessionId && (payment === "success" || currentPath === "/camps/confirmed")) {
+    if (payment === "success" && sessionId) {
       setCampCheckoutState({ status: "loading", message: "", details: null, activeOption: "" });
 
       fetch("/api/checkout-status", {
@@ -3407,10 +3224,8 @@ function ChessTruckApp() {
           setCampCheckoutState({
             status: "success",
             message:
-              payload.daySelectionRequired && !payload.daySelectionComplete
-                ? "Payment confirmed. Choose your camp days below."
-                : payload.message ||
-                  "Camp payment confirmed. We will follow up with the next registration details.",
+              payload.message ||
+              "Camp payment confirmed. We will follow up with the next registration details.",
             details: payload,
             activeOption: "",
           });
@@ -3419,10 +3234,8 @@ function ChessTruckApp() {
             JSON.stringify({
               status: "success",
               message:
-                payload.daySelectionRequired && !payload.daySelectionComplete
-                  ? "Payment confirmed. Choose your camp days below."
-                  : payload.message ||
-                    "Camp payment confirmed. We will follow up with the next registration details.",
+                payload.message ||
+                "Camp payment confirmed. We will follow up with the next registration details.",
               details: payload,
               activeOption: "",
             })
@@ -3491,14 +3304,6 @@ function ChessTruckApp() {
 
     const fallbackSchedule =
       getCampScheduleOptions(matchedOption.id)[0]?.value || matchedOption.defaultSchedulePreference;
-
-    if (matchedOption.id === "full-week") {
-      setCampBookingState((current) => ({
-        ...current,
-        schedulePreference: "",
-      }));
-      return;
-    }
 
     if (!campBookingState.schedulePreference.trim() && fallbackSchedule) {
       setCampBookingState((current) => ({
@@ -3786,13 +3591,11 @@ function ChessTruckApp() {
 
     const fallbackSchedule =
       getCampScheduleOptions(optionId)[0]?.value || selectedOption?.defaultSchedulePreference || "";
-    const nextSchedulePreference = isFlexibleCampPack(optionId)
-      ? ""
-      : schedulePreference || fallbackSchedule;
+    const nextSchedulePreference = schedulePreference || fallbackSchedule;
 
     setCampBookingState((current) => ({
       ...current,
-      schedulePreference: nextSchedulePreference,
+      schedulePreference: nextSchedulePreference || current.schedulePreference,
       addOns: current.addOns || [],
     }));
     setCampBookingErrors((current) => {
@@ -3813,7 +3616,7 @@ function ChessTruckApp() {
   const handleCampBookingSubmit = async (event, optionId) => {
     event.preventDefault();
 
-    const nextErrors = validateCampBookingFields(campBookingState, optionId);
+    const nextErrors = validateCampBookingFields(campBookingState);
     setCampBookingErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {

@@ -1257,82 +1257,6 @@ a {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.flex-pack-picker {
-  display: grid;
-  gap: 18px;
-  padding: 24px;
-  border: 1px solid rgba(25, 42, 50, 0.12);
-  background: rgba(248, 243, 232, 0.58);
-}
-
-.flex-pack-picker h3,
-.camp-flex-pack-note strong {
-  color: var(--ink);
-}
-
-.flex-pack-picker p,
-.camp-flex-pack-note p {
-  margin: 0;
-  color: var(--ink-soft);
-  line-height: 1.7;
-}
-
-.flex-pack-counter {
-  display: inline-grid;
-  gap: 2px;
-  justify-items: start;
-}
-
-.flex-pack-counter strong {
-  font-size: 1.8rem;
-  line-height: 1;
-  color: var(--ink);
-}
-
-.flex-pack-counter span {
-  color: var(--ink-soft);
-}
-
-.flex-pack-days-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.flex-pack-day-button {
-  min-height: 58px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(25, 42, 50, 0.14);
-  background: rgba(255, 255, 255, 0.96);
-  color: var(--ink);
-  font: inherit;
-  font-weight: 700;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    transform 160ms ease,
-    border-color 160ms ease,
-    background 160ms ease,
-    box-shadow 160ms ease;
-}
-
-.flex-pack-day-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: rgba(47, 116, 104, 0.45);
-  box-shadow: 0 14px 24px rgba(19, 33, 39, 0.08);
-}
-
-.flex-pack-day-button.is-selected {
-  border-color: rgba(47, 116, 104, 0.72);
-  background: rgba(47, 116, 104, 0.12);
-}
-
-.flex-pack-day-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
 .camp-hero-facts {
   margin-top: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1631,14 +1555,6 @@ a {
 .camp-addons-grid {
   display: grid;
   gap: 12px;
-}
-
-.camp-flex-pack-note {
-  display: grid;
-  gap: 10px;
-  padding: 18px 20px;
-  border: 1px solid rgba(25, 42, 50, 0.12);
-  background: rgba(248, 243, 232, 0.58);
 }
 
 .camp-addon-option {
@@ -2557,11 +2473,6 @@ a {
   }
 
   .booking-option-switcher {
-    grid-template-columns: 1fr;
-  }
-
-  .camp-confirmation-facts,
-  .flex-pack-days-grid {
     grid-template-columns: 1fr;
   }
 
