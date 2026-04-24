@@ -1610,9 +1610,9 @@ function CampsOverviewPage({
 
   return (
     <>
-      <section className="page-hero lesson-page-hero">
-        <div className="shell lesson-hero-grid lesson-detail-hero-grid">
-          <div className="lesson-hero-copy lesson-detail-hero-copy">
+      <section className="page-hero lesson-page-hero camp-overview-hero">
+        <div className="shell lesson-hero-grid lesson-detail-hero-grid camp-overview-hero-grid">
+          <div className="lesson-hero-copy lesson-detail-hero-copy camp-overview-hero-copy">
             <span className="section-tag">{campOverviewPage.eyebrow}</span>
             <h1>{campOverviewPage.title}</h1>
             {campOverviewPage.intro ? <p className="page-intro">{campOverviewPage.intro}</p> : null}
@@ -1646,7 +1646,7 @@ function CampsOverviewPage({
             </div>
           </div>
 
-          <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel">
+          <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel camp-overview-hero-panel">
             <div className="lesson-hero-top">
               <div className="lesson-photo-shell">
                 <img src={brandLogo} alt={`${siteBrand.name} logo`} className="lesson-photo lesson-detail-photo camp-logo-photo" />
