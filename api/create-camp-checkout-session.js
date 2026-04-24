@@ -14,12 +14,33 @@ const campOptions = {
   },
 };
 
+const campAddOns = {
+  "early-drop-off": {
+    label: "Early Drop-Off (8:30 AM)",
+    amount: 3000,
+  },
+  "extended-day": {
+    label: "Extended Day (until 12:30 PM)",
+    amount: 3000,
+  },
+};
+
 const sanitize = (value, limit = 120) => {
   if (typeof value !== "string") {
     return "";
   }
 
   return value.trim().slice(0, limit);
+};
+
+const sanitizeAddOns = (value) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((item) => sanitize(item, 40))
+    .filter((item, index, list) => item && list.indexOf(item) === index && campAddOns[item]);
 };
 
 const normalizeReturnPath = (value, optionId) => {
@@ -162,6 +183,11 @@ export default {
     const studentAge = sanitize(payload.studentAge, 80);
     const studentLevel = sanitize(payload.studentLevel, 120);
     const schedulePreference = sanitize(payload.schedulePreference, 140);
+    const selectedAddOns = sanitizeAddOns(payload.addOns);
+    const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
+    const totalAmount =
+      selectedOption.amount +
+      selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0);
     const notes = sanitize(payload.notes, 300);
 
     const params = new URLSearchParams();
@@ -179,11 +205,13 @@ export default {
     params.set("line_items[0][adjustable_quantity][minimum]", "1");
     params.set("line_items[0][adjustable_quantity][maximum]", "6");
     params.set("line_items[0][price_data][currency]", "usd");
-    params.set("line_items[0][price_data][unit_amount]", String(selectedOption.amount));
+    params.set("line_items[0][price_data][unit_amount]", String(totalAmount));
     params.set("line_items[0][price_data][product_data][name]", "Chess and Truck Summer Camp");
     params.set(
       "line_items[0][price_data][product_data][description]",
-      `${selectedOption.label} | June 15 - August 21 | House of Chess and Checkers, Central Park`
+      `${selectedOption.label} | ${schedulePreference} | House of Chess and Checkers, Central Park${
+        addOnSummary ? ` | ${addOnSummary}` : ""
+      }`
     );
     params.set("client_reference_id", reference);
     params.set("metadata[booking_type]", "camp");
@@ -198,6 +226,7 @@ export default {
     params.set("metadata[student_age]", studentAge);
     params.set("metadata[student_level]", studentLevel);
     params.set("metadata[schedule_preference]", schedulePreference);
+    params.set("metadata[add_ons]", addOnSummary || "None");
     params.set("metadata[notes]", notes);
 
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {

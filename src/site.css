@@ -527,6 +527,12 @@ a {
   width: 100%;
 }
 
+.btn-emphasis {
+  min-height: 64px;
+  padding: 0 34px;
+  font-size: 1.05rem;
+}
+
 .page-hero {
   padding: 54px 0 24px;
 }
@@ -1397,6 +1403,11 @@ a {
   align-content: start;
 }
 
+.camp-booking-card.is-selected {
+  border-color: rgba(196, 149, 73, 0.58);
+  box-shadow: 0 22px 48px rgba(18, 30, 36, 0.12);
+}
+
 .camp-booking-card h3 {
   font-size: clamp(1.6rem, 3.2vw, 2rem);
 }
@@ -1508,6 +1519,49 @@ a {
   background: rgba(196, 149, 73, 0.16);
   border-color: rgba(196, 149, 73, 0.65);
   box-shadow: 0 18px 36px rgba(19, 33, 39, 0.08);
+}
+
+.camp-addons-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.camp-addon-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(25, 42, 50, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+}
+
+.camp-addon-option.is-selected {
+  border-color: rgba(196, 149, 73, 0.58);
+  background: rgba(248, 243, 232, 0.72);
+}
+
+.camp-addon-option input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.camp-addon-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.camp-addon-copy strong,
+.camp-addon-price {
+  color: var(--ink);
+}
+
+.camp-addon-price {
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .summary-card-block p {

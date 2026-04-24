@@ -83,11 +83,14 @@ const buildInternalText = (session) => {
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
     isCamp ? `Camp option: ${metadata.service_level || "-"}` : `Player: ${metadata.player_name || "-"}`,
     isCamp ? `Location: ${metadata.location || "-"}` : `Section: ${metadata.section || "-"}`,
-    `Service level: ${metadata.service_level || "-"}`,
+    isCamp ? `Date: ${metadata.schedule_preference || "-"}` : `Service level: ${metadata.service_level || "-"}`,
+    isCamp ? `Additional services: ${metadata.add_ons || "None"}` : null,
     `Parent email: ${metadata.parent_email || session.customer_details?.email || "-"}`,
     `Amount: ${formatAmount(session.amount_total, session.currency)}`,
     `Stripe session ID: ${session.id}`,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 };
 
 const buildCustomerText = (session) => {
@@ -100,13 +103,16 @@ const buildCustomerText = (session) => {
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
     isCamp ? `Camp option: ${metadata.service_level || "-"}` : `Player: ${metadata.player_name || "Registered player"}`,
     isCamp ? `Location: ${metadata.location || "-"}` : `Section: ${metadata.section || "-"}`,
-    `Service level: ${metadata.service_level || "-"}`,
+    isCamp ? `Date: ${metadata.schedule_preference || "-"}` : `Service level: ${metadata.service_level || "-"}`,
+    isCamp ? `Additional services: ${metadata.add_ons || "None"}` : null,
     `Amount paid: ${formatAmount(session.amount_total, session.currency)}`,
     "",
     isCamp
       ? "The camp team can follow up with schedule and registration details using the contact information you entered in Stripe."
       : "The program team can follow up using the registration details you submitted before checkout.",
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 };
 
 const markProcessed = (eventId) => {

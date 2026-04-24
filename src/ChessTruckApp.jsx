@@ -100,8 +100,73 @@ const campBookingInitialState = {
   studentAge: "",
   studentLevel: "",
   schedulePreference: "",
+  addOns: [],
   notes: "",
   website: "",
+};
+
+const CAMP_OPTION_BASE_AMOUNTS = {
+  "full-week": 450,
+  "single-day": 100,
+};
+
+const CAMP_ADD_ONS = [
+  {
+    id: "early-drop-off",
+    label: "Early Drop-Off (8:30 AM)",
+    amount: 30,
+  },
+  {
+    id: "extended-day",
+    label: "Extended Day (until 12:30 PM)",
+    amount: 30,
+  },
+];
+
+const campDayFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "long",
+  month: "long",
+  day: "numeric",
+});
+
+const buildCampDayOptions = () => {
+  const options = [];
+  const endDate = new Date(2026, 7, 21);
+
+  for (let current = new Date(2026, 5, 15); current <= endDate; ) {
+    if (current.getDay() !== 0 && current.getDay() !== 6) {
+      const label = campDayFormatter.format(current);
+      options.push({
+        value: label,
+        label,
+        dayOfWeek: current.getDay(),
+      });
+    }
+
+    current = new Date(current.getFullYear(), current.getMonth(), current.getDate() + 1);
+  }
+
+  return options;
+};
+
+const CAMP_DAY_OPTIONS = buildCampDayOptions();
+const CAMP_WEEK_OPTIONS = CAMP_DAY_OPTIONS.filter((item) => item.dayOfWeek === 1).map((item) => ({
+  value: `Week of ${item.label.replace(/^[^,]+,\s*/, "")}`,
+  label: `Week of ${item.label.replace(/^[^,]+,\s*/, "")}`,
+}));
+
+const getCampScheduleOptions = (optionId) =>
+  optionId === "full-week" ? CAMP_WEEK_OPTIONS : CAMP_DAY_OPTIONS;
+
+const calculateCampAddOnTotal = (addOnIds = []) =>
+  CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).reduce(
+    (sum, item) => sum + item.amount,
+    0
+  );
+
+const formatCampAddOnSummary = (addOnIds = []) => {
+  const labels = CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).map((item) => item.label);
+  return labels.length ? labels.join(", ") : "None";
 };
 
 const registrationStepDefinitions = [
@@ -560,14 +625,14 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, portraitCa
   );
 
   return (
-    <section className="page-hero">
-      <div className="shell page-hero-grid">
-        <div className="page-hero-copy">
-          <span className="section-tag">{eyebrow}</span>
-          <h1>{title}</h1>
-          <p className="page-intro">{intro}</p>
-          {actions ? <div className="cta-row">{actions}</div> : null}
-          {heroFacts?.length ? (
+      <section className="page-hero">
+        <div className="shell page-hero-grid">
+          <div className="page-hero-copy">
+            <span className="section-tag">{eyebrow}</span>
+            <h1>{title}</h1>
+            {intro ? <p className="page-intro">{intro}</p> : null}
+            {actions ? <div className="cta-row">{actions}</div> : null}
+            {heroFacts?.length ? (
             <div className="fact-list fact-list-hero page-hero-facts">
               {heroFacts.map((item) => (
                 <div key={item.label}>
@@ -1055,15 +1120,25 @@ function CampBookingFormPanel({
   campCheckoutState,
   openCampBooking,
 }) {
-  const selectedLabel =
-    selectedOption.id === "full-week" ? "Preferred week" : "Preferred day";
-  const selectedPlaceholder =
-    selectedOption.id === "full-week"
-      ? "Example: Week of June 15"
-      : "Example: June 18";
+  const selectedLabel = selectedOption.id === "full-week" ? "Date" : "Date";
+  const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
+  const selectedAddOns =
+    selectedOption.id === "single-day" ? campBookingState.addOns || [] : [];
+  const addOnTotal = calculateCampAddOnTotal(selectedAddOns);
+  const baseAmount = CAMP_OPTION_BASE_AMOUNTS[selectedOption.id] || 0;
+  const totalAmount = baseAmount + addOnTotal;
   const bookingSupportMethods = [...contactNumbers, emailContact].filter(Boolean);
+
+  const toggleCampAddOn = (addOnId) => {
+    const currentAddOns = Array.isArray(campBookingState.addOns) ? campBookingState.addOns : [];
+    const nextAddOns = currentAddOns.includes(addOnId)
+      ? currentAddOns.filter((item) => item !== addOnId)
+      : [...currentAddOns, addOnId];
+
+    updateCampBookingField("addOns", nextAddOns);
+  };
 
   return (
     <div className="register-layout camp-booking-layout" id="camp-booking-form">
@@ -1221,14 +1296,20 @@ function CampBookingFormPanel({
           <div className="field-grid">
             <label className="field">
               <span>{selectedLabel}</span>
-              <input
-                type="text"
+              <select
                 name="schedulePreference"
                 value={campBookingState.schedulePreference}
                 onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
-                placeholder={selectedPlaceholder}
-                autoComplete="off"
-              />
+              >
+                <option value="">
+                  {selectedOption.id === "full-week" ? "Select week" : "Select date"}
+                </option>
+                {selectedScheduleOptions.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
               {campBookingErrors.schedulePreference ? (
                 <span className="field-error">{campBookingErrors.schedulePreference}</span>
               ) : null}
@@ -1244,6 +1325,37 @@ function CampBookingFormPanel({
             </label>
           </div>
         </div>
+
+        {selectedOption.id === "single-day" ? (
+          <div className="form-section">
+            <div className="form-section-head">
+              <div className="section-count">04</div>
+              <div>
+                <h3>Add to class</h3>
+                <p>Optional add-ons for the selected camp day.</p>
+              </div>
+            </div>
+            <div className="camp-addons-grid">
+              {CAMP_ADD_ONS.map((item) => {
+                const isChecked = selectedAddOns.includes(item.id);
+
+                return (
+                  <label className={`camp-addon-option${isChecked ? " is-selected" : ""}`} key={item.id}>
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => toggleCampAddOn(item.id)}
+                    />
+                    <span className="camp-addon-copy">
+                      <strong>{item.label}</strong>
+                    </span>
+                    <span className="camp-addon-price">+ {formatCurrency(item.amount)}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
 
         <label className="honeypot-field" aria-hidden="true">
           Website
@@ -1273,7 +1385,7 @@ function CampBookingFormPanel({
           <article className="surface summary-card-block">
             <span className="mini-tag">{selectedOption.eyebrow}</span>
             <h2>{selectedOption.title}</h2>
-            <p className="camp-booking-price">{selectedOption.price}</p>
+            <p className="camp-booking-price">{formatCurrency(totalAmount)}</p>
             <div className="summary-list summary-list-booking">
               <div>
                 <span>Dates</span>
@@ -1284,12 +1396,20 @@ function CampBookingFormPanel({
                 <strong>House of Chess and Checkers, Central Park</strong>
               </div>
               <div>
-                <span>Selected slot</span>
-                <strong>{selectedSchedule || "Choose a day above"}</strong>
+                <span>Date</span>
+                <strong>{selectedSchedule || "Choose a date above"}</strong>
               </div>
               <div>
-                <span>Service</span>
-                <strong>{selectedOption.id === "full-week" ? "Half-day camp week" : "Half-day camp session"}</strong>
+                <span>Camp time</span>
+                <strong>9:00 AM - 12:00 PM</strong>
+              </div>
+              <div>
+                <span>Age range</span>
+                <strong>Ages 4 - 17</strong>
+              </div>
+              <div>
+                <span>Additional services</span>
+                <strong>{formatCampAddOnSummary(selectedAddOns)}</strong>
               </div>
             </div>
             <ul className="camp-booking-list">
@@ -1297,6 +1417,9 @@ function CampBookingFormPanel({
                 <li key={detail}>{detail}</li>
               ))}
             </ul>
+            {selectedOption.id === "single-day" && selectedAddOns.length ? (
+              <p className="camp-booking-availability">Additional services total: {formatCurrency(addOnTotal)}</p>
+            ) : null}
             <p className="camp-booking-availability">{selectedOption.availability}</p>
           </article>
 
@@ -1536,11 +1659,6 @@ function CampsOverviewPage({
   const selectedOption =
     campOverviewPage.bookingCards.find((item) => item.id === selectedCampOptionId) ||
     campOverviewPage.bookingCards[0];
-  const weeklyOption =
-    campOverviewPage.bookingCards.find((item) => item.id === "full-week") ||
-    campOverviewPage.bookingCards[0];
-  const activeSchedulePreference =
-    campBookingState.schedulePreference?.trim() || selectedOption?.defaultSchedulePreference || "";
 
   return (
     <>
@@ -1549,19 +1667,21 @@ function CampsOverviewPage({
           <div className="lesson-hero-copy lesson-detail-hero-copy">
             <span className="section-tag">{campOverviewPage.eyebrow}</span>
             <h1>{campOverviewPage.title}</h1>
-            <p className="page-intro">{campOverviewPage.intro}</p>
+            {campOverviewPage.intro ? <p className="page-intro">{campOverviewPage.intro}</p> : null}
 
-            <div className="lesson-chip-row">
-              {campOverviewPage.chips.map((item) => (
-                <span key={item} className="lesson-chip">
-                  {item}
-                </span>
-              ))}
-            </div>
+            {campOverviewPage.chips.length ? (
+              <div className="lesson-chip-row">
+                {campOverviewPage.chips.map((item) => (
+                  <span key={item} className="lesson-chip">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : null}
 
             <div className="cta-row">
-              <a href="#camp-booking" className="btn btn-primary">
-                Book Camp
+              <a href="#camp-booking" className="btn btn-primary btn-emphasis">
+                Book Now
               </a>
               <a href="#camp-schedule" className="btn btn-secondary">
                 Camp Schedule
@@ -1621,73 +1741,38 @@ function CampsOverviewPage({
             intro={campOverviewPage.bookingSection.intro}
           />
           <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
-          <div className="camp-booking-board">
-            <div className="camp-booking-days">
-              {campOverviewPage.bookingSchedule.map((item) => {
-                const isLoading =
-                  campCheckoutState.status === "loading" && campCheckoutState.activeOption === item.optionId;
-                const isSelected =
-                  selectedCampOptionId === item.optionId && activeSchedulePreference === item.schedulePreference;
+          <div className="camp-booking-grid">
+            {campOverviewPage.bookingCards.map((item) => {
+              const isSelected = selectedCampOptionId === item.id;
+              const isLoading =
+                campCheckoutState.status === "loading" && campCheckoutState.activeOption === item.id;
 
-                return (
-                  <article className={`surface camp-booking-slot${isSelected ? " is-selected" : ""}`} key={item.id}>
-                    <div className="camp-booking-slot-header">
-                      <strong>{item.date}</strong>
-                      <span>{item.relativeLabel}</span>
-                    </div>
-                    <div className="camp-booking-slot-body">
-                      <div className="camp-booking-slot-media">
-                        <img src={brandLogo} alt={`${siteBrand.name} logo`} className="camp-booking-slot-image camp-booking-slot-logo" />
-                      </div>
-                      <div className="camp-booking-slot-copy">
-                        <strong className="camp-booking-slot-time">{item.time}</strong>
-                        <h3>{item.title}</h3>
-                        <p>
-                          {item.subtitle} @ {item.price}
-                        </p>
-                      </div>
-                      <div className="camp-booking-slot-side">
-                        <button
-                          type="button"
-                          className="btn btn-primary camp-booking-button camp-booking-slot-button"
-                          onClick={() => openCampBooking(item.optionId, item.schedulePreference)}
-                          disabled={campCheckoutState.status === "loading"}
-                        >
-                          {isLoading ? "Opening..." : "Book"}
-                        </button>
-                        <span>{item.spotsLeft}</span>
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-
-            <article
-              className={`surface surface-dark camp-booking-week-card${
-                selectedCampOptionId === weeklyOption.id ? " is-selected" : ""
-              }`}
-            >
-              <span className="mini-tag mini-tag-dark">{weeklyOption.eyebrow}</span>
-              <h3>{weeklyOption.title}</h3>
-              <p className="camp-booking-price">{weeklyOption.price}</p>
-              <ul className="camp-booking-list">
-                {weeklyOption.details.map((detail) => (
-                  <li key={detail}>{detail}</li>
-                ))}
-              </ul>
-              <p className="camp-booking-availability">{weeklyOption.availability}</p>
-              <button
-                type="button"
-                className="btn btn-primary camp-booking-button"
-                onClick={() => openCampBooking(weeklyOption.id, weeklyOption.defaultSchedulePreference)}
-                disabled={campCheckoutState.status === "loading"}
-              >
-                {campCheckoutState.status === "loading" && campCheckoutState.activeOption === weeklyOption.id
-                  ? "Opening checkout..."
-                  : weeklyOption.cta}
-              </button>
-            </article>
+              return (
+                <article
+                  className={`surface camp-booking-card${isSelected ? " is-selected" : ""}`}
+                  key={item.id}
+                >
+                  <span className="mini-tag">{item.eyebrow}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.id === "single-day" ? "9:00 AM - 12:00 PM" : "Weekdays from 9:00 AM - 12:00 PM"}</p>
+                  <p className="camp-booking-price">{item.price}</p>
+                  <ul className="camp-booking-list">
+                    {item.details.map((detail) => (
+                      <li key={detail}>{detail}</li>
+                    ))}
+                  </ul>
+                  <p className="camp-booking-availability">{item.availability}</p>
+                  <button
+                    type="button"
+                    className="btn btn-primary camp-booking-button"
+                    onClick={() => openCampBooking(item.id, item.defaultSchedulePreference)}
+                    disabled={campCheckoutState.status === "loading"}
+                  >
+                    {isLoading ? "Opening..." : item.id === "single-day" ? "Book Now" : item.cta}
+                  </button>
+                </article>
+              );
+            })}
           </div>
 
           {isCampBookingFormVisible || campCheckoutState.status !== "idle" ? (
@@ -1852,20 +1937,13 @@ function CampBookingPage({
   updateCampBookingField,
   handleCampBookingSubmit,
   campCheckoutState,
+  openCampBooking,
 }) {
   const searchParams = new URLSearchParams(routeSearch);
   const requestedOptionId = searchParams.get("option");
   const selectedOption =
     campOverviewPage.bookingCards.find((item) => item.id === requestedOptionId) ||
     campOverviewPage.bookingCards[0];
-
-  const selectedLabel =
-    selectedOption.id === "full-week" ? "Preferred week" : "Preferred day";
-  const selectedPlaceholder =
-    selectedOption.id === "full-week"
-      ? "Example: Week of June 16"
-      : "Example: June 18";
-  const bookingSupportMethods = [...contactNumbers, emailContact].filter(Boolean);
 
   return (
     <>
@@ -1875,13 +1953,15 @@ function CampBookingPage({
             <span className="section-tag">{campBookingPage.eyebrow}</span>
             <h1>{campBookingPage.title}</h1>
             <p className="page-intro">{campBookingPage.intro}</p>
-            <div className="lesson-chip-row">
-              {campBookingPage.chips.map((item) => (
-                <span key={item} className="lesson-chip">
-                  {item}
-                </span>
-              ))}
-            </div>
+            {campBookingPage.chips.length ? (
+              <div className="lesson-chip-row">
+                {campBookingPage.chips.map((item) => (
+                  <span key={item} className="lesson-chip">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="cta-row">
             {campOverviewPage.bookingCards.map((item) => (
@@ -1903,247 +1983,16 @@ function CampBookingPage({
 
       <section className="page-section">
         <div className="shell register-layout camp-booking-layout">
-          <form
-            className="surface registration-form camp-booking-form"
-            onSubmit={(event) => handleCampBookingSubmit(event, selectedOption.id)}
-          >
-            <div className="form-header">
-              <span className="mini-tag">{selectedOption.eyebrow}</span>
-              <h2>{campBookingPage.formTitle}</h2>
-              <p>{campBookingPage.formIntro}</p>
-            </div>
-
-            {campCheckoutState.status !== "idle" && (
-              <article className={`surface status-banner status-banner-${campCheckoutState.status}`}>
-                <strong>
-                  {campCheckoutState.status === "loading" && "Opening secure checkout"}
-                  {campCheckoutState.status === "success" && "Payment confirmed"}
-                  {campCheckoutState.status === "cancelled" && "Checkout cancelled"}
-                  {campCheckoutState.status === "error" && "Camp checkout could not start"}
-                </strong>
-                <p>{campCheckoutState.message}</p>
-              </article>
-            )}
-
-            <div className="form-section">
-              <div className="form-section-head">
-                <div className="section-count">01</div>
-                <div>
-                  <h3>{campBookingPage.sections[0].title}</h3>
-                  <p>{campBookingPage.sections[0].intro}</p>
-                </div>
-              </div>
-              <div className="field-grid">
-                <label className="field">
-                  <span>Parent first name</span>
-                  <input
-                    type="text"
-                    name="parentFirstName"
-                    value={campBookingState.parentFirstName}
-                    onChange={(event) => updateCampBookingField("parentFirstName", event.target.value)}
-                    autoComplete="given-name"
-                  />
-                  {campBookingErrors.parentFirstName ? (
-                    <span className="field-error">{campBookingErrors.parentFirstName}</span>
-                  ) : null}
-                </label>
-                <label className="field">
-                  <span>Parent last name</span>
-                  <input
-                    type="text"
-                    name="parentLastName"
-                    value={campBookingState.parentLastName}
-                    onChange={(event) => updateCampBookingField("parentLastName", event.target.value)}
-                    autoComplete="family-name"
-                  />
-                  {campBookingErrors.parentLastName ? (
-                    <span className="field-error">{campBookingErrors.parentLastName}</span>
-                  ) : null}
-                </label>
-                <label className="field">
-                  <span>Email</span>
-                  <input
-                    type="email"
-                    name="email"
-                    value={campBookingState.email}
-                    onChange={(event) => updateCampBookingField("email", event.target.value)}
-                    autoComplete="email"
-                    inputMode="email"
-                  />
-                  {campBookingErrors.email ? (
-                    <span className="field-error">{campBookingErrors.email}</span>
-                  ) : null}
-                </label>
-                <label className="field">
-                  <span>Phone</span>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={campBookingState.phone}
-                    onChange={(event) => updateCampBookingField("phone", event.target.value)}
-                    autoComplete="tel"
-                    inputMode="tel"
-                  />
-                  {campBookingErrors.phone ? (
-                    <span className="field-error">{campBookingErrors.phone}</span>
-                  ) : null}
-                </label>
-              </div>
-            </div>
-
-            <div className="form-section">
-              <div className="form-section-head">
-                <div className="section-count">02</div>
-                <div>
-                  <h3>{campBookingPage.sections[1].title}</h3>
-                  <p>{campBookingPage.sections[1].intro}</p>
-                </div>
-              </div>
-              <div className="field-grid">
-                <label className="field">
-                  <span>Student name</span>
-                  <input
-                    type="text"
-                    name="studentName"
-                    value={campBookingState.studentName}
-                    onChange={(event) => updateCampBookingField("studentName", event.target.value)}
-                    autoComplete="off"
-                  />
-                  {campBookingErrors.studentName ? (
-                    <span className="field-error">{campBookingErrors.studentName}</span>
-                  ) : null}
-                </label>
-                <label className="field">
-                  <span>Student age or grade</span>
-                  <input
-                    type="text"
-                    name="studentAge"
-                    value={campBookingState.studentAge}
-                    onChange={(event) => updateCampBookingField("studentAge", event.target.value)}
-                    placeholder="Example: Age 9 or Grade 4"
-                    autoComplete="off"
-                  />
-                  {campBookingErrors.studentAge ? (
-                    <span className="field-error">{campBookingErrors.studentAge}</span>
-                  ) : null}
-                </label>
-                <label className="field field-span-2">
-                  <span>Current level</span>
-                  <input
-                    type="text"
-                    name="studentLevel"
-                    value={campBookingState.studentLevel}
-                    onChange={(event) => updateCampBookingField("studentLevel", event.target.value)}
-                    placeholder="Example: Beginner, improving, tournament player"
-                    autoComplete="off"
-                  />
-                  {campBookingErrors.studentLevel ? (
-                    <span className="field-error">{campBookingErrors.studentLevel}</span>
-                  ) : null}
-                </label>
-              </div>
-            </div>
-
-            <div className="form-section">
-              <div className="form-section-head">
-                <div className="section-count">03</div>
-                <div>
-                  <h3>{campBookingPage.sections[2].title}</h3>
-                  <p>{campBookingPage.sections[2].intro}</p>
-                </div>
-              </div>
-              <div className="field-grid">
-                <label className="field">
-                  <span>{selectedLabel}</span>
-                  <input
-                    type="text"
-                    name="schedulePreference"
-                    value={campBookingState.schedulePreference}
-                    onChange={(event) => updateCampBookingField("schedulePreference", event.target.value)}
-                    placeholder={selectedPlaceholder}
-                    autoComplete="off"
-                  />
-                  {campBookingErrors.schedulePreference ? (
-                    <span className="field-error">{campBookingErrors.schedulePreference}</span>
-                  ) : null}
-                </label>
-                <label className="field field-span-2">
-                  <span>Allergies/anything we need to know</span>
-                  <textarea
-                    name="notes"
-                    value={campBookingState.notes}
-                    onChange={(event) => updateCampBookingField("notes", event.target.value)}
-                    placeholder="Allergies/anything we need to know"
-                  />
-                </label>
-              </div>
-            </div>
-
-            <label className="honeypot-field" aria-hidden="true">
-              Website
-              <input
-                type="text"
-                tabIndex="-1"
-                autoComplete="off"
-                value={campBookingState.website}
-                onChange={(event) => updateCampBookingField("website", event.target.value)}
-              />
-            </label>
-
-            <div className="submit-actions">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={campCheckoutState.status === "loading"}
-              >
-                {campCheckoutState.status === "loading" ? "Opening checkout..." : "Continue to secure checkout"}
-              </button>
-              <p className="field-note">{campBookingPage.siblingNote}</p>
-            </div>
-          </form>
-
-          <aside className="register-sidebar">
-            <div className="summary-card">
-              <article className="surface summary-card-block">
-                <span className="mini-tag">{selectedOption.eyebrow}</span>
-                <h2>{selectedOption.title}</h2>
-                <p className="camp-booking-price">{selectedOption.price}</p>
-                <div className="summary-list summary-list-booking">
-                  <div>
-                    <span>Dates</span>
-                    <strong>June 15 - August 21 (weekdays)</strong>
-                  </div>
-                  <div>
-                    <span>Location</span>
-                    <strong>House of Chess and Checkers, Central Park</strong>
-                  </div>
-                  <div>
-                    <span>Service</span>
-                    <strong>{selectedOption.id === "full-week" ? "Half-day camp week" : "Half-day camp session"}</strong>
-                  </div>
-                </div>
-                <ul className="camp-booking-list">
-                  {selectedOption.details.map((detail) => (
-                    <li key={detail}>{detail}</li>
-                  ))}
-                </ul>
-                <p className="camp-booking-availability">{selectedOption.availability}</p>
-              </article>
-
-              <article className="surface summary-card-block">
-                <span className="mini-tag">{campBookingPage.supportTitle}</span>
-                <p>{campBookingPage.supportText}</p>
-                <div className="booking-support-actions">
-                  {bookingSupportMethods.map((item) => (
-                    <a key={item.display} href={item.href} className="btn btn-secondary btn-full booking-support-action">
-                      <span>{item.label}</span>
-                      <strong>{item.display}</strong>
-                    </a>
-                  ))}
-                </div>
-              </article>
-            </div>
-          </aside>
+          <CampCheckoutStatusBanner campCheckoutState={campCheckoutState} />
+          <CampBookingFormPanel
+            selectedOption={selectedOption}
+            campBookingState={campBookingState}
+            campBookingErrors={campBookingErrors}
+            updateCampBookingField={updateCampBookingField}
+            handleCampBookingSubmit={handleCampBookingSubmit}
+            campCheckoutState={campCheckoutState}
+            openCampBooking={openCampBooking}
+          />
         </div>
       </section>
     </>
@@ -3470,10 +3319,13 @@ function ChessTruckApp() {
     setSelectedCampOptionId(matchedOption.id);
     setIsCampBookingFormVisible(true);
 
-    if (!campBookingState.schedulePreference.trim() && matchedOption.defaultSchedulePreference) {
+    const fallbackSchedule =
+      getCampScheduleOptions(matchedOption.id)[0]?.value || matchedOption.defaultSchedulePreference;
+
+    if (!campBookingState.schedulePreference.trim() && fallbackSchedule) {
       setCampBookingState((current) => ({
         ...current,
-        schedulePreference: matchedOption.defaultSchedulePreference,
+        schedulePreference: fallbackSchedule,
       }));
     }
   }, [currentPath, route.search, campBookingState.schedulePreference]);
@@ -3717,11 +3569,21 @@ function ChessTruckApp() {
     setSelectedCampOptionId(optionId);
     setIsCampBookingFormVisible(true);
 
-    const nextSchedulePreference = schedulePreference || selectedOption?.defaultSchedulePreference || "";
+    const fallbackSchedule =
+      getCampScheduleOptions(optionId)[0]?.value || selectedOption?.defaultSchedulePreference || "";
+    const nextSchedulePreference = schedulePreference || fallbackSchedule;
 
-    if (nextSchedulePreference) {
-      updateCampBookingField("schedulePreference", nextSchedulePreference);
-    }
+    setCampBookingState((current) => ({
+      ...current,
+      schedulePreference: nextSchedulePreference || current.schedulePreference,
+      addOns: optionId === "single-day" ? current.addOns : [],
+    }));
+    setCampBookingErrors((current) => {
+      const next = { ...current };
+      delete next.schedulePreference;
+      delete next.addOns;
+      return next;
+    });
 
     window.requestAnimationFrame(() => {
       document.getElementById("camp-booking-form")?.scrollIntoView({

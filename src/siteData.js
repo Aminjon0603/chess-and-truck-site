@@ -203,7 +203,7 @@ export const featuredTournament = {
   title: "Summer Chess Camp",
   city: "House of Chess and Checkers, Central Park",
   scheduleLabel: "June 15 - August 21 (weekdays)",
-  formatLabel: "Half-day camp",
+  formatLabel: "9:00 AM - 12:00 PM",
   pricingLabel: "Camp details available now",
   venueLabel: "House of Chess and Checkers, Central Park",
   shortSummary: "Central Park summer camp. Daily lessons, guided games, and clear structure.",
@@ -220,11 +220,11 @@ export const footerLegalLinks = [
 export const homePage = {
   eyebrow: "NYC chess camps",
   title: "Summer chess camps in Central Park.",
-  intro: "June 15 to August 21. Weekdays only. Half-day camp with FIDE Masters in Central Park.",
+  intro: "Weekday summer camp with FIDE Masters in Central Park.",
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
-    { label: "Service", value: "Half-day camp" },
+    { label: "Age range", value: "Ages 4 - 17" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
   ],
   offerSection: {
@@ -333,19 +333,19 @@ export const lessonCarouselSlides = [
 export const campOverviewPage = {
   eyebrow: "Camps",
   title: "Summer Chess Camps in Central Park",
-  intro: "June 15 to August 21. Weekdays only. Central Park. Half-day camp. Book a day or a full week.",
-  chips: ["June 15 - August 21", "Weekdays only", "Half-day camp"],
+  intro: "",
+  chips: [],
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "House of Chess and Checkers, Central Park" },
     { label: "Levels", value: "Beginner-friendly and improving players" },
-    { label: "Service", value: "Half-day camp" },
+    { label: "Age range", value: "Ages 4 - 17" },
   ],
   portraitCaption: "Simple camp booking with real chess structure.",
   asideTag: "Summer 2026",
   asideTitle: "Camp plan",
   asideText:
-    "Morning camp in Central Park with FIDE Masters, warm-up games, park play, snack time, and rated chess activities.",
+    "Morning camp in Central Park with FIDE Masters, warm-up games, park play, snack time, rated matches, and chess activities.",
   asideFacts: [
     { label: "Schedule", value: "9:00 AM to 12:00 PM" },
     { label: "Coaches", value: "FIDE Masters" },
@@ -387,15 +387,15 @@ export const campOverviewPage = {
     { title: "Location", text: "House of Chess and Checkers, Central Park" },
     { title: "Dates", text: "June 15 - August 21 (weekdays)" },
     { title: "Time", text: "9:00 AM to 12:00 PM" },
-    { title: "Service", text: "Half-day camp" },
-    { title: "Ages", text: "School-age players" },
+    { title: "Age range", text: "Ages 4 - 17" },
+    { title: "Rated matches", text: "Included during camp sessions" },
     { title: "Skill levels", text: "Beginner-friendly with level grouping" },
     { title: "Contact", text: "Contact us for availability and next steps" },
   ],
   bookingSection: {
     eyebrow: "Camp booking",
     title: "Book now",
-    intro: "Pick a day or full week and continue to secure checkout.",
+    intro: "Choose an option, pick a date, and continue to secure checkout.",
     note: "Contact us if you have any questions, reservations or concerns.",
   },
   bookingCards: [
@@ -406,12 +406,12 @@ export const campOverviewPage = {
       price: "$450 per week",
       defaultSchedulePreference: "Week of June 15",
       details: [
-        "Five half-day camp sessions in one week",
+        "Five camp days from 9:00 AM to 12:00 PM",
         "Best value for a full block",
-        "Lessons, games, and breaks in Central Park",
+        "Lessons, rated matches, and park activities in Central Park",
       ],
       availability: "Limited group size",
-      cta: "Reserve Your Week",
+      cta: "Book full week",
     },
     {
       id: "single-day",
@@ -420,12 +420,12 @@ export const campOverviewPage = {
       price: "$100 per day",
       defaultSchedulePreference: "Monday, June 15",
       details: [
-        "Join for one half-day camp session",
+        "One camp session from 9:00 AM to 12:00 PM",
         "Easy for changing summer schedules",
-        "Same camp structure in a shorter commitment",
+        "Lessons, rated matches, and park activities in Central Park",
       ],
       availability: "Limited group size",
-      cta: "Book a Day",
+      cta: "Book single day",
     },
   ],
   bookingSchedule: [
@@ -435,7 +435,7 @@ export const campOverviewPage = {
       relativeLabel: "Weekday session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "Half day in Central Park",
+      subtitle: "3 hours of camp in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -447,7 +447,7 @@ export const campOverviewPage = {
       relativeLabel: "Day 2",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "Half day in Central Park",
+      subtitle: "3 hours of camp in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -459,7 +459,7 @@ export const campOverviewPage = {
       relativeLabel: "Midweek session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "Half day in Central Park",
+      subtitle: "3 hours of camp in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -471,7 +471,7 @@ export const campOverviewPage = {
       relativeLabel: "Late-week session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "Half day in Central Park",
+      subtitle: "3 hours of camp in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -483,7 +483,7 @@ export const campOverviewPage = {
       relativeLabel: "Wrap-up day",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "Half day in Central Park",
+      subtitle: "3 hours of camp in Central Park",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -504,7 +504,7 @@ export const campOverviewPage = {
   scheduleSection: {
     eyebrow: "Sample day",
     title: "Schedule",
-    intro: "Morning half-day structure for camp days.",
+    intro: "9:00 AM to 12:00 PM structure for camp days.",
   },
   sampleSchedule: [
     {
@@ -594,9 +594,9 @@ export const campBookingPage = {
   eyebrow: "Camp booking",
   title: "Choose an option and continue to secure checkout",
   intro: "Pick an option, add family details, and continue to Stripe.",
-  chips: ["June 15 - August 21", "Weekdays only", "Secure checkout"],
+  chips: ["Date selection", "Additional services", "Secure checkout"],
   formTitle: "Camp booking details",
-  formIntro: "A quick step before payment.",
+  formIntro: "Pick your date, add extras, and continue to secure checkout.",
   sections: [
     {
       title: "Parent contact",
@@ -1071,13 +1071,10 @@ export const faqPage = {
 export const contactPage = {
   eyebrow: "Contact",
   title: "Contact the team for camps and lessons.",
-  intro:
-    "Use the contact form, call or text (646) 251-7087 or (646) 494-5363, or email info@chessandtruck.com for camp questions, lesson inquiries, pricing, or help choosing the right program.",
+  intro: "",
   heroFacts: [
     { label: "Phone lines", value: "(646) 251-7087 / (646) 494-5363" },
     { label: "Email", value: "info@chessandtruck.com" },
-    { label: "Reply type", value: "Direct response" },
-    { label: "Best for", value: "Questions + contact requests" },
   ],
   topicSection: {
     eyebrow: "What to contact us about",
