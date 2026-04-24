@@ -73,18 +73,47 @@ const getProgramLabel = (session) => {
   return "CHESS AND TRUCK";
 };
 
+const buildCampReceiptLines = (session) => {
+  const metadata = session.metadata || {};
+  const addOns = metadata.add_ons || "None";
+  const addOnsTotal = Number(metadata.add_ons_total || 0);
+
+  return [
+    `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
+    `Camp option: ${metadata.service_level || "-"}`,
+    `Location: ${metadata.location || "-"}`,
+    `Date: ${metadata.schedule_preference || "-"}`,
+    `Camp time: ${metadata.camp_time || "9:00 AM - 12:00 PM"}`,
+    `Parent name: ${metadata.parent_name || "-"}`,
+    `Parent email: ${metadata.parent_email || session.customer_details?.email || "-"}`,
+    `Parent phone: ${metadata.parent_phone || "-"}`,
+    `Student name: ${metadata.student_name || "-"}`,
+    `Student age: ${metadata.student_age || "-"}`,
+    `Student level: ${metadata.student_level || "-"}`,
+    `Additional services: ${addOns}`,
+    addOns !== "None" ? `Additional services total: ${formatAmount(addOnsTotal, session.currency)}` : null,
+    `Notes: ${metadata.notes || "None"}`,
+    `Amount paid: ${formatAmount(session.amount_total, session.currency)}`,
+    `Stripe session ID: ${session.id}`,
+  ].filter(Boolean);
+};
+
 const buildInternalText = (session) => {
   const metadata = session.metadata || {};
   const isCamp = metadata.booking_type === "camp";
+
+  if (isCamp) {
+    return [
+      `Stripe payment confirmed for ${getProgramLabel(session)}.`,
+      "",
+      ...buildCampReceiptLines(session),
+    ].join("\n");
+  }
 
   return [
     `Stripe payment confirmed for ${getProgramLabel(session)}.`,
     "",
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
-    isCamp ? `Camp option: ${metadata.service_level || "-"}` : `Player: ${metadata.player_name || "-"}`,
-    isCamp ? `Location: ${metadata.location || "-"}` : `Section: ${metadata.section || "-"}`,
-    isCamp ? `Date: ${metadata.schedule_preference || "-"}` : `Service level: ${metadata.service_level || "-"}`,
-    isCamp ? `Additional services: ${metadata.add_ons || "None"}` : null,
     `Parent email: ${metadata.parent_email || session.customer_details?.email || "-"}`,
     `Amount: ${formatAmount(session.amount_total, session.currency)}`,
     `Stripe session ID: ${session.id}`,
@@ -97,19 +126,23 @@ const buildCustomerText = (session) => {
   const metadata = session.metadata || {};
   const isCamp = metadata.booking_type === "camp";
 
+  if (isCamp) {
+    return [
+      `Your payment for ${getProgramLabel(session)} has been confirmed.`,
+      "",
+      ...buildCampReceiptLines(session).filter((line) => !line.startsWith("Stripe session ID:")),
+      "",
+      "The camp team can follow up with schedule and registration details using the contact information from your booking.",
+    ].join("\n");
+  }
+
   return [
     `Your payment for ${getProgramLabel(session)} has been confirmed.`,
     "",
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
-    isCamp ? `Camp option: ${metadata.service_level || "-"}` : `Player: ${metadata.player_name || "Registered player"}`,
-    isCamp ? `Location: ${metadata.location || "-"}` : `Section: ${metadata.section || "-"}`,
-    isCamp ? `Date: ${metadata.schedule_preference || "-"}` : `Service level: ${metadata.service_level || "-"}`,
-    isCamp ? `Additional services: ${metadata.add_ons || "None"}` : null,
     `Amount paid: ${formatAmount(session.amount_total, session.currency)}`,
     "",
-    isCamp
-      ? "The camp team can follow up with schedule and registration details using the contact information you entered in Stripe."
-      : "The program team can follow up using the registration details you submitted before checkout.",
+    "The program team can follow up using the registration details you submitted before checkout.",
   ]
     .filter(Boolean)
     .join("\n");

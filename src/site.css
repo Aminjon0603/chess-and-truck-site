@@ -1607,6 +1607,19 @@ a {
   grid-column: 1 / -1;
 }
 
+.summary-addon-list {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+}
+
+.summary-addon-list li.is-selected {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .booking-support-actions {
   display: grid;
   gap: 12px;

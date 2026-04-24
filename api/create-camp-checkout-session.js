@@ -214,12 +214,16 @@ export default {
       }`
     );
     params.set("client_reference_id", reference);
+    params.set("metadata[registration_reference]", reference);
     params.set("metadata[booking_type]", "camp");
     params.set("metadata[service_level]", selectedOption.label);
     params.set("metadata[camp_option]", optionId);
     params.set("metadata[program_name]", "Chess and Truck Summer Camp");
     params.set("metadata[location]", "House of Chess and Checkers, Central Park");
+    params.set("metadata[camp_time]", "9:00 AM - 12:00 PM");
     params.set("metadata[parent_name]", `${parentFirstName} ${parentLastName}`.trim());
+    params.set("metadata[parent_first_name]", parentFirstName);
+    params.set("metadata[parent_last_name]", parentLastName);
     params.set("metadata[parent_email]", email);
     params.set("metadata[parent_phone]", phone);
     params.set("metadata[student_name]", studentName);
@@ -227,6 +231,7 @@ export default {
     params.set("metadata[student_level]", studentLevel);
     params.set("metadata[schedule_preference]", schedulePreference);
     params.set("metadata[add_ons]", addOnSummary || "None");
+    params.set("metadata[add_ons_total]", String(selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0)));
     params.set("metadata[notes]", notes);
 
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {

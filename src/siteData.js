@@ -48,7 +48,7 @@ export const campMenuFeature = {
   eyebrow: "Summer camp",
   title: "Chess camp in Central Park, June 15 to August 21.",
   text:
-    "Structured summer camp for NYC families who want lessons, guided games, and a clear daily rhythm.",
+    "The best chess camp in the city -- led by two Masters with 20+ years of NYC experience. Structured, engaging, and genuinely fun.",
   ctaLabel: "Open camp overview",
   ctaPath: "/camps",
 };

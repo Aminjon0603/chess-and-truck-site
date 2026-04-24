@@ -1229,7 +1229,7 @@ function CampBookingFormPanel({
               ) : null}
             </label>
             <label className="field">
-              <span>Student age or grade</span>
+              <span>Student age</span>
               <input
                 type="text"
                 name="studentAge"
@@ -1365,7 +1365,18 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Additional services</span>
-                <strong>{formatCampAddOnSummary(selectedAddOns)}</strong>
+                <strong>{selectedAddOns.length ? "Selected below" : "Available add-ons"}</strong>
+                <ul className="summary-addon-list">
+                  {CAMP_ADD_ONS.map((item) => {
+                    const isSelected = selectedAddOns.includes(item.id);
+
+                    return (
+                      <li key={item.id} className={isSelected ? "is-selected" : ""}>
+                        {item.label} (+{formatCurrency(item.amount)})
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </div>
             <ul className="camp-booking-list">
