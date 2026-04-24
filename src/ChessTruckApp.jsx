@@ -584,7 +584,15 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts,
           <div className="page-hero-copy">
             <span className="section-tag">{eyebrow}</span>
             <h1>{title}</h1>
-            {intro ? <p className="page-intro">{intro}</p> : null}
+            {Array.isArray(intro)
+              ? intro.map((paragraph) => (
+                  <p className="page-intro" key={paragraph}>
+                    {paragraph}
+                  </p>
+                ))
+              : intro
+                ? <p className="page-intro">{intro}</p>
+                : null}
             {actions ? <div className="cta-row">{actions}</div> : null}
             {heroFacts?.length ? (
             <div className="fact-list fact-list-hero page-hero-facts">
@@ -725,12 +733,12 @@ function SiteFooter({ currentPath, navigate }) {
                 currentPath={currentPath}
                 className="btn btn-primary footer-cta"
               >
-                Contact us
+                Inquire
               </AppLink>
             </div>
 
             <div className="footer-column">
-              <span className="mini-tag">Explore</span>
+              <span className="mini-tag">Explore Programs</span>
               <div className="footer-nav">
                 {navigationItems.map((item) => (
                   <AppLink
@@ -784,8 +792,8 @@ function SiteFooter({ currentPath, navigate }) {
               <h3>{campOverviewPage.title}</h3>
               <p>{campOverviewPage.intro}</p>
               <div className="footer-meta">
-                <span>{campOverviewPage.heroFacts.find((item) => item.label === "Location")?.value || "Upper East Side, NYC"}</span>
-                <strong>{campOverviewPage.heroFacts.find((item) => item.label === "Dates")?.value || "Summer 2026"}</strong>
+                <span>{featuredTournament.venueLabel || "House of Chess & Checkers, Central Park"}</span>
+                <strong>{featuredTournament.scheduleLabel || "June 15 - August 21 · Weekdays"}</strong>
               </div>
               <AppLink
                 to="/camps"
@@ -793,7 +801,7 @@ function SiteFooter({ currentPath, navigate }) {
                 currentPath={currentPath}
                 className="text-link"
               >
-                View Camp Details
+                View Full Camp Details
               </AppLink>
             </div>
           </div>
@@ -1421,10 +1429,10 @@ function AboutPage({ currentPath, navigate }) {
         actions={
           <>
             <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              View Camps
+              Explore Camps
             </AppLink>
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Contact us
+                Get in Touch
               </AppLink>
           </>
         }
@@ -1462,24 +1470,6 @@ function AboutPage({ currentPath, navigate }) {
               ))}
             </ul>
           </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <article className="surface lesson-detail-cta">
-            <span className="section-tag">Contact us</span>
-            <h3>{aboutPage.ctaTitle}</h3>
-            <p>{aboutPage.ctaText}</p>
-            <div className="cta-row">
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Contact us
-              </AppLink>
-              <AppLink to="/lessons/manage" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Manage Lessons
-              </AppLink>
-            </div>
-          </article>
         </div>
       </section>
     </>

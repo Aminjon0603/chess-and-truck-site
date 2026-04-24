@@ -4,7 +4,7 @@ export const siteBrand = {
   city: "New York City",
   tagline: "NYC summer chess camps at Central Park",
   footerNote:
-    "Summer chess camp runs June 15 to August 21 on weekdays at the House of Chess and Checkers in Central Park.",
+    "Our summer chess program is held June 15 through August 21, with weekday sessions at the House of Chess & Checkers in Central Park.",
 };
 
 export const navigationItems = [
@@ -46,10 +46,10 @@ export const campMenuItems = [
 
 export const campMenuFeature = {
   eyebrow: "Summer camp",
-  title: "Chess camp in Central Park, June 15 to August 21.",
+  title: "June 15 - August 21 · Weekdays",
   text:
-    "The best chess camp in the city -- led by two Masters with 20+ years of NYC experience. Structured, engaging, and genuinely fun.",
-  ctaLabel: "Open camp overview",
+    "Our summer chess program is held June 15 through August 21, with weekday sessions at the House of Chess & Checkers in Central Park.",
+  ctaLabel: "View Full Camp Details",
   ctaPath: "/camps",
 };
 
@@ -159,13 +159,14 @@ export const routeMeta = {
 export const featuredTournament = {
   slug: "summer-camp",
   title: "Summer Chess Camp",
-  city: "House of Chess and Checkers, Central Park",
-  scheduleLabel: "June 15 - August 21 (weekdays)",
+  city: "House of Chess & Checkers, Central Park",
+  scheduleLabel: "June 15 - August 21 · Weekdays",
   formatLabel: "9:00 AM - 12:00 PM",
   pricingLabel: "Camp details available now",
-  venueLabel: "House of Chess and Checkers, Central Park",
+  venueLabel: "House of Chess & Checkers, Central Park",
   shortSummary: "Central Park summer camp. Daily lessons, guided games, and clear structure.",
-  longSummary: "Summer camp runs June 15 to August 21 on weekdays at the House of Chess and Checkers in Central Park.",
+  longSummary:
+    "Our summer chess program is held June 15 through August 21, with weekday sessions at the House of Chess & Checkers in Central Park.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -775,9 +776,12 @@ export const campDetailPages = {
 
 export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
-  title: "A New York City chess program built for families.",
-  intro:
-    "CHESS AND TRUCK gives NYC families clear camp and lesson options, simple communication, and real coaching value.",
+  title: "A Smarter Chess Program for NYC Families",
+  intro: [
+    "Chess and Truck makes it easy for New York City families to find high-quality chess camps and lessons -- without the guesswork. Clear options, seamless communication, and expert coaching your child will actually benefit from.",
+    "Our handpicked team of premium coaches brings 25+ years of combined NYC experience, blending structured learning with a genuinely fun, engaging approach kids love.",
+    "Real progress. Real coaches. Real results.",
+  ],
   heroFacts: [
     { label: "Focus", value: "Scholastic chess" },
     { label: "City", value: "New York City" },
@@ -785,38 +789,35 @@ export const aboutPage = {
     { label: "Status", value: "Launching soon" },
   ],
   introSection: {
-    eyebrow: "What matters",
-    title: "What families should know right away",
-    intro: "No vague promises. Just the information parents actually look for first.",
+    eyebrow: "What matters most to families",
+    title: "What Matters Most to Families",
+    intro: "We prioritize clarity, structure, and meaningful instruction -- before anything else.",
   },
   pillars: [
     {
-      title: "Clear camp structure",
-      text: "Dates, location, schedule, and daily flow should be easy to see before a parent reaches out.",
+      title: "Transparent program design",
+      text: "All essential details -- schedule, setting, and daily structure -- are clear from the outset.",
     },
     {
-      title: "Real lesson value",
-      text: "Lessons should lead to real improvement, not random chess activity.",
+      title: "Substantive instruction",
+      text: "Each lesson is designed to develop analytical thinking and measurable improvement.",
     },
     {
-      title: "Direct communication",
-      text: "Families should know the next step fast without chasing details by email.",
+      title: "Clear lines of communication",
+      text: "Parents stay informed and supported, without needing to chase information.",
     },
   ],
   whySection: {
     eyebrow: "Why parents trust it",
-    title: "What the standard should feel like",
-    intro: "Parents should feel clarity, trust, and a simple next step.",
+    title: "The Standard Families Should Expect",
+    intro: "Clarity, trust, and a clear sense of what comes next.",
   },
   standards: [
-    "Clear level fit before sign-up",
-    "Direct contact without confusion",
-    "Honest launch updates instead of vague promises",
-    "Programs that feel structured from the first page",
+    "Thoughtful level placement prior to enrollment",
+    "Direct, accessible communication",
+    "Transparent updates -- no vague timelines",
+    "Programs that feel structured from the very first interaction",
   ],
-  ctaTitle: "Need details before openings go live?",
-  ctaText:
-    "Use Contact us if you want camp or lesson details as the first public openings go live.",
 };
 
 export const eventsPage = {
@@ -1700,12 +1701,12 @@ export const faqItems = [
 
 export const contactNumbers = [
   {
-    label: "Call or text",
+    label: "Primary Contact",
     display: "(646) 251-7087",
     href: "tel:+16462517087",
   },
   {
-    label: "Alternate line",
+    label: "Alternate Contact",
     display: "(646) 494-5363",
     href: "tel:+16464945363",
   },
@@ -1713,7 +1714,7 @@ export const contactNumbers = [
 
 export const contactEmails = [
   {
-    label: "General inquiries",
+    label: "General Inquiries",
     display: "info@chessandtruck.com",
     href: "mailto:info@chessandtruck.com",
   },
