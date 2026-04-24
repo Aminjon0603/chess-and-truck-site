@@ -1581,9 +1581,17 @@ a {
 }
 
 .camp-day-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   max-height: 280px;
   overflow-y: auto;
   padding-right: 4px;
+}
+
+.camp-day-chip-grid .camp-week-day-chip {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
 }
 
 .booking-option-chip {
@@ -2827,6 +2835,30 @@ a {
   .contact-form,
   .register-sidebar {
     gap: 18px;
+  }
+
+  .camp-booking-form {
+    padding: 20px;
+  }
+
+  .camp-week-preview {
+    margin-top: 14px;
+    padding: 16px;
+  }
+
+  .camp-week-preview-head strong {
+    font-size: 0.92rem;
+  }
+
+  .camp-week-day-chip {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .camp-day-chip-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: 260px;
   }
 
   .form-section {

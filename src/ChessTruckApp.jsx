@@ -134,6 +134,10 @@ const campShortDateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
 });
 
+const campShortWeekdayFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "short",
+});
+
 const buildCampDayOptions = () => {
   const options = [];
   const endDate = new Date(2026, 7, 21);
@@ -146,6 +150,7 @@ const buildCampDayOptions = () => {
         label,
         dayOfWeek: current.getDay(),
         shortLabel: campShortDateFormatter.format(current),
+        compactLabel: `${campShortWeekdayFormatter.format(current)}, ${campShortDateFormatter.format(current)}`,
         isoDate: current.toISOString().slice(0, 10),
       });
     }
@@ -1293,8 +1298,9 @@ function CampBookingFormPanel({
                     type="button"
                     className={`camp-week-day-chip${isSelected ? " is-selected" : ""}`}
                     onClick={() => toggleSelectedSingleDay(day.value)}
+                    title={day.value}
                   >
-                    {day.value}
+                    {day.compactLabel}
                   </button>
                 );
               })}
