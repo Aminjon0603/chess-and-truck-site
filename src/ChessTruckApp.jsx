@@ -1107,6 +1107,10 @@ function CampBookingFormPanel({
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
+  const selectedDayOption =
+    selectedOption.id === "single-day"
+      ? CAMP_DAY_OPTIONS.find((item) => item.value === selectedSchedule) || null
+      : null;
   const selectedWeekOption =
     selectedOption.id === "full-week" ? getSelectedCampWeekOption(selectedSchedule) : null;
   const selectedWeekDays =
@@ -1226,6 +1230,35 @@ function CampBookingFormPanel({
             {campBookingErrors.selectedDays ? (
               <span className="field-error">{campBookingErrors.selectedDays}</span>
             ) : null}
+          </article>
+        ) : null}
+
+        {selectedOption.id === "single-day" ? (
+          <article className="surface camp-week-preview camp-day-preview">
+            <div className="camp-week-preview-head">
+              <div>
+                <span className="mini-tag">Selected day</span>
+                <h3>{selectedDayOption?.value || "Choose a camp day"}</h3>
+              </div>
+              <strong>{selectedDayOption?.shortLabel || "Weekdays only"}</strong>
+            </div>
+            <div className="camp-week-days camp-day-chip-grid">
+              {CAMP_DAY_OPTIONS.map((day) => {
+                const isSelected = selectedSchedule === day.value;
+
+                return (
+                  <button
+                    key={day.value}
+                    type="button"
+                    className={`camp-week-day-chip${isSelected ? " is-selected" : ""}`}
+                    onClick={() => updateCampBookingField("schedulePreference", day.value)}
+                  >
+                    {day.value}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="field-note">Click any available weekday to set the camp date instantly.</p>
           </article>
         ) : null}
 

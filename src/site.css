@@ -1576,6 +1576,16 @@ a {
   background: rgba(47, 116, 104, 0.14);
 }
 
+.camp-day-preview {
+  gap: 18px;
+}
+
+.camp-day-chip-grid {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
 .booking-option-chip {
   display: grid;
   gap: 4px;
