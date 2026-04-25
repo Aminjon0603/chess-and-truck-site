@@ -2460,14 +2460,14 @@ function FaqPage({ currentPath, navigate }) {
         navigate={navigate}
         actions={
           <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-            Ask a Question
+            Ask About Camp
           </AppLink>
         }
       />
 
       <section className="page-section">
         <div className="shell">
-          <SectionIntro eyebrow="Quick answers" title="The fastest things to know" />
+          <SectionIntro eyebrow="Quick answers" title="What parents ask most" />
           <div className="card-grid card-grid-three">
             {faqPage.quickCards.map((item) => (
               <article className="surface" key={item.title}>
@@ -2481,7 +2481,7 @@ function FaqPage({ currentPath, navigate }) {
 
       <section className="page-section">
         <div className="shell faq-stack">
-          <SectionIntro eyebrow="Full FAQ" title="Direct answers to the common questions" />
+          <SectionIntro eyebrow="Full FAQ" title="Common camp questions" />
           {faqItems.map((item) => (
             <details className="faq-item" key={item.question}>
               <summary>{item.question}</summary>

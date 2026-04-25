@@ -927,8 +927,8 @@ export const tournamentPage = {
 
 export const faqPage = {
   eyebrow: "FAQ",
-  title: "Clear answers before registration.",
-  intro: "Camp fit, what to bring, and how sign-up works.",
+  title: "Camp FAQ",
+  intro: "The answers parents usually want before booking.",
   heroFacts: [
     { label: "Camp dates", value: "June 15 - August 21 (weekdays)" },
     { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
@@ -938,15 +938,15 @@ export const faqPage = {
   quickCards: [
     {
       title: "Beginner friendly?",
-      text: "Yes. Camp is built to work for beginners and improving players.",
+      text: "Yes. Camp works well for beginners and improving players.",
     },
     {
       title: "Grouped by level?",
-      text: "Yes. Students are grouped by level so the day and the coaching pace make sense.",
+      text: "Yes. Students are grouped by level so the pace and games make sense.",
     },
     {
-      title: "Need help first?",
-      text: "Use Contact us if you want section guidance or the latest program details.",
+      title: "Not sure yet?",
+      text: "Call, text, or email us and we will help you decide if camp is the right fit.",
     },
   ],
   prepSection: {
@@ -1651,19 +1651,29 @@ export const policyItems = [
 
 export const faqItems = [
   {
+    question: "What ages is camp for?",
+    answer:
+      "Camp is designed for ages 4 - 17.",
+  },
+  {
     question: "Is this good for beginners?",
     answer:
-      "Yes. Camp is built to work for beginners as well as improving students.",
+      "Yes. Camp is built for beginners as well as improving players who want stronger structure.",
   },
   {
     question: "Are students grouped by level?",
     answer:
-      "Yes. Students are grouped by level so the coaching pace and the work make sense for the room.",
+      "Yes. Students are grouped by level so the coaching, games, and activities feel right for the group.",
+    },
+  {
+    question: "What is a typical camp day like?",
+    answer:
+      "Camp runs from 9:00 AM to 12:00 PM and includes coach-led instruction, rated games, park activities, snack time, and structured chess work.",
   },
   {
     question: "What should my child bring?",
     answer:
-      "Bring a water bottle, lunch or snack if needed, and anything staff should know medically.",
+      "Bring a water bottle, a snack if needed, and anything staff should know medically.",
   },
   {
     question: "Is prior experience required?",
@@ -1673,22 +1683,22 @@ export const faqItems = [
   {
     question: "Is lunch included?",
     answer:
-      "Families should plan for lunch or snack needs during camp. Final day notes will confirm the exact schedule and lunch handling.",
+      "Lunch is not part of camp because the day ends at 12:00 PM. Send a snack if your child needs one.",
   },
   {
     question: "How do I register?",
     answer:
-      "Use the Contact page now and we will reply with availability, pricing, and the cleanest next step for your family.",
+      "Use the booking section on the camp page to choose your option and continue to checkout.",
   },
   {
     question: "How do I contact the team?",
     answer:
-      "Use the Contact page and ask about camp. We will send the current details and the next step.",
+      "Call, text, email, or use the contact form and we will get back to you.",
   },
   {
     question: "What should I include in my message?",
     answer:
-      "Include the student age, current level, and the camp question you want answered.",
+      "Include the student age, current level, and the question you want answered.",
   },
 ];
 
