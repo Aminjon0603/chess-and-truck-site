@@ -785,7 +785,6 @@ export const aboutPage = {
     { label: "Focus", value: "Scholastic chess" },
     { label: "City", value: "New York City" },
     { label: "Programs", value: "Summer camps" },
-    { label: "Status", value: "Now open" },
   ],
   introSection: {
     eyebrow: "What matters most to families",
