@@ -255,7 +255,7 @@ export const carouselSlides = [
 
 export const campOverviewPage = {
   eyebrow: "Camps",
-  title: "Summer Chess Camps at 62 E 92nd Street, New York, NY 10128",
+  title: "Summer Chess Camps on the Upper East Side",
   intro: "",
   chips: [],
   heroFacts: [

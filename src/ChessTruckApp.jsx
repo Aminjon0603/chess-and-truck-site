@@ -1831,6 +1831,9 @@ function CampsOverviewPage({
               <a href="#camp-schedule" className="btn btn-secondary">
                 Camp Schedule
               </a>
+              <a href="#camp-location" className="btn btn-secondary">
+                Few blocks away from Central Park
+              </a>
             </div>
 
             <div className="fact-list fact-list-hero camp-hero-facts">
@@ -1942,7 +1945,7 @@ function CampsOverviewPage({
         </div>
       </section>
 
-      <section className="page-section">
+      <section className="page-section" id="camp-location">
         <div className="shell">
           <div className="camp-map-grid">
             <article className="surface camp-map-copy">
