@@ -5,12 +5,12 @@ const campOptions = {
   "full-week": {
     label: "Full Week Camp",
     amount: 45000,
-    description: "Five camp days in one week at the House of Chess and Checkers, Central Park.",
+    description: "Five camp days in one week at 62 E 92nd Street, New York, NY 10128.",
   },
   "single-day": {
     label: "Single Day",
     amount: 10000,
-    description: "One camp day with lessons, coached games, and structured chess work in Central Park.",
+    description: "One camp day with lessons, coached games, and structured chess work at 62 E 92nd Street, New York, NY 10128.",
   },
 };
 
@@ -245,7 +245,7 @@ export default {
       "line_items[0][price_data][product_data][description]",
       `${selectedOption.label} | ${scheduleSummary}${
         selectedDaysSummary ? ` | ${selectedDaysSummary}` : ""
-      } | House of Chess and Checkers, Central Park${
+      } | 62 E 92nd Street, New York, NY 10128${
         addOnSummary ? ` | ${addOnSummary}` : ""
       }`
     );
@@ -255,7 +255,7 @@ export default {
     params.set("metadata[service_level]", selectedOption.label);
     params.set("metadata[camp_option]", optionId);
     params.set("metadata[program_name]", "Chess and Truck Summer Camp");
-    params.set("metadata[location]", "House of Chess and Checkers, Central Park");
+    params.set("metadata[location]", "62 E 92nd Street, New York, NY 10128");
     params.set("metadata[camp_time]", "9:00 AM - 12:00 PM");
     params.set("metadata[parent_name]", `${parentFirstName} ${parentLastName}`.trim());
     params.set("metadata[parent_first_name]", parentFirstName);
