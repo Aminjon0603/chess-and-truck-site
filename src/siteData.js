@@ -2,9 +2,9 @@ export const siteBrand = {
   name: "CHESS AND TRUCK",
   short: "CT",
   city: "New York City",
-  tagline: "NYC summer chess camps at 62 E 92nd Street",
+  tagline: "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128",
   footerNote:
-    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street.",
+    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street, New York, NY 10128.",
 };
 
 export const navigationItems = [
@@ -48,7 +48,7 @@ export const campMenuFeature = {
   eyebrow: "Summer camp",
   title: "June 15 - August 21 · Weekdays",
   text:
-    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street.",
+    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street, New York, NY 10128.",
   ctaLabel: "View Full Camp Details",
   ctaPath: "/camps",
 };
@@ -57,7 +57,7 @@ export const routeMeta = {
   "/": {
     title: "CHESS AND TRUCK | NYC Chess Camps",
     description:
-      "NYC summer chess camps at 62 E 92nd Street from June 15 to August 21, with weekday half-day sessions and practical details for families.",
+    "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128 from June 15 to August 21, with weekday half-day sessions and practical details for families.",
   },
   "/about": {
     title: "About | CHESS AND TRUCK",
@@ -67,12 +67,12 @@ export const routeMeta = {
   "/camps": {
     title: "Camps | CHESS AND TRUCK",
     description:
-      "See summer camp dates, the 62 E 92nd Street location, daily format, and what students will do at CHESS AND TRUCK camps.",
+    "See summer camp dates, the 62 E 92nd Street, New York, NY 10128 location, daily format, and what students will do at CHESS AND TRUCK camps.",
   },
   "/camps/book": {
     title: "Camp Booking | CHESS AND TRUCK",
     description:
-      "Choose a summer camp option, add family details, and continue to secure checkout for CHESS AND TRUCK camps at 62 E 92nd Street.",
+    "Choose a summer camp option, add family details, and continue to secure checkout for CHESS AND TRUCK camps at 62 E 92nd Street, New York, NY 10128.",
   },
   "/camps/confirmed": {
     title: "Camp Confirmation | CHESS AND TRUCK",
@@ -97,12 +97,12 @@ export const routeMeta = {
   "/events": {
     title: "Camps | CHESS AND TRUCK",
     description:
-      "NYC summer chess camps at 62 E 92nd Street with dates, format, daily structure, and clear next steps for families.",
+    "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128 with dates, format, daily structure, and clear next steps for families.",
   },
   "/events/chess-and-truck-tournament": {
     title: "Summer Camp | CHESS AND TRUCK",
     description:
-      "See the summer camp format, 62 E 92nd Street location, daily structure, and camp details for CHESS AND TRUCK.",
+    "See the summer camp format, 62 E 92nd Street, New York, NY 10128 location, daily structure, and camp details for CHESS AND TRUCK.",
   },
   "/private-lessons": {
     title: "Lessons | CHESS AND TRUCK",
@@ -159,14 +159,14 @@ export const routeMeta = {
 export const featuredTournament = {
   slug: "summer-camp",
   title: "Summer Chess Camp",
-  city: "62 E 92nd Street",
+  city: "62 E 92nd Street, New York, NY 10128",
   scheduleLabel: "June 15 - August 21 · Weekdays",
   formatLabel: "9:00 AM - 12:00 PM",
   pricingLabel: "Camp details available now",
-  venueLabel: "62 E 92nd Street",
-  shortSummary: "Summer camp at 62 E 92nd Street. Daily lessons, guided games, and clear structure.",
+  venueLabel: "62 E 92nd Street, New York, NY 10128",
+  shortSummary: "Summer camp at 62 E 92nd Street, New York, NY 10128. Daily lessons, guided games, and clear structure.",
   longSummary:
-    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street.",
+    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street, New York, NY 10128.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -178,11 +178,11 @@ export const footerLegalLinks = [
 
 export const homePage = {
   eyebrow: "NYC chess camps",
-  title: "Summer chess camps at 62 E 92nd Street.",
-  intro: "Weekday summer camp with FIDE Masters at 62 E 92nd Street.",
+  title: "Summer chess camps at 62 E 92nd Street, New York, NY 10128.",
+  intro: "Weekday summer camp with FIDE Masters at 62 E 92nd Street, New York, NY 10128.",
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21 (weekdays)" },
-    { label: "Location", value: "62 E 92nd Street" },
+    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
     { label: "Age range", value: "Ages 4 - 17" },
     { label: "Levels", value: "Beginner and Advance Players" },
   ],
@@ -256,12 +256,12 @@ export const carouselSlides = [
 
 export const campOverviewPage = {
   eyebrow: "Camps",
-  title: "Summer Chess Camps at 62 E 92nd Street",
+  title: "Summer Chess Camps at 62 E 92nd Street, New York, NY 10128",
   intro: "",
   chips: [],
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21 (weekdays)" },
-    { label: "Location", value: "62 E 92nd Street" },
+    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
     { label: "Levels", value: "Beginner and Advance Players" },
     { label: "Age range", value: "Ages 4 - 17" },
   ],
@@ -269,7 +269,7 @@ export const campOverviewPage = {
   asideTag: "Summer 2026",
   asideTitle: "Camp plan",
   asideText:
-    "Morning camp at 62 E 92nd Street with FIDE Masters, warm-up games, snack time, rated matches, and chess activities.",
+    "Morning camp at 62 E 92nd Street, New York, NY 10128 with FIDE Masters, warm-up games, snack time, rated matches, and chess activities.",
   asideFacts: [
     { label: "Schedule", value: "9:00 AM to 12:00 PM" },
     { label: "Coaches", value: "FIDE Masters" },
@@ -308,7 +308,7 @@ export const campOverviewPage = {
     intro: "Quick facts.",
   },
   detailsCards: [
-    { title: "Location", text: "62 E 92nd Street" },
+    { title: "Location", text: "62 E 92nd Street, New York, NY 10128" },
     { title: "Dates", text: "June 15 - August 21 (weekdays)" },
     { title: "Time", text: "9:00 AM to 12:00 PM" },
     { title: "Age range", text: "Ages 4 - 17" },
@@ -332,7 +332,7 @@ export const campOverviewPage = {
       details: [
         "Five camp days from 9:00 AM to 12:00 PM",
         "Best value for a full block",
-        "Lessons, rated matches, and chess activities at 62 E 92nd Street",
+      "Lessons, rated matches, and chess activities at 62 E 92nd Street, New York, NY 10128",
       ],
       availability: "Limited group size",
       cta: "Book full week",
@@ -346,7 +346,7 @@ export const campOverviewPage = {
       details: [
         "One camp session from 9:00 AM to 12:00 PM",
         "Easy for changing summer schedules",
-        "Lessons, rated matches, and chess activities at 62 E 92nd Street",
+      "Lessons, rated matches, and chess activities at 62 E 92nd Street, New York, NY 10128",
       ],
       availability: "Limited group size",
       cta: "Book single day",
@@ -359,7 +359,7 @@ export const campOverviewPage = {
       relativeLabel: "Weekday session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours of camp at 62 E 92nd Street",
+    subtitle: "3 hours of camp at 62 E 92nd Street, New York, NY 10128",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -371,7 +371,7 @@ export const campOverviewPage = {
       relativeLabel: "Day 2",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours of camp at 62 E 92nd Street",
+    subtitle: "3 hours of camp at 62 E 92nd Street, New York, NY 10128",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -383,7 +383,7 @@ export const campOverviewPage = {
       relativeLabel: "Midweek session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours of camp at 62 E 92nd Street",
+    subtitle: "3 hours of camp at 62 E 92nd Street, New York, NY 10128",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -395,7 +395,7 @@ export const campOverviewPage = {
       relativeLabel: "Late-week session",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours of camp at 62 E 92nd Street",
+    subtitle: "3 hours of camp at 62 E 92nd Street, New York, NY 10128",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -407,7 +407,7 @@ export const campOverviewPage = {
       relativeLabel: "Wrap-up day",
       time: "9:00 AM",
       title: "Summer Camp Day",
-      subtitle: "3 hours of camp at 62 E 92nd Street",
+    subtitle: "3 hours of camp at 62 E 92nd Street, New York, NY 10128",
       price: "$100.00",
       spotsLeft: "12 spots left",
       optionId: "single-day",
@@ -417,7 +417,7 @@ export const campOverviewPage = {
   mapSection: {
     eyebrow: "Camp location",
     title: "Location",
-    intro: "62 E 92nd Street.",
+  intro: "62 E 92nd Street, New York, NY 10128.",
     address: "62 E 92nd Street, New York, NY 10128",
     directionsLabel: "Open in Google Maps",
     directionsHref:
@@ -826,7 +826,7 @@ export const eventsPage = {
   intro:
     "Open and Beginner sections, a 9:00 AM start, and a morning schedule that wraps by lunch. Families can review the structure now and contact us for current tournament details.",
   heroFacts: [
-    { label: "Location", value: "Brick Church, 62 E 92nd Street" },
+    { label: "Location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
     { label: "Service", value: "Open + Beginner" },
     { label: "Status", value: "Current details available" },
   ],
@@ -855,7 +855,7 @@ export const eventsPage = {
     intro: "Dates are still being finalized, but the core event structure is already set.",
   },
   detailCards: [
-    { title: "Location", text: "Brick Church, 62 E 92nd Street" },
+    { title: "Location", text: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
     { title: "Dates", text: "Contact us for current tournament dates" },
     { title: "Time", text: "Saturday mornings, 9:00 AM to lunch" },
     { title: "Service", text: "Rated and beginner-friendly divisions" },
@@ -913,7 +913,7 @@ export const tournamentPage = {
   title: "Chess & Truck Tournament",
   intro: "The format is set. Contact us for current tournament details and the next step.",
   atAGlance: [
-    { label: "Location", value: "Brick Church, 62 E 92nd Street" },
+    { label: "Location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
     { label: "Service", value: "Open & Beginner sections" },
     { label: "Schedule", value: "Saturday mornings, 9:00 AM to lunch" },
     { label: "Status", value: "Current details available" },

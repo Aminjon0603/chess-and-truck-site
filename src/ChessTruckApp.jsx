@@ -824,7 +824,7 @@ function SiteFooter({ currentPath, navigate }) {
               <h3>{campOverviewPage.title}</h3>
               <p>{campOverviewPage.intro}</p>
               <div className="footer-meta">
-                <span>{featuredTournament.venueLabel || "62 E 92nd Street"}</span>
+                <span>{featuredTournament.venueLabel || "62 E 92nd Street, New York, NY 10128"}</span>
                 <strong>{featuredTournament.scheduleLabel || "June 15 - August 21 · Weekdays"}</strong>
               </div>
               <AppLink
@@ -1522,7 +1522,7 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Location</span>
-                <strong>62 E 92nd Street</strong>
+                    <strong>62 E 92nd Street, New York, NY 10128</strong>
               </div>
               <div>
                 <span>{selectedOption.id === "full-week" ? "Week" : "Dates"}</span>
