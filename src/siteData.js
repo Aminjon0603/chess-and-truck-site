@@ -10,7 +10,6 @@ export const siteBrand = {
 export const navigationItems = [
   { label: "Home", path: "/" },
   { label: "Camps", path: "/camps" },
-  { label: "Lessons", path: "/lessons/manage" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
 ];
@@ -62,7 +61,7 @@ export const routeMeta = {
   "/about": {
     title: "About | CHESS AND TRUCK",
     description:
-      "Learn why CHESS AND TRUCK is being built for NYC families and how camps, lessons, and direct parent communication are being structured.",
+      "Learn why CHESS AND TRUCK is built for NYC families and how summer camp and direct parent communication are being structured.",
   },
   "/camps": {
     title: "Camps | CHESS AND TRUCK",
@@ -132,27 +131,27 @@ export const routeMeta = {
   "/faq": {
     title: "FAQ | CHESS AND TRUCK",
     description:
-      "Get answers about summer camp, lessons, student fit, what to bring, and how to get the next step.",
+      "Get answers about summer camp, student fit, what to bring, and how to get the next step.",
   },
   "/contact": {
     title: "Contact | CHESS AND TRUCK",
     description:
-      "Reach the CHESS AND TRUCK team by phone, email, or the contact form for camp and lesson questions.",
+      "Reach the CHESS AND TRUCK team by phone, email, or the contact form for camp questions.",
   },
   "/register": {
     title: "Contact | CHESS AND TRUCK",
     description:
-      "Contact CHESS AND TRUCK for camp availability, lessons, pricing, and the next step.",
+      "Contact CHESS AND TRUCK for camp availability, pricing, and the next step.",
   },
   "/terms": {
     title: "Terms of Service | CHESS AND TRUCK",
     description:
-      "Review CHESS AND TRUCK terms covering camp and lesson inquiries, payments, cancellations, and program participation.",
+      "Review CHESS AND TRUCK terms covering camp inquiries, payments, cancellations, and program participation.",
   },
   "/privacy": {
     title: "Privacy Policy | CHESS AND TRUCK",
     description:
-      "See how CHESS AND TRUCK uses contact and payment-related information for camp, lesson, and family communication.",
+      "See how CHESS AND TRUCK uses contact and payment-related information for camp and family communication.",
   },
 };
 
@@ -778,14 +777,14 @@ export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
   title: "A Smarter Chess Program for NYC Families",
   intro: [
-    "Chess and Truck makes it easy for New York City families to find high-quality chess camps and lessons -- without the guesswork. Clear options, seamless communication, and expert coaching your child will actually benefit from.",
+    "Chess and Truck makes it easy for New York City families to find a high-quality chess camp -- without the guesswork. Clear options, seamless communication, and expert coaching your child will actually benefit from.",
     "Our handpicked team of premium coaches brings 25+ years of combined NYC experience, blending structured learning with a genuinely fun, engaging approach kids love.",
     "Real progress. Real coaches. Real results.",
   ],
   heroFacts: [
     { label: "Focus", value: "Scholastic chess" },
     { label: "City", value: "New York City" },
-    { label: "Programs", value: "Camps + lessons" },
+    { label: "Programs", value: "Summer camps" },
     { label: "Status", value: "Now open" },
   ],
   introSection: {
@@ -800,7 +799,7 @@ export const aboutPage = {
     },
     {
       title: "Substantive instruction",
-      text: "Each lesson is designed to develop analytical thinking and measurable improvement.",
+      text: "Each camp day is designed to develop analytical thinking and measurable improvement.",
     },
     {
       title: "Clear lines of communication",
@@ -929,17 +928,17 @@ export const tournamentPage = {
 export const faqPage = {
   eyebrow: "FAQ",
   title: "Clear answers before registration.",
-  intro: "Camp fit, lesson options, what to bring, and how sign-up works.",
+  intro: "Camp fit, what to bring, and how sign-up works.",
   heroFacts: [
     { label: "Camp dates", value: "June 15 - August 21 (weekdays)" },
-    { label: "Location", value: "Central Park" },
-    { label: "Lessons", value: "Online + in person" },
-    { label: "Support", value: "Contact is open now" },
+    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
+    { label: "Camp time", value: "9:00 AM - 12:00 PM" },
+    { label: "Support", value: "Call, text, or email" },
   ],
   quickCards: [
     {
       title: "Beginner friendly?",
-      text: "Yes. Camp and lesson formats are being built to work for beginners and improving players.",
+      text: "Yes. Camp is built to work for beginners and improving players.",
     },
     {
       title: "Grouped by level?",
@@ -958,7 +957,7 @@ export const faqPage = {
   prepCards: [
     {
       title: "Who can join?",
-      text: "School-age players who want camp, lessons, or a stronger summer chess routine.",
+      text: "School-age players who want a stronger summer chess routine.",
     },
     {
       title: "What should students bring?",
@@ -977,11 +976,11 @@ export const faqPage = {
   flowSteps: [
     {
       title: "Review the right page",
-      text: "Start with camps or lessons first so you can see the format, schedule, and fit.",
+      text: "Start with the camp page first so you can see the format, schedule, and fit.",
     },
     {
       title: "Send one message",
-      text: "Tell us the student age, current level, and whether you want camp or lessons.",
+      text: "Tell us the student age, current level, and what camp question you have.",
     },
     {
       title: "Get the next step",
@@ -994,7 +993,7 @@ export const faqPage = {
 
 export const contactPage = {
   eyebrow: "Contact",
-  title: "Contact the team for camps and lessons.",
+  title: "Contact the team about camp.",
   intro: "",
   heroFacts: [
     { label: "Phone lines", value: "(646) 251-7087 / (646) 494-5363" },
@@ -1654,7 +1653,7 @@ export const faqItems = [
   {
     question: "Is this good for beginners?",
     answer:
-      "Yes. Camp and lesson formats are being built to work for beginners as well as improving students.",
+      "Yes. Camp is built to work for beginners as well as improving students.",
   },
   {
     question: "Are students grouped by level?",
@@ -1669,12 +1668,7 @@ export const faqItems = [
   {
     question: "Is prior experience required?",
     answer:
-      "No. Beginners are welcome, and we can help point families to the right camp or lesson format.",
-  },
-  {
-    question: "How do lessons work?",
-    answer:
-      "Lessons can be online, in person, or in small groups. Most sessions are built around real games, analysis, and a clear next step.",
+      "No. Beginners are welcome, and we can help point families to the right camp format.",
   },
   {
     question: "Is lunch included?",
@@ -1689,12 +1683,12 @@ export const faqItems = [
   {
     question: "How do I contact the team?",
     answer:
-      "Use the Contact page and ask about camp or lessons. We will send the current details and the next step.",
+      "Use the Contact page and ask about camp. We will send the current details and the next step.",
   },
   {
     question: "What should I include in my message?",
     answer:
-      "Include the student age, current level, and whether you are asking about camp or lessons.",
+      "Include the student age, current level, and the camp question you want answered.",
   },
 ];
 
@@ -1723,7 +1717,7 @@ export const termsPage = {
   eyebrow: "Terms of Service",
   title: "Program terms for families and students",
   intro:
-    "These terms explain how CHESS AND TRUCK handles camp and lesson inquiries, payments, cancellations, and participation expectations.",
+    "These terms explain how CHESS AND TRUCK handles camp inquiries, payments, cancellations, and participation expectations.",
   sections: [
     {
       title: "Inquiry accuracy",
@@ -1738,7 +1732,7 @@ export const termsPage = {
     {
       title: "Program fit",
       body:
-        "Families should choose the most appropriate camp or lesson format before paying. CHESS AND TRUCK may contact a family if a selected option appears inconsistent with the student's level, age, or program fit.",
+        "Families should choose the most appropriate camp format before paying. CHESS AND TRUCK may contact a family if a selected option appears inconsistent with the student's level, age, or program fit.",
     },
     {
       title: "Cancellations and changes",
@@ -1762,7 +1756,7 @@ export const privacyPage = {
   eyebrow: "Privacy Policy",
   title: "How registration and contact information is used",
   intro:
-    "CHESS AND TRUCK collects only the information needed to operate camps and lessons, communicate with families, and process secure payments.",
+    "CHESS AND TRUCK collects only the information needed to operate camp, communicate with families, and process secure payments.",
   sections: [
     {
       title: "Information collected",

@@ -283,10 +283,11 @@ const knownRoutes = new Set([
 ]);
 
 const legacyRouteRedirects = {
-  "/private-lessons": "/lessons/manage",
-  "/lessons/online": "/lessons/manage",
-  "/lessons/in-person": "/lessons/manage",
-  "/lessons/group": "/lessons/manage",
+  "/private-lessons": "/contact",
+  "/lessons/online": "/contact",
+  "/lessons/in-person": "/contact",
+  "/lessons/group": "/contact",
+  "/lessons/manage": "/contact",
   "/camps/training": "/camps",
   "/camps/prep": "/camps",
   "/camps/online": "/camps",
@@ -2477,42 +2478,6 @@ function FaqPage({ currentPath, navigate }) {
 
       <section className="page-section">
         <div className="shell faq-stack">
-          <SectionIntro
-            eyebrow={faqPage.prepSection.eyebrow}
-            title={faqPage.prepSection.title}
-            intro={faqPage.prepSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {faqPage.prepCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={faqPage.flowSection.eyebrow}
-            title={faqPage.flowSection.title}
-            intro={faqPage.flowSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {faqPage.flowSteps.map((item) => (
-              <article className="surface stat-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell faq-stack">
           <SectionIntro eyebrow="Full FAQ" title="Direct answers to the common questions" />
           {faqItems.map((item) => (
             <details className="faq-item" key={item.question}>
@@ -2520,24 +2485,6 @@ function FaqPage({ currentPath, navigate }) {
               <p>{item.answer}</p>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <article className="surface lesson-detail-cta">
-            <span className="section-tag">Still unsure?</span>
-            <h3>{faqPage.ctaTitle}</h3>
-            <p>{faqPage.ctaText}</p>
-            <div className="cta-row">
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Contact Us
-              </AppLink>
-              <a href={phoneContact.href} className="btn btn-secondary">
-                Call / Text {phoneContact.display}
-              </a>
-            </div>
-          </article>
         </div>
       </section>
     </>
@@ -3926,10 +3873,13 @@ function ChessTruckApp() {
       case "/lessons/group":
       case "/lessons/manage":
         return (
-          <LessonDetailPage
-            page={lessonDetailPages["/lessons/manage"]}
+          <ContactPage
             currentPath={currentPath}
             navigate={navigate}
+            contactState={contactState}
+            contactSubmitState={contactSubmitState}
+            updateContactField={updateContactField}
+            handleContactSubmit={handleContactSubmit}
           />
         );
       case "/faq":
