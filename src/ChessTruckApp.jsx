@@ -904,10 +904,10 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
   return (
     <form className="surface contact-form" onSubmit={handleContactSubmit}>
       <span className="mini-tag">Message the team</span>
-      <h3>Ask before the first release</h3>
+      <h3>Before enrollment, ask us anything</h3>
       <p>
-        Use this form for early-access interest, section fit, launch timing, logistics, or anything
-        you want confirmed before the dates go live.
+        Use this form to ask about availability, group placement, schedule, or any details before
+        registration opens.
       </p>
 
       <label className="field">
@@ -2557,68 +2557,6 @@ function ContactPage({ currentPath, navigate, contactState, contactSubmitState, 
       />
 
       <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={contactPage.topicSection.eyebrow}
-            title={contactPage.topicSection.title}
-            intro={contactPage.topicSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {contactPage.topicCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <div className="card-grid card-grid-three">
-            {contactPage.supportCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <article className="surface">
-            <SectionIntro eyebrow="Before you send" title="What helps us reply faster" intro="A few details in your message make it easier to point you to the right program." />
-            <ul className="checklist">
-              {contactPage.messageChecklist.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={contactPage.responseSection.eyebrow}
-            title={contactPage.responseSection.title}
-            intro={contactPage.responseSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {contactPage.responseSteps.map((item) => (
-              <article className="surface stat-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section">
         <div className="shell two-column contact-layout">
           <ContactDirectory />
           <ContactForm
@@ -2627,24 +2565,6 @@ function ContactPage({ currentPath, navigate, contactState, contactSubmitState, 
             updateContactField={updateContactField}
             handleContactSubmit={handleContactSubmit}
           />
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell">
-          <article className="surface lesson-detail-cta">
-            <span className="section-tag">Contact the team</span>
-            <h3>{contactPage.ctaTitle}</h3>
-            <p>{contactPage.ctaText}</p>
-            <div className="cta-row">
-              <a href={phoneContact.href} className="btn btn-primary">
-                Call / Text {phoneContact.display}
-              </a>
-              <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Review Camps
-              </AppLink>
-            </div>
-          </article>
         </div>
       </section>
     </>
