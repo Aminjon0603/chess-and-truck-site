@@ -117,7 +117,14 @@ const CAMP_OPTION_BASE_AMOUNTS = {
 const CAMP_WEEKLY_OPTION_IDS = new Set(["full-week"]);
 const CAMP_DATE_SELECTION_OPTION_IDS = new Set(["single-day", "half-day-am", "half-day-pm"]);
 const CAMP_FLEX_PACK_OPTION_IDS = new Set(["flex-5-pack", "flex-10-pack"]);
-const CAMP_OPTIONS_WITH_ADD_ONS = new Set(["full-week", "single-day"]);
+const CAMP_OPTIONS_WITH_ADD_ONS = new Set([
+  "full-week",
+  "single-day",
+  "half-day-am",
+  "half-day-pm",
+  "flex-5-pack",
+  "flex-10-pack",
+]);
 
 const CAMP_ADD_ONS = [
   {
@@ -243,6 +250,22 @@ const calculateCampAddOnTotal = (addOnIds = []) =>
 const formatCampAddOnSummary = (addOnIds = []) => {
   const labels = CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).map((item) => item.label);
   return labels.length ? labels.join(", ") : "None";
+};
+
+const getCampAddOnChargeMode = (optionId) => {
+  if (CAMP_FLEX_PACK_OPTION_IDS.has(optionId)) {
+    return "saved-preference";
+  }
+
+  if (CAMP_DATE_SELECTION_OPTION_IDS.has(optionId)) {
+    return "per-selected-day";
+  }
+
+  if (CAMP_WEEKLY_OPTION_IDS.has(optionId)) {
+    return "per-week";
+  }
+
+  return "none";
 };
 
 const registrationStepDefinitions = [
@@ -428,6 +451,8 @@ function FeatureMenu({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+  const hasSinglePrimaryDestination =
+    items.length === 1 && items[0]?.path && feature?.ctaPath && items[0].path === feature.ctaPath;
 
   useEffect(() => {
     if (!isOpen) {
@@ -452,6 +477,20 @@ function FeatureMenu({
     setIsOpen(false);
     closeNavigation?.();
   };
+
+  if (isCompactViewport && hasSinglePrimaryDestination) {
+    return (
+      <AppLink
+        to={feature.ctaPath}
+        navigate={navigate}
+        currentPath={currentPath}
+        className={`nav-link${isActive ? " is-active" : ""}`}
+        onNavigate={handleNavigate}
+      >
+        {label}
+      </AppLink>
+    );
+  }
 
   return (
     <div
@@ -1171,6 +1210,7 @@ function CampBookingFormPanel({
   const isDateSelectionOption = CAMP_DATE_SELECTION_OPTION_IDS.has(selectedOption.id);
   const isFlexiblePackOption = CAMP_FLEX_PACK_OPTION_IDS.has(selectedOption.id);
   const allowsAddOns = CAMP_OPTIONS_WITH_ADD_ONS.has(selectedOption.id);
+  const addOnChargeMode = getCampAddOnChargeMode(selectedOption.id);
   const selectedLabel = isWeeklyOption ? "Week" : "Dates";
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
@@ -1201,11 +1241,13 @@ function CampBookingFormPanel({
   const baseAmount =
     (CAMP_OPTION_BASE_AMOUNTS[selectedOption.id] || 0) *
     (isDateSelectionOption ? selectedDayCount : 1);
-  const addOnTotal = allowsAddOns
-    ? isDateSelectionOption
+  const addOnTotal = !allowsAddOns
+    ? 0
+    : addOnChargeMode === "per-selected-day"
       ? addOnUnitTotal * selectedDayCount
-      : addOnUnitTotal
-    : 0;
+      : addOnChargeMode === "per-week"
+        ? addOnUnitTotal
+        : 0;
   const totalAmount = baseAmount + addOnTotal;
   const bookingSupportMethods = [...contactNumbers, emailContact].filter(Boolean);
 
@@ -1509,9 +1551,11 @@ function CampBookingFormPanel({
               <div>
                 <h3>Additional services</h3>
                 <p>
-                  {isWeeklyOption
-                    ? "Optional add-ons for the selected camp week."
-                    : "Optional add-ons for each selected camp day."}
+                  {isFlexiblePackOption
+                    ? "Optional add-ons to request now and finalize with your dates later."
+                    : isWeeklyOption
+                      ? "Optional add-ons for the selected camp week."
+                      : "Optional add-ons for each selected camp day."}
                 </p>
               </div>
             </div>
@@ -1620,7 +1664,9 @@ function CampBookingFormPanel({
                   <span>Additional services</span>
                   <strong>
                     {selectedAddOns.length
-                      ? isDateSelectionOption
+                      ? isFlexiblePackOption
+                        ? "Requested for later scheduling"
+                        : isDateSelectionOption
                         ? "Selected for each chosen day"
                         : "Selected below"
                       : "Available add-ons"}
@@ -1645,7 +1691,11 @@ function CampBookingFormPanel({
               ))}
             </ul>
             {selectedAddOns.length ? (
-              <p className="camp-booking-availability">Additional services total: {formatCurrency(addOnTotal)}</p>
+              <p className="camp-booking-availability">
+                {isFlexiblePackOption
+                  ? "Additional services will be finalized when you choose your dates."
+                  : `Additional services total: ${formatCurrency(addOnTotal)}`}
+              </p>
             ) : null}
             <p className="camp-booking-availability">{selectedOption.availability}</p>
           </article>

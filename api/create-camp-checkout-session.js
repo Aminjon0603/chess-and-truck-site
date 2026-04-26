@@ -51,6 +51,9 @@ const campAddOns = {
   },
 };
 
+const flexPackOptionIds = new Set(["flex-5-pack", "flex-10-pack"]);
+const dateSelectionOptionIds = new Set(["single-day", "half-day-am", "half-day-pm"]);
+
 const sanitize = (value, limit = 120) => {
   if (typeof value !== "string") {
     return "";
@@ -99,7 +102,7 @@ const validateCampBookingPayload = (payload, optionId) => {
   const errors = {};
   const selectedDays = sanitizeSelectedDays(payload.selectedDays);
   const isWeeklyOption = optionId === "full-week";
-  const isDateSelectionOption = ["single-day", "half-day-am", "half-day-pm"].includes(optionId);
+  const isDateSelectionOption = dateSelectionOptionIds.has(optionId);
 
   if (!sanitize(payload.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
   if (!sanitize(payload.parentLastName)) errors.parentLastName = "Parent last name is required.";
@@ -233,15 +236,19 @@ export default {
     const schedulePreference = sanitize(payload.schedulePreference, 140);
     const selectedDays = sanitizeSelectedDays(payload.selectedDays);
     const selectedDaysSummary = selectedDays.join(", ");
-    const allowsAddOns = ["full-week", "single-day"].includes(optionId);
+    const isDateSelectionOption = dateSelectionOptionIds.has(optionId);
+    const isFlexiblePackOption = flexPackOptionIds.has(optionId);
+    const allowsAddOns =
+      optionId === "full-week" || isDateSelectionOption || isFlexiblePackOption;
     const selectedAddOns = allowsAddOns ? sanitizeAddOns(payload.addOns) : [];
     const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
-    const isDateSelectionOption = ["single-day", "half-day-am", "half-day-pm"].includes(optionId);
     const dayQuantity = isDateSelectionOption ? selectedDays.length : 1;
     const addOnUnitTotal = selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0);
     const addOnTotal = allowsAddOns
       ? isDateSelectionOption
         ? addOnUnitTotal * dayQuantity
+        : isFlexiblePackOption
+          ? 0
         : addOnUnitTotal
       : 0;
     const totalAmount =
@@ -253,7 +260,7 @@ export default {
         ? selectedDays.length === 1
           ? selectedDays[0]
           : `${selectedDays.length} selected ${optionId === "single-day" ? "camp days" : "half-day sessions"}`
-        : optionId === "flex-5-pack" || optionId === "flex-10-pack"
+        : isFlexiblePackOption
           ? "Dates selected later"
         : schedulePreference;
     const notes = sanitize(payload.notes, 300);
