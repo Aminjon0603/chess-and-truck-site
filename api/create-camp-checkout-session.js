@@ -273,7 +273,7 @@ export default {
     params.set(
       "line_items[0][price_data][unit_amount]",
       String(
-        isDateSelectionOption && allowsAddOns
+        isDateSelectionOption
           ? selectedOption.amount + addOnUnitTotal
           : totalAmount
       )
