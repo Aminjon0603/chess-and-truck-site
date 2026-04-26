@@ -4,13 +4,13 @@ import { applyRateLimit } from "./_lib/rate-limit.js";
 const campOptions = {
   "full-week": {
     label: "Full Week Camp",
-    amount: 45000,
-    description: "Five camp days in one week at 62 E 92nd Street, New York, NY 10128.",
+    amount: 70000,
+    description: "Five full camp days in one week at 62 E 92nd Street, New York, NY 10128.",
   },
   "single-day": {
-    label: "Single Day",
-    amount: 10000,
-    description: "One camp day with lessons, coached games, and structured chess work at 62 E 92nd Street, New York, NY 10128.",
+    label: "Single Day Option",
+    amount: 15000,
+    description: "One full camp day with FIDE Masters, rated games, lunch, outdoor park time, and fun activities at 62 E 92nd Street, New York, NY 10128.",
   },
 };
 
@@ -20,7 +20,7 @@ const campAddOns = {
     amount: 3000,
   },
   "extended-day": {
-    label: "Extended Day (until 12:30 PM)",
+    label: "Late Pick-Up (until 3:30 PM)",
     amount: 3000,
   },
 };
@@ -256,7 +256,7 @@ export default {
     params.set("metadata[camp_option]", optionId);
     params.set("metadata[program_name]", "Chess and Truck Summer Camp");
     params.set("metadata[location]", "62 E 92nd Street, New York, NY 10128");
-    params.set("metadata[camp_time]", "9:00 AM - 12:00 PM");
+    params.set("metadata[camp_time]", "9:00 AM - 3:00 PM");
     params.set("metadata[parent_name]", `${parentFirstName} ${parentLastName}`.trim());
     params.set("metadata[parent_first_name]", parentFirstName);
     params.set("metadata[parent_last_name]", parentLastName);

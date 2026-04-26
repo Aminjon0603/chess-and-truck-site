@@ -85,7 +85,7 @@ const buildCampReceiptLines = (session) => {
     `Location: ${metadata.location || "-"}`,
     `Date: ${metadata.schedule_preference || "-"}`,
     selectedDays && selectedDays !== "None" ? `Selected days: ${selectedDays}` : null,
-    `Camp time: ${metadata.camp_time || "9:00 AM - 12:00 PM"}`,
+    `Camp time: ${metadata.camp_time || "9:00 AM - 3:00 PM"}`,
     `Parent name: ${metadata.parent_name || "-"}`,
     `Parent email: ${metadata.parent_email || session.customer_details?.email || "-"}`,
     `Parent phone: ${metadata.parent_phone || "-"}`,

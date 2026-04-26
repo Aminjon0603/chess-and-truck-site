@@ -106,8 +106,8 @@ const campBookingInitialState = {
 };
 
 const CAMP_OPTION_BASE_AMOUNTS = {
-  "full-week": 450,
-  "single-day": 100,
+  "full-week": 700,
+  "single-day": 150,
 };
 
 const CAMP_ADD_ONS = [
@@ -118,7 +118,7 @@ const CAMP_ADD_ONS = [
   },
   {
     id: "extended-day",
-    label: "Extended Day (until 12:30 PM)",
+    label: "Late Pick-Up (until 3:30 PM)",
     amount: 30,
   },
 ];
@@ -1307,7 +1307,7 @@ function CampBookingFormPanel({
               })}
             </div>
             <input type="hidden" name="selectedDays" value={selectedSingleDays.join(", ")} />
-            <p className="field-note">Click every weekday you want to book. We will charge $100 for each selected day.</p>
+            <p className="field-note">Click every weekday you want to book. We will charge $150 for each selected day.</p>
             {campBookingErrors.selectedDays ? (
               <span className="field-error">{campBookingErrors.selectedDays}</span>
             ) : null}
@@ -1519,7 +1519,7 @@ function CampBookingFormPanel({
             <div className="summary-list summary-list-booking">
               <div>
                 <span>Dates</span>
-                <strong>June 15 - August 21 (weekdays)</strong>
+                <strong>June 15 - August 21 · Weekdays</strong>
               </div>
               <div>
                 <span>Location</span>
@@ -1555,7 +1555,7 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Camp time</span>
-                <strong>9:00 AM - 12:00 PM</strong>
+                <strong>9:00 AM - 3:00 PM</strong>
               </div>
               <div>
                 <span>Age range</span>
@@ -1826,13 +1826,13 @@ function CampsOverviewPage({
 
             <div className="cta-row">
               <a href="#camp-booking" className="btn btn-primary btn-emphasis">
-                Book Now
+                Enroll Now
               </a>
               <a href="#camp-schedule" className="btn btn-secondary">
-                Camp Schedule
+                View Schedule
               </a>
               <a href="#camp-location" className="btn btn-secondary">
-                Few blocks away from Central Park
+                Two Blocks Away from Central Park
               </a>
             </div>
 
@@ -1901,7 +1901,7 @@ function CampsOverviewPage({
                 >
                   <span className="mini-tag">{item.eyebrow}</span>
                   <h3>{item.title}</h3>
-                  <p>{item.id === "single-day" ? "9:00 AM - 12:00 PM" : "Weekdays from 9:00 AM - 12:00 PM"}</p>
+                  <p>{item.scheduleText}</p>
                   <p className="camp-booking-price">{item.price}</p>
                   <ul className="camp-booking-list">
                     {item.details.map((detail) => (
@@ -1915,7 +1915,7 @@ function CampsOverviewPage({
                     onClick={() => openCampBooking(item.id, item.defaultSchedulePreference)}
                     disabled={campCheckoutState.status === "loading"}
                   >
-                    {isLoading ? "Opening..." : item.id === "single-day" ? "Book Now" : item.cta}
+                    {isLoading ? "Opening..." : item.cta}
                   </button>
                 </article>
               );
@@ -1935,13 +1935,7 @@ function CampsOverviewPage({
                 openCampBooking={openCampBooking}
               />
             </>
-          ) : (
-            <article className="surface camp-booking-hint" id="camp-booking-form">
-              <span className="mini-tag">Registration form</span>
-              <h3>Click Book to open the registration form.</h3>
-              <p>Choose any day or the full week option above and the form will open here.</p>
-            </article>
-          )}
+          ) : null}
         </div>
       </section>
 
@@ -2121,7 +2115,7 @@ function CampBookingPage({
                   selectedOption.id === item.id ? "btn-primary" : "btn-secondary"
                 }`}
               >
-                {item.cta}
+                {item.title}
               </AppLink>
             ))}
           </div>
@@ -2198,7 +2192,7 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
                   <strong>
                     {typeof campCheckoutState.details.amountTotal === "number"
                       ? formatCurrency(campCheckoutState.details.amountTotal)
-                      : "$100"}
+                      : "See Stripe receipt"}
                   </strong>
                 </div>
                 <div>
