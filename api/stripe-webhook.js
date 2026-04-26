@@ -77,7 +77,11 @@ const buildCampReceiptLines = (session) => {
   const metadata = session.metadata || {};
   const addOns = metadata.add_ons || "None";
   const addOnsTotal = Number(metadata.add_ons_total || 0);
+  const extraServices = metadata.extra_services || "None";
+  const extraServicesTotal = Number(metadata.extra_services_total || 0);
   const selectedDays = metadata.selected_days || "";
+  const combinedServices = [addOns, extraServices].filter((item) => item && item !== "None").join(", ");
+  const combinedServicesTotal = addOnsTotal + extraServicesTotal;
 
   return [
     `Reference: ${metadata.registration_reference || session.client_reference_id || "-"}`,
@@ -92,8 +96,10 @@ const buildCampReceiptLines = (session) => {
     `Student name: ${metadata.student_name || "-"}`,
     `Student age: ${metadata.student_age || "-"}`,
     `Student level: ${metadata.student_level || "-"}`,
-    `Additional services: ${addOns}`,
-    addOns !== "None" ? `Additional services total: ${formatAmount(addOnsTotal, session.currency)}` : null,
+    `Additional services: ${combinedServices || "None"}`,
+    combinedServices
+      ? `Additional services total: ${formatAmount(combinedServicesTotal, session.currency)}`
+      : null,
     `Notes: ${metadata.notes || "None"}`,
     `Amount paid: ${formatAmount(session.amount_total, session.currency)}`,
     `Stripe session ID: ${session.id}`,

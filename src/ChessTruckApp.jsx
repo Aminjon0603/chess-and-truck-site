@@ -101,6 +101,16 @@ const campBookingInitialState = {
   schedulePreference: "",
   selectedDays: [],
   addOns: [],
+  serviceSelections: {
+    pizza: {
+      option: "",
+      quantity: 1,
+    },
+    "ice-cream": {
+      option: "",
+      quantity: 1,
+    },
+  },
   notes: "",
   website: "",
 };
@@ -136,6 +146,21 @@ const CAMP_ADD_ONS = [
     id: "extended-day",
     label: "Late Pick-Up (until 3:30 PM)",
     amount: 30,
+  },
+];
+
+const CAMP_EXTRA_SERVICES = [
+  {
+    id: "pizza",
+    label: "Pizza",
+    optionLabel: "Pizza / lunch happens at 11:30",
+    amount: 50,
+  },
+  {
+    id: "ice-cream",
+    label: "Ice-Cream",
+    optionLabel: "Ice-cream happens at 3:00",
+    amount: 35,
   },
 ];
 
@@ -250,6 +275,53 @@ const calculateCampAddOnTotal = (addOnIds = []) =>
 const formatCampAddOnSummary = (addOnIds = []) => {
   const labels = CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).map((item) => item.label);
   return labels.length ? labels.join(", ") : "None";
+};
+
+const normalizeCampServiceSelections = (value) => {
+  const current = value && typeof value === "object" ? value : {};
+
+  return CAMP_EXTRA_SERVICES.reduce((accumulator, item) => {
+    const existing = current[item.id] && typeof current[item.id] === "object" ? current[item.id] : {};
+    const quantity = Number.parseInt(existing.quantity, 10);
+
+    accumulator[item.id] = {
+      option: existing.option === "selected" ? "selected" : "",
+      quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
+    };
+
+    return accumulator;
+  }, {});
+};
+
+const calculateCampExtraServicesTotal = (serviceSelections = {}) =>
+  CAMP_EXTRA_SERVICES.reduce((sum, item) => {
+    const selection = serviceSelections[item.id];
+
+    if (!selection || selection.option !== "selected") {
+      return sum;
+    }
+
+    return sum + item.amount * selection.quantity;
+  }, 0);
+
+const hasSelectedCampExtraServices = (serviceSelections = {}) =>
+  CAMP_EXTRA_SERVICES.some((item) => {
+    const selection = serviceSelections[item.id];
+    return selection && selection.option === "selected";
+  });
+
+const formatCampExtraServicesSummary = (serviceSelections = {}) => {
+  const summary = CAMP_EXTRA_SERVICES.flatMap((item) => {
+    const selection = serviceSelections[item.id];
+
+    if (!selection || selection.option !== "selected") {
+      return [];
+    }
+
+    return [`${item.label} x${selection.quantity} (+${formatCurrency(item.amount * selection.quantity)})`];
+  });
+
+  return summary.length ? summary.join(", ") : "None";
 };
 
 const getCampAddOnChargeMode = (optionId) => {
@@ -1233,7 +1305,10 @@ function CampBookingFormPanel({
         : selectedWeekOption?.days || []
       : [];
   const selectedAddOns = Array.isArray(campBookingState.addOns) ? campBookingState.addOns : [];
+  const selectedServiceSelections = normalizeCampServiceSelections(campBookingState.serviceSelections);
   const addOnUnitTotal = calculateCampAddOnTotal(selectedAddOns);
+  const extraServicesTotal = calculateCampExtraServicesTotal(selectedServiceSelections);
+  const hasExtraServicesSelected = hasSelectedCampExtraServices(selectedServiceSelections);
   const selectedDayCount =
     isDateSelectionOption
       ? selectedSingleDays.length
@@ -1248,7 +1323,7 @@ function CampBookingFormPanel({
       : addOnChargeMode === "per-week"
         ? addOnUnitTotal
         : 0;
-  const totalAmount = baseAmount + addOnTotal;
+  const totalAmount = baseAmount + addOnTotal + extraServicesTotal;
   const bookingSupportMethods = [...contactNumbers, emailContact].filter(Boolean);
 
   const toggleCampAddOn = (addOnId) => {
@@ -1258,6 +1333,31 @@ function CampBookingFormPanel({
       : [...currentAddOns, addOnId];
 
     updateCampBookingField("addOns", nextAddOns);
+  };
+
+  const updateCampExtraServiceOption = (serviceId, option) => {
+    const nextSelections = {
+      ...selectedServiceSelections,
+      [serviceId]: {
+        ...selectedServiceSelections[serviceId],
+        option,
+      },
+    };
+
+    updateCampBookingField("serviceSelections", nextSelections);
+  };
+
+  const updateCampExtraServiceQuantity = (serviceId, value) => {
+    const parsed = Number.parseInt(value, 10);
+    const nextSelections = {
+      ...selectedServiceSelections,
+      [serviceId]: {
+        ...selectedServiceSelections[serviceId],
+        quantity: Number.isFinite(parsed) && parsed > 0 ? parsed : 1,
+      },
+    };
+
+    updateCampBookingField("serviceSelections", nextSelections);
   };
 
   const toggleSelectedWeekDay = (day) => {
@@ -1552,7 +1652,7 @@ function CampBookingFormPanel({
                 <h3>Additional services</h3>
                 <p>
                   {isFlexiblePackOption
-                    ? "Optional add-ons to request now and finalize with your dates later."
+                    ? "Optional add-ons to request now. Meal services are charged now; scheduling add-ons are finalized with your dates later."
                     : isWeeklyOption
                       ? "Optional add-ons for the selected camp week."
                       : "Optional add-ons for each selected camp day."}
@@ -1575,6 +1675,41 @@ function CampBookingFormPanel({
                     </span>
                     <span className="camp-addon-price">+ {formatCurrency(item.amount)}</span>
                   </label>
+                );
+              })}
+            </div>
+            <div className="camp-service-request-grid">
+              {CAMP_EXTRA_SERVICES.map((item) => {
+                const selection = selectedServiceSelections[item.id];
+                const isSelected = selection.option === "selected";
+
+                return (
+                  <div className="camp-service-request-row" key={item.id}>
+                    <label className="field">
+                      <span>{item.label}</span>
+                      <select
+                        value={selection.option}
+                        onChange={(event) => updateCampExtraServiceOption(item.id, event.target.value)}
+                      >
+                        <option value="">Select an option</option>
+                        <option value="selected">
+                          {item.optionLabel} (+{formatCurrency(item.amount)} each)
+                        </option>
+                      </select>
+                    </label>
+                    <label className="field camp-service-quantity">
+                      <span>Qty</span>
+                      <input
+                        type="number"
+                        min="1"
+                        step="1"
+                        inputMode="numeric"
+                        value={selection.quantity}
+                        disabled={!isSelected}
+                        onChange={(event) => updateCampExtraServiceQuantity(item.id, event.target.value)}
+                      />
+                    </label>
+                  </div>
                 );
               })}
             </div>
@@ -1663,11 +1798,15 @@ function CampBookingFormPanel({
                 <div>
                   <span>Additional services</span>
                   <strong>
-                    {selectedAddOns.length
+                    {selectedAddOns.length || extraServicesTotal > 0
                       ? isFlexiblePackOption
-                        ? "Requested for later scheduling"
+                        ? selectedAddOns.length && hasExtraServicesSelected
+                          ? "Charged extras + requested add-ons"
+                          : hasExtraServicesSelected
+                            ? "Charged below"
+                            : "Requested for later scheduling"
                         : isDateSelectionOption
-                        ? "Selected for each chosen day"
+                          ? "Selected for each chosen day"
                         : "Selected below"
                       : "Available add-ons"}
                   </strong>
@@ -1681,6 +1820,16 @@ function CampBookingFormPanel({
                         </li>
                       );
                     })}
+                    {CAMP_EXTRA_SERVICES.map((item) => {
+                      const selection = selectedServiceSelections[item.id];
+                      const isSelected = selection.option === "selected";
+
+                      return (
+                        <li key={item.id} className={isSelected ? "is-selected" : ""}>
+                          {item.label} {isSelected ? `x${selection.quantity} (+${formatCurrency(item.amount * selection.quantity)})` : "(not selected)"}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ) : null}
@@ -1690,11 +1839,15 @@ function CampBookingFormPanel({
                 <li key={detail}>{detail}</li>
               ))}
             </ul>
-            {selectedAddOns.length ? (
+            {selectedAddOns.length || extraServicesTotal > 0 ? (
               <p className="camp-booking-availability">
                 {isFlexiblePackOption
-                  ? "Additional services will be finalized when you choose your dates."
-                  : `Additional services total: ${formatCurrency(addOnTotal)}`}
+                  ? selectedAddOns.length && extraServicesTotal > 0
+                    ? `Charged now: ${formatCurrency(extraServicesTotal)}. Scheduling add-ons will be finalized when you choose your dates.`
+                    : extraServicesTotal > 0
+                      ? `Additional services total: ${formatCurrency(extraServicesTotal)}`
+                      : "Additional services will be finalized when you choose your dates."
+                  : `Additional services total: ${formatCurrency(addOnTotal + extraServicesTotal)}`}
               </p>
             ) : null}
             <p className="camp-booking-availability">{selectedOption.availability}</p>

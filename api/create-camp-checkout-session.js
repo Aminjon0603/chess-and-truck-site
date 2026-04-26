@@ -51,6 +51,19 @@ const campAddOns = {
   },
 };
 
+const campExtraServices = {
+  pizza: {
+    label: "Pizza",
+    description: "Pizza / lunch happens at 11:30",
+    amount: 5000,
+  },
+  "ice-cream": {
+    label: "Ice-Cream",
+    description: "Ice-cream happens at 3:00",
+    amount: 3500,
+  },
+};
+
 const flexPackOptionIds = new Set(["flex-5-pack", "flex-10-pack"]);
 const dateSelectionOptionIds = new Set(["single-day", "half-day-am", "half-day-pm"]);
 
@@ -70,6 +83,27 @@ const sanitizeAddOns = (value) => {
   return value
     .map((item) => sanitize(item, 40))
     .filter((item, index, list) => item && list.indexOf(item) === index && campAddOns[item]);
+};
+
+const sanitizeServiceSelections = (value) => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+
+  return Object.entries(campExtraServices).reduce((accumulator, [serviceId, service]) => {
+    const rawSelection =
+      value[serviceId] && typeof value[serviceId] === "object" ? value[serviceId] : {};
+    const quantity = Number.parseInt(rawSelection.quantity, 10);
+
+    if (rawSelection.option === "selected") {
+      accumulator[serviceId] = {
+        ...service,
+        quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
+      };
+    }
+
+    return accumulator;
+  }, {});
 };
 
 const sanitizeSelectedDays = (value) => {
@@ -241,9 +275,17 @@ export default {
     const allowsAddOns =
       optionId === "full-week" || isDateSelectionOption || isFlexiblePackOption;
     const selectedAddOns = allowsAddOns ? sanitizeAddOns(payload.addOns) : [];
+    const selectedExtraServices = allowsAddOns ? sanitizeServiceSelections(payload.serviceSelections) : {};
     const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
+    const extraServiceSummary = Object.values(selectedExtraServices)
+      .map((item) => `${item.label} x${item.quantity}`)
+      .join(", ");
     const dayQuantity = isDateSelectionOption ? selectedDays.length : 1;
     const addOnUnitTotal = selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0);
+    const extraServicesTotal = Object.values(selectedExtraServices).reduce(
+      (sum, item) => sum + item.amount * item.quantity,
+      0
+    );
     const addOnTotal = allowsAddOns
       ? isDateSelectionOption
         ? addOnUnitTotal * dayQuantity
@@ -253,8 +295,8 @@ export default {
       : 0;
     const totalAmount =
       isDateSelectionOption
-        ? selectedOption.amount * dayQuantity + addOnTotal
-        : selectedOption.amount + addOnTotal;
+        ? selectedOption.amount * dayQuantity + addOnTotal + extraServicesTotal
+        : selectedOption.amount + addOnTotal + extraServicesTotal;
     const scheduleSummary =
       optionId === "single-day" || optionId === "half-day-am" || optionId === "half-day-pm"
         ? selectedDays.length === 1
@@ -295,6 +337,8 @@ export default {
         selectedDaysSummary ? ` | ${selectedDaysSummary}` : ""
       }${
         addOnSummary ? ` | ${addOnSummary}` : ""
+      }${
+        extraServiceSummary ? ` | ${extraServiceSummary}` : ""
       }`
     );
     params.set("client_reference_id", reference);
@@ -317,7 +361,21 @@ export default {
     params.set("metadata[selected_days]", selectedDaysSummary || "None");
     params.set("metadata[add_ons]", addOnSummary || "None");
     params.set("metadata[add_ons_total]", String(addOnTotal));
+    params.set("metadata[extra_services]", extraServiceSummary || "None");
+    params.set("metadata[extra_services_total]", String(extraServicesTotal));
     params.set("metadata[notes]", notes);
+
+    Object.entries(selectedExtraServices).forEach(([serviceId, item], index) => {
+      const lineItemIndex = index + 1;
+      params.set(`line_items[${lineItemIndex}][quantity]`, String(item.quantity));
+      params.set(`line_items[${lineItemIndex}][price_data][currency]`, "usd");
+      params.set(`line_items[${lineItemIndex}][price_data][unit_amount]`, String(item.amount));
+      params.set(`line_items[${lineItemIndex}][price_data][product_data][name]`, item.label);
+      params.set(
+        `line_items[${lineItemIndex}][price_data][product_data][description]`,
+        item.description
+      );
+    });
 
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",

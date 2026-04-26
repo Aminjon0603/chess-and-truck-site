@@ -1643,6 +1643,27 @@ a {
   gap: 12px;
 }
 
+.camp-service-request-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.camp-service-request-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 100px;
+  gap: 14px;
+  align-items: end;
+}
+
+.camp-service-request-row .field {
+  margin: 0;
+}
+
+.camp-service-quantity input:disabled {
+  opacity: 0.55;
+}
+
 .camp-addon-option {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -2561,6 +2582,24 @@ a {
     width: min(1200px, calc(100% - 20px));
   }
 
+  .btn {
+    min-height: 48px;
+    padding: 0 18px;
+  }
+
+  .btn-emphasis {
+    min-height: 58px;
+  }
+
+  .section-tag,
+  .mini-tag,
+  .step-chip {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+  }
+
   .site-header {
     backdrop-filter: blur(14px);
   }
@@ -2578,20 +2617,30 @@ a {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 14px 12px;
-    padding: 12px 0;
+    gap: 8px 8px;
+    padding: 6px 0;
     align-items: center;
   }
 
   .brand-link {
-    flex: 0 1 calc(100% - 56px);
+    order: 1;
+    flex: 0 1 calc(100% - 52px);
     min-width: 0;
     gap: 0;
-    max-width: calc(100% - 44px);
+    max-width: calc(100% - 52px);
   }
 
   .brand-mark {
-    width: clamp(192px, 58vw, 260px);
+    width: clamp(116px, 34vw, 146px);
+    height: 58px;
+    overflow: hidden;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .brand-mark-image {
+    transform: scale(1.28);
+    transform-origin: left top;
   }
 
   .brand-copy strong {
@@ -2603,22 +2652,25 @@ a {
   }
 
   .header-actions {
+    order: 2;
     position: static;
     flex: 0 0 auto;
     gap: 6px;
+    margin-left: auto;
   }
 
   .site-nav {
+    order: 3;
     display: none;
     width: 100%;
     flex-direction: column;
-    gap: 8px;
-    padding: 14px;
-    border-radius: 22px;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 16px;
     border: 1px solid var(--line);
     background: rgba(252, 253, 250, 0.98);
-    box-shadow: 0 18px 44px rgba(21, 38, 30, 0.1);
-    max-height: calc(100vh - 104px);
+    box-shadow: 0 16px 36px rgba(21, 38, 30, 0.09);
+    max-height: calc(100vh - 92px);
     overflow-y: auto;
     overscroll-behavior: contain;
   }
@@ -2627,14 +2679,23 @@ a {
     display: flex;
   }
 
+  .site-nav > .nav-link,
+  .site-nav > .nav-dropdown {
+    width: 100%;
+  }
+
+  .site-nav > .nav-link {
+    justify-content: center;
+  }
+
   .nav-dropdown {
     display: grid;
-    gap: 8px;
+    gap: 6px;
   }
 
   .nav-link {
-    min-height: 48px;
-    padding: 0 16px;
+    min-height: 40px;
+    padding: 0 12px;
     border: 1px solid transparent;
     background: rgba(255, 255, 255, 0.7);
   }
@@ -2648,7 +2709,7 @@ a {
     position: static;
     min-width: 0;
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -2662,17 +2723,18 @@ a {
 
   .nav-dropdown.is-open .nav-dropdown-menu {
     display: grid;
-    gap: 10px;
+    gap: 8px;
   }
 
   .nav-dropdown-feature {
-    padding: 16px;
-    border-radius: 20px;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 16px;
   }
 
   .nav-dropdown-copy {
     gap: 2px;
-    padding: 0 4px 2px;
+    padding: 0 2px 2px;
     border-bottom: 0;
   }
 
@@ -2685,24 +2747,24 @@ a {
   }
 
   .nav-dropdown-links {
-    gap: 8px;
+    gap: 6px;
     padding-top: 0;
     background: transparent;
     border-radius: 0;
   }
 
   .nav-dropdown-link {
-    grid-template-columns: 56px minmax(0, 1fr) auto;
-    gap: 10px;
-    padding: 12px 14px;
+    grid-template-columns: 50px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 8px 10px;
     border-color: var(--line);
     background: rgba(255, 255, 255, 0.82);
   }
 
   .nav-dropdown-thumb {
-    width: 56px;
-    height: 56px;
-    padding: 6px;
+    width: 50px;
+    height: 50px;
+    padding: 5px;
   }
 
   .nav-dropdown-link strong {
@@ -2725,11 +2787,12 @@ a {
   .nav-toggle {
     position: relative;
     display: inline-flex;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
     border-color: rgba(17, 69, 60, 0.92);
     background: rgba(17, 69, 60, 0.96);
-    box-shadow: 0 12px 24px rgba(17, 69, 60, 0.2);
+    box-shadow: 0 10px 20px rgba(17, 69, 60, 0.18);
   }
 
   .nav-toggle span {
@@ -2744,6 +2807,7 @@ a {
 
   .cta-row {
     flex-direction: column;
+    gap: 10px;
   }
 
   .fact-list-hero {
@@ -2756,49 +2820,57 @@ a {
     padding: 14px 16px;
   }
 
-.page-hero-facts strong {
-  font-size: 1rem;
-}
+  .page-hero-facts strong {
+    font-size: 1rem;
+  }
 
-.hero-fact-lines {
-  display: grid;
-  gap: 4px;
-}
+  .hero-fact-lines {
+    display: grid;
+    gap: 4px;
+  }
 
-.hero-fact-lines strong {
-  line-height: 1.35;
-}
+  .hero-fact-lines strong {
+    line-height: 1.35;
+  }
 
-.hero-fact-lines .hero-fact-lead {
-  font-size: 1.2rem;
-}
+  .hero-fact-lines .hero-fact-lead {
+    font-size: 1.2rem;
+  }
 
   .page-hero {
-    padding: 28px 0 10px;
+    padding: 14px 0 6px;
   }
 
   .page-hero-grid {
-    gap: 18px;
+    gap: 12px;
   }
 
   .page-hero-copy {
-    gap: 16px;
+    gap: 12px;
   }
 
   .page-hero-copy h1 {
     max-width: none;
-    font-size: clamp(2.35rem, 11vw, 3.55rem);
-    line-height: 0.95;
+    font-size: clamp(1.92rem, 9.4vw, 2.72rem);
+    line-height: 0.91;
   }
 
   .page-intro {
-    font-size: 1rem;
-    line-height: 1.58;
+    font-size: 0.95rem;
+    line-height: 1.46;
   }
 
   .surface,
   .status-banner {
-    padding: 20px;
+    padding: 18px;
+  }
+
+  .page-section {
+    padding: 22px 0 24px;
+  }
+
+  .page-section .shell {
+    padding-top: 24px;
   }
 
   .hero-visual {
@@ -2817,7 +2889,70 @@ a {
   }
 
   .camp-hero-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .camp-hero-facts > div,
+  .camp-hero-facts > .fact-list-card-link {
+    min-height: 0;
+    padding: 12px 13px;
+  }
+
+  .camp-overview-hero-panel {
+    padding: 16px;
+  }
+
+  .camp-overview-hero-copy .btn {
+    min-height: 50px;
+  }
+
+  .camp-booking-grid {
+    gap: 14px;
+  }
+
+  .camp-booking-card {
+    gap: 10px;
+  }
+
+  .camp-booking-card h3 {
+    font-size: clamp(1.32rem, 6.8vw, 1.64rem);
+  }
+
+  .camp-booking-price {
+    font-size: clamp(1.35rem, 6vw, 1.72rem);
+  }
+
+  .camp-booking-list {
+    gap: 8px;
+    padding-left: 1rem;
+    font-size: 0.94rem;
+    line-height: 1.56;
+  }
+
+  .camp-booking-actions {
+    gap: 10px;
+  }
+
+  .camp-booking-form,
+  .summary-card-block {
+    gap: 16px;
+  }
+
+  .camp-booking-hint {
+    gap: 10px;
+    margin-top: 16px;
+    padding: 16px 18px;
+  }
+
+  .booking-option-switcher {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .camp-service-request-row {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .contact-layout,
@@ -2861,12 +2996,13 @@ a {
   }
 
   .camp-booking-form {
-    padding: 20px;
+    padding: 18px;
   }
 
   .camp-week-preview {
-    margin-top: 14px;
-    padding: 16px;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 14px;
   }
 
   .camp-week-preview-head strong {
@@ -2874,23 +3010,143 @@ a {
   }
 
   .camp-week-day-chip {
-    min-height: 44px;
-    padding: 10px 12px;
-    font-size: 0.95rem;
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
   }
 
   .camp-day-chip-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-height: 260px;
+    gap: 8px;
+    max-height: 232px;
+  }
+
+  .booking-option-chip {
+    gap: 3px;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .booking-option-chip span {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+
+  .booking-option-chip strong {
+    font-size: 0.9rem;
+    line-height: 1.24;
+  }
+
+  .camp-addon-option {
+    gap: 12px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .camp-addon-copy strong {
+    line-height: 1.35;
+  }
+
+  .camp-addon-price {
+    font-size: 0.95rem;
+  }
+
+  .summary-list-booking {
+    gap: 12px;
+  }
+
+  .summary-list > div,
+  .fact-list > div,
+  .contact-link,
+  .service-card,
+  .fact-list-card-link {
+    gap: 8px;
+    padding: 13px 14px;
+  }
+
+  .booking-support-actions {
+    gap: 10px;
+  }
+
+  .booking-support-action {
+    gap: 4px;
+    padding: 13px 14px;
+    border-radius: 14px;
+  }
+
+  .booking-support-action span {
+    font-size: 0.84rem;
+  }
+
+  .booking-support-action strong {
+    font-size: 0.95rem;
+    line-height: 1.34;
+  }
+
+  .camp-map-meta {
+    gap: 12px;
+  }
+
+  .camp-map-meta strong {
+    font-size: 0.95rem;
+    line-height: 1.48;
+  }
+
+  .camp-schedule-grid {
+    gap: 16px;
+  }
+
+  .camp-schedule-item {
+    gap: 8px;
+    padding-left: 18px;
+  }
+
+  .camp-schedule-time {
+    font-size: 0.84rem;
+    letter-spacing: 0.06em;
+  }
+
+  .faq-item summary {
+    padding: 18px;
+    font-size: 1.02rem;
+  }
+
+  .faq-item p {
+    padding: 0 18px 18px;
+    line-height: 1.6;
+  }
+
+  .field,
+  .checkbox-field {
+    gap: 10px;
+  }
+
+  .field-grid {
+    gap: 14px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 13px 14px;
+    border-radius: 14px;
+  }
+
+  .field textarea {
+    min-height: 112px;
+  }
+
+  .field-error {
+    font-size: 0.82rem;
   }
 
   .form-section {
-    gap: 14px;
-    padding-bottom: 18px;
+    gap: 12px;
+    padding-bottom: 16px;
   }
 
   .form-section-head {
-    gap: 12px;
+    gap: 10px;
   }
 
   .mobile-stepper {
@@ -2910,24 +3166,26 @@ a {
   }
 
   .footer-panel {
-    padding: 22px;
+    gap: 20px;
+    padding: 18px;
   }
 
   .footer-top {
-    gap: 18px;
+    gap: 14px;
   }
 
   .footer-nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 12px;
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .footer-contact-stack {
-    gap: 10px;
+    gap: 8px;
   }
 
   .footer-contact-link {
-    padding: 10px 12px;
+    padding: 9px 11px;
+    border-radius: 14px;
   }
 
   .contact-link strong,
@@ -2938,5 +3196,50 @@ a {
 
   .brand-copy small {
     font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 460px) {
+  .site-nav {
+    padding: 8px;
+    border-radius: 14px;
+  }
+
+  .nav-link {
+    min-height: 38px;
+    padding: 0 11px;
+  }
+
+  .nav-dropdown-feature {
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .nav-dropdown-link {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    padding: 8px 9px;
+  }
+
+  .nav-dropdown-thumb {
+    width: 44px;
+    height: 44px;
+    padding: 4px;
+  }
+
+  .page-hero-copy h1 {
+    font-size: clamp(1.84rem, 9vw, 2.42rem);
+  }
+
+  .camp-hero-facts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .booking-option-switcher {
+    grid-template-columns: 1fr;
+  }
+
+  .camp-day-chip-grid {
+    grid-template-columns: 1fr;
+    max-height: 260px;
   }
 }
