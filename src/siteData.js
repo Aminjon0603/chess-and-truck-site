@@ -4,7 +4,7 @@ export const siteBrand = {
   city: "New York City",
   tagline: "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128",
   footerNote:
-    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street, New York, NY 10128.",
+    "Our summer chess program runs June 15 through August 21, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
 };
 
 export const navigationItems = [
@@ -47,7 +47,7 @@ export const campMenuFeature = {
   eyebrow: "Summer camp",
   title: "June 15 - August 21 · Weekdays",
   text:
-    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street, New York, NY 10128.",
+    "Our summer chess program runs June 15 through August 21, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
   ctaLabel: "View Full Camp Details",
   ctaPath: "/camps",
 };
@@ -163,9 +163,9 @@ export const featuredTournament = {
   formatLabel: "9:00 AM - 3:00 PM",
   pricingLabel: "Camp details available now",
   venueLabel: "62 E 92nd Street, New York, NY 10128",
-  shortSummary: "Summer camp at 62 E 92nd Street, New York, NY 10128. Daily lessons, guided games, and clear structure.",
+  shortSummary: "A full-day program combining expert instruction, structured play, outdoor time, and plenty of FUN.",
   longSummary:
-    "Our summer chess program is held June 15 through August 21, with weekday sessions at 62 E 92nd Street, New York, NY 10128.",
+    "Our summer chess program runs June 15 through August 21, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -272,7 +272,7 @@ export const campOverviewPage = {
   asideFacts: [
     { label: "Schedule", value: "9:00 AM - 3:00 PM" },
     { label: "Coaches", value: "FIDE Masters" },
-    { label: "Contact", value: "Contact us" },
+    { label: "Contact", value: "Contact Us" },
   ],
   overviewSection: {
     eyebrow: "What camp includes",
@@ -313,7 +313,7 @@ export const campOverviewPage = {
     { title: "Age range", text: "Ages 4 - 17" },
     { title: "Rated matches", text: "Included during camp sessions" },
     { title: "Skill levels", text: "Beginner through advanced groupings" },
-    { title: "Contact", text: "Contact us for availability and next steps" },
+    { title: "Contact", text: "Contact Us for availability and next steps" },
   ],
   bookingSection: {
     eyebrow: "Camp booking",
@@ -324,7 +324,7 @@ export const campOverviewPage = {
   bookingCards: [
     {
       id: "full-week",
-      eyebrow: "Weekly camp",
+      eyebrow: "Weekly Pass",
       title: "Full Week Camp",
       price: "$700 per week",
       defaultSchedulePreference: "Week of June 15",
@@ -339,8 +339,8 @@ export const campOverviewPage = {
     },
     {
       id: "single-day",
-      eyebrow: "Flexible option",
-      title: "Single Day Option",
+      eyebrow: "Daily Pass",
+      title: "Single Day Camp",
       price: "$150 per day",
       defaultSchedulePreference: "Monday, June 15",
       scheduleText: "9:00 AM - 3:00 PM",
@@ -427,35 +427,40 @@ export const campOverviewPage = {
       "https://www.google.com/maps?q=62%20E%2092nd%20Street%20New%20York%20NY%2010128&output=embed",
   },
   scheduleSection: {
-    eyebrow: "Sample day",
-    title: "Schedule",
-    intro: "9:00 AM - 3:00 PM structure for camp days.",
+    eyebrow: "FULL CAMP DAY",
+    title: "APPROXIMATE SCHEDULE",
+    intro: "",
   },
   sampleSchedule: [
     {
-      time: "9:00 AM",
-      title: "Chess instruction with FIDE Masters",
-      text: "Students start the day with structured instruction and guided chess work.",
+      time: "9:00 - 10:00 AM",
+      title: "Drop-off, warm-up games, evaluation, and grouping",
+      text: "Students arrive, settle in, and begin with warm-up games while coaches evaluate level and group students thoughtfully.",
     },
     {
-      time: "10:30 AM",
-      title: "Rated games and structured play",
-      text: "Students apply ideas in games with supervision and review built in.",
+      time: "10:00 - 11:00 AM",
+      title: "Central Park fun",
+      text: "Soccer, playground time, board games, tag, and other organized outdoor games keep the morning active and social.",
     },
     {
-      time: "12:00 PM",
-      title: "Lunch break",
-      text: "A mid-day reset with lunch before the afternoon block.",
+      time: "11:00 AM - 12:00 PM",
+      title: "Chess lessons and organized activities",
+      text: "Puzzles, simuls, blitz games, the $1 beat-the-coach challenge, and other fun structured chess activities.",
     },
     {
-      time: "1:00 PM",
-      title: "Outdoor park time",
-      text: "Fresh air, movement, and outdoor time near Central Park.",
+      time: "12:00 - 1:00 PM",
+      title: "Lunch break and social time",
+      text: "A relaxed lunch block gives students time to recharge, eat, and connect with the group.",
     },
     {
-      time: "2:00 PM",
-      title: "Fun activities and chess games",
-      text: "The afternoon keeps students engaged with chess activities and interactive games through 3:00 PM.",
+      time: "1:00 - 2:30 PM",
+      title: "Chess lessons, rated matches, and analysis",
+      text: "The afternoon block includes instruction, rated games, group post-game analysis, and an ice cream break.",
+    },
+    {
+      time: "2:30 - 3:00 PM",
+      title: "Recap, fun chess activities, and pick-up",
+      text: "Students wrap up the day with a quick recap, fun chess activities, and end-of-day pick-up.",
     },
   ],
   learningSection: {
@@ -512,7 +517,7 @@ export const campOverviewPage = {
     },
   ],
   ctaTitle: "Ask about summer camp",
-  ctaText: "Contact us for availability, pricing, and the next step.",
+  ctaText: "Contact Us for availability, pricing, and the next step.",
 };
 
 export const campBookingPage = {
@@ -537,7 +542,7 @@ export const campBookingPage = {
     },
   ],
   supportTitle: "Need help before checkout?",
-  supportText: "Contact us if you have any questions, reservations or concerns.",
+  supportText: "Contact Us if you have any questions, reservations or concerns.",
   siblingNote: "Booking for more than one student? Please submit a separate booking for each child.",
 };
 
@@ -791,7 +796,7 @@ export const aboutPage = {
   introSection: {
     eyebrow: "What matters most to families",
     title: "What Matters Most to Families",
-    intro: "We prioritize clarity, structure, and meaningful instruction -- before anything else.",
+    intro: "We prioritize fun, clarity, structure, and meaningful instruction -- every step of the way.",
   },
   pillars: [
     {
@@ -856,11 +861,11 @@ export const eventsPage = {
   },
   detailCards: [
     { title: "Location", text: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
-    { title: "Dates", text: "Contact us for current tournament dates" },
+    { title: "Dates", text: "Contact Us for current tournament dates" },
     { title: "Time", text: "Saturday mornings, 9:00 AM to lunch" },
     { title: "Service", text: "Rated and beginner-friendly divisions" },
     { title: "Entry", text: "Registration from $55 planned" },
-    { title: "Contact", text: "Contact us now" },
+    { title: "Contact", text: "Contact Us now" },
   ],
   sampleSection: {
     eyebrow: "Sample event morning",
@@ -900,18 +905,18 @@ export const eventsPage = {
     },
     {
       title: "Simple next step",
-      text: "Families can use Contact us now for current tournament information and next steps.",
+      text: "Families can use Contact Us now for current tournament information and next steps.",
     },
   ],
   ctaTitle: "Want tournament details?",
   ctaText:
-    "Contact us now and we will send section guidance, registration details, and the next step.",
+      "Contact Us now and we will send section guidance, registration details, and the next step.",
 };
 
 export const tournamentPage = {
   eyebrow: "Featured Tournament",
   title: "Chess & Truck Tournament",
-  intro: "The format is set. Contact us for current tournament details and the next step.",
+    intro: "The format is set. Contact Us for current tournament details and the next step.",
   atAGlance: [
     { label: "Location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
     { label: "Service", value: "Open & Beginner sections" },
@@ -938,16 +943,16 @@ export const faqPage = {
   ],
   quickCards: [
     {
-      title: "Beginner friendly?",
-      text: "Yes. Camp works well for beginners and improving players.",
+      title: "Is this suitable for beginners?",
+      text: "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join!",
     },
     {
-      title: "Grouped by level?",
-      text: "Yes. Students are grouped by level so the pace and games make sense.",
+      title: "Who leads instruction?",
+      text: "All instruction is led by FIDE Masters with more than 25 years of experience in the field.",
     },
     {
-      title: "Not sure yet?",
-      text: "Call, text, or email us and we will help you decide if camp is the right fit.",
+      title: "What should students bring?",
+      text: "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
     },
   ],
   prepSection: {
@@ -994,11 +999,17 @@ export const faqPage = {
 
 export const contactPage = {
   eyebrow: "Contact",
-  title: "Contact the team about camp.",
+  title: "Have questions? We’re here to help",
   intro: "",
   heroFacts: [
-    { label: "Phone lines", value: "(646) 251-7087 / (646) 494-5363" },
-    { label: "Email", value: "info@chessandtruck.com" },
+    {
+      label: "Phone",
+      lines: ["Call or Text", "(646) 251-7087", "(646) 494-5363"],
+    },
+    {
+      label: "Email",
+      lines: ["info@chessandtruck.com"],
+    },
   ],
   topicSection: {
     eyebrow: "What to contact us about",
@@ -1489,7 +1500,7 @@ export const lessonDetailPages = {
     asideTag: "Lesson desk",
     asideTitle: "Simple support for families.",
     asideText:
-      "Contact us for lesson scheduling, coach questions, or help choosing the right next step.",
+      "Contact Us for lesson scheduling, coach questions, or help choosing the right next step.",
     asideFacts: [
       { label: "For", value: "Current and new families" },
       { label: "Best for", value: "Scheduling and support" },
@@ -1599,7 +1610,7 @@ export const upcomingTournaments = [
   },
   {
     id: "contact-us",
-    dateLabel: "Contact us",
+    dateLabel: "Contact Us",
     statusLabel: "Direct support",
     timeLabel: "9:00 AM to lunch",
     title: "Tournament guidance",
@@ -1646,60 +1657,35 @@ export const policyItems = [
   "Open section players will need an active USCF membership.",
   "Beginner section players will not need a USCF membership.",
   "The Saturday morning structure is already set before the dates go public.",
-  "Families can use Contact us now if they want the latest tournament details.",
+  "Families can use Contact Us now if they want the latest tournament details.",
   "Full registration and payment happen after the date and section are confirmed.",
 ];
 
 export const faqItems = [
   {
-    question: "What ages is camp for?",
+    question: "Is this suitable for beginners?",
     answer:
-      "Camp is designed for ages 4 - 17.",
+      "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join!",
   },
   {
-    question: "Is this good for beginners?",
+    question: "Who leads instruction?",
     answer:
-      "Yes. Camp is built for beginners as well as improving players who want stronger structure.",
+      "All instruction is led by FIDE Masters with more than 25 years of experience in the field.",
   },
   {
-    question: "Are students grouped by level?",
+    question: "What should students bring?",
     answer:
-      "Yes. Students are grouped by level so the coaching, games, and activities feel right for the group.",
-    },
-  {
-    question: "What is a typical camp day like?",
-    answer:
-      "Camp runs from 9:00 AM to 3:00 PM and includes chess instruction with FIDE Masters, rated games, lunch, outdoor park time, and fun activities.",
+      "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
   },
   {
-    question: "What should my child bring?",
+    question: "Are campers supervised at all times?",
     answer:
-      "Bring a water bottle, a snack if needed, and anything staff should know medically.",
+      "Yes. Students are supervised at all times throughout the day.",
   },
   {
-    question: "Is prior experience required?",
+    question: "Are early drop-off and extended day options available?",
     answer:
-      "No. Beginners are welcome, and we can help point families to the right camp format.",
-  },
-  {
-    question: "Is lunch included?",
-    answer:
-      "Lunch is not part of camp because the day ends at 12:00 PM. Send a snack if your child needs one.",
-  },
-  {
-    question: "How do I register?",
-    answer:
-      "Use the booking section on the camp page to choose your option and continue to checkout.",
-  },
-  {
-    question: "How do I contact the team?",
-    answer:
-      "Call, text, email, or use the contact form and we will get back to you.",
-  },
-  {
-    question: "What should I include in my message?",
-    answer:
-      "Include the student age, current level, and the question you want answered.",
+      "Yes. Both options are available during enrollment.",
   },
 ];
 

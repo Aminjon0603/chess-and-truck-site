@@ -604,7 +604,7 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts,
           <strong>{featuredTournament.city}</strong>
         </div>
         <div>
-          <span>Service</span>
+          <span>Camp Hours</span>
           <strong>{featuredTournament.formatLabel}</strong>
         </div>
       </div>
@@ -632,7 +632,17 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts,
               {heroFacts.map((item) => (
                 <div key={item.label}>
                   <span>{item.label}</span>
-                  <strong>{item.value}</strong>
+                  {Array.isArray(item.lines) ? (
+                    <div className="hero-fact-lines">
+                      {item.lines.map((line, index) => (
+                        <strong key={`${item.label}-${line}`} className={index === 0 ? "hero-fact-lead" : ""}>
+                          {line}
+                        </strong>
+                      ))}
+                    </div>
+                  ) : (
+                    <strong>{item.value}</strong>
+                  )}
                 </div>
               ))}
             </div>
@@ -790,7 +800,7 @@ function SiteFooter({ currentPath, navigate }) {
                   currentPath={currentPath}
                   className="footer-link"
                 >
-                  Contact us
+            Contact Us
                 </AppLink>
               </div>
               <div className="footer-legal-links">
@@ -904,11 +914,10 @@ function ContactDirectory() {
 function ContactForm({ contactState, contactSubmitState, updateContactField, handleContactSubmit }) {
   return (
     <form className="surface contact-form" onSubmit={handleContactSubmit}>
-      <span className="mini-tag">Message the team</span>
-      <h3>Before enrollment, ask us anything</h3>
+      <span className="mini-tag">CONTACT OUR TEAM</span>
+      <h3>Have questions before enrolling?</h3>
       <p>
-        Use this form to ask about availability, group placement, schedule, or any details before
-        registration opens.
+        Ask about availability, group placement, scheduling, or anything else - we're happy to help.
       </p>
 
       <label className="field">
@@ -967,7 +976,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           value={contactState.message}
           onChange={updateContactField}
           rows="5"
-          placeholder="Tell us what you want to know before the first release opens."
+          placeholder="Let us know how we can help."
           autoComplete="off"
           required
         />
@@ -979,7 +988,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
 
       <small className={`status-copy status-${contactSubmitState.status}`} aria-live="polite">
         {contactSubmitState.status === "idle"
-          ? "Messages go directly to the launch and program support team."
+          ? "We'll get back to you shortly."
           : contactSubmitState.message}
       </small>
     </form>
@@ -1241,40 +1250,6 @@ function CampBookingFormPanel({
             ) : null}
           </label>
         </div>
-
-        {selectedOption.id === "full-week" && selectedWeekOption ? (
-          <article className="surface camp-week-preview">
-            <div className="camp-week-preview-head">
-              <div>
-                <span className="mini-tag">Selected week</span>
-                <h3>{selectedWeekOption.value}</h3>
-              </div>
-              <strong>{selectedWeekOption.rangeLabel}</strong>
-            </div>
-            <div className="camp-week-days">
-              {selectedWeekOption.days.map((day) => {
-                const isSelected = selectedWeekDays.includes(day);
-
-                return (
-                  <button
-                    key={day}
-                    type="button"
-                    className={`camp-week-day-chip${isSelected ? " is-selected" : ""}`}
-                    onClick={() => toggleSelectedWeekDay(day)}
-                  >
-                    {day}
-                  </button>
-                );
-              })}
-            </div>
-            <p className="field-note">
-              Click the weekdays your student plans to attend during this selected week.
-            </p>
-            {campBookingErrors.selectedDays ? (
-              <span className="field-error">{campBookingErrors.selectedDays}</span>
-            ) : null}
-          </article>
-        ) : null}
 
         {selectedOption.id === "single-day" ? (
           <article className="surface camp-week-preview camp-day-preview">
@@ -1867,7 +1842,7 @@ function CampsOverviewPage({
                   navigate={navigate}
                   currentPath={currentPath}
                   className="fact-list-card-link"
-                  aria-label={`Contact us about ${item.label.toLowerCase()}`}
+                  aria-label={`Contact Us about ${item.label.toLowerCase()}`}
                 >
                   <span>{item.label}</span>
                   <strong>{item.value}</strong>
@@ -2207,7 +2182,7 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
                 Back to Camps
               </AppLink>
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Contact us
+                Contact Us
               </AppLink>
             </div>
           </article>
@@ -2461,7 +2436,7 @@ function FaqPage({ currentPath, navigate }) {
 
       <section className="page-section">
         <div className="shell">
-          <SectionIntro eyebrow="Quick answers" title="What parents ask most" />
+          <SectionIntro eyebrow="FAQ" title="Common Questions" />
           <div className="card-grid card-grid-three">
             {faqPage.quickCards.map((item) => (
               <article className="surface" key={item.title}>
@@ -3996,7 +3971,7 @@ function ChessTruckApp() {
               className="btn btn-primary header-button"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              {isCompactViewport ? "Contact" : "Contact us"}
+                {isCompactViewport ? "Contact" : "Contact Us"}
             </AppLink>
             <button
               type="button"

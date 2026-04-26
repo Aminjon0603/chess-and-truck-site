@@ -2746,9 +2746,22 @@ a {
     padding: 14px 16px;
   }
 
-  .page-hero-facts strong {
-    font-size: 1rem;
-  }
+.page-hero-facts strong {
+  font-size: 1rem;
+}
+
+.hero-fact-lines {
+  display: grid;
+  gap: 4px;
+}
+
+.hero-fact-lines strong {
+  line-height: 1.35;
+}
+
+.hero-fact-lines .hero-fact-lead {
+  font-size: 1.2rem;
+}
 
   .page-hero {
     padding: 28px 0 10px;
