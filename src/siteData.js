@@ -813,7 +813,7 @@ export const aboutPage = {
     },
   ],
   whySection: {
-    eyebrow: "Why parents trust it",
+    eyebrow: "Why Parents Trust Us",
     title: "The Standard Families Should Expect",
     intro: "Clarity, trust, and a clear sense of what comes next.",
   },
@@ -953,6 +953,14 @@ export const faqPage = {
     {
       title: "What should students bring?",
       text: "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
+    },
+    {
+      title: "Are campers supervised at all times?",
+      text: "Yes. Students are supervised at all times throughout the day.",
+    },
+    {
+      title: "Are early drop-off and extended day options available?",
+      text: "Yes. Both options are available during enrollment.",
     },
   ],
   prepSection: {
@@ -1663,29 +1671,54 @@ export const policyItems = [
 
 export const faqItems = [
   {
-    question: "Is this suitable for beginners?",
+    question: "What ages is camp for?",
     answer:
-      "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join!",
+      "Camp is designed for ages 4 - 17.",
   },
   {
-    question: "Who leads instruction?",
+    question: "Is this good for beginners?",
     answer:
-      "All instruction is led by FIDE Masters with more than 25 years of experience in the field.",
+      "Yes. Camp is built for beginners as well as improving players who want stronger structure.",
   },
   {
-    question: "What should students bring?",
+    question: "Are students grouped by level?",
     answer:
-      "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
+      "Yes. Students are grouped by level so the coaching, games, and activities feel right for the group.",
   },
   {
-    question: "Are campers supervised at all times?",
+    question: "What is a typical camp day like?",
     answer:
-      "Yes. Students are supervised at all times throughout the day.",
+      "Camp runs from 9:00 AM to 3:00 PM and includes chess instruction with FIDE Masters, rated games, lunch, outdoor park time, and fun activities.",
   },
   {
-    question: "Are early drop-off and extended day options available?",
+    question: "What should my child bring?",
     answer:
-      "Yes. Both options are available during enrollment.",
+      "Bring a water bottle, a snack if needed, and anything staff should know medically.",
+  },
+  {
+    question: "Is prior experience required?",
+    answer:
+      "No. Beginners are welcome, and we can help point families to the right camp format.",
+  },
+  {
+    question: "Is lunch included?",
+    answer:
+      "Lunch is not part of camp because the day ends at 12:00 PM. Send a snack if your child needs one.",
+  },
+  {
+    question: "How do I register?",
+    answer:
+      "Use the booking section on the camp page to choose your option and continue to checkout.",
+  },
+  {
+    question: "How do I contact the team?",
+    answer:
+      "Call, text, email, or use the contact form and we will get back to you.",
+  },
+  {
+    question: "What should I include in my message?",
+    answer:
+      "Include the student age, current level, and the question you want answered.",
   },
 ];
 
