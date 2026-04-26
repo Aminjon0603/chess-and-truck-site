@@ -102,6 +102,8 @@ export function validateContactFields(state) {
 export function validateCampBookingFields(state, optionId = "") {
   const errors = {};
   const selectedDays = Array.isArray(state.selectedDays) ? state.selectedDays : [];
+  const isWeeklyOption = optionId === "full-week";
+  const isDateSelectionOption = ["single-day", "half-day-am", "half-day-pm"].includes(optionId);
 
   if (!cleanText(state.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
   if (!cleanText(state.parentLastName)) errors.parentLastName = "Parent last name is required.";
@@ -121,19 +123,19 @@ export function validateCampBookingFields(state, optionId = "") {
   if (!cleanText(state.studentName)) errors.studentName = "Student name is required.";
   if (!cleanText(state.studentAge)) errors.studentAge = "Student age or grade is required.";
   if (!cleanText(state.studentLevel)) errors.studentLevel = "Please add the student level.";
-  if (optionId === "full-week" && !cleanText(state.schedulePreference)) {
+  if (isWeeklyOption && !cleanText(state.schedulePreference)) {
     errors.schedulePreference = "Please add your preferred week.";
   }
 
-  if (
-    optionId === "full-week" &&
-    selectedDays.length === 0
-  ) {
+  if (isWeeklyOption && selectedDays.length === 0) {
     errors.selectedDays = "Please choose at least one camp day in the selected week.";
   }
 
-  if (optionId === "single-day" && selectedDays.length === 0) {
-    errors.selectedDays = "Please choose at least one camp day.";
+  if (isDateSelectionOption && selectedDays.length === 0) {
+    errors.selectedDays =
+      optionId === "single-day"
+        ? "Please choose at least one camp day."
+        : "Please choose at least one half-day session.";
   }
 
   return errors;

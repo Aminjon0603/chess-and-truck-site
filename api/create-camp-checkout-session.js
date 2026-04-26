@@ -6,11 +6,37 @@ const campOptions = {
     label: "Full Week Camp",
     amount: 70000,
     description: "Five full camp days in one week at 62 E 92nd Street, New York, NY 10128.",
+    campTime: "9:00 AM - 3:00 PM",
   },
   "single-day": {
-    label: "Single Day Option",
+    label: "Single Day Camp",
     amount: 15000,
     description: "One full camp day with FIDE Masters, rated games, lunch, outdoor park time, and fun activities at 62 E 92nd Street, New York, NY 10128.",
+    campTime: "9:00 AM - 3:00 PM",
+  },
+  "half-day-am": {
+    label: "Half Day AM",
+    amount: 9500,
+    description: "One half-day AM chess camp session at 62 E 92nd Street, New York, NY 10128.",
+    campTime: "9:00 AM - 12:00 PM",
+  },
+  "half-day-pm": {
+    label: "Half Day PM",
+    amount: 9500,
+    description: "One half-day PM chess camp session at 62 E 92nd Street, New York, NY 10128.",
+    campTime: "12:00 PM - 3:00 PM",
+  },
+  "flex-5-pack": {
+    label: "5-Day Flexible Pack",
+    amount: 80000,
+    description: "Five flexible full camp days to schedule later at 62 E 92nd Street, New York, NY 10128.",
+    campTime: "Dates selected later",
+  },
+  "flex-10-pack": {
+    label: "10-Day Flexible Pack",
+    amount: 150000,
+    description: "Ten flexible full camp days to schedule later at 62 E 92nd Street, New York, NY 10128.",
+    campTime: "Dates selected later",
   },
 };
 
@@ -72,6 +98,8 @@ const normalizeReturnPath = (value, optionId) => {
 const validateCampBookingPayload = (payload, optionId) => {
   const errors = {};
   const selectedDays = sanitizeSelectedDays(payload.selectedDays);
+  const isWeeklyOption = optionId === "full-week";
+  const isDateSelectionOption = ["single-day", "half-day-am", "half-day-pm"].includes(optionId);
 
   if (!sanitize(payload.parentFirstName)) errors.parentFirstName = "Parent first name is required.";
   if (!sanitize(payload.parentLastName)) errors.parentLastName = "Parent last name is required.";
@@ -93,14 +121,17 @@ const validateCampBookingPayload = (payload, optionId) => {
   if (!sanitize(payload.studentName)) errors.studentName = "Student name is required.";
   if (!sanitize(payload.studentAge)) errors.studentAge = "Student age or grade is required.";
   if (!sanitize(payload.studentLevel)) errors.studentLevel = "Student level is required.";
-  if (optionId === "full-week" && !sanitize(payload.schedulePreference, 140)) {
+  if (isWeeklyOption && !sanitize(payload.schedulePreference, 140)) {
     errors.schedulePreference = "Preferred week is required.";
   }
-  if (optionId === "full-week" && selectedDays.length === 0) {
+  if (isWeeklyOption && selectedDays.length === 0) {
     errors.selectedDays = "Please choose at least one camp day in the selected week.";
   }
-  if (optionId === "single-day" && selectedDays.length === 0) {
-    errors.selectedDays = "Please choose at least one camp day.";
+  if (isDateSelectionOption && selectedDays.length === 0) {
+    errors.selectedDays =
+      optionId === "single-day"
+        ? "Please choose at least one camp day."
+        : "Please choose at least one half-day session.";
   }
 
   return errors;
@@ -202,20 +233,28 @@ export default {
     const schedulePreference = sanitize(payload.schedulePreference, 140);
     const selectedDays = sanitizeSelectedDays(payload.selectedDays);
     const selectedDaysSummary = selectedDays.join(", ");
-    const selectedAddOns = sanitizeAddOns(payload.addOns);
+    const allowsAddOns = ["full-week", "single-day"].includes(optionId);
+    const selectedAddOns = allowsAddOns ? sanitizeAddOns(payload.addOns) : [];
     const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
-    const dayQuantity = optionId === "single-day" ? selectedDays.length : 1;
+    const isDateSelectionOption = ["single-day", "half-day-am", "half-day-pm"].includes(optionId);
+    const dayQuantity = isDateSelectionOption ? selectedDays.length : 1;
     const addOnUnitTotal = selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0);
-    const addOnTotal = optionId === "single-day" ? addOnUnitTotal * dayQuantity : addOnUnitTotal;
+    const addOnTotal = allowsAddOns
+      ? isDateSelectionOption
+        ? addOnUnitTotal * dayQuantity
+        : addOnUnitTotal
+      : 0;
     const totalAmount =
-      optionId === "single-day"
+      isDateSelectionOption
         ? selectedOption.amount * dayQuantity + addOnTotal
         : selectedOption.amount + addOnTotal;
     const scheduleSummary =
-      optionId === "single-day"
+      optionId === "single-day" || optionId === "half-day-am" || optionId === "half-day-pm"
         ? selectedDays.length === 1
           ? selectedDays[0]
-          : `${selectedDays.length} selected camp days`
+          : `${selectedDays.length} selected ${optionId === "single-day" ? "camp days" : "half-day sessions"}`
+        : optionId === "flex-5-pack" || optionId === "flex-10-pack"
+          ? "Dates selected later"
         : schedulePreference;
     const notes = sanitize(payload.notes, 300);
 
@@ -233,19 +272,21 @@ export default {
     params.set("line_items[0][price_data][currency]", "usd");
     params.set(
       "line_items[0][price_data][unit_amount]",
-      String(optionId === "single-day" ? selectedOption.amount + addOnUnitTotal : totalAmount)
+      String(
+        isDateSelectionOption && allowsAddOns
+          ? selectedOption.amount + addOnUnitTotal
+          : totalAmount
+      )
     );
     params.set(
       "line_items[0][price_data][product_data][name]",
-      optionId === "single-day" && dayQuantity > 1
-        ? "Chess and Truck Summer Camp Days"
-        : "Chess and Truck Summer Camp"
+      selectedOption.label
     );
     params.set(
       "line_items[0][price_data][product_data][description]",
-      `${selectedOption.label} | ${scheduleSummary}${
+      `${selectedOption.description} | ${scheduleSummary}${
         selectedDaysSummary ? ` | ${selectedDaysSummary}` : ""
-      } | 62 E 92nd Street, New York, NY 10128${
+      }${
         addOnSummary ? ` | ${addOnSummary}` : ""
       }`
     );
@@ -256,7 +297,7 @@ export default {
     params.set("metadata[camp_option]", optionId);
     params.set("metadata[program_name]", "Chess and Truck Summer Camp");
     params.set("metadata[location]", "62 E 92nd Street, New York, NY 10128");
-    params.set("metadata[camp_time]", "9:00 AM - 3:00 PM");
+    params.set("metadata[camp_time]", selectedOption.campTime || "9:00 AM - 3:00 PM");
     params.set("metadata[parent_name]", `${parentFirstName} ${parentLastName}`.trim());
     params.set("metadata[parent_first_name]", parentFirstName);
     params.set("metadata[parent_last_name]", parentLastName);
