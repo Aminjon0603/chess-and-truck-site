@@ -494,26 +494,30 @@ export const campOverviewPage = {
     },
   ],
   faqSection: {
-    eyebrow: "Camp FAQ",
-    title: "Quick answers",
-    intro: "The basics parents ask first.",
+    eyebrow: "FAQ",
+    title: "Common Questions",
+    intro: "",
   },
   faqs: [
     {
-      question: "Is this good for beginners?",
-      answer: "Yes. Beginners are welcome, and students are grouped as cleanly as possible by level.",
+      question: "Is this suitable for beginners?",
+      answer: "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join!",
     },
     {
-      question: "Who teaches the camp?",
-      answer: "Chess lessons are taught with FIDE Masters.",
+      question: "Who leads instruction?",
+      answer: "All instruction is led by FIDE Masters with more than 25 years of experience in the field.",
     },
     {
       question: "What should students bring?",
-      answer: "Bring a water bottle, a snack, and anything listed in the registration note.",
+      answer: "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
     },
     {
-      question: "Can I book one day instead of a full week?",
-      answer: "Yes. You can book a single day or reserve a full week directly on the page.",
+      question: "Are campers supervised at all times?",
+      answer: "Yes. Students are supervised at all times throughout the day.",
+    },
+    {
+      question: "Are early drop-off and extended day options available?",
+      answer: "Yes. Both options are available during enrollment.",
     },
   ],
   ctaTitle: "Ask about summer camp",
