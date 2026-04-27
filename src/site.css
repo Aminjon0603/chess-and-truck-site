@@ -1651,17 +1651,13 @@ a {
 
 .camp-service-request-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 100px;
+  grid-template-columns: 1fr;
   gap: 14px;
   align-items: end;
 }
 
 .camp-service-request-row .field {
   margin: 0;
-}
-
-.camp-service-quantity input:disabled {
-  opacity: 0.55;
 }
 
 .camp-addon-option {

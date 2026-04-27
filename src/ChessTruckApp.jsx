@@ -104,11 +104,9 @@ const campBookingInitialState = {
   serviceSelections: {
     pizza: {
       option: "",
-      quantity: 1,
     },
     "ice-cream": {
       option: "",
-      quantity: 1,
     },
   },
   notes: "",
@@ -153,14 +151,14 @@ const CAMP_EXTRA_SERVICES = [
   {
     id: "pizza",
     label: "Pizza",
-    optionLabel: "Pizza / lunch happens at 11:30",
-    amount: 50,
+    optionLabel: "Yes - Pizza / lunch happens at 11:30",
+    amount: 7,
   },
   {
     id: "ice-cream",
     label: "Ice-Cream",
-    optionLabel: "Ice-cream happens at 3:00",
-    amount: 35,
+    optionLabel: "Yes - Ice-cream happens at 3:00",
+    amount: 3,
   },
 ];
 
@@ -282,11 +280,9 @@ const normalizeCampServiceSelections = (value) => {
 
   return CAMP_EXTRA_SERVICES.reduce((accumulator, item) => {
     const existing = current[item.id] && typeof current[item.id] === "object" ? current[item.id] : {};
-    const quantity = Number.parseInt(existing.quantity, 10);
 
     accumulator[item.id] = {
       option: existing.option === "selected" ? "selected" : "",
-      quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
     };
 
     return accumulator;
@@ -301,7 +297,7 @@ const calculateCampExtraServicesTotal = (serviceSelections = {}) =>
       return sum;
     }
 
-    return sum + item.amount * selection.quantity;
+    return sum + item.amount;
   }, 0);
 
 const hasSelectedCampExtraServices = (serviceSelections = {}) =>
@@ -318,7 +314,7 @@ const formatCampExtraServicesSummary = (serviceSelections = {}) => {
       return [];
     }
 
-    return [`${item.label} x${selection.quantity} (+${formatCurrency(item.amount * selection.quantity)})`];
+    return [`${item.label} (+${formatCurrency(item.amount)})`];
   });
 
   return summary.length ? summary.join(", ") : "None";
@@ -1347,19 +1343,6 @@ function CampBookingFormPanel({
     updateCampBookingField("serviceSelections", nextSelections);
   };
 
-  const updateCampExtraServiceQuantity = (serviceId, value) => {
-    const parsed = Number.parseInt(value, 10);
-    const nextSelections = {
-      ...selectedServiceSelections,
-      [serviceId]: {
-        ...selectedServiceSelections[serviceId],
-        quantity: Number.isFinite(parsed) && parsed > 0 ? parsed : 1,
-      },
-    };
-
-    updateCampBookingField("serviceSelections", nextSelections);
-  };
-
   const toggleSelectedWeekDay = (day) => {
     const currentDays = Array.isArray(campBookingState.selectedDays) ? campBookingState.selectedDays : [];
     const nextDays = currentDays.includes(day)
@@ -1691,23 +1674,11 @@ function CampBookingFormPanel({
                         value={selection.option}
                         onChange={(event) => updateCampExtraServiceOption(item.id, event.target.value)}
                       >
-                        <option value="">Select an option</option>
+                        <option value="">No</option>
                         <option value="selected">
-                          {item.optionLabel} (+{formatCurrency(item.amount)} each)
+                          {item.optionLabel} (+{formatCurrency(item.amount)})
                         </option>
                       </select>
-                    </label>
-                    <label className="field camp-service-quantity">
-                      <span>Qty</span>
-                      <input
-                        type="number"
-                        min="1"
-                        step="1"
-                        inputMode="numeric"
-                        value={selection.quantity}
-                        disabled={!isSelected}
-                        onChange={(event) => updateCampExtraServiceQuantity(item.id, event.target.value)}
-                      />
                     </label>
                   </div>
                 );
@@ -1826,7 +1797,7 @@ function CampBookingFormPanel({
 
                       return (
                         <li key={item.id} className={isSelected ? "is-selected" : ""}>
-                          {item.label} {isSelected ? `x${selection.quantity} (+${formatCurrency(item.amount * selection.quantity)})` : "(not selected)"}
+                          {item.label} {isSelected ? `(+${formatCurrency(item.amount)})` : "(not selected)"}
                         </li>
                       );
                     })}

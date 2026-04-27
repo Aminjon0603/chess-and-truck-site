@@ -55,12 +55,12 @@ const campExtraServices = {
   pizza: {
     label: "Pizza",
     description: "Pizza / lunch happens at 11:30",
-    amount: 5000,
+    amount: 700,
   },
   "ice-cream": {
     label: "Ice-Cream",
     description: "Ice-cream happens at 3:00",
-    amount: 3500,
+    amount: 300,
   },
 };
 
@@ -93,12 +93,10 @@ const sanitizeServiceSelections = (value) => {
   return Object.entries(campExtraServices).reduce((accumulator, [serviceId, service]) => {
     const rawSelection =
       value[serviceId] && typeof value[serviceId] === "object" ? value[serviceId] : {};
-    const quantity = Number.parseInt(rawSelection.quantity, 10);
 
     if (rawSelection.option === "selected") {
       accumulator[serviceId] = {
         ...service,
-        quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
       };
     }
 
@@ -278,12 +276,12 @@ export default {
     const selectedExtraServices = allowsAddOns ? sanitizeServiceSelections(payload.serviceSelections) : {};
     const addOnSummary = selectedAddOns.map((item) => campAddOns[item].label).join(", ");
     const extraServiceSummary = Object.values(selectedExtraServices)
-      .map((item) => `${item.label} x${item.quantity}`)
+      .map((item) => item.label)
       .join(", ");
     const dayQuantity = isDateSelectionOption ? selectedDays.length : 1;
     const addOnUnitTotal = selectedAddOns.reduce((sum, item) => sum + campAddOns[item].amount, 0);
     const extraServicesTotal = Object.values(selectedExtraServices).reduce(
-      (sum, item) => sum + item.amount * item.quantity,
+      (sum, item) => sum + item.amount,
       0
     );
     const addOnTotal = allowsAddOns
@@ -367,7 +365,7 @@ export default {
 
     Object.entries(selectedExtraServices).forEach(([serviceId, item], index) => {
       const lineItemIndex = index + 1;
-      params.set(`line_items[${lineItemIndex}][quantity]`, String(item.quantity));
+      params.set(`line_items[${lineItemIndex}][quantity]`, "1");
       params.set(`line_items[${lineItemIndex}][price_data][currency]`, "usd");
       params.set(`line_items[${lineItemIndex}][price_data][unit_amount]`, String(item.amount));
       params.set(`line_items[${lineItemIndex}][price_data][product_data][name]`, item.label);
