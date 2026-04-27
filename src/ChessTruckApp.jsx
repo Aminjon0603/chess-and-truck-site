@@ -151,13 +151,13 @@ const CAMP_EXTRA_SERVICES = [
   {
     id: "pizza",
     label: "Pizza",
-    optionLabel: "Yes - Pizza / lunch happens at 11:30",
+    optionLabel: "Yes",
     amount: 7,
   },
   {
     id: "ice-cream",
     label: "Ice-Cream",
-    optionLabel: "Yes - Ice-cream happens at 3:00",
+    optionLabel: "Yes",
     amount: 3,
   },
 ];
