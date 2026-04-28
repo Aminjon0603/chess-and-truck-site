@@ -157,7 +157,7 @@ const CAMP_EXTRA_SERVICES = [
     id: "ice-cream",
     label: "Ice-Cream",
     optionLabel: "Yes",
-    amount: 3,
+    amount: 5,
   },
 ];
 

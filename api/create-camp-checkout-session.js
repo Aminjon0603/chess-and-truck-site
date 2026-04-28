@@ -60,7 +60,7 @@ const campExtraServices = {
   "ice-cream": {
     label: "Ice-Cream",
     description: "Ice-cream happens at 3:00",
-    amount: 300,
+    amount: 500,
   },
 };
 
