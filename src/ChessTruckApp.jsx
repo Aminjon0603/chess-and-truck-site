@@ -9,7 +9,6 @@ import {
   contactEmails,
   contactNumbers,
   contactPage,
-  faqItems,
   faqPage,
   featuredTournament,
   footerLegalLinks,
@@ -2728,18 +2727,6 @@ function FaqPage({ currentPath, navigate }) {
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="page-section">
-        <div className="shell faq-stack">
-          <SectionIntro eyebrow="Full FAQ" title="Common camp questions" />
-          {faqItems.map((item) => (
-            <details className="faq-item" key={item.question}>
-              <summary>{item.question}</summary>
-              <p>{item.answer}</p>
-            </details>
-          ))}
         </div>
       </section>
     </>
