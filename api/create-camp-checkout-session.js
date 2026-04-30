@@ -194,6 +194,42 @@ const appendRawQueryParam = (url, key, value) => {
   return `${url.toString()}${separator}${key}=${value}`;
 };
 
+const parseCsvEnv = (value) => {
+  if (typeof value !== "string") {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const normalizeQaEmail = (value) => sanitize(value, 180).toLowerCase();
+
+const normalizeQaPhone = (value) => sanitize(value, 40).replace(/\D/g, "");
+
+const isQaModeEnabled = () => String(process.env.CAMP_QA_MODE || "").toLowerCase() === "true";
+
+const isQaEligibleBooking = ({ email, phone }) => {
+  if (!isQaModeEnabled()) {
+    return false;
+  }
+
+  const allowedEmails = new Set(parseCsvEnv(process.env.CAMP_QA_EMAILS).map(normalizeQaEmail));
+  const allowedPhones = new Set(parseCsvEnv(process.env.CAMP_QA_PHONES).map(normalizeQaPhone));
+
+  const normalizedEmail = normalizeQaEmail(email);
+  const normalizedPhone = normalizeQaPhone(phone);
+
+  return (
+    (normalizedEmail && allowedEmails.has(normalizedEmail)) ||
+    (normalizedPhone && allowedPhones.has(normalizedPhone))
+  );
+};
+
+const getQaAmountOverride = (amount, isQaEligible) => (isQaEligible ? 100 : amount);
+
 export const runtime = "nodejs";
 
 export default {
@@ -304,6 +340,11 @@ export default {
           ? "Dates selected later"
         : schedulePreference;
     const notes = sanitize(payload.notes, 300);
+    const isQaEligible = isQaEligibleBooking({ email, phone });
+    const baseLineItemAmount = getQaAmountOverride(
+      isDateSelectionOption ? selectedOption.amount + addOnUnitTotal : totalAmount,
+      isQaEligible
+    );
 
     const params = new URLSearchParams();
 
@@ -317,14 +358,7 @@ export default {
     params.set("customer_email", email);
     params.set("line_items[0][quantity]", String(dayQuantity));
     params.set("line_items[0][price_data][currency]", "usd");
-    params.set(
-      "line_items[0][price_data][unit_amount]",
-      String(
-        isDateSelectionOption
-          ? selectedOption.amount + addOnUnitTotal
-          : totalAmount
-      )
-    );
+    params.set("line_items[0][price_data][unit_amount]", String(baseLineItemAmount));
     params.set(
       "line_items[0][price_data][product_data][name]",
       selectedOption.label
@@ -362,12 +396,16 @@ export default {
     params.set("metadata[extra_services]", extraServiceSummary || "None");
     params.set("metadata[extra_services_total]", String(extraServicesTotal));
     params.set("metadata[notes]", notes);
+    params.set("metadata[qa_mode]", isQaEligible ? "enabled" : "disabled");
 
     Object.entries(selectedExtraServices).forEach(([serviceId, item], index) => {
       const lineItemIndex = index + 1;
       params.set(`line_items[${lineItemIndex}][quantity]`, "1");
       params.set(`line_items[${lineItemIndex}][price_data][currency]`, "usd");
-      params.set(`line_items[${lineItemIndex}][price_data][unit_amount]`, String(item.amount));
+      params.set(
+        `line_items[${lineItemIndex}][price_data][unit_amount]`,
+        String(getQaAmountOverride(item.amount, isQaEligible))
+      );
       params.set(`line_items[${lineItemIndex}][price_data][product_data][name]`, item.label);
       params.set(
         `line_items[${lineItemIndex}][price_data][product_data][description]`,
