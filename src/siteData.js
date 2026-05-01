@@ -178,7 +178,7 @@ export const footerLegalLinks = [
 export const homePage = {
   eyebrow: "NYC chess camps",
   title: "Summer chess camps at 62 E 92nd Street, New York, NY 10128.",
-  intro: "Weekday summer camp with FIDE Masters at 62 E 92nd Street, New York, NY 10128.",
+    intro: "Weekday summer camp with Chess Masters at 62 E 92nd Street, New York, NY 10128.",
   heroFacts: [
     { label: "Dates", value: "June 15 - August 21 · Weekdays" },
     { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
@@ -268,10 +268,10 @@ export const campOverviewPage = {
   asideTag: "Summer 2026",
   asideTitle: "Program Overview",
   asideText:
-    "Full-day program led by FIDE Masters, with chess lessons, rated matches, lunch, outdoor park time, and a fun, engaging environment students look forward to each day.",
+      "Full-day program led by Chess Masters, with chess lessons, rated matches, lunch, outdoor park time, and a fun, engaging environment students look forward to each day.",
   asideFacts: [
     { label: "Schedule", value: "9:00 AM - 3:00 PM" },
-    { label: "Coaches", value: "FIDE Masters" },
+      { label: "Coaches", value: "Chess Masters" },
     { label: "Contact", value: "Contact Us" },
   ],
   overviewSection: {
@@ -330,7 +330,7 @@ export const campOverviewPage = {
       defaultSchedulePreference: "Week of June 15",
       scheduleText: "Weekdays · 9:00 AM - 3:00 PM",
       details: [
-        "Daily chess instruction with FIDE Masters",
+        "Daily chess instruction with Chess Masters",
         "Rated games, lunch break, and outdoor park time",
         "Fun, engaging activities throughout the day",
       ],
@@ -346,7 +346,7 @@ export const campOverviewPage = {
       defaultSchedulePreference: "Monday, June 15",
       scheduleText: "9:00 AM - 3:00 PM",
       details: [
-        "Chess instruction with FIDE Masters",
+        "Chess instruction with Chess Masters",
         "Rated games and structured play",
         "Lunch, outdoor park time, and fun activities",
       ],
@@ -576,7 +576,7 @@ export const campOverviewPage = {
     },
     {
       question: "Who leads instruction?",
-      answer: "All instruction is led by FIDE Masters with more than 25 years of experience in the field.",
+      answer: "All instruction is led by Chess Masters with more than 25 years of experience in the field.",
     },
     {
       question: "What should students bring?",
@@ -1023,7 +1023,7 @@ export const faqPage = {
     },
     {
       title: "Who leads instruction?",
-      text: "All instruction is led by FIDE Masters with more than 25 years of experience in the field.",
+      text: "All instruction is led by Chess Masters with more than 25 years of experience in the field.",
     },
     {
       title: "What should students bring?",
@@ -1763,7 +1763,7 @@ export const faqItems = [
   {
     question: "What is a typical camp day like?",
     answer:
-      "Camp runs from 9:00 AM to 3:00 PM and includes chess instruction with FIDE Masters, rated games, lunch, outdoor park time, and fun activities.",
+      "Camp runs from 9:00 AM to 3:00 PM and includes chess instruction with Chess Masters, rated games, lunch, outdoor park time, and fun activities.",
   },
   {
     question: "What should my child bring?",

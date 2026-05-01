@@ -11,7 +11,7 @@ const campOptions = {
   "single-day": {
     label: "Single Day Camp",
     amount: 15000,
-    description: "One full camp day with FIDE Masters, rated games, lunch, outdoor park time, and fun activities at 62 E 92nd Street, New York, NY 10128.",
+    description: "One full camp day with Chess Masters, rated games, lunch, outdoor park time, and fun activities at 62 E 92nd Street, New York, NY 10128.",
     campTime: "9:00 AM - 3:00 PM",
   },
   "half-day-am": {
