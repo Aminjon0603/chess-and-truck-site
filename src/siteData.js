@@ -873,6 +873,20 @@ export const aboutPage = {
     title: "What Matters Most to Families",
     intro: "We prioritize fun, clarity, structure, and meaningful instruction -- every step of the way.",
   },
+  coachSpotlight: {
+    eyebrow: "Meet the Chess Masters",
+    title: "Meet Andrea",
+    intro: "Italian Chess Master • 24 years of teaching experience",
+    paragraphs: [
+      "Based in New York, Andrea has spent nearly 24 years teaching chess through camps, private lessons, after-school programs, birthday events, and promotional programs in both the U.S. and Canada.",
+      "He brings a rare mix of structure, energy, and joy to every lesson, helping young players discover the beauty of chess through serious instruction that still feels genuinely fun.",
+    ],
+    highlights: [
+      "24 years teaching chess",
+      "Camps, lessons, events, and after-school programs",
+      "NYC-based with international coaching experience",
+    ],
+  },
   pillars: [
     {
       title: "Transparent program design",

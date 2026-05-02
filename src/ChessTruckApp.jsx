@@ -39,6 +39,7 @@ import lessonOnlineVisual from "./assets/lesson-online.svg";
 import lessonPhoto from "./assets/private-lesson-visual.svg";
 import dojoMark from "./assets/dojo-mark.svg";
 import trophyBadge from "./assets/trophy-badge.svg";
+import andreaPhoto from "./assets/andrea.jpg";
 import {
   validateCampBookingFields,
   validateContactFields,
@@ -1877,6 +1878,35 @@ function AboutPage({ currentPath, navigate }) {
                 <p>{item.text}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="shell">
+          <div className="surface coach-spotlight">
+            <div className="coach-spotlight-media">
+              <img
+                src={andreaPhoto}
+                alt="Andrea teaching chess outdoors with a board set up in front of him"
+                className="coach-spotlight-image"
+              />
+            </div>
+            <div className="coach-spotlight-copy">
+              <span className="section-tag">{aboutPage.coachSpotlight.eyebrow}</span>
+              <h2>{aboutPage.coachSpotlight.title}</h2>
+              <p className="coach-spotlight-role">{aboutPage.coachSpotlight.intro}</p>
+              <div className="coach-spotlight-text">
+                {aboutPage.coachSpotlight.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+              <ul className="coach-spotlight-highlights">
+                {aboutPage.coachSpotlight.highlights.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
