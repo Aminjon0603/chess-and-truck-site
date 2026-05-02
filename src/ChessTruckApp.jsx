@@ -2063,6 +2063,19 @@ function CampsOverviewPage({
   const selectedOption =
     CAMP_PURCHASE_OPTION_MAP.get(selectedCampOptionId) || CAMP_PURCHASE_OPTIONS[0];
 
+  const scrollToCampSection = (sectionId) => (event) => {
+    event.preventDefault();
+    const section = document.getElementById(sectionId);
+    if (!section) {
+      return;
+    }
+
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   return (
     <>
       <section className="page-hero lesson-page-hero camp-overview-hero">
@@ -2083,13 +2096,25 @@ function CampsOverviewPage({
             ) : null}
 
             <div className="cta-row">
-              <a href="#camp-booking" className="btn btn-primary btn-emphasis">
+              <a
+                href="#camp-booking"
+                className="btn btn-primary btn-emphasis"
+                onClick={scrollToCampSection("camp-booking")}
+              >
                 Enroll Now
               </a>
-              <a href="#camp-schedule" className="btn btn-secondary">
+              <a
+                href="#camp-schedule"
+                className="btn btn-secondary"
+                onClick={scrollToCampSection("camp-schedule")}
+              >
                 View Schedule
               </a>
-              <a href="#camp-location" className="btn btn-secondary">
+              <a
+                href="#camp-location"
+                className="btn btn-secondary"
+                onClick={scrollToCampSection("camp-location")}
+              >
                 Two Blocks Away from Central Park
               </a>
             </div>

@@ -68,6 +68,16 @@ a {
   text-decoration: none;
 }
 
+button,
+a,
+.btn,
+.camp-booking-button,
+.contact-link,
+.fact-list-card-link {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 :focus-visible {
   outline: 3px solid rgba(47, 116, 104, 0.26);
   outline-offset: 2px;
@@ -743,6 +753,12 @@ a {
 
 .page-section {
   padding: 28px 0 30px;
+}
+
+#camp-booking,
+#camp-location,
+#camp-schedule {
+  scroll-margin-top: 92px;
 }
 
 .page-section .shell {
