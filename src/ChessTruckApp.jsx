@@ -395,6 +395,9 @@ const findFirstStepWithErrors = (errors) =>
     (stepDefinition) => Object.keys(getStepErrors(errors, stepDefinition)).length > 0
   );
 
+const getFieldClassName = (hasError, baseClassName = "field") =>
+  hasError ? `${baseClassName} has-error` : baseClassName;
+
 const knownRoutes = new Set([
   "/",
   "/camps",
@@ -1063,7 +1066,13 @@ function ContactDirectory() {
   );
 }
 
-function ContactForm({ contactState, contactSubmitState, updateContactField, handleContactSubmit }) {
+function ContactForm({
+  contactState,
+  contactErrors,
+  contactSubmitState,
+  updateContactField,
+  handleContactSubmit,
+}) {
   return (
     <form className="surface contact-form" onSubmit={handleContactSubmit}>
       <span className="mini-tag">CONTACT OUR TEAM</span>
@@ -1072,7 +1081,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
         Ask about availability, group placement, scheduling, or anything else - we're happy to help.
       </p>
 
-      <label className="field">
+      <label className={getFieldClassName(contactErrors.name)}>
         <span>Name *</span>
         <input
           name="name"
@@ -1080,11 +1089,13 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           onChange={updateContactField}
           placeholder="Your name"
           autoComplete="name"
+          aria-invalid={contactErrors.name ? "true" : "false"}
           required
         />
+        {contactErrors.name ? <small className="field-error">{contactErrors.name}</small> : null}
       </label>
 
-      <label className="field">
+      <label className={getFieldClassName(contactErrors.email)}>
         <span>Email *</span>
         <input
           name="email"
@@ -1093,11 +1104,13 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           onChange={updateContactField}
           placeholder="you@example.com"
           autoComplete="email"
+          aria-invalid={contactErrors.email ? "true" : "false"}
           required
         />
+        {contactErrors.email ? <small className="field-error">{contactErrors.email}</small> : null}
       </label>
 
-      <label className="field">
+      <label className={getFieldClassName(contactErrors.phone)}>
         <span>Phone</span>
         <input
           name="phone"
@@ -1107,7 +1120,9 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           placeholder="+1 ..."
           autoComplete="tel"
           inputMode="tel"
+          aria-invalid={contactErrors.phone ? "true" : "false"}
         />
+        {contactErrors.phone ? <small className="field-error">{contactErrors.phone}</small> : null}
       </label>
 
       <label className="field honeypot-field" aria-hidden="true" tabIndex="-1">
@@ -1121,7 +1136,7 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
         />
       </label>
 
-      <label className="field">
+      <label className={getFieldClassName(contactErrors.message)}>
         <span>Message *</span>
         <textarea
           name="message"
@@ -1130,8 +1145,10 @@ function ContactForm({ contactState, contactSubmitState, updateContactField, han
           rows="5"
           placeholder="Let us know how we can help."
           autoComplete="off"
+          aria-invalid={contactErrors.message ? "true" : "false"}
           required
         />
+        {contactErrors.message ? <small className="field-error">{contactErrors.message}</small> : null}
       </label>
 
       <button type="submit" className="btn btn-primary btn-full" disabled={contactSubmitState.status === "loading"}>
@@ -1390,11 +1407,17 @@ function CampBookingFormPanel({
 
         {!isFlexiblePackOption ? (
           <div className="field-grid camp-date-picker-grid">
-            <label className="field field-span-2">
+            <label
+              className={getFieldClassName(
+                Boolean(campBookingErrors.schedulePreference),
+                "field field-span-2"
+              )}
+            >
               <span>{selectedLabel}</span>
               <select
                 name="schedulePreference"
                 value={campBookingState.schedulePreference}
+                aria-invalid={campBookingErrors.schedulePreference ? "true" : "false"}
                 onChange={(event) => {
                   const nextValue = event.target.value;
                   if (isWeeklyOption) {
@@ -1431,7 +1454,12 @@ function CampBookingFormPanel({
         ) : null}
 
         {isDateSelectionOption ? (
-          <article className="surface camp-week-preview camp-day-preview">
+          <article
+            className={`surface camp-week-preview camp-day-preview${
+              campBookingErrors.selectedDays ? " has-error" : ""
+            }`}
+            data-error-target="selectedDays"
+          >
             <div className="camp-week-preview-head">
               <div>
                 <span className="mini-tag">Selected days</span>
@@ -1496,7 +1524,7 @@ function CampBookingFormPanel({
             </div>
           </div>
           <div className="field-grid">
-            <label className="field">
+            <label className={getFieldClassName(campBookingErrors.parentFirstName)}>
               <span>Parent first name</span>
               <input
                 type="text"
@@ -1504,12 +1532,13 @@ function CampBookingFormPanel({
                 value={campBookingState.parentFirstName}
                 onChange={(event) => updateCampBookingField("parentFirstName", event.target.value)}
                 autoComplete="given-name"
+                aria-invalid={campBookingErrors.parentFirstName ? "true" : "false"}
               />
               {campBookingErrors.parentFirstName ? (
                 <span className="field-error">{campBookingErrors.parentFirstName}</span>
               ) : null}
             </label>
-            <label className="field">
+            <label className={getFieldClassName(campBookingErrors.parentLastName)}>
               <span>Parent last name</span>
               <input
                 type="text"
@@ -1517,12 +1546,13 @@ function CampBookingFormPanel({
                 value={campBookingState.parentLastName}
                 onChange={(event) => updateCampBookingField("parentLastName", event.target.value)}
                 autoComplete="family-name"
+                aria-invalid={campBookingErrors.parentLastName ? "true" : "false"}
               />
               {campBookingErrors.parentLastName ? (
                 <span className="field-error">{campBookingErrors.parentLastName}</span>
               ) : null}
             </label>
-            <label className="field">
+            <label className={getFieldClassName(campBookingErrors.email)}>
               <span>Email</span>
               <input
                 type="email"
@@ -1531,12 +1561,13 @@ function CampBookingFormPanel({
                 onChange={(event) => updateCampBookingField("email", event.target.value)}
                 autoComplete="email"
                 inputMode="email"
+                aria-invalid={campBookingErrors.email ? "true" : "false"}
               />
               {campBookingErrors.email ? (
                 <span className="field-error">{campBookingErrors.email}</span>
               ) : null}
             </label>
-            <label className="field">
+            <label className={getFieldClassName(campBookingErrors.phone)}>
               <span>Phone</span>
               <input
                 type="tel"
@@ -1545,6 +1576,7 @@ function CampBookingFormPanel({
                 onChange={(event) => updateCampBookingField("phone", event.target.value)}
                 autoComplete="tel"
                 inputMode="tel"
+                aria-invalid={campBookingErrors.phone ? "true" : "false"}
               />
               {campBookingErrors.phone ? (
                 <span className="field-error">{campBookingErrors.phone}</span>
@@ -1562,7 +1594,7 @@ function CampBookingFormPanel({
             </div>
           </div>
           <div className="field-grid">
-            <label className="field">
+            <label className={getFieldClassName(campBookingErrors.studentName)}>
               <span>Student name</span>
               <input
                 type="text"
@@ -1570,12 +1602,13 @@ function CampBookingFormPanel({
                 value={campBookingState.studentName}
                 onChange={(event) => updateCampBookingField("studentName", event.target.value)}
                 autoComplete="off"
+                aria-invalid={campBookingErrors.studentName ? "true" : "false"}
               />
               {campBookingErrors.studentName ? (
                 <span className="field-error">{campBookingErrors.studentName}</span>
               ) : null}
             </label>
-            <label className="field">
+            <label className={getFieldClassName(campBookingErrors.studentAge)}>
               <span>Student age</span>
               <input
                 type="text"
@@ -1584,12 +1617,13 @@ function CampBookingFormPanel({
                 onChange={(event) => updateCampBookingField("studentAge", event.target.value)}
                 placeholder="Example: Age 9 or Grade 4"
                 autoComplete="off"
+                aria-invalid={campBookingErrors.studentAge ? "true" : "false"}
               />
               {campBookingErrors.studentAge ? (
                 <span className="field-error">{campBookingErrors.studentAge}</span>
               ) : null}
             </label>
-            <label className="field field-span-2">
+            <label className={getFieldClassName(campBookingErrors.studentLevel, "field field-span-2")}>
               <span>Current level</span>
               <input
                 type="text"
@@ -1598,6 +1632,7 @@ function CampBookingFormPanel({
                 onChange={(event) => updateCampBookingField("studentLevel", event.target.value)}
                 placeholder="Example: Beginner, improving, tournament player"
                 autoComplete="off"
+                aria-invalid={campBookingErrors.studentLevel ? "true" : "false"}
               />
               {campBookingErrors.studentLevel ? (
                 <span className="field-error">{campBookingErrors.studentLevel}</span>
@@ -1615,7 +1650,7 @@ function CampBookingFormPanel({
             </div>
           </div>
           <div className="field-grid">
-            <label className="field field-span-2">
+            <label className={getFieldClassName(false, "field field-span-2")}>
               <span>Allergies/anything we need to know</span>
               <textarea
                 name="notes"
@@ -2788,7 +2823,15 @@ function FaqPage({ currentPath, navigate }) {
   );
 }
 
-function ContactPage({ currentPath, navigate, contactState, contactSubmitState, updateContactField, handleContactSubmit }) {
+function ContactPage({
+  currentPath,
+  navigate,
+  contactState,
+  contactErrors,
+  contactSubmitState,
+  updateContactField,
+  handleContactSubmit,
+}) {
   return (
     <>
       <PageHero
@@ -2805,6 +2848,7 @@ function ContactPage({ currentPath, navigate, contactState, contactSubmitState, 
           <ContactDirectory />
           <ContactForm
             contactState={contactState}
+            contactErrors={contactErrors}
             contactSubmitState={contactSubmitState}
             updateContactField={updateContactField}
             handleContactSubmit={handleContactSubmit}
@@ -2935,7 +2979,7 @@ function RegisterPage({
                 </div>
 
                 <div className="field-grid">
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.firstName)}>
                     <span>First Name *</span>
                     <input
                       name="firstName"
@@ -2943,13 +2987,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="First name"
                       autoComplete="given-name"
+                      aria-invalid={registrationErrors.firstName ? "true" : "false"}
                     />
                     {registrationErrors.firstName ? (
                       <small className="field-error">{registrationErrors.firstName}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.lastName)}>
                     <span>Last Name *</span>
                     <input
                       name="lastName"
@@ -2957,13 +3002,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Last name"
                       autoComplete="family-name"
+                      aria-invalid={registrationErrors.lastName ? "true" : "false"}
                     />
                     {registrationErrors.lastName ? (
                       <small className="field-error">{registrationErrors.lastName}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.phone)}>
                     <span>Phone *</span>
                     <input
                       name="phone"
@@ -2971,13 +3017,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="+1 ..."
                       autoComplete="tel"
+                      aria-invalid={registrationErrors.phone ? "true" : "false"}
                     />
                     {registrationErrors.phone ? (
                       <small className="field-error">{registrationErrors.phone}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.email)}>
                     <span>Email *</span>
                     <input
                       name="email"
@@ -2986,13 +3033,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="family@example.com"
                       autoComplete="email"
+                      aria-invalid={registrationErrors.email ? "true" : "false"}
                     />
                     {registrationErrors.email ? (
                       <small className="field-error">{registrationErrors.email}</small>
                     ) : null}
                   </label>
 
-                  <label className="field field-span-2">
+                  <label className={getFieldClassName(registrationErrors.additionalEmails, "field field-span-2")}>
                     <span>Additional Emails</span>
                     <input
                       name="additionalEmails"
@@ -3000,6 +3048,7 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Add any other addresses that should receive confirmations"
                       autoComplete="off"
+                      aria-invalid={registrationErrors.additionalEmails ? "true" : "false"}
                     />
                     {registrationErrors.additionalEmails ? (
                       <small className="field-error">{registrationErrors.additionalEmails}</small>
@@ -3035,7 +3084,7 @@ function RegisterPage({
                 </div>
 
                 <div className="field-grid">
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.playerFirstName)}>
                     <span>Player First Name *</span>
                     <input
                       name="playerFirstName"
@@ -3043,13 +3092,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Player first name"
                       autoComplete="off"
+                      aria-invalid={registrationErrors.playerFirstName ? "true" : "false"}
                     />
                     {registrationErrors.playerFirstName ? (
                       <small className="field-error">{registrationErrors.playerFirstName}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.playerLastName)}>
                     <span>Player Last Name *</span>
                     <input
                       name="playerLastName"
@@ -3057,13 +3107,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Player last name"
                       autoComplete="off"
+                      aria-invalid={registrationErrors.playerLastName ? "true" : "false"}
                     />
                     {registrationErrors.playerLastName ? (
                       <small className="field-error">{registrationErrors.playerLastName}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.playerGrade)}>
                     <span>Player Grade *</span>
                     <input
                       name="playerGrade"
@@ -3071,6 +3122,7 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Grade"
                       autoComplete="off"
+                      aria-invalid={registrationErrors.playerGrade ? "true" : "false"}
                     />
                     {registrationErrors.playerGrade ? (
                       <small className="field-error">{registrationErrors.playerGrade}</small>
@@ -3088,9 +3140,14 @@ function RegisterPage({
                     />
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.section)}>
                     <span>Section *</span>
-                    <select name="section" value={registrationState.section} onChange={updateRegistrationField}>
+                    <select
+                      name="section"
+                      value={registrationState.section}
+                      onChange={updateRegistrationField}
+                      aria-invalid={registrationErrors.section ? "true" : "false"}
+                    >
                       <option value="">Select section</option>
                       <option value="Open">Open</option>
                       <option value="Beginner">Beginner</option>
@@ -3100,12 +3157,13 @@ function RegisterPage({
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.serviceLevel)}>
                     <span>Service Level *</span>
                     <select
                       name="serviceLevel"
                       value={registrationState.serviceLevel}
                       onChange={updateRegistrationField}
+                      aria-invalid={registrationErrors.serviceLevel ? "true" : "false"}
                     >
                       <option value="">Select service level</option>
                       {serviceLevels.map((item) => (
@@ -3119,7 +3177,7 @@ function RegisterPage({
                     ) : null}
                   </label>
 
-                  <label className="field field-span-2">
+                  <label className={getFieldClassName(registrationErrors.uscfId, "field field-span-2")}>
                     <span>USCF ID</span>
                     <input
                       name="uscfId"
@@ -3127,6 +3185,7 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Required for the Open section"
                       autoComplete="off"
+                      aria-invalid={registrationErrors.uscfId ? "true" : "false"}
                     />
                     <small className="field-note">
                       Players in the Open section need an active USCF membership. Leave this blank
@@ -3153,7 +3212,7 @@ function RegisterPage({
                 </div>
 
                 <div className="field-grid">
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.parentName)}>
                     <span>Parent / Guardian Name *</span>
                     <input
                       name="parentName"
@@ -3161,13 +3220,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Parent or guardian name"
                       autoComplete="name"
+                      aria-invalid={registrationErrors.parentName ? "true" : "false"}
                     />
                     {registrationErrors.parentName ? (
                       <small className="field-error">{registrationErrors.parentName}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.parentEmail)}>
                     <span>Parent Email *</span>
                     <input
                       name="parentEmail"
@@ -3176,13 +3236,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="parent@example.com"
                       autoComplete="email"
+                      aria-invalid={registrationErrors.parentEmail ? "true" : "false"}
                     />
                     {registrationErrors.parentEmail ? (
                       <small className="field-error">{registrationErrors.parentEmail}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.parentPhone)}>
                     <span>Parent Phone *</span>
                     <input
                       name="parentPhone"
@@ -3190,6 +3251,7 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="+1 ..."
                       autoComplete="tel"
+                      aria-invalid={registrationErrors.parentPhone ? "true" : "false"}
                     />
                     {registrationErrors.parentPhone ? (
                       <small className="field-error">{registrationErrors.parentPhone}</small>
@@ -3208,7 +3270,7 @@ function RegisterPage({
                 </div>
 
                 <div className="field-grid">
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.emergencyName)}>
                     <span>Emergency Contact Name *</span>
                     <input
                       name="emergencyName"
@@ -3216,13 +3278,14 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="Emergency contact name"
                       autoComplete="off"
+                      aria-invalid={registrationErrors.emergencyName ? "true" : "false"}
                     />
                     {registrationErrors.emergencyName ? (
                       <small className="field-error">{registrationErrors.emergencyName}</small>
                     ) : null}
                   </label>
 
-                  <label className="field">
+                  <label className={getFieldClassName(registrationErrors.emergencyPhone)}>
                     <span>Emergency Contact Phone *</span>
                     <input
                       name="emergencyPhone"
@@ -3230,6 +3293,7 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       placeholder="+1 ..."
                       autoComplete="tel"
+                      aria-invalid={registrationErrors.emergencyPhone ? "true" : "false"}
                     />
                     {registrationErrors.emergencyPhone ? (
                       <small className="field-error">{registrationErrors.emergencyPhone}</small>
@@ -3248,7 +3312,7 @@ function RegisterPage({
                 </div>
 
                 <div className="field-grid">
-                  <label className="field field-span-2">
+                  <label className={getFieldClassName(registrationErrors.medicalInfo, "field field-span-2")}>
                     <span>Medical Information *</span>
                     <textarea
                       name="medicalInfo"
@@ -3256,6 +3320,7 @@ function RegisterPage({
                       onChange={updateRegistrationField}
                       rows="4"
                       placeholder="Allergies, medical conditions, medications, or notes for staff"
+                      aria-invalid={registrationErrors.medicalInfo ? "true" : "false"}
                     />
                     {registrationErrors.medicalInfo ? (
                       <small className="field-error">{registrationErrors.medicalInfo}</small>
@@ -3386,6 +3451,7 @@ function ChessTruckApp() {
       ""
   );
   const [contactState, setContactState] = useState(contactInitialState);
+  const [contactErrors, setContactErrors] = useState({});
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
   const [hasLoadedRegistrationDraft, setHasLoadedRegistrationDraft] = useState(false);
   const [isCompactViewport, setIsCompactViewport] = useState(false);
@@ -3765,7 +3831,10 @@ function ChessTruckApp() {
 
   const focusFieldByName = (fieldName, frameCount = 1) => {
     const tryFocus = () => {
-      const field = document.querySelector(`[name="${fieldName}"]`);
+      const field =
+        fieldName === "selectedDays"
+          ? document.querySelector('[data-error-target="selectedDays"] .camp-week-day-chip')
+          : document.querySelector(`[name="${fieldName}"]`);
 
       if (field instanceof HTMLElement) {
         field.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
@@ -3840,6 +3909,11 @@ function ChessTruckApp() {
   const updateContactField = ({ target }) => {
     const { name, value } = target;
     setContactState((current) => ({ ...current, [name]: value }));
+    setContactErrors((current) => {
+      const next = { ...current };
+      delete next[name];
+      return next;
+    });
 
     if (contactSubmitState.status !== "idle") {
       setContactSubmitState({ status: "idle", message: "" });
@@ -4047,6 +4121,7 @@ function ChessTruckApp() {
   const handleContactSubmit = async (event) => {
     event.preventDefault();
     const contactErrors = validateContactFields(contactState);
+    setContactErrors(contactErrors);
 
     if (Object.keys(contactErrors).length > 0) {
       focusFirstErrorField(contactErrors);
@@ -4179,6 +4254,7 @@ function ChessTruckApp() {
             currentPath={currentPath}
             navigate={navigate}
             contactState={contactState}
+            contactErrors={contactErrors}
             contactSubmitState={contactSubmitState}
             updateContactField={updateContactField}
             handleContactSubmit={handleContactSubmit}
@@ -4196,6 +4272,7 @@ function ChessTruckApp() {
             currentPath={currentPath}
             navigate={navigate}
             contactState={contactState}
+            contactErrors={contactErrors}
             contactSubmitState={contactSubmitState}
             updateContactField={updateContactField}
             handleContactSubmit={handleContactSubmit}

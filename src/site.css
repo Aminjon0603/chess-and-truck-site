@@ -2241,6 +2241,7 @@ a,
   border: 1px solid var(--line);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.88);
+  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
 }
 
 .field input::placeholder,
@@ -2254,6 +2255,25 @@ a,
   border-color: rgba(46, 107, 87, 0.32);
   box-shadow: 0 0 0 4px rgba(46, 107, 87, 0.08);
   outline: none;
+}
+
+.field.has-error > span:first-child {
+  color: #9e2b1a;
+}
+
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: rgba(177, 50, 31, 0.72);
+  background: rgba(255, 247, 246, 0.96);
+  box-shadow: 0 0 0 4px rgba(177, 50, 31, 0.12);
+}
+
+.field input[aria-invalid="true"]:focus,
+.field select[aria-invalid="true"]:focus,
+.field textarea[aria-invalid="true"]:focus {
+  border-color: rgba(177, 50, 31, 0.88);
+  box-shadow: 0 0 0 4px rgba(177, 50, 31, 0.16);
 }
 
 .field textarea {
@@ -2289,6 +2309,22 @@ a,
 .field-error {
   color: #b1321f;
   font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.camp-week-preview.has-error {
+  border-color: rgba(177, 50, 31, 0.28);
+  box-shadow: 0 0 0 4px rgba(177, 50, 31, 0.08);
+}
+
+.camp-week-preview.has-error .camp-week-preview-head strong,
+.camp-week-preview.has-error .field-note {
+  color: #9e2b1a;
+}
+
+.camp-week-preview.has-error .camp-week-day-chip {
+  border-color: rgba(177, 50, 31, 0.45);
 }
 
 .mobile-stepper,
