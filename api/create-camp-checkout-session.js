@@ -26,18 +26,6 @@ const campOptions = {
     description: "One half-day PM chess camp session at 62 E 92nd Street, New York, NY 10128.",
     campTime: "12:00 PM - 3:00 PM",
   },
-  "flex-5-pack": {
-    label: "5-Day Flexible Pack",
-    amount: 80000,
-    description: "Five flexible full camp days to schedule later at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "Dates selected later",
-  },
-  "flex-10-pack": {
-    label: "10-Day Flexible Pack",
-    amount: 150000,
-    description: "Ten flexible full camp days to schedule later at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "Dates selected later",
-  },
 };
 
 const campAddOns = {
@@ -64,7 +52,7 @@ const campExtraServices = {
   },
 };
 
-const flexPackOptionIds = new Set(["flex-5-pack", "flex-10-pack"]);
+const flexPackOptionIds = new Set();
 const dateSelectionOptionIds = new Set(["single-day", "half-day-am", "half-day-pm"]);
 
 const sanitize = (value, limit = 120) => {
@@ -336,8 +324,6 @@ export default {
         ? selectedDays.length === 1
           ? selectedDays[0]
           : `${selectedDays.length} selected ${optionId === "single-day" ? "camp days" : "half-day sessions"}`
-        : isFlexiblePackOption
-          ? "Dates selected later"
         : schedulePreference;
     const notes = sanitize(payload.notes, 300);
     const isQaEligible = isQaEligibleBooking({ email, phone });

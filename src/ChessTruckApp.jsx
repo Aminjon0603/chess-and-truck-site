@@ -118,20 +118,16 @@ const CAMP_OPTION_BASE_AMOUNTS = {
   "single-day": 150,
   "half-day-am": 95,
   "half-day-pm": 95,
-  "flex-5-pack": 800,
-  "flex-10-pack": 1500,
 };
 
 const CAMP_WEEKLY_OPTION_IDS = new Set(["full-week"]);
 const CAMP_DATE_SELECTION_OPTION_IDS = new Set(["single-day", "half-day-am", "half-day-pm"]);
-const CAMP_FLEX_PACK_OPTION_IDS = new Set(["flex-5-pack", "flex-10-pack"]);
+const CAMP_FLEX_PACK_OPTION_IDS = new Set();
 const CAMP_OPTIONS_WITH_ADD_ONS = new Set([
   "full-week",
   "single-day",
   "half-day-am",
   "half-day-pm",
-  "flex-5-pack",
-  "flex-10-pack",
 ]);
 
 const CAMP_ADD_ONS = [
@@ -179,7 +175,7 @@ const campShortWeekdayFormatter = new Intl.DateTimeFormat("en-US", {
 
 const buildCampDayOptions = () => {
   const options = [];
-  const endDate = new Date(2026, 7, 21);
+  const endDate = new Date(2026, 5, 19);
 
   for (let current = new Date(2026, 5, 15); current <= endDate; ) {
     if (current.getDay() !== 0 && current.getDay() !== 6) {
@@ -991,7 +987,7 @@ function SiteFooter({ currentPath, navigate }) {
               <p>{campOverviewPage.intro}</p>
               <div className="footer-meta">
                 <span>{featuredTournament.venueLabel || "62 E 92nd Street, New York, NY 10128"}</span>
-                <strong>{featuredTournament.scheduleLabel || "June 15 - August 21 · Weekdays"}</strong>
+                <strong>{featuredTournament.scheduleLabel || "June 15 - June 19 | Weekdays"}</strong>
               </div>
               <AppLink
                 to="/camps"
@@ -1502,19 +1498,6 @@ function CampBookingFormPanel({
           </article>
         ) : null}
 
-        {isFlexiblePackOption ? (
-          <article className="surface camp-week-preview camp-flex-pack-preview">
-            <div className="camp-week-preview-head">
-              <div>
-                <span className="mini-tag">Flexible dates</span>
-                <h3>Choose your dates later</h3>
-              </div>
-              <strong>{selectedOption.id === "flex-5-pack" ? "5-day pack" : "10-day pack"}</strong>
-            </div>
-            <p className="field-note">Purchase the pack now and finalize the camp dates later.</p>
-          </article>
-        ) : null}
-
         <div className="form-section">
           <div className="form-section-head">
             <div className="section-count">01</div>
@@ -1754,14 +1737,14 @@ function CampBookingFormPanel({
             <div className="summary-list summary-list-booking">
               <div>
                 <span>Dates</span>
-                <strong>June 15 - August 21 · Weekdays</strong>
+                <strong>June 15 - June 19 | Weekdays</strong>
               </div>
               <div>
                 <span>Location</span>
                     <strong>62 E 92nd Street, New York, NY 10128</strong>
               </div>
               <div>
-                <span>{isWeeklyOption ? "Week" : isFlexiblePackOption ? "Flexible dates" : "Dates"}</span>
+                <span>{isWeeklyOption ? "Week" : "Dates"}</span>
                 <strong>
                   {isWeeklyOption
                     ? selectedSchedule || "Choose a week above"
