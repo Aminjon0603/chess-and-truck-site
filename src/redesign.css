@@ -1457,6 +1457,777 @@
   }
 }
 
+/* ------------------------------------------------- inner program pages */
+/* Camps, Tournaments, and Private Lessons, built on the homepage system. */
+
+.pg-hero {
+  padding: 56px 0 72px;
+  background: var(--ac-cream);
+}
+
+.pg-hero-camps {
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(196, 149, 73, 0.18), transparent 55%),
+    var(--ac-cream);
+}
+
+.pg-hero-tournaments {
+  background:
+    radial-gradient(ellipse at 90% 20%, rgba(47, 116, 104, 0.14), transparent 55%),
+    var(--ac-cream);
+}
+
+.pg-hero-lessons {
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(196, 149, 73, 0.14), transparent 50%),
+    var(--ac-cream);
+}
+
+.pg-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 56px;
+  align-items: center;
+}
+
+.pg-hero-copy {
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+}
+
+.pg-hero-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+
+.pg-hero-copy h1 {
+  margin: 0;
+  max-width: 16ch;
+  font-family: var(--display);
+  font-size: clamp(2.3rem, 4.2vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: var(--ac-ink);
+  text-wrap: balance;
+}
+
+/* fact panel (camps: dark, tournaments: light) */
+
+.pg-fact-panel {
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+  border-radius: 22px;
+}
+
+.pg-fact-panel-dark {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(220, 185, 120, 0.16), transparent 50%),
+    linear-gradient(160deg, var(--ac-green-900), var(--ac-green-950));
+  color: #e7ede9;
+  box-shadow: 0 24px 48px -20px rgba(16, 34, 30, 0.45);
+}
+
+.pg-fact-panel-light {
+  background: var(--ac-paper);
+  border: 1px solid var(--ac-line);
+  box-shadow: 0 20px 44px -24px rgba(17, 29, 25, 0.3);
+}
+
+.pg-fact-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pg-fact-panel-head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.pg-fact-panel-dark h2 {
+  color: #fff;
+}
+
+.pg-fact-panel-light h2 {
+  color: var(--ac-ink);
+}
+
+.pg-fact-panel dl {
+  display: grid;
+  margin: 0;
+}
+
+.pg-fact-panel dl div {
+  display: grid;
+  gap: 2px;
+  padding: 12px 0;
+  border-top: 1px solid var(--ac-line);
+}
+
+.pg-fact-panel-dark dl div {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.pg-fact-panel dt {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pg-fact-panel-dark dt {
+  color: var(--ac-gold-light);
+}
+
+.pg-fact-panel-light dt {
+  color: var(--ac-gold-text);
+}
+
+.pg-fact-panel dd {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.pg-fact-panel-dark dd {
+  color: #fff;
+}
+
+.pg-fact-panel-light dd {
+  color: var(--ac-ink);
+}
+
+/* lessons: "every lesson" card */
+
+.pg-includes {
+  padding: 30px;
+  border-radius: 22px;
+  border: 1px solid var(--ac-line);
+  border-top: 4px solid var(--ac-gold);
+  background: var(--ac-paper);
+  box-shadow: 0 20px 44px -24px rgba(17, 29, 25, 0.3);
+}
+
+.pg-includes h2 {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ac-ink);
+}
+
+.pg-includes ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-includes li {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  padding: 14px 0 14px 24px;
+  border-bottom: 1px solid var(--ac-line);
+}
+
+.pg-includes li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.pg-includes li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 22px;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  background: var(--ac-gold);
+}
+
+.pg-includes h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ac-ink);
+}
+
+.pg-includes p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ac-ink-soft);
+}
+
+/* camps: day timeline */
+
+.pg-day-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.pg-day-grid .ac-section-heading {
+  position: sticky;
+  top: calc(var(--ac-header-height) + 32px);
+  margin-bottom: 0;
+}
+
+.pg-timeline {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-timeline li {
+  display: grid;
+  grid-template-columns: 176px minmax(0, 1fr);
+  gap: 20px;
+  padding: 22px 0;
+  border-top: 1px solid var(--ac-line-strong);
+}
+
+.pg-timeline li:last-child {
+  border-bottom: 1px solid var(--ac-line-strong);
+}
+
+.pg-timeline-time {
+  font-family: var(--display);
+  font-size: 0.98rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ac-gold-text);
+}
+
+.pg-timeline h3,
+.pg-skill-grid h3,
+.pg-format-list h3,
+.pg-morning h3,
+.pg-flow h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--ac-ink);
+}
+
+.pg-timeline p,
+.pg-skill-grid p,
+.pg-format-list p,
+.pg-morning p,
+.pg-flow p {
+  margin: 4px 0 0;
+  max-width: 52ch;
+  line-height: 1.6;
+  color: var(--ac-ink-soft);
+}
+
+/* camps: skills */
+
+.pg-skill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-skill-grid li {
+  padding: 20px 22px;
+  border-radius: var(--ac-radius-sm);
+  background: var(--ac-paper);
+  border: 1px solid var(--ac-line);
+}
+
+/* camps: location */
+
+.pg-location {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.pg-location-copy {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+}
+
+.pg-location-copy .ac-section-heading {
+  margin-bottom: 0;
+}
+
+.pg-address {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ac-ink);
+}
+
+.pg-map {
+  overflow: hidden;
+  border-radius: var(--ac-radius);
+  border: 1px solid var(--ac-line);
+  background: var(--ac-cream-deep);
+}
+
+.pg-map iframe {
+  display: block;
+  width: 100%;
+  height: 340px;
+  border: 0;
+}
+
+/* faq */
+
+.pg-faq .ac-faq-list {
+  max-width: 860px;
+}
+
+/* tournaments: sections band */
+
+.pg-dark-section {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(220, 185, 120, 0.12), transparent 50%),
+    linear-gradient(160deg, var(--ac-green-900), var(--ac-green-950));
+}
+
+.pg-dark-section .ac-eyebrow {
+  color: var(--ac-gold-light);
+}
+
+.pg-dark-section .ac-section-heading h2 {
+  color: #fff;
+}
+
+.pg-dark-section .ac-section-heading p {
+  color: #c9d3ce;
+}
+
+.pg-section-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.pg-section-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 30px;
+  border-radius: 22px;
+  border: 1px solid rgba(220, 185, 120, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e7ede9;
+}
+
+.pg-section-tag {
+  font-family: var(--display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ac-gold-text);
+}
+
+.pg-section-card .pg-section-tag {
+  color: var(--ac-gold-light);
+}
+
+.pg-section-card h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.pg-section-card p {
+  margin: 0;
+  color: #c9d3ce;
+  line-height: 1.6;
+}
+
+.pg-section-card ul {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 0;
+  padding: 16px 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pg-section-card li {
+  position: relative;
+  padding-left: 22px;
+  line-height: 1.5;
+}
+
+.pg-section-card li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: var(--ac-gold);
+}
+
+/* tournaments: morning timeline */
+
+.pg-morning {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-morning::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 7px;
+  height: 2px;
+  background: rgba(196, 149, 73, 0.45);
+}
+
+.pg-morning li {
+  position: relative;
+  padding-top: 34px;
+}
+
+.pg-morning li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ac-green-900);
+  box-shadow: 0 0 0 4px var(--ac-cream);
+}
+
+.pg-morning-time {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ac-gold-text);
+}
+
+/* lessons: play, review, practice */
+
+.pg-flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.pg-flow li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--ac-paper);
+  border: 1px solid var(--ac-line);
+}
+
+.pg-flow li:not(:last-child)::after {
+  content: "\2192";
+  position: absolute;
+  right: -17px;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+  border-radius: 50%;
+  background: var(--ac-green-900);
+  color: var(--ac-gold-light);
+  font-size: 0.95rem;
+}
+
+.pg-flow-step {
+  font-family: var(--display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ac-gold);
+}
+
+.pg-flow h3 {
+  font-size: 1.35rem;
+}
+
+.pg-two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px;
+  align-items: start;
+}
+
+.pg-format-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-format-list li {
+  display: grid;
+  gap: 4px;
+  padding: 18px 0;
+  border-top: 1px solid var(--ac-line-strong);
+}
+
+.pg-format-list li:last-child {
+  border-bottom: 1px solid var(--ac-line-strong);
+}
+
+/* registration status panel */
+
+.pg-status-section {
+  padding-top: 8px;
+}
+
+.pg-status {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) auto;
+  gap: 32px;
+  align-items: center;
+  padding: 40px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(220, 185, 120, 0.18), transparent 45%),
+    linear-gradient(160deg, var(--ac-green-900), var(--ac-green-950));
+  color: #e7ede9;
+}
+
+.pg-status-copy {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.pg-status-copy h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #fff;
+}
+
+.pg-status-copy p {
+  margin: 0;
+  max-width: 56ch;
+  line-height: 1.6;
+  color: #c9d3ce;
+}
+
+.pg-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.pg-btn-on-dark {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.pg-btn-on-dark:hover {
+  border-color: var(--ac-gold-light);
+  color: var(--ac-gold-light);
+}
+
+@media (max-width: 1023px) {
+  .pg-hero-grid,
+  .pg-day-grid,
+  .pg-location,
+  .pg-two-col,
+  .pg-status {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .pg-day-grid .ac-section-heading {
+    position: static;
+  }
+
+  .pg-skill-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pg-section-cards,
+  .pg-flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pg-flow li:not(:last-child)::after {
+    content: "\2193";
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: -17px;
+    margin: 0 0 0 -15px;
+  }
+
+  .pg-morning {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .pg-morning::before {
+    left: 7px;
+    right: auto;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    height: auto;
+  }
+
+  .pg-morning li {
+    padding: 0 0 24px 36px;
+  }
+
+  .pg-morning li:last-child {
+    padding-bottom: 0;
+  }
+
+  .pg-status-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .pg-hero {
+    padding: 28px 0 44px;
+  }
+
+  .pg-hero-grid {
+    gap: 24px;
+  }
+
+  .pg-hero-copy {
+    gap: 14px;
+  }
+
+  .pg-hero-copy h1 {
+    font-size: 2.15rem;
+  }
+
+  .pg-fact-panel,
+  .pg-includes {
+    padding: 20px;
+  }
+
+  .pg-fact-panel dl div {
+    padding: 10px 0;
+  }
+
+  .pg-includes li {
+    padding: 12px 0 12px 22px;
+  }
+
+  .pg-includes li::before {
+    top: 20px;
+  }
+
+  .pg-timeline li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 16px 0;
+  }
+
+  .pg-skill-grid {
+    gap: 10px;
+  }
+
+  .pg-skill-grid li {
+    padding: 14px 16px;
+  }
+
+  .pg-skill-grid h3 {
+    font-size: 1rem;
+  }
+
+  .pg-skill-grid p {
+    font-size: 0.92rem;
+  }
+
+  .pg-map iframe {
+    height: 220px;
+  }
+
+  .pg-section-card {
+    padding: 22px;
+  }
+
+  .pg-section-card h3 {
+    font-size: 1.35rem;
+  }
+
+  .pg-flow li {
+    grid-template-columns: 36px minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 20px;
+  }
+
+  .pg-flow li > :not(.pg-flow-step) {
+    grid-column: 2;
+  }
+
+  .pg-flow-step {
+    grid-row: span 2;
+    font-size: 1.8rem;
+  }
+
+  .pg-status {
+    padding: 26px 22px;
+    border-radius: 20px;
+  }
+
+  .pg-status-actions,
+  .pg-status-actions .ac-btn {
+    width: 100%;
+  }
+}
+
 /* ------------------------------------------------- accessibility patches */
 
 /* Camp schedule times were gold on white at 2.7:1; this darker gold is 6.5:1. */

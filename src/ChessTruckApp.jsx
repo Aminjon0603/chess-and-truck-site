@@ -6,6 +6,7 @@ import {
   campMenuFeature,
   campMenuItems,
   campOverviewPage,
+  campsPageContent,
   contactEmails,
   contactNumbers,
   contactPage,
@@ -13,6 +14,7 @@ import {
   featuredTournament,
   footerLegalLinks,
   homePage,
+  lessonsPageContent,
   lessonMenuFeature,
   lessonMenuItems,
   masterTrainingDojo,
@@ -28,6 +30,7 @@ import {
   serviceLevels,
   siteBrand,
   termsPage,
+  tournamentsPageContent,
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
@@ -1584,6 +1587,411 @@ function AcademyHomePage({ currentPath, navigate }) {
   );
 }
 
+const scrollToSection = (sectionId) => (event) => {
+  const section = document.getElementById(sectionId);
+
+  if (!section) {
+    return;
+  }
+
+  event.preventDefault();
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+};
+
+function InnerHero({ eyebrow, title, intro, programId, actions, aside, variant }) {
+  return (
+    <section className={`pg-hero pg-hero-${variant}`} aria-labelledby="page-title">
+      <div className="ac-shell pg-hero-grid">
+        <div className="pg-hero-copy">
+          <div className="pg-hero-kicker">
+            <span className="ac-eyebrow">{eyebrow}</span>
+            <ProgramStatusBadge programId={programId} />
+          </div>
+          <h1 id="page-title">{title}</h1>
+          <p className="ac-lead">{intro}</p>
+          <div className="ac-actions">{actions}</div>
+        </div>
+        {aside}
+      </div>
+    </section>
+  );
+}
+
+function FactPanel({ title, iconKey, items, tone }) {
+  return (
+    <aside className={`pg-fact-panel pg-fact-panel-${tone}`} aria-label={title}>
+      <div className="pg-fact-panel-head">
+        <span className="ac-program-icon">
+          <ProgramIcon iconKey={iconKey} />
+        </span>
+        <h2>{title}</h2>
+      </div>
+      <dl>
+        {items.map((item) => (
+          <div key={item.label}>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+  );
+}
+
+function FaqBlock({ id, eyebrow, title, items }) {
+  return (
+    <section className="ac-section" aria-labelledby={id}>
+      <div className="ac-shell pg-faq">
+        <AcademySectionHeading id={id} eyebrow={eyebrow} title={title} />
+        <div className="ac-faq-list">
+          {items.map((item) => (
+            <details className="ac-faq-item" key={item.question}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RegistrationStatusPanel({ id, programId, title, text, currentPath, navigate, openAction }) {
+  const isOpen = isProgramOpen(programId);
+
+  return (
+    <section className="ac-section pg-status-section" id={id} aria-labelledby={`${id}-title`}>
+      <div className="ac-shell">
+        <div className="pg-status">
+          <div className="pg-status-copy">
+            <ProgramStatusBadge programId={programId} />
+            <h2 id={`${id}-title`}>{title}</h2>
+            <p>{text}</p>
+          </div>
+          <div className="pg-status-actions">
+            {isOpen && openAction ? openAction : null}
+            <AppLink
+              to="/contact"
+              navigate={navigate}
+              currentPath={currentPath}
+              className={`ac-btn ${isOpen && openAction ? "pg-btn-on-dark" : "ac-btn-gold"}`}
+            >
+              Contact us
+            </AppLink>
+            <a href={phoneContact.href} className="ac-btn pg-btn-on-dark">
+              Call or text {phoneContact.display}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CampsPage({ currentPath, navigate, bookingProps }) {
+  const content = campsPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="camps"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="camps"
+        actions={
+          <>
+            <a href="#camp-day" className="ac-btn ac-btn-primary" onClick={scrollToSection("camp-day")}>
+              See a camp day
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Ask about camp
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="Camp at a glance" iconKey="camps" items={content.glance} tone="dark" />}
+      />
+
+      <section className="ac-section pg-day-section" id="camp-day" aria-labelledby="camp-day-title">
+        <div className="ac-shell pg-day-grid">
+          <AcademySectionHeading id="camp-day-title" {...content.daySection} />
+          <ol className="pg-timeline">
+            {campOverviewPage.sampleSchedule.map((item) => (
+              <li key={item.time}>
+                <span className="pg-timeline-time">{item.time}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="camp-learn-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="camp-learn-title" {...content.learnSection} />
+          <ul className="pg-skill-grid">
+            {campOverviewPage.learningCards.map((item) => (
+              <li key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="camp-location-title">
+        <div className="ac-shell pg-location">
+          <div className="pg-location-copy">
+            <AcademySectionHeading id="camp-location-title" {...content.locationSection} />
+            <p className="pg-address">{campOverviewPage.mapSection.address}</p>
+            <a
+              href={campOverviewPage.mapSection.directionsHref}
+              target="_blank"
+              rel="noreferrer"
+              className="ac-btn ac-btn-secondary"
+            >
+              Open in Google Maps
+            </a>
+          </div>
+          <div className="pg-map">
+            <iframe
+              title="Map of 62 E 92nd Street, New York"
+              src={campOverviewPage.mapSection.embedSrc}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </section>
+
+      <FaqBlock id="camp-faq-title" {...content.faqSection} items={content.faqs} />
+
+      {isProgramOpen("camps") ? (
+        <CampsOverviewPage currentPath={currentPath} navigate={navigate} {...bookingProps} bookingOnly />
+      ) : (
+        <RegistrationStatusPanel
+          id="camp-registration"
+          programId="camps"
+          title={content.status.title}
+          text={content.status.text}
+          currentPath={currentPath}
+          navigate={navigate}
+        />
+      )}
+    </div>
+  );
+}
+
+function TournamentsPage({ currentPath, navigate }) {
+  const content = tournamentsPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="tournaments"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="tournaments"
+        actions={
+          <>
+            <a href="#sections" className="ac-btn ac-btn-primary" onClick={scrollToSection("sections")}>
+              See the sections
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="Planned format" iconKey="tournaments" items={content.plannedFormat} tone="light" />}
+      />
+
+      <section className="ac-section pg-dark-section" id="sections" aria-labelledby="sections-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="sections-title" {...content.sectionsSection} />
+          <div className="pg-section-cards">
+            {sectionOptions.map((item) => (
+              <article className="pg-section-card" key={item.id}>
+                <span className="pg-section-tag">{item.badge}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <ul>
+                  {item.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="morning-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="morning-title" {...content.morningSection} />
+          <ol className="pg-morning">
+            {content.morning.map((item) => (
+              <li key={item.time}>
+                <span className="pg-morning-time">{item.time}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="registration-steps-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="registration-steps-title" {...content.registrationSection} />
+          <ol className="ac-steps">
+            {content.registrationSteps.map((item, index) => (
+              <li key={item.title}>
+                <span className="ac-step-number" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <FaqBlock id="tournament-faq-title" {...content.faqSection} items={content.faqs} />
+
+      <RegistrationStatusPanel
+        id="tournament-registration"
+        programId="tournaments"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+        openAction={
+          <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+            Register now
+          </AppLink>
+        }
+      />
+    </div>
+  );
+}
+
+function LessonsPage({ currentPath, navigate }) {
+  const content = lessonsPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="lessons"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="lessons"
+        actions={
+          <>
+            <a href="#lesson-flow" className="ac-btn ac-btn-primary" onClick={scrollToSection("lesson-flow")}>
+              How a lesson works
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Ask about lessons
+            </AppLink>
+          </>
+        }
+        aside={
+          <aside className="pg-includes" aria-labelledby="lesson-includes-title">
+            <h2 id="lesson-includes-title">{content.includesTitle}</h2>
+            <ul>
+              {content.includes.map((item) => (
+                <li key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        }
+      />
+
+      <section className="ac-section" id="lesson-flow" aria-labelledby="lesson-flow-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="lesson-flow-title" {...content.sessionSection} />
+          <ol className="pg-flow">
+            {content.session.map((item, index) => (
+              <li key={item.title}>
+                <span className="pg-flow-step" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="lesson-formats-title">
+        <div className="ac-shell pg-two-col">
+          <div>
+            <AcademySectionHeading id="lesson-formats-title" {...content.formatsSection} />
+            <ul className="pg-format-list">
+              {privateLessonsPage.formatCards.map((item) => (
+                <li key={item.title}>
+                  <span className="pg-section-tag">{item.eyebrow}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <AcademySectionHeading id="lesson-fit-title" {...content.fitSection} />
+            <ul className="ac-pillars">
+              {content.fit.map((item) => (
+                <li key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="lesson-steps-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="lesson-steps-title" {...content.stepsSection} />
+          <ol className="ac-steps">
+            {content.steps.map((item, index) => (
+              <li key={item.title}>
+                <span className="ac-step-number" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <RegistrationStatusPanel
+        id="lesson-registration"
+        programId="lessons"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+      />
+    </div>
+  );
+}
+
 function SiteFooter({ currentPath, navigate }) {
   const academyLinks = [
     { label: "Home", path: "/" },
@@ -2734,6 +3142,7 @@ function CampsOverviewPage({
   isCampBookingFormVisible = false,
   openCampBooking = () => {},
   showProgramsOverview = false,
+  bookingOnly = false,
 }) {
   const selectedOption =
     CAMP_PURCHASE_OPTION_MAP.get(selectedCampOptionId) || CAMP_PURCHASE_OPTIONS[0];
@@ -2751,93 +3160,7 @@ function CampsOverviewPage({
     });
   };
 
-  return (
-    <>
-      <section className="page-hero lesson-page-hero camp-overview-hero">
-        <div className="shell lesson-hero-grid lesson-detail-hero-grid camp-overview-hero-grid">
-          <div className="lesson-hero-copy lesson-detail-hero-copy camp-overview-hero-copy">
-            <span className="section-tag">{campOverviewPage.eyebrow}</span>
-            <h1>{campOverviewPage.title}</h1>
-            {campOverviewPage.intro ? <p className="page-intro">{campOverviewPage.intro}</p> : null}
-
-            {campOverviewPage.chips.length ? (
-              <div className="lesson-chip-row">
-                {campOverviewPage.chips.map((item) => (
-                  <span key={item} className="lesson-chip">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            <div className="cta-row">
-              <a
-                href="#camp-booking"
-                className="btn btn-primary btn-emphasis"
-                onClick={scrollToCampSection("camp-booking")}
-              >
-                {CAMP_REGISTRATION_OPEN ? "Enroll Now" : PROGRAM_STATUS_LABELS[getProgramStatus("camps")]}
-              </a>
-              <a
-                href="#camp-schedule"
-                className="btn btn-secondary"
-                onClick={scrollToCampSection("camp-schedule")}
-              >
-                View Schedule
-              </a>
-              <a
-                href="#camp-location"
-                className="btn btn-secondary"
-                onClick={scrollToCampSection("camp-location")}
-              >
-                Two Blocks Away from Central Park
-              </a>
-            </div>
-
-            <div className="fact-list fact-list-hero camp-hero-facts">
-              {campOverviewPage.heroFacts.map((item) => (
-                <div key={item.label}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel camp-overview-hero-panel">
-            <div className="lesson-hero-top">
-              <div className="lesson-photo-shell">
-                <img src={brandLogo} alt={`${siteBrand.name} logo`} className="lesson-photo lesson-detail-photo camp-logo-photo" />
-              </div>
-
-              <div className="lesson-hero-note">
-                <span className="mini-tag mini-tag-dark">{campOverviewPage.asideTag}</span>
-                <h2>{campOverviewPage.asideTitle}</h2>
-                <p>{campOverviewPage.asideText}</p>
-              </div>
-            </div>
-
-            <div className="fact-list lesson-fact-grid">
-              {campOverviewPage.asideFacts.map((item) => (
-                <AppLink
-                  key={item.label}
-                  to="/contact"
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  className="fact-list-card-link"
-                  aria-label={`Contact Us about ${item.label.toLowerCase()}`}
-                >
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </AppLink>
-              ))}
-            </div>
-          </article>
-        </div>
-      </section>
-
-      {showProgramsOverview ? <ProgramsOverview currentPath={currentPath} navigate={navigate} /> : null}
-
+  const bookingSection = (
       <section className="page-section" id="camp-booking">
         <div className="shell">
           <SectionIntro
@@ -2933,6 +3256,100 @@ function CampsOverviewPage({
           ) : null}
         </div>
       </section>
+  );
+
+  if (bookingOnly) {
+    return bookingSection;
+  }
+
+  return (
+    <>
+      <section className="page-hero lesson-page-hero camp-overview-hero">
+        <div className="shell lesson-hero-grid lesson-detail-hero-grid camp-overview-hero-grid">
+          <div className="lesson-hero-copy lesson-detail-hero-copy camp-overview-hero-copy">
+            <span className="section-tag">{campOverviewPage.eyebrow}</span>
+            <h1>{campOverviewPage.title}</h1>
+            {campOverviewPage.intro ? <p className="page-intro">{campOverviewPage.intro}</p> : null}
+
+            {campOverviewPage.chips.length ? (
+              <div className="lesson-chip-row">
+                {campOverviewPage.chips.map((item) => (
+                  <span key={item} className="lesson-chip">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="cta-row">
+              <a
+                href="#camp-booking"
+                className="btn btn-primary btn-emphasis"
+                onClick={scrollToCampSection("camp-booking")}
+              >
+                {CAMP_REGISTRATION_OPEN ? "Enroll Now" : PROGRAM_STATUS_LABELS[getProgramStatus("camps")]}
+              </a>
+              <a
+                href="#camp-schedule"
+                className="btn btn-secondary"
+                onClick={scrollToCampSection("camp-schedule")}
+              >
+                View Schedule
+              </a>
+              <a
+                href="#camp-location"
+                className="btn btn-secondary"
+                onClick={scrollToCampSection("camp-location")}
+              >
+                Two Blocks Away from Central Park
+              </a>
+            </div>
+
+            <div className="fact-list fact-list-hero camp-hero-facts">
+              {campOverviewPage.heroFacts.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel camp-overview-hero-panel">
+            <div className="lesson-hero-top">
+              <div className="lesson-photo-shell">
+                <img src={brandLogo} alt={`${siteBrand.name} logo`} className="lesson-photo lesson-detail-photo camp-logo-photo" />
+              </div>
+
+              <div className="lesson-hero-note">
+                <span className="mini-tag mini-tag-dark">{campOverviewPage.asideTag}</span>
+                <h2>{campOverviewPage.asideTitle}</h2>
+                <p>{campOverviewPage.asideText}</p>
+              </div>
+            </div>
+
+            <div className="fact-list lesson-fact-grid">
+              {campOverviewPage.asideFacts.map((item) => (
+                <AppLink
+                  key={item.label}
+                  to="/contact"
+                  navigate={navigate}
+                  currentPath={currentPath}
+                  className="fact-list-card-link"
+                  aria-label={`Contact Us about ${item.label.toLowerCase()}`}
+                >
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </AppLink>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {showProgramsOverview ? <ProgramsOverview currentPath={currentPath} navigate={navigate} /> : null}
+
+      {bookingSection}
 
       <section className="page-section" id="camp-location">
         <div className="shell">
@@ -4681,33 +5098,21 @@ function ChessTruckApp() {
         case "/":
           return <AcademyHomePage currentPath={currentPath} navigate={navigate} />;
         case "/camps":
-          return (
-            <CampsOverviewPage
-              currentPath={currentPath}
-              navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
-            />
-          );
         case "/camps/book":
           return (
-            <CampsOverviewPage
+            <CampsPage
               currentPath={currentPath}
               navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
+              bookingProps={{
+                campCheckoutState,
+                campBookingState,
+                campBookingErrors,
+                updateCampBookingField,
+                handleCampBookingSubmit,
+                selectedCampOptionId,
+                isCampBookingFormVisible,
+                openCampBooking,
+              }}
             />
           );
         case "/camps/confirmed":
@@ -4721,26 +5126,13 @@ function ChessTruckApp() {
         case "/camps/training":
         case "/camps/prep":
         case "/camps/online":
-          return (
-            <CampsOverviewPage
-              currentPath={currentPath}
-              navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
-            />
-          );
+          return <CampsPage currentPath={currentPath} navigate={navigate} bookingProps={{}} />;
         case "/about":
           return <AboutPage currentPath={currentPath} navigate={navigate} />;
       case "/tournaments":
-        return <ProgramPage programId="tournaments" currentPath={currentPath} navigate={navigate} />;
+        return <TournamentsPage currentPath={currentPath} navigate={navigate} />;
       case "/private-lessons":
-        return <PrivateLessonsPage currentPath={currentPath} navigate={navigate} />;
+        return <LessonsPage currentPath={currentPath} navigate={navigate} />;
       case "/after-school":
         return <ProgramPage programId="afterSchool" currentPath={currentPath} navigate={navigate} />;
       case "/dojo":
@@ -4766,7 +5158,7 @@ function ChessTruckApp() {
       case "/register":
         // Tournament registration stays behind the program status, even via direct URL.
         if (!isProgramOpen("tournaments")) {
-          return <ProgramPage programId="tournaments" currentPath={currentPath} navigate={navigate} />;
+          return <TournamentsPage currentPath={currentPath} navigate={navigate} />;
         }
 
         return (

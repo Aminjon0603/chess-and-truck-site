@@ -25,4 +25,4 @@ export const CAMP_REGISTRATION_CLOSED_MESSAGE =
   "Camp registration is closed for this season. Contact us to hear when next season's dates open.";
 
 export const getRegistrationUnavailableMessage = (programName) =>
-  `${programName} registration is not open yet. Contact us and we will let you know when it opens.`;
+  `${programName} registration is not open yet. Contact us if you have questions in the meantime.`;
