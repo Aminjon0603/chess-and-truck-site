@@ -82,6 +82,9 @@ export default {
     return Response.json(
       {
         status: "paid",
+        // True when the payment belongs to a program that is not open, so the
+        // site shows "payment received" instead of a confirmed registration.
+        requiresReview: !programIsOpen,
         message: !programIsOpen
           ? "Payment received. Our team will contact you about your registration."
           : isCamp

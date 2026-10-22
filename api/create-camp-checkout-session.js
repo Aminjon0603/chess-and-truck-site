@@ -4,6 +4,7 @@ import { getRegistrationUnavailableMessage } from "../src/lib/programs.js";
 import { getApprovedSessionLabels } from "../src/lib/launchReadiness.js";
 import { campAddOns, campExtraServices, campOptions } from "./_lib/priceCatalog.js";
 import { checkRegistrationGate } from "./_lib/registrationGate.js";
+import { getCheckoutExpiresAt } from "./_lib/checkoutExpiry.js";
 
 const flexPackOptionIds = new Set();
 const dateSelectionOptionIds = new Set(["single-day", "half-day-am", "half-day-pm"]);
@@ -340,6 +341,7 @@ export default {
     const params = new URLSearchParams();
 
     params.set("mode", "payment");
+    params.set("expires_at", String(getCheckoutExpiresAt()));
     params.set("success_url", successUrlString);
     params.set("cancel_url", cancelUrl.toString());
     params.set("adaptive_pricing[enabled]", "false");

@@ -26,6 +26,10 @@ The checkout API checks this on every request, before QA pricing or Stripe. The 
 
 ## Notes
 
+- Camp booking days come only from the approved sessions. The website reads them from `/api/program-availability` once camps are open, and checkout rejects any day outside them. There are no hard-coded camp dates.
+- Stripe Checkout pages expire 60 minutes after they are created (`api/_lib/checkoutExpiry.js`). If you close or change a program, pages created in the last hour can still be paid; those payments trigger a "[REVIEW NEEDED]" email and the family is told the payment was received, not confirmed.
+- The $1 QA price works only with `CAMP_QA_MODE=true`, a non-production deployment, and a Stripe test-mode key. Prefer Stripe Test Mode for all testing.
+
 - The June 15-19 camp dates, the 62 E 92nd Street venue, and the current prices are historical draft values. They are not approved.
 - Visitors never see why a program is closed. They see "Registration Opening Soon" and a generic message; the reasons are written to the server log.
 - The launch details are read through `loadLaunchConfig()` in `api/_lib/registrationGate.js`. To move them to a database such as Supabase, change only that function to read the same fields from a table.

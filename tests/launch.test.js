@@ -265,7 +265,8 @@ const run = async () => {
     const response = await programAvailability.fetch(new Request("https://example.test/api/program-availability"));
     assert.equal(response.status, 200);
     const body = await response.json();
-    assert.deepEqual(Object.keys(body), ["programs"]);
+    assert.deepEqual(Object.keys(body).sort(), ["programs", "sessions"]);
+    assert.deepEqual(body.sessions, { camps: [] });
     Object.values(body.programs).forEach((value) => assert.equal(value, false));
     assert.deepEqual(await getPublicAvailability({ now: NOW }), body.programs);
     restore();

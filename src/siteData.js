@@ -574,7 +574,7 @@ export const programPages = {
     intro:
       "We are preparing scholastic tournaments for school-age players. No tournament dates have been announced yet. The details below describe the planned format and may change before registration opens.",
     heroFacts: [
-      { label: "Planned location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+      { label: "Planned location", value: "Venue to be announced" },
       { label: "Planned sections", value: "Open + Beginner" },
       { label: "Planned format", value: "Saturday mornings, 9:00 AM to lunch" },
     ],
@@ -865,11 +865,11 @@ export const footerLegalLinks = [
 
 export const homePage = {
   eyebrow: "NYC chess camps",
-  title: "Summer chess camps at 62 E 92nd Street, New York, NY 10128.",
-    intro: "Weekday summer camp at 62 E 92nd Street, New York, NY 10128.",
+  title: "Summer chess camp, coming soon.",
+    intro: "Our first summer chess camp is in preparation. Location and dates will be announced.",
   heroFacts: [
     { label: "Dates", value: "Coming soon" },
-    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
+    { label: "Location", value: "To be announced" },
     { label: "Age range", value: "Ages 4 - 17" },
     { label: "Levels", value: "Beginner through Advanced" },
   ],
@@ -943,12 +943,12 @@ export const carouselSlides = [
 
 export const campOverviewPage = {
   eyebrow: "Camps",
-  title: "Summer Chess Camps on the Upper East Side",
+  title: "Summer chess camp",
   intro: "",
   chips: [],
   heroFacts: [
     { label: "Dates", value: "Coming soon" },
-    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
+    { label: "Location", value: "To be announced" },
     { label: "Levels", value: "Beginner through Advanced" },
     { label: "Age range", value: "Ages 4 - 17" },
   ],
@@ -995,7 +995,7 @@ export const campOverviewPage = {
     intro: "Quick facts.",
   },
   detailsCards: [
-    { title: "Location", text: "62 E 92nd Street, New York, NY 10128" },
+    { title: "Location", text: "To be announced" },
     { title: "Dates", text: "Next season's dates coming soon" },
     { title: "Time", text: "9:00 AM - 3:00 PM" },
     { title: "Age range", text: "Ages 4 - 17" },
@@ -1015,8 +1015,8 @@ export const campOverviewPage = {
       eyebrow: "Weekly Pass",
       title: "Full Week Camp",
       price: "$700 per week",
-      defaultSchedulePreference: "Week of June 15",
-      scheduleText: "Jun 15 - Jun 19 | 9:00 AM - 3:00 PM",
+      defaultSchedulePreference: "",
+      scheduleText: "9:00 AM - 3:00 PM",
       details: [
         "Daily chess instruction",
         "Rated games, lunch break, and outdoor park time",
@@ -1031,7 +1031,7 @@ export const campOverviewPage = {
       eyebrow: "Daily Pass",
       title: "Single Day Camp",
       price: "$150 per day",
-      defaultSchedulePreference: "Monday, June 15",
+      defaultSchedulePreference: "",
       scheduleText: "9:00 AM - 3:00 PM",
       details: [
         "Chess instruction",
@@ -1047,7 +1047,7 @@ export const campOverviewPage = {
       eyebrow: "AM/PM options",
       title: "Half Day",
       price: "$95 per half day",
-      defaultSchedulePreference: "Monday, June 15",
+      defaultSchedulePreference: "",
       scheduleText: "9:00 AM - 12:00 PM or 12:00 PM - 3:00 PM",
       details: [
         "Flexible for families and kids",
@@ -1062,7 +1062,7 @@ export const campOverviewPage = {
           switcherTitle: "Half Day AM",
           scheduleText: "9:00 AM - 12:00 PM",
           price: "$95 per half day",
-          defaultSchedulePreference: "Monday, June 15",
+          defaultSchedulePreference: "",
           campTime: "9:00 AM - 12:00 PM",
           label: "ENROLL AM",
         },
@@ -1072,85 +1072,23 @@ export const campOverviewPage = {
           switcherTitle: "Half Day PM",
           scheduleText: "12:00 PM - 3:00 PM",
           price: "$95 per half day",
-          defaultSchedulePreference: "Monday, June 15",
+          defaultSchedulePreference: "",
           campTime: "12:00 PM - 3:00 PM",
           label: "ENROLL PM",
         },
       ],
     },
   ],
-  bookingSchedule: [
-    {
-      id: "camp-day-1",
-      date: "Monday, June 15th, 2026",
-      relativeLabel: "Weekday session",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Monday, June 15",
-    },
-    {
-      id: "camp-day-2",
-      date: "Tuesday, June 16th, 2026",
-      relativeLabel: "Day 2",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Tuesday, June 16",
-    },
-    {
-      id: "camp-day-3",
-      date: "Wednesday, June 17th, 2026",
-      relativeLabel: "Midweek session",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Wednesday, June 17",
-    },
-    {
-      id: "camp-day-4",
-      date: "Thursday, June 18th, 2026",
-      relativeLabel: "Late-week session",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Thursday, June 18",
-    },
-    {
-      id: "camp-day-5",
-      date: "Friday, June 19th, 2026",
-      relativeLabel: "Wrap-up day",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Friday, June 19",
-    },
-  ],
+  // Camp days now come only from approved launch sessions.
+  bookingSchedule: [],
   mapSection: {
     eyebrow: "Camp location",
     title: "Location",
-  intro: "62 E 92nd Street, New York, NY 10128.",
-    address: "62 E 92nd Street, New York, NY 10128",
+  intro: "Location to be announced.",
+    address: "Location to be announced",
     directionsLabel: "Open in Google Maps",
-    directionsHref:
-      "https://www.google.com/maps/search/?api=1&query=62%20E%2092nd%20Street%20New%20York%20NY%2010128",
-    embedSrc:
-      "https://www.google.com/maps?q=62%20E%2092nd%20Street%20New%20York%20NY%2010128&output=embed",
+    directionsHref: "",
+    embedSrc: "",
   },
   scheduleSection: {
     eyebrow: "FULL CAMP DAY",
@@ -1235,7 +1173,7 @@ export const campOverviewPage = {
     },
     {
       question: "What should students bring?",
-      answer: "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
+      answer: "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
     },
     {
       question: "Are campers supervised at all times?",
@@ -1575,7 +1513,7 @@ export const eventsPage = {
   intro:
     "Open and Beginner sections, a 9:00 AM start, and a morning schedule that wraps by lunch. Families can review the structure now and contact us for current tournament details.",
   heroFacts: [
-    { label: "Location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+    { label: "Location", value: "Venue to be announced" },
     { label: "Service", value: "Open + Beginner" },
     { label: "Status", value: "Current details available" },
   ],
@@ -1604,7 +1542,7 @@ export const eventsPage = {
     intro: "Dates are still being finalized, but the core event structure is already set.",
   },
   detailCards: [
-    { title: "Location", text: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+    { title: "Location", text: "Venue to be announced" },
     { title: "Dates", text: "Contact Us for current tournament dates" },
     { title: "Time", text: "Saturday mornings, 9:00 AM to lunch" },
     { title: "Service", text: "Rated and beginner-friendly divisions" },
@@ -1662,7 +1600,7 @@ export const tournamentPage = {
   title: "Chess & Truck Tournament",
     intro: "The format is set. Contact Us for current tournament details and the next step.",
   atAGlance: [
-    { label: "Location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+    { label: "Location", value: "Venue to be announced" },
     { label: "Service", value: "Open & Beginner sections" },
     { label: "Schedule", value: "Saturday mornings, 9:00 AM to lunch" },
     { label: "Status", value: "Current details available" },
@@ -1907,7 +1845,7 @@ export const privateLessonsPage = {
         "A clean first step for students who are just entering structured training",
       ],
       meta: "Single-session inquiry",
-      note: "Available now",
+      note: "Opening soon",
       cta: "Ask about starter lessons",
     },
     {
@@ -1919,7 +1857,7 @@ export const privateLessonsPage = {
         "Strong fit for families who want progress that builds month to month",
       ],
       meta: "Recurring private coaching",
-      note: "Priority scheduling available",
+      note: "Opening soon",
       cta: "Ask about weekly coaching",
     },
       {
@@ -1931,7 +1869,7 @@ export const privateLessonsPage = {
           "Best for players who want sharper preparation before the next training stretch",
         ],
         meta: "Pre-event coaching track",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about prep coaching",
     },
   ],
@@ -1991,7 +1929,7 @@ export const lessonDetailPages = {
     title: "Serious coaching, no commute required.",
     intro:
       "A clean remote lesson path for students who want consistency, game review, and a real training rhythm from home.",
-    chips: ["Zoom-based", "NYC families", "Available now"],
+    chips: ["Zoom-based", "NYC families", "Opening soon"],
     portraitCaption:
       "Remote lessons should still feel demanding, personal, and sharply structured from the first session.",
     asideTag: "Remote standard",
@@ -2001,7 +1939,7 @@ export const lessonDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Weekly rhythm" },
       { label: "Works well for", value: "Game review and calculation" },
-      { label: "Status", value: "Available now" },
+      { label: "Status", value: "Opening soon" },
     ],
     cards: [
       {
@@ -2032,7 +1970,7 @@ export const lessonDetailPages = {
           "A clean first step for students entering structured online work",
         ],
         meta: "Single online inquiry",
-        note: "Available now",
+        note: "Opening soon",
         cta: "Ask about online starters",
       },
       {
@@ -2044,7 +1982,7 @@ export const lessonDetailPages = {
           "Built for game review, calculation, and consistent progress from home",
         ],
         meta: "Recurring online coaching",
-        note: "Priority scheduling available",
+        note: "Opening soon",
         cta: "Ask about weekly online",
       },
       {
@@ -2056,7 +1994,7 @@ export const lessonDetailPages = {
           "Can sharpen openings, decision-making, and post-game understanding fast",
         ],
         meta: "Targeted online block",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about review blocks",
       },
     ],
@@ -2076,7 +2014,7 @@ export const lessonDetailPages = {
     title: "Board work feels different in the room.",
     intro:
       "For students who focus better face to face, in-person coaching keeps the board, the pace, and the lesson energy sharper.",
-    chips: ["NYC-based", "Face-to-face", "Available now"],
+    chips: ["NYC-based", "Face-to-face", "Opening soon"],
     portraitCaption:
       "Some students understand more quickly when the coach is right there at the board and the lesson pace can shift in real time.",
     asideTag: "In-person fit",
@@ -2086,7 +2024,7 @@ export const lessonDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Board-first learners" },
       { label: "Works well for", value: "Habits and fundamentals" },
-      { label: "Status", value: "Available now" },
+      { label: "Status", value: "Opening soon" },
     ],
     cards: [
       {
@@ -2117,7 +2055,7 @@ export const lessonDetailPages = {
           "Useful first step for younger students and board-first learners",
         ],
         meta: "Single in-person inquiry",
-        note: "Available now",
+        note: "Opening soon",
         cta: "Ask about board assessments",
       },
       {
@@ -2141,7 +2079,7 @@ export const lessonDetailPages = {
           "Best for players who want sharper preparation and cleaner follow-up work",
         ],
         meta: "Pre-event in-person track",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about prep coaching",
       },
     ],
@@ -2161,7 +2099,7 @@ export const lessonDetailPages = {
     title: "Small group training, not crowded filler.",
     intro:
       "The right group lesson creates pace, energy, and accountability without losing clarity.",
-    chips: ["Small groups", "Better level matching", "Available now"],
+    chips: ["Small groups", "Better level matching", "Opening soon"],
     portraitCaption:
       "A good group lesson does not feel generic. It feels fast, focused, and matched to the students actually in the room.",
     asideTag: "Group standard",
@@ -2171,7 +2109,7 @@ export const lessonDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Shared pace" },
       { label: "Works well for", value: "Peer energy and repetition" },
-      { label: "Status", value: "Available now" },
+      { label: "Status", value: "Opening soon" },
     ],
     cards: [
       {
@@ -2202,7 +2140,7 @@ export const lessonDetailPages = {
           "Strong fit for students who like peer energy but still need structure",
         ],
         meta: "Early group interest",
-        note: "Available now",
+        note: "Opening soon",
         cta: "Ask about founding groups",
       },
       {
@@ -2226,7 +2164,7 @@ export const lessonDetailPages = {
           "Best for players who benefit from training beside motivated peers",
         ],
         meta: "Event-focused group track",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about advanced groups",
       },
     ],
@@ -2351,7 +2289,7 @@ export const upcomingTournaments = [
   {
     id: "first-release",
     dateLabel: "Current details",
-    statusLabel: "Available now",
+    statusLabel: "Opening soon",
     timeLabel: "Saturday mornings",
     title: "First tournament date",
     meta: "Open & Beginner format already confirmed",

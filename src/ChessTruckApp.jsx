@@ -46,6 +46,13 @@ import {
   isProgramOpen,
   setRegistrationAvailability,
 } from "./lib/programs.js";
+import {
+  getCampDayOptions,
+  getCampDayOrder,
+  getCampWeekOptions,
+  parseAvailabilityResponse,
+  setApprovedCampSessions,
+} from "./lib/registrationAvailability.js";
 import campOnlineVisual from "./assets/camp-online.svg";
 import campOverviewVisual from "./assets/camp-overview.svg";
 import campPrepVisual from "./assets/camp-prep.svg";
@@ -176,60 +183,8 @@ const CAMP_EXTRA_SERVICES = [
   },
 ];
 
-const campDayFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "long",
-  month: "long",
-  day: "numeric",
-});
-
-const campShortDateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-});
-
-const campShortWeekdayFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-});
-
-const buildCampDayOptions = () => {
-  const options = [];
-  const endDate = new Date(2026, 5, 19);
-
-  for (let current = new Date(2026, 5, 15); current <= endDate; ) {
-    if (current.getDay() !== 0 && current.getDay() !== 6) {
-      const label = campDayFormatter.format(current);
-      options.push({
-        value: label,
-        label,
-        dayOfWeek: current.getDay(),
-        shortLabel: campShortDateFormatter.format(current),
-        compactLabel: `${campShortWeekdayFormatter.format(current)}, ${campShortDateFormatter.format(current)}`,
-        isoDate: current.toISOString().slice(0, 10),
-      });
-    }
-
-    current = new Date(current.getFullYear(), current.getMonth(), current.getDate() + 1);
-  }
-
-  return options;
-};
-
-const CAMP_DAY_OPTIONS = buildCampDayOptions();
-const CAMP_DAY_ORDER = new Map(CAMP_DAY_OPTIONS.map((item, index) => [item.value, index]));
-const CAMP_WEEK_OPTIONS = CAMP_DAY_OPTIONS.filter((item) => item.dayOfWeek === 1).map((item) => {
-  const startIndex = CAMP_DAY_OPTIONS.findIndex((day) => day.isoDate === item.isoDate);
-  const weekDays = CAMP_DAY_OPTIONS.slice(startIndex, startIndex + 5);
-  const weekLabel = `Week of ${item.label.replace(/^[^,]+,\s*/, "")}`;
-  const rangeLabel = `${weekDays[0]?.shortLabel || ""} - ${weekDays[weekDays.length - 1]?.shortLabel || ""}`;
-
-  return {
-    value: weekLabel,
-    label: `${weekLabel} (${rangeLabel})`,
-    rangeLabel,
-    days: weekDays.map((day) => day.label),
-  };
-});
-
+// Camp day and week options come only from approved sessions confirmed by the
+// server (see src/lib/registrationAvailability.js). Until then there are none.
 const buildCampPurchaseOptions = (cards = []) =>
   cards.flatMap((card) => {
     if (Array.isArray(card.actions) && card.actions.length) {
@@ -262,21 +217,26 @@ const buildCampPurchaseOptions = (cards = []) =>
 const CAMP_PURCHASE_OPTIONS = buildCampPurchaseOptions(campOverviewPage.bookingCards);
 const CAMP_PURCHASE_OPTION_MAP = new Map(CAMP_PURCHASE_OPTIONS.map((item) => [item.id, item]));
 
+const formatApprovedCampDateRange = () => {
+  const days = getCampDayOptions();
+  return days.length ? `${days[0].shortLabel} - ${days[days.length - 1].shortLabel} | Weekdays` : "To be announced";
+};
+
 const getCampScheduleOptions = (optionId) =>
   CAMP_WEEKLY_OPTION_IDS.has(optionId)
-    ? CAMP_WEEK_OPTIONS
+    ? getCampWeekOptions()
     : CAMP_DATE_SELECTION_OPTION_IDS.has(optionId)
-      ? CAMP_DAY_OPTIONS
+      ? getCampDayOptions()
       : [];
 
 const getSelectedCampWeekOption = (schedulePreference) =>
-  CAMP_WEEK_OPTIONS.find((item) => item.value === schedulePreference) || null;
+  getCampWeekOptions().find((item) => item.value === schedulePreference) || null;
 
 const getWeekDaysForSchedulePreference = (schedulePreference) =>
   getSelectedCampWeekOption(schedulePreference)?.days || [];
 
 const sortCampDays = (days = []) =>
-  [...days].sort((left, right) => (CAMP_DAY_ORDER.get(left) ?? 0) - (CAMP_DAY_ORDER.get(right) ?? 0));
+  [...days].sort((left, right) => (getCampDayOrder().get(left) ?? 0) - (getCampDayOrder().get(right) ?? 0));
 
 const calculateCampAddOnTotal = (addOnIds = []) =>
   CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).reduce(
@@ -2516,7 +2476,7 @@ function CampBookingFormPanel({
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
-  const selectedDayOption = CAMP_DAY_OPTIONS.find((item) => item.value === selectedSchedule) || null;
+  const selectedDayOption = getCampDayOptions().find((item) => item.value === selectedSchedule) || null;
   const selectedSingleDays =
     isDateSelectionOption
       ? Array.isArray(campBookingState.selectedDays) && campBookingState.selectedDays.length
@@ -2681,7 +2641,7 @@ function CampBookingFormPanel({
               <strong>{selectedSingleDays.length ? "Weekdays only" : "No dates selected yet"}</strong>
             </div>
             <div className="camp-week-days camp-day-chip-grid">
-              {CAMP_DAY_OPTIONS.map((day) => {
+              {getCampDayOptions().map((day) => {
                 const isSelected = selectedSingleDays.includes(day.value);
 
                 return (
@@ -2947,11 +2907,11 @@ function CampBookingFormPanel({
             <div className="summary-list summary-list-booking">
               <div>
                 <span>Dates</span>
-                <strong>June 15 - June 19 | Weekdays</strong>
+                <strong>{formatApprovedCampDateRange()}</strong>
               </div>
               <div>
                 <span>Location</span>
-                    <strong>62 E 92nd Street, New York, NY 10128</strong>
+                <strong>Included in your confirmation email</strong>
               </div>
               <div>
                 <span>{isWeeklyOption ? "Week" : "Dates"}</span>
@@ -3704,8 +3664,12 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
   const isSuccess = campCheckoutState.status === "success" && campCheckoutState.details;
   const isLoading = campCheckoutState.status === "loading";
   const isError = campCheckoutState.status === "error";
+  // Payments for a program that is not open are received but not confirmed.
+  const needsReview = Boolean(isSuccess && campCheckoutState.details.requiresReview);
 
-  const title = isSuccess
+  const title = needsReview
+    ? "Thank you. We received your payment."
+    : isSuccess
     ? "Thank you. Your camp spot is confirmed."
     : isLoading
       ? "Confirming your camp payment..."
@@ -3713,7 +3677,9 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
         ? "We could not confirm the camp payment yet."
         : "Camp confirmation";
 
-  const intro = isSuccess
+  const intro = needsReview
+    ? "Our team will contact you about your registration shortly."
+    : isSuccess
     ? `A Stripe receipt was sent to ${campCheckoutState.details.customerEmail || "your email"}. We will follow up with the next camp details shortly.`
     : isLoading
       ? "Please wait a moment while we verify the Stripe checkout session."
@@ -3726,14 +3692,14 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
       <section className="page-hero lesson-page-hero">
         <div className="shell">
           <article className="surface camp-confirmation-card">
-            <span className="section-tag">{isSuccess ? "Camp confirmed" : "Camp checkout"}</span>
+            <span className="section-tag">{isSuccess && !needsReview ? "Camp confirmed" : "Camp checkout"}</span>
             <h1>{title}</h1>
             <p className="page-intro">{intro}</p>
 
             {campCheckoutState.status !== "idle" ? (
               <article className={`status-banner status-banner-${campCheckoutState.status}`}>
                 <strong>
-                  {isSuccess && "Payment confirmed"}
+                  {isSuccess && (needsReview ? "Payment received" : "Payment confirmed")}
                   {isLoading && "Checking payment"}
                   {isError && "Confirmation needs attention"}
                 </strong>
@@ -4707,13 +4673,21 @@ function ChessTruckApp() {
 
     let cancelled = false;
 
-    fetch("/api/program-availability", { headers: { Accept: "application/json" } })
+    fetch("/api/program-availability", { headers: { Accept: "application/json" }, cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((payload) => {
-        if (!cancelled && payload?.programs) {
-          setRegistrationAvailability(payload.programs);
-          setAvailabilityVersion((version) => version + 1);
+        if (cancelled) {
+          return;
         }
+
+        // Malformed or missing data parses to "everything closed".
+        const { programs: availablePrograms, campSessions } = parseAvailabilityResponse(
+          payload,
+          programs.map((item) => item.id)
+        );
+        setApprovedCampSessions(campSessions);
+        setRegistrationAvailability(availablePrograms);
+        setAvailabilityVersion((version) => version + 1);
       })
       .catch(() => {
         // Stay closed if the check cannot be reached.

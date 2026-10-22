@@ -53,7 +53,7 @@ export const isProgramOpen = (programId) => getProgramStatus(programId) === PROG
 
 // Shown only if camps are set to "closed".
 export const CAMP_REGISTRATION_CLOSED_MESSAGE =
-  "Camp registration is closed for this season. Contact us to hear when next season's dates open.";
+  "Camp registration is closed. Contact us if you have questions.";
 
 export const getRegistrationUnavailableMessage = (programName) =>
   `${programName} registration is not open yet. Contact us if you have questions in the meantime.`;

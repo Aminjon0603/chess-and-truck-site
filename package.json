@@ -8,7 +8,7 @@
                     "build":  "vite build",
                     "lint":  "eslint .",
                     "preview":  "vite preview",
-                    "test":  "node tests/validation.test.js && node tests/launch.test.js",
+                    "test":  "node tests/validation.test.js && node tests/launch.test.js && node tests/security.test.js",
                     "launch:check":  "node scripts/launch-check.mjs"
                 },
     "dependencies":  {

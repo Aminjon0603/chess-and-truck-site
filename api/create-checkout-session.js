@@ -5,6 +5,7 @@ import { validateRegistrationFields } from "../src/lib/validation.js";
 import { getRegistrationUnavailableMessage } from "../src/lib/programs.js";
 import { tournamentServiceLevels as serviceLevels } from "./_lib/priceCatalog.js";
 import { checkRegistrationGate } from "./_lib/registrationGate.js";
+import { getCheckoutExpiresAt } from "./_lib/checkoutExpiry.js";
 
 
 const sanitize = (value, limit = 200) => {
@@ -192,6 +193,7 @@ export default {
       "{CHECKOUT_SESSION_ID}"
     );
     params.set("mode", "payment");
+    params.set("expires_at", String(getCheckoutExpiresAt()));
     params.set("success_url", successUrl);
     params.set("cancel_url", `${getBaseUrl(request)}/register?payment=cancel`);
     params.set("adaptive_pricing[enabled]", "false");
