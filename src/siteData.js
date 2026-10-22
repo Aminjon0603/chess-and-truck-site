@@ -139,9 +139,9 @@ export const routeMeta = {
       "Reach the CHESS AND TRUCK team by phone, email, or the contact form for camp questions.",
   },
   "/register": {
-    title: "Contact | CHESS AND TRUCK",
+    title: "Registration | CHESS AND TRUCK",
     description:
-      "Contact CHESS AND TRUCK for camp availability, pricing, and the next step.",
+      "Complete the CHESS AND TRUCK registration form and continue to secure checkout.",
   },
   "/terms": {
     title: "Terms of Service | CHESS AND TRUCK",
