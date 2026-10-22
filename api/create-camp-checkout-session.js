@@ -1,5 +1,9 @@
 import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
+import {
+  CAMP_REGISTRATION_CLOSED_MESSAGE,
+  CAMP_REGISTRATION_OPEN,
+} from "../src/lib/campRegistration.js";
 
 const campOptions = {
   "full-week": {
@@ -224,6 +228,10 @@ export default {
   async fetch(request) {
     if (request.method !== "POST") {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
+    }
+
+    if (!CAMP_REGISTRATION_OPEN) {
+      return Response.json({ error: CAMP_REGISTRATION_CLOSED_MESSAGE }, { status: 409 });
     }
 
     const limited = applyRateLimit(request, "camp-checkout", {

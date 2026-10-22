@@ -608,6 +608,17 @@ a,
   box-shadow: var(--shadow);
 }
 
+.camp-registration-closed {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.camp-registration-closed p {
+  margin: 0;
+}
+
 .surface-dark {
   color: #f8f5ef;
   background: var(--surface-dark);

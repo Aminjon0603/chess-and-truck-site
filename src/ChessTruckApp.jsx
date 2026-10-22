@@ -26,6 +26,7 @@ import {
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
+import { CAMP_REGISTRATION_CLOSED_MESSAGE, CAMP_REGISTRATION_OPEN } from "./lib/campRegistration.js";
 import campOnlineVisual from "./assets/camp-online.svg";
 import campOverviewVisual from "./assets/camp-overview.svg";
 import campPrepVisual from "./assets/camp-prep.svg";
@@ -571,7 +572,7 @@ const getInitialPaymentState = () => {
 };
 
 const findRequestedCampOption = (nextRoute) => {
-  if (!CAMP_OPTION_REQUEST_PATHS.has(nextRoute.pathname)) {
+  if (!CAMP_REGISTRATION_OPEN || !CAMP_OPTION_REQUEST_PATHS.has(nextRoute.pathname)) {
     return null;
   }
 
@@ -2251,7 +2252,7 @@ function CampsOverviewPage({
                 className="btn btn-primary btn-emphasis"
                 onClick={scrollToCampSection("camp-booking")}
               >
-                Enroll Now
+                {CAMP_REGISTRATION_OPEN ? "Enroll Now" : "Registration Closed"}
               </a>
               <a
                 href="#camp-schedule"
@@ -2321,71 +2322,82 @@ function CampsOverviewPage({
           {campOverviewPage.bookingSection.note ? (
             <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
           ) : null}
-          <div className="camp-booking-grid">
-            {campOverviewPage.bookingCards.map((item) => {
-              const isSelected =
-                selectedCampOptionId === item.id ||
-                (Array.isArray(item.actions) &&
-                  item.actions.some((action) => action.optionId === selectedCampOptionId));
+          {CAMP_REGISTRATION_OPEN ? (
+            <div className="camp-booking-grid">
+              {campOverviewPage.bookingCards.map((item) => {
+                const isSelected =
+                  selectedCampOptionId === item.id ||
+                  (Array.isArray(item.actions) &&
+                    item.actions.some((action) => action.optionId === selectedCampOptionId));
 
-              return (
-                <article
-                  className={`surface camp-booking-card${isSelected ? " is-selected" : ""}`}
-                  key={item.id}
-                >
-                  <span className="mini-tag">{item.eyebrow}</span>
-                  <h3>{item.title}</h3>
-                  <p>{item.scheduleText}</p>
-                  <p className="camp-booking-price">{item.price}</p>
-                  <ul className="camp-booking-list">
-                    {item.details.map((detail) => (
-                      <li key={detail}>{detail}</li>
-                    ))}
-                  </ul>
-                  <p className="camp-booking-availability">{item.availability}</p>
-                  {Array.isArray(item.actions) && item.actions.length ? (
-                    <div className="camp-booking-actions">
-                      {item.actions.map((action) => {
-                        const isLoading =
-                          campCheckoutState.status === "loading" &&
-                          campCheckoutState.activeOption === action.optionId;
+                return (
+                  <article
+                    className={`surface camp-booking-card${isSelected ? " is-selected" : ""}`}
+                    key={item.id}
+                  >
+                    <span className="mini-tag">{item.eyebrow}</span>
+                    <h3>{item.title}</h3>
+                    <p>{item.scheduleText}</p>
+                    <p className="camp-booking-price">{item.price}</p>
+                    <ul className="camp-booking-list">
+                      {item.details.map((detail) => (
+                        <li key={detail}>{detail}</li>
+                      ))}
+                    </ul>
+                    <p className="camp-booking-availability">{item.availability}</p>
+                    {Array.isArray(item.actions) && item.actions.length ? (
+                      <div className="camp-booking-actions">
+                        {item.actions.map((action) => {
+                          const isLoading =
+                            campCheckoutState.status === "loading" &&
+                            campCheckoutState.activeOption === action.optionId;
 
-                        return (
-                          <button
-                            key={action.optionId}
-                            type="button"
-                            className="btn btn-primary camp-booking-button"
-                            onClick={() =>
-                              openCampBooking(
-                                action.optionId,
-                                action.defaultSchedulePreference || item.defaultSchedulePreference || ""
-                              )
-                            }
-                            disabled={campCheckoutState.status === "loading"}
-                          >
-                            {isLoading ? "Opening..." : action.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      className="btn btn-primary camp-booking-button"
-                      onClick={() => openCampBooking(item.id, item.defaultSchedulePreference)}
-                      disabled={campCheckoutState.status === "loading"}
-                    >
-                      {campCheckoutState.status === "loading" && campCheckoutState.activeOption === item.id
-                        ? "Opening..."
-                        : item.cta}
-                    </button>
-                  )}
-                </article>
-              );
-            })}
-          </div>
+                          return (
+                            <button
+                              key={action.optionId}
+                              type="button"
+                              className="btn btn-primary camp-booking-button"
+                              onClick={() =>
+                                openCampBooking(
+                                  action.optionId,
+                                  action.defaultSchedulePreference || item.defaultSchedulePreference || ""
+                                )
+                              }
+                              disabled={campCheckoutState.status === "loading"}
+                            >
+                              {isLoading ? "Opening..." : action.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-primary camp-booking-button"
+                        onClick={() => openCampBooking(item.id, item.defaultSchedulePreference)}
+                        disabled={campCheckoutState.status === "loading"}
+                      >
+                        {campCheckoutState.status === "loading" && campCheckoutState.activeOption === item.id
+                          ? "Opening..."
+                          : item.cta}
+                      </button>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
 
-          {isCampBookingFormVisible || campCheckoutState.status !== "idle" ? (
+          ) : (
+            <article className="surface status-banner camp-registration-closed">
+              <strong>Registration closed</strong>
+              <p>{CAMP_REGISTRATION_CLOSED_MESSAGE}</p>
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+                Contact Us
+              </AppLink>
+            </article>
+          )}
+
+          {CAMP_REGISTRATION_OPEN && (isCampBookingFormVisible || campCheckoutState.status !== "idle") ? (
             <>
               <CampCheckoutStatusBanner campCheckoutState={campCheckoutState} />
               <CampBookingFormPanel
