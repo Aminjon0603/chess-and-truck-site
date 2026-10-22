@@ -1,3 +1,5 @@
+import { checkRegistrationGate } from "./_lib/registrationGate.js";
+
 const sanitize = (value, limit = 180) => {
   if (typeof value !== "string") {
     return "";
@@ -71,13 +73,20 @@ export default {
 
     const metadata = stripePayload.metadata || {};
     const isCamp = metadata.booking_type === "camp";
+    const programId = metadata.program_id || (isCamp ? "camps" : "tournaments");
+    // A payment for a program that is not open is not shown as a confirmed registration.
+    const { ready: programIsOpen } = await checkRegistrationGate(programId, { log: false }).catch(() => ({
+      ready: false,
+    }));
 
     return Response.json(
       {
         status: "paid",
-        message: isCamp
-          ? "Camp payment confirmed successfully."
-          : "Payment confirmed successfully.",
+        message: !programIsOpen
+          ? "Payment received. Our team will contact you about your registration."
+          : isCamp
+            ? "Camp payment confirmed successfully."
+            : "Payment confirmed successfully.",
         customerEmail: stripePayload.customer_details?.email || stripePayload.customer_email || "",
         reference:
           metadata.registration_reference || stripePayload.client_reference_id || stripePayload.id,

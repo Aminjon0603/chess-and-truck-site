@@ -39,6 +39,7 @@ const buildRegistrationReference = () => {
 
 const buildMetadata = (data, serviceLevel, registrationReference) => ({
   registration_reference: registrationReference,
+  program_id: "tournaments",
   player_name: `${data.playerFirstName} ${data.playerLastName}`.trim().slice(0, 120),
   section: data.section.slice(0, 32),
   service_level: serviceLevel.label.slice(0, 120),

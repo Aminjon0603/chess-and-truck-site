@@ -146,7 +146,7 @@ const checkPricing = (config, priceCatalog, issues) => {
     return;
   }
 
-  if (!priceCatalog || typeof priceCatalog.prices !== "object") {
+  if (!priceCatalog || !priceCatalog.prices || typeof priceCatalog.prices !== "object" || Array.isArray(priceCatalog.prices)) {
     issues.push(issue("CHECKOUT_UNAVAILABLE", "pricing", "This program has no server-side checkout to compare prices with."));
     return;
   }
@@ -261,7 +261,16 @@ const CHECKS = {
  * @returns {{ ready: boolean, issues: Array<{code: string, field: string, message: string}> }}
  * Issues are for the owner and server logs only; never show them to visitors.
  */
-export const getLaunchReadiness = ({ programId, status, config, priceCatalog, now = new Date() }) => {
+export const getLaunchReadiness = (input) => {
+  // Any unexpected error means "not ready": the gate must fail closed.
+  try {
+    return evaluateLaunchReadiness(input);
+  } catch {
+    return { ready: false, issues: [issue("READINESS_ERROR", "config", "Launch details could not be validated.")] };
+  }
+};
+
+const evaluateLaunchReadiness = ({ programId, status, config, priceCatalog, now = new Date() }) => {
   const issues = [];
   const requirements = PROGRAM_REQUIREMENTS[programId];
 
@@ -283,4 +292,51 @@ export const getLaunchReadiness = ({ programId, status, config, priceCatalog, no
   checkApproval(config, context.today, issues);
 
   return { ready: issues.length === 0, issues };
+};
+
+const dayLabelFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: "UTC",
+  weekday: "long",
+  month: "long",
+  day: "numeric",
+});
+
+const weekLabelFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: "UTC",
+  month: "long",
+  day: "numeric",
+});
+
+/**
+ * Camp day and week labels for approved sessions, in the format the booking form
+ * sends ("Monday, July 12" and "Week of July 12"). Weekdays only, like the form.
+ * Used by checkout to reject days that are not part of an approved session.
+ */
+export const getApprovedSessionLabels = (sessions) => {
+  const days = new Set();
+  const weeks = new Set();
+
+  (Array.isArray(sessions) ? sessions : []).forEach((session) => {
+    if (!isValidIsoDate(session?.startDate) || !isValidIsoDate(session?.endDate)) {
+      return;
+    }
+
+    const end = new Date(`${session.endDate}T00:00:00Z`);
+
+    for (let current = new Date(`${session.startDate}T00:00:00Z`); current <= end; ) {
+      const weekday = current.getUTCDay();
+
+      if (weekday !== 0 && weekday !== 6) {
+        days.add(dayLabelFormatter.format(current));
+      }
+
+      if (weekday === 1) {
+        weeks.add(`Week of ${weekLabelFormatter.format(current)}`);
+      }
+
+      current = new Date(current.getTime() + 24 * 60 * 60 * 1000);
+    }
+  });
+
+  return { days, weeks };
 };

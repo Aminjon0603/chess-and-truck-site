@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
 import { getRegistrationUnavailableMessage } from "../src/lib/programs.js";
+import { getApprovedSessionLabels } from "../src/lib/launchReadiness.js";
 import { campAddOns, campExtraServices, campOptions } from "./_lib/priceCatalog.js";
 import { checkRegistrationGate } from "./_lib/registrationGate.js";
 
@@ -149,7 +150,12 @@ const normalizeQaEmail = (value) => sanitize(value, 180).toLowerCase();
 
 const normalizeQaPhone = (value) => sanitize(value, 40).replace(/\D/g, "");
 
-const isQaModeEnabled = () => String(process.env.CAMP_QA_MODE || "").toLowerCase() === "true";
+// $1 QA pricing is test-only: it needs the flag, a non-production deployment,
+// AND a Stripe test-mode key. With a live key or in production it is always off.
+export const isQaModeEnabled = (env = process.env) =>
+  String(env.CAMP_QA_MODE || "").toLowerCase() === "true" &&
+  env.VERCEL_ENV !== "production" &&
+  /^(sk|rk)_test_/.test(String(env.STRIPE_SECRET_KEY || ""));
 
 const isQaEligibleBooking = ({ email, phone }) => {
   if (!isQaModeEnabled()) {
@@ -169,6 +175,29 @@ const isQaEligibleBooking = ({ email, phone }) => {
 };
 
 const getQaAmountOverride = (amount, isQaEligible) => (isQaEligible ? 100 : amount);
+
+const weeklyOptionIds = new Set(["full-week"]);
+
+// Only days and weeks inside approved launch sessions can be booked, so stale
+// or hand-crafted dates are rejected even after camps open.
+export const validateApprovedSchedule = ({ optionId, schedulePreference, selectedDays, sessions }) => {
+  const { days, weeks } = getApprovedSessionLabels(sessions);
+
+  if (weeklyOptionIds.has(optionId) && !weeks.has(schedulePreference)) {
+    return false;
+  }
+
+  if ((weeklyOptionIds.has(optionId) || dateSelectionOptionIds.has(optionId)) && selectedDays.length === 0) {
+    return false;
+  }
+
+  return selectedDays.every((day) => days.has(day));
+};
+
+const formatApprovedLocation = (location) =>
+  location?.type === "online"
+    ? `Online (${location.platform})`
+    : [location?.name, location?.address].filter(Boolean).join(", ");
 
 export const runtime = "nodejs";
 
@@ -222,6 +251,20 @@ export default {
     if (Object.keys(fieldErrors).length > 0) {
       return Response.json(
         { error: "Please review the booking details and try again.", fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const scheduleIsApproved = validateApprovedSchedule({
+      optionId,
+      schedulePreference: sanitize(payload.schedulePreference, 140),
+      selectedDays: sanitizeSelectedDays(payload.selectedDays),
+      sessions: gate.config?.sessions,
+    });
+
+    if (!scheduleIsApproved) {
+      return Response.json(
+        { error: "Please choose an available camp date.", fieldErrors: { selectedDays: "Please choose an available camp date." } },
         { status: 400 }
       );
     }
@@ -324,10 +367,11 @@ export default {
     params.set("client_reference_id", reference);
     params.set("metadata[registration_reference]", reference);
     params.set("metadata[booking_type]", "camp");
+    params.set("metadata[program_id]", "camps");
     params.set("metadata[service_level]", selectedOption.label);
     params.set("metadata[camp_option]", optionId);
     params.set("metadata[program_name]", "Chess and Truck Summer Camp");
-    params.set("metadata[location]", "62 E 92nd Street, New York, NY 10128");
+    params.set("metadata[location]", formatApprovedLocation(gate.config?.location));
     params.set("metadata[camp_time]", selectedOption.campTime || "9:00 AM - 3:00 PM");
     params.set("metadata[parent_name]", `${parentFirstName} ${parentLastName}`.trim());
     params.set("metadata[parent_first_name]", parentFirstName);
