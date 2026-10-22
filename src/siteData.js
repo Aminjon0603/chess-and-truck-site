@@ -27,37 +27,44 @@ export const academyHomePage = {
     eyebrow: "Chess programs for NYC kids",
     title: "Your Next Move Starts Here.",
     intro:
-      "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City kids, taught by experienced coaches.",
-    facts: ["Led by Chess Masters", "Beginner to advanced", "New York City"],
+      "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City kids. Structured lessons, real games, and an approach kids enjoy.",
+    facts: ["Beginners welcome", "Direct parent support", "New York City"],
   },
   programsSection: {
-    eyebrow: "Our programs",
-    title: "Five ways to learn, train, and compete",
-    intro: "Each program shows where registration stands today.",
+    eyebrow: "Programs",
+    title: "Five ways to play, learn, and compete",
+    intro: "Explore what each program offers and where registration stands.",
   },
   whySection: {
     eyebrow: "Why Chess & Truck",
     title: "Serious chess, taught with clarity and fun",
     intro:
-      "Our handpicked team of coaches brings 25+ years of combined NYC experience, blending structured learning with a genuinely fun, engaging approach kids love.",
+      "We keep chess structured enough to build real skills and fun enough that kids want to come back.",
     pillars: [
       {
-        title: "Transparent program design",
-        text: "Schedules, settings, and structure are clear from the outset.",
+        title: "Clear program details",
+        text: "We share schedules, locations, and what each program includes before families register.",
       },
       {
-        title: "Substantive instruction",
-        text: "Every session is designed to build analytical thinking and measurable improvement.",
+        title: "Real games, real progress",
+        text: "Lessons combine real games with guided analysis, so students understand what to repeat and what to change.",
       },
       {
-        title: "Clear communication",
-        text: "Parents stay informed and supported, without needing to chase information.",
+        title: "Direct communication",
+        text: "Parents can reach us by phone, text, or email for a clear answer and next step.",
       },
     ],
   },
-  coachesSection: {
-    eyebrow: "Meet our coaches",
-    title: "Learn from experienced chess masters",
+  coachSection: {
+    eyebrow: "Coach spotlight",
+    title: "Meet Andrea",
+    role: "Italian Chess Master",
+    summary:
+      "Andrea is based in New York and has taught chess through camps, private lessons, after-school programs, and events in the U.S. and Canada.",
+    facts: [
+      { value: "24 years", label: "teaching chess" },
+      { value: "U.S. & Canada", label: "teaching experience" },
+    ],
   },
   howSection: {
     eyebrow: "How it works",
@@ -65,15 +72,15 @@ export const academyHomePage = {
     steps: [
       {
         title: "Choose a program",
-        text: "Browse camps, tournaments, lessons, after-school programs, and the Dojo, and check each program's registration status.",
+        text: "Browse camps, tournaments, private lessons, after-school programs, and the Chess Dojo.",
       },
       {
         title: "Tell us about your student",
-        text: "Send age, level, and what you are looking for. We will recommend the best fit.",
+        text: "Share your child's age, experience, and goals, and we will suggest a good starting point.",
       },
       {
-        title: "Register when it opens",
-        text: "When registration is open, you register online and pay through secure Stripe checkout. We follow up with the details.",
+        title: "Hear when registration opens",
+        text: "We will let you know when registration opens and share schedule, pricing, and payment details.",
       },
     ],
   },
@@ -84,26 +91,27 @@ export const academyHomePage = {
       {
         question: "Is Chess & Truck suitable for beginners?",
         answer:
-          "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join.",
+          "Yes. Beginners are welcome. Tell us your child's age and experience, and we will suggest the best place to start.",
       },
       {
         question: "Who leads instruction?",
-        answer: "All instruction is led by Chess Masters with more than 25 years of experience in the field.",
+        answer:
+          "Andrea is an Italian Chess Master with 24 years of teaching experience. We will share coaching details for each program when its registration opens.",
       },
       {
         question: "When does registration open?",
         answer:
-          "Each program above shows its current status. Programs marked Registration Opening Soon are not taking registrations yet. Contact us and we will let you know when registration opens.",
+          "Each program above shows its current status. While a program shows Registration Opening Soon, we are not taking registrations or payments for it. Contact us and we will let you know when registration opens.",
       },
       {
         question: "How do payments work?",
         answer:
-          "When a program's registration is open, you register on this site and pay through secure Stripe checkout.",
+          "We will share pricing and payment details for each program when its registration opens. Payments made on this website are processed securely by Stripe.",
       },
     ],
   },
   contactCard: {
-    title: "Have a question? Talk to us.",
+    title: "Questions? Talk to us.",
     text: "Call, text, or email, and we will point you to the right program.",
   },
 };
@@ -124,7 +132,7 @@ export const programs = [
     name: "Chess Camps",
     path: "/camps",
     summary:
-      "Weekday summer camp on the Upper East Side with expert instruction, structured play, and a fun camp experience.",
+      "Weekday summer camp on the Upper East Side with chess lessons, games, and outdoor time.",
   },
   {
     id: "tournaments",

@@ -1406,16 +1406,17 @@ function BrandMark({ tone = "light" }) {
 function ProgramCard({ program, currentPath, navigate }) {
   return (
     <AppLink to={program.path} navigate={navigate} currentPath={currentPath} className="ac-program-card">
-      <span className="ac-program-card-top">
-        <span className="ac-program-icon">
-          <ProgramIcon iconKey={program.iconKey} />
-        </span>
-        <ProgramStatusBadge programId={program.id} />
+      <span className="ac-program-icon">
+        <ProgramIcon iconKey={program.iconKey} />
       </span>
+      <ProgramStatusBadge programId={program.id} />
       <h3>{program.name}</h3>
       <p>{program.summary}</p>
       <span className="ac-program-link">
-        View program <span aria-hidden="true">&rarr;</span>
+        View program
+        <span className="ac-program-arrow" aria-hidden="true">
+          &rarr;
+        </span>
       </span>
     </AppLink>
   );
@@ -1432,9 +1433,9 @@ function AcademySectionHeading({ id, eyebrow, title, intro }) {
 }
 
 function AcademyHomePage({ currentPath, navigate }) {
-  const { hero, programsSection, whySection, coachesSection, howSection, faqSection, contactCard } =
+  const { hero, programsSection, whySection, coachSection, howSection, faqSection, contactCard } =
     academyHomePage;
-  const coach = aboutPage.coachSpotlight;
+  const homeContactMethods = [contactNumbers[0], emailContact].filter(Boolean);
 
   const scrollToPrograms = (event) => {
     const section = document.getElementById("programs");
@@ -1501,27 +1502,29 @@ function AcademyHomePage({ currentPath, navigate }) {
         </div>
       </section>
 
-      <section className="ac-section" aria-labelledby="coaches-title">
+      <section className="ac-section" aria-labelledby="coach-title">
         <div className="ac-shell">
-          <AcademySectionHeading id="coaches-title" {...coachesSection} />
+          <AcademySectionHeading id="coach-title" eyebrow={coachSection.eyebrow} title={coachSection.title} />
           <article className="ac-coach">
             <img
               src={andreaPhoto}
-              alt="Andrea, Chess & Truck coach, at an outdoor chess table"
+              alt="Andrea at an outdoor chess table"
               className="ac-coach-photo"
               width="647"
               height="480"
               loading="lazy"
             />
             <div className="ac-coach-copy">
-              <h3>Andrea</h3>
-              <p className="ac-coach-role">{coach.intro}</p>
-              <p>{coach.paragraphs[0]}</p>
-              <ul className="ac-chip-list">
-                {coach.highlights.map((item) => (
-                  <li key={item}>{item}</li>
+              <span className="ac-coach-role">{coachSection.role}</span>
+              <p>{coachSection.summary}</p>
+              <dl className="ac-coach-facts">
+                {coachSection.facts.map((item) => (
+                  <div key={item.label}>
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
+                  </div>
                 ))}
-              </ul>
+              </dl>
               <AppLink to="/about" navigate={navigate} currentPath={currentPath} className="ac-text-link">
                 More about Chess &amp; Truck <span aria-hidden="true">&rarr;</span>
               </AppLink>
@@ -1564,7 +1567,7 @@ function AcademyHomePage({ currentPath, navigate }) {
             <h2 id="contact-card-title">{contactCard.title}</h2>
             <p>{contactCard.text}</p>
             <ul className="ac-contact-list">
-              {footerContactMethods.map((item) => (
+              {homeContactMethods.map((item) => (
                 <li key={item.display}>
                   <span>{item.label}</span>
                   <a href={item.href}>{item.display}</a>
