@@ -42,7 +42,9 @@ import {
   PROGRAM_STATUS,
   getProgramStatus,
   getRegistrationUnavailableMessage,
+  hasOpenConfiguredStatus,
   isProgramOpen,
+  setRegistrationAvailability,
 } from "./lib/programs.js";
 import campOnlineVisual from "./assets/camp-online.svg";
 import campOverviewVisual from "./assets/camp-overview.svg";
@@ -434,7 +436,8 @@ const normalizePath = (path) => {
   return path.endsWith("/") ? path.slice(0, -1) : path;
 };
 
-const CAMP_REGISTRATION_OPEN = isProgramOpen("camps");
+// Evaluated at render time: availability can change after the server check loads.
+const isCampRegistrationOpen = () => isProgramOpen("camps");
 
 const PROGRAM_STATUS_LABELS = {
   [PROGRAM_STATUS.OPEN]: "Registration Open",
@@ -462,9 +465,8 @@ const getProgramStatusMessage = (programId) => {
 };
 
 // The Dojo tournament add-on can only be bought once the Dojo itself is open.
-const availableServiceLevels = serviceLevels.filter(
-  (item) => item.id !== "entry-dojo" || isProgramOpen("dojo")
-);
+const getAvailableServiceLevels = () =>
+  serviceLevels.filter((item) => item.id !== "entry-dojo" || isProgramOpen("dojo"));
 
 const lessonCarouselImages = {
   online: lessonOnlineVisual,
@@ -686,7 +688,7 @@ const getInitialPaymentState = () => {
 };
 
 const findRequestedCampOption = (nextRoute) => {
-  if (!CAMP_REGISTRATION_OPEN || !CAMP_OPTION_REQUEST_PATHS.has(nextRoute.pathname)) {
+  if (!isCampRegistrationOpen() || !CAMP_OPTION_REQUEST_PATHS.has(nextRoute.pathname)) {
     return null;
   }
 
@@ -3318,7 +3320,7 @@ function CampsOverviewPage({
           {campOverviewPage.bookingSection.note ? (
             <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
           ) : null}
-          {CAMP_REGISTRATION_OPEN ? (
+          {isCampRegistrationOpen() ? (
             <div className="camp-booking-grid">
               {campOverviewPage.bookingCards.map((item) => {
                 const isSelected =
@@ -3387,7 +3389,7 @@ function CampsOverviewPage({
             <ProgramStatusNotice programId="camps" currentPath={currentPath} navigate={navigate} />
           )}
 
-          {CAMP_REGISTRATION_OPEN && (isCampBookingFormVisible || campCheckoutState.status !== "idle") ? (
+          {isCampRegistrationOpen() && (isCampBookingFormVisible || campCheckoutState.status !== "idle") ? (
             <>
               <CampCheckoutStatusBanner campCheckoutState={campCheckoutState} />
               <CampBookingFormPanel
@@ -3434,7 +3436,7 @@ function CampsOverviewPage({
                 className="btn btn-primary btn-emphasis"
                 onClick={scrollToCampSection("camp-booking")}
               >
-                {CAMP_REGISTRATION_OPEN ? "Enroll Now" : PROGRAM_STATUS_LABELS[getProgramStatus("camps")]}
+                {isCampRegistrationOpen() ? "Enroll Now" : PROGRAM_STATUS_LABELS[getProgramStatus("camps")]}
               </a>
               <a
                 href="#camp-schedule"
@@ -4369,7 +4371,7 @@ function RegisterPage({
                       aria-invalid={registrationErrors.serviceLevel ? "true" : "false"}
                     >
                       <option value="">Select service level</option>
-                      {availableServiceLevels.map((item) => (
+                      {getAvailableServiceLevels().map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.label} - {formatCurrency(item.amount)}
                         </option>
@@ -4602,7 +4604,7 @@ function RegisterPage({
               <article className="surface">
                 <span className="mini-tag">Service levels</span>
                 <div className="service-stack">
-                  {availableServiceLevels.map((item) => (
+                  {getAvailableServiceLevels().map((item) => (
                     <article className="service-card" key={item.id}>
                       <div>
                         <h3>{item.label}</h3>
@@ -4670,6 +4672,8 @@ function ChessTruckApp() {
   );
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isNavCompact, setIsNavCompact] = useState(() => window.matchMedia(NAV_COMPACT_QUERY).matches);
+  // Bumped when the server's registration availability arrives so the page re-renders.
+  const [, setAvailabilityVersion] = useState(0);
   const [activeRegistrationStep, setActiveRegistrationStep] = useState(0);
   const mainRef = useRef(null);
   const currentPath = route.pathname;
@@ -4692,6 +4696,32 @@ function ChessTruckApp() {
 
     media.addListener(handleViewportChange);
     return () => media.removeListener(handleViewportChange);
+  }, []);
+
+  // Registration opens only when the server confirms a program passed its launch
+  // check. Nothing is requested while no program is marked "open".
+  useEffect(() => {
+    if (!hasOpenConfiguredStatus()) {
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    fetch("/api/program-availability", { headers: { Accept: "application/json" } })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload) => {
+        if (!cancelled && payload?.programs) {
+          setRegistrationAvailability(payload.programs);
+          setAvailabilityVersion((version) => version + 1);
+        }
+      })
+      .catch(() => {
+        // Stay closed if the check cannot be reached.
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {

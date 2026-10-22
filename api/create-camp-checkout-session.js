@@ -1,57 +1,8 @@
 import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
-import { getRegistrationUnavailableMessage, isProgramOpen } from "../src/lib/programs.js";
-
-const campOptions = {
-  "full-week": {
-    label: "Full Week Camp",
-    amount: 70000,
-    description: "Five full camp days in one week at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "9:00 AM - 3:00 PM",
-  },
-  "single-day": {
-    label: "Single Day Camp",
-    amount: 15000,
-    description: "One full camp day with Chess Masters, rated games, lunch, outdoor park time, and fun activities at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "9:00 AM - 3:00 PM",
-  },
-  "half-day-am": {
-    label: "Half Day AM",
-    amount: 9500,
-    description: "One half-day AM chess camp session at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "9:00 AM - 12:00 PM",
-  },
-  "half-day-pm": {
-    label: "Half Day PM",
-    amount: 9500,
-    description: "One half-day PM chess camp session at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "12:00 PM - 3:00 PM",
-  },
-};
-
-const campAddOns = {
-  "early-drop-off": {
-    label: "Early Drop-Off (8:30 AM)",
-    amount: 3000,
-  },
-  "extended-day": {
-    label: "Late Pick-Up (until 3:30 PM)",
-    amount: 3000,
-  },
-};
-
-const campExtraServices = {
-  pizza: {
-    label: "Pizza",
-    description: "Pizza / lunch happens at 11:30",
-    amount: 700,
-  },
-  "ice-cream": {
-    label: "Ice-Cream",
-    description: "Ice-cream happens at 3:00",
-    amount: 500,
-  },
-};
+import { getRegistrationUnavailableMessage } from "../src/lib/programs.js";
+import { campAddOns, campExtraServices, campOptions } from "./_lib/priceCatalog.js";
+import { checkRegistrationGate } from "./_lib/registrationGate.js";
 
 const flexPackOptionIds = new Set();
 const dateSelectionOptionIds = new Set(["single-day", "half-day-am", "half-day-pm"]);
@@ -227,7 +178,10 @@ export default {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
     }
 
-    if (!isProgramOpen("camps")) {
+    // Launch gate: runs before rate limiting, QA pricing, and Stripe.
+    const gate = await checkRegistrationGate("camps");
+
+    if (!gate.ready) {
       return Response.json(
         { error: getRegistrationUnavailableMessage("Camp") },
         { status: 409 }

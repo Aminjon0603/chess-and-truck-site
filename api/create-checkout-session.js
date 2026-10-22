@@ -2,12 +2,10 @@ import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
 import { getNotificationRecipients, sendResendEmail } from "./_lib/resend.js";
 import { validateRegistrationFields } from "../src/lib/validation.js";
-import { getRegistrationUnavailableMessage, isProgramOpen } from "../src/lib/programs.js";
+import { getRegistrationUnavailableMessage } from "../src/lib/programs.js";
+import { tournamentServiceLevels as serviceLevels } from "./_lib/priceCatalog.js";
+import { checkRegistrationGate } from "./_lib/registrationGate.js";
 
-const serviceLevels = {
-  entry: { label: "Tournament Entry", amount: 5500 },
-  "entry-dojo": { label: "Tournament Entry + Master Training Dojo", amount: 15500 },
-};
 
 const sanitize = (value, limit = 200) => {
   if (typeof value !== "string") {
@@ -82,7 +80,10 @@ export default {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
     }
 
-    if (!isProgramOpen("tournaments")) {
+    // Launch gate: runs before rate limiting, emails, and Stripe.
+    const gate = await checkRegistrationGate("tournaments");
+
+    if (!gate.ready) {
       return Response.json(
         { error: getRegistrationUnavailableMessage("Tournament") },
         { status: 409 }
@@ -154,7 +155,7 @@ export default {
       return Response.json({ error: "Please choose a valid service level." }, { status: 400 });
     }
 
-    if (data.serviceLevel === "entry-dojo" && !isProgramOpen("dojo")) {
+    if (data.serviceLevel === "entry-dojo" && !(await checkRegistrationGate("dojo")).ready) {
       return Response.json(
         { error: getRegistrationUnavailableMessage("Chess Dojo") },
         { status: 409 }
