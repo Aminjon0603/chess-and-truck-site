@@ -449,7 +449,7 @@ const NAV_COMPACT_QUERY = "(max-width: 1179px)";
 const getProgramById = (programId) => programs.find((item) => item.id === programId);
 
 const getProgramStatusMessage = (programId) => {
-  if (programId === "camps" && !CAMP_REGISTRATION_OPEN) {
+  if (programId === "camps" && getProgramStatus("camps") === PROGRAM_STATUS.CLOSED) {
     return CAMP_REGISTRATION_CLOSED_MESSAGE;
   }
 
@@ -2714,7 +2714,7 @@ function CampsOverviewPage({
                 className="btn btn-primary btn-emphasis"
                 onClick={scrollToCampSection("camp-booking")}
               >
-                {CAMP_REGISTRATION_OPEN ? "Enroll Now" : "Registration Closed"}
+                {CAMP_REGISTRATION_OPEN ? "Enroll Now" : PROGRAM_STATUS_LABELS[getProgramStatus("camps")]}
               </a>
               <a
                 href="#camp-schedule"

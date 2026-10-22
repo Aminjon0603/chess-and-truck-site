@@ -8,7 +8,7 @@ export const PROGRAM_STATUS = {
 };
 
 export const programStatuses = {
-  camps: PROGRAM_STATUS.CLOSED,
+  camps: PROGRAM_STATUS.COMING_SOON,
   tournaments: PROGRAM_STATUS.COMING_SOON,
   lessons: PROGRAM_STATUS.COMING_SOON,
   afterSchool: PROGRAM_STATUS.COMING_SOON,
@@ -20,8 +20,9 @@ export const getProgramStatus = (programId) =>
 
 export const isProgramOpen = (programId) => getProgramStatus(programId) === PROGRAM_STATUS.OPEN;
 
+// Shown only if camps are set to "closed".
 export const CAMP_REGISTRATION_CLOSED_MESSAGE =
-  "Registration for the June 15 - 19 summer camp is closed. Contact us to hear when next season's dates open.";
+  "Camp registration is closed for this season. Contact us to hear when next season's dates open.";
 
 export const getRegistrationUnavailableMessage = (programName) =>
   `${programName} registration is not open yet. Contact us and we will let you know when it opens.`;

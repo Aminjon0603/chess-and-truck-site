@@ -4,7 +4,7 @@ export const siteBrand = {
   city: "New York City",
   tagline: "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128",
   footerNote:
-    "Our summer chess program runs June 15 through June 19, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "Our summer chess program runs on weekdays on the Upper East Side, and next season's dates will be announced when registration opens. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
   // Academy-wide wording for the shared header and footer.
   academyTagline: "Chess Academy · New York City",
   academyNote:
@@ -93,7 +93,7 @@ export const academyHomePage = {
       {
         question: "When does registration open?",
         answer:
-          "Each program above shows its current status. Programs marked Registration Opening Soon or Registration Closed are not taking registrations yet. Contact us and we will let you know when registration opens.",
+          "Each program above shows its current status. Programs marked Registration Opening Soon are not taking registrations yet. Contact us and we will let you know when registration opens.",
       },
       {
         question: "How do payments work?",
@@ -305,16 +305,16 @@ export const campMenuItems = [
     label: "Camp Overview",
     path: "/camps",
     description: "See dates, location, daily format, and how summer camp works before you register.",
-    signal: "June 15 - 19",
+    signal: "Opening soon",
     imageKey: "overview",
   },
 ];
 
 export const campMenuFeature = {
   eyebrow: "Summer camp",
-  title: "June 15 - June 19 | Weekdays",
+  title: "Summer camp | Weekdays",
   text:
-    "Our summer chess program runs June 15 through June 19, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "Our summer chess program runs on weekdays on the Upper East Side, and next season's dates will be announced when registration opens. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
   ctaLabel: "View Full Camp Details",
   ctaPath: "/camps",
 };
@@ -441,13 +441,13 @@ export const featuredTournament = {
   slug: "summer-camp",
   title: "Summer Chess Camp",
   city: "62 E 92nd Street, New York, NY 10128",
-  scheduleLabel: "June 15 - June 19 | Weekdays",
+  scheduleLabel: "Weekdays | Dates coming soon",
   formatLabel: "9:00 AM - 3:00 PM",
   pricingLabel: "Camp details available now",
   venueLabel: "62 E 92nd Street, New York, NY 10128",
   shortSummary: "A full-day program combining expert instruction, structured play, outdoor time, and plenty of FUN.",
   longSummary:
-    "Our summer chess program runs June 15 through June 19, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "Our summer chess program runs on weekdays on the Upper East Side, and next season's dates will be announced when registration opens. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -462,7 +462,7 @@ export const homePage = {
   title: "Summer chess camps at 62 E 92nd Street, New York, NY 10128.",
     intro: "Weekday summer camp with Chess Masters at 62 E 92nd Street, New York, NY 10128.",
   heroFacts: [
-    { label: "Dates", value: "June 15 - June 19 | Weekdays" },
+    { label: "Dates", value: "Coming soon" },
     { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
     { label: "Age range", value: "Ages 4 - 17" },
     { label: "Levels", value: "Beginner through Advanced" },
@@ -541,13 +541,13 @@ export const campOverviewPage = {
   intro: "",
   chips: [],
   heroFacts: [
-    { label: "Dates", value: "June 15 - June 19 | Weekdays" },
+    { label: "Dates", value: "Coming soon" },
     { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
     { label: "Levels", value: "Beginner through Advanced" },
     { label: "Age range", value: "Ages 4 - 17" },
   ],
   portraitCaption: "Simple camp booking with real chess structure.",
-  asideTag: "June 15 - 19",
+  asideTag: "Opening soon",
   asideTitle: "Program Overview",
   asideText:
       "Full-day program led by Chess Masters, with chess lessons, rated matches, lunch, outdoor park time, and a fun, engaging environment students look forward to each day.",
@@ -590,7 +590,7 @@ export const campOverviewPage = {
   },
   detailsCards: [
     { title: "Location", text: "62 E 92nd Street, New York, NY 10128" },
-    { title: "Dates", text: "June 15 - June 19 | Weekdays" },
+    { title: "Dates", text: "Next season's dates coming soon" },
     { title: "Time", text: "9:00 AM - 3:00 PM" },
     { title: "Age range", text: "Ages 4 - 17" },
     { title: "Rated matches", text: "Included during camp sessions" },
@@ -876,7 +876,7 @@ export const campDetailPages = {
     title: "Daily camp rhythm for students who need more than casual chess.",
     intro:
       "A summer camp format built around instruction, supervised play, review, and daily habits that actually move a student forward.",
-    chips: ["Daily rhythm", "June 15 - June 19", "Central Park"],
+    chips: ["Daily rhythm", "Summer camp", "Central Park"],
     portraitCaption:
       "A strong training camp should feel focused and alive, not like a room where chess is just one activity in the background.",
     asideTag: "Training camp fit",
@@ -886,7 +886,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Students building fundamentals" },
       { label: "Daily feel", value: "Coach-led and active" },
-      { label: "Season", value: "June 15 - June 19" },
+      { label: "Season", value: "Summer" },
     ],
     cards: [
       { title: "Daily instruction", text: "Coach-led camp blocks with a clear training theme instead of random activity shifts." },
@@ -908,7 +908,7 @@ export const campDetailPages = {
           "Useful for students who need structure more than intensity right away",
         ],
         meta: "Founding camp release",
-        note: "Runs June 15 - June 19",
+        note: "Dates coming soon",
         cta: "Ask about intro camp week",
       },
       {
@@ -953,7 +953,7 @@ export const campDetailPages = {
     title: "Shorter, sharper camp blocks for students who want deeper work.",
     intro:
       "This camp format is for students who already know the basics and want a more focused training week with stronger review and cleaner habits.",
-    chips: ["Advanced players", "June 15 - June 19", "Focused training"],
+    chips: ["Advanced players", "Summer camp", "Focused training"],
     portraitCaption:
       "Advanced camp should feel sharper than general camp: more game review, cleaner goals, and stronger daily focus.",
     asideTag: "Prep camp fit",
@@ -963,7 +963,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Active competitors" },
       { label: "Works well for", value: "Game review and prep" },
-      { label: "Season", value: "June 15 - June 19" },
+      { label: "Season", value: "Summer" },
     ],
     cards: [
       { title: "Game review first", text: "The week should include real review of practical mistakes, not only abstract instruction." },
@@ -985,7 +985,7 @@ export const campDetailPages = {
           "Useful for players who want a more competitive training focus",
         ],
         meta: "Short prep release",
-        note: "Runs June 15 - June 19",
+        note: "Dates coming soon",
         cta: "Ask about prep blocks",
       },
       {
@@ -1030,7 +1030,7 @@ export const campDetailPages = {
     title: "Remote camp structure for families who still want a serious week.",
     intro:
       "For students who need a structured chess week without commuting, online camps can still feel focused, coach-led, and worth the time.",
-    chips: ["Remote format", "June 15 - June 19", "Structured days"],
+    chips: ["Remote format", "Summer camp", "Structured days"],
     portraitCaption:
       "Online camp should not feel passive. The right setup keeps the student engaged, moving, and accountable through the day.",
     asideTag: "Online camp fit",
@@ -1040,7 +1040,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Remote families" },
       { label: "Works well for", value: "Review and guided practice" },
-      { label: "Season", value: "June 15 - June 19" },
+      { label: "Season", value: "Summer" },
     ],
     cards: [
       { title: "Cleaner than random online time", text: "A camp week should give students structure, not more disconnected chess activity." },
@@ -1062,7 +1062,7 @@ export const campDetailPages = {
           "Useful when a student benefits from shorter, more controlled camp blocks",
         ],
         meta: "Short online release",
-        note: "Runs June 15 - June 19",
+        note: "Dates coming soon",
         cta: "Ask about mini online camps",
       },
       {
@@ -1274,7 +1274,7 @@ export const faqPage = {
   title: "Camp FAQ",
   intro: "The answers parents usually want before booking.",
   heroFacts: [
-    { label: "Camp dates", value: "June 15 - June 19 | Weekdays" },
+    { label: "Camp dates", value: "Coming soon" },
     { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
     { label: "Camp time", value: "9:00 AM - 3:00 PM" },
     { label: "Support", value: "Call, text, or email" },

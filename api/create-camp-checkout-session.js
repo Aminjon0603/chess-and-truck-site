@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
-import { CAMP_REGISTRATION_CLOSED_MESSAGE, isProgramOpen } from "../src/lib/programs.js";
+import { getRegistrationUnavailableMessage, isProgramOpen } from "../src/lib/programs.js";
 
 const campOptions = {
   "full-week": {
@@ -228,7 +228,10 @@ export default {
     }
 
     if (!isProgramOpen("camps")) {
-      return Response.json({ error: CAMP_REGISTRATION_CLOSED_MESSAGE }, { status: 409 });
+      return Response.json(
+        { error: getRegistrationUnavailableMessage("Camp") },
+        { status: 409 }
+      );
     }
 
     const limited = applyRateLimit(request, "camp-checkout", {
