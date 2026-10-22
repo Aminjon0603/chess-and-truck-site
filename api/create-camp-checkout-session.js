@@ -1,9 +1,6 @@
 import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
-import {
-  CAMP_REGISTRATION_CLOSED_MESSAGE,
-  CAMP_REGISTRATION_OPEN,
-} from "../src/lib/campRegistration.js";
+import { CAMP_REGISTRATION_CLOSED_MESSAGE, isProgramOpen } from "../src/lib/programs.js";
 
 const campOptions = {
   "full-week": {
@@ -230,7 +227,7 @@ export default {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
     }
 
-    if (!CAMP_REGISTRATION_OPEN) {
+    if (!isProgramOpen("camps")) {
       return Response.json({ error: CAMP_REGISTRATION_CLOSED_MESSAGE }, { status: 409 });
     }
 

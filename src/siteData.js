@@ -10,9 +10,181 @@ export const siteBrand = {
 export const navigationItems = [
   { label: "Home", path: "/" },
   { label: "Camps", path: "/camps" },
+  { label: "Tournaments", path: "/tournaments" },
+  { label: "Lessons", path: "/private-lessons" },
+  { label: "After-School", path: "/after-school" },
+  { label: "Dojo", path: "/dojo" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
 ];
+
+// Program names, summaries, and page content. Registration status lives in
+// src/lib/programs.js so it can be shared with the checkout API.
+export const programOverview = {
+  eyebrow: "Our programs",
+  title: "Chess education for every stage",
+  intro:
+    "Camps, tournaments, lessons, after-school programs, and the Chess Dojo. Here is what each program is and where registration stands today.",
+};
+
+export const programs = [
+  {
+    id: "camps",
+    name: "Chess Camps",
+    path: "/camps",
+    summary:
+      "Weekday summer camp on the Upper East Side with expert instruction, structured play, and a fun camp experience.",
+  },
+  {
+    id: "tournaments",
+    name: "Chess Tournaments",
+    path: "/tournaments",
+    registrationPath: "/register",
+    summary:
+      "Planned scholastic tournaments with Open and Beginner sections. Tournament dates have not been announced yet.",
+  },
+  {
+    id: "lessons",
+    name: "Private Chess Lessons",
+    path: "/private-lessons",
+    summary:
+      "Private, small-group, and online coaching with real games, guided analysis, and structured improvement.",
+  },
+  {
+    id: "afterSchool",
+    name: "After-School Programs",
+    path: "/after-school",
+    summary:
+      "After-school chess for NYC students. Program details are still being finalized.",
+  },
+  {
+    id: "dojo",
+    name: "Chess Dojo",
+    path: "/dojo",
+    summary:
+      "Extra coaching around tournament day, turning competition into both a playing experience and a training block.",
+  },
+];
+
+export const programPages = {
+  tournaments: {
+    eyebrow: "Chess Tournaments",
+    title: "NYC scholastic chess tournaments.",
+    intro:
+      "We are preparing scholastic tournaments for school-age players. No tournament dates have been announced yet. The details below describe the planned format and may change before registration opens.",
+    heroFacts: [
+      { label: "Planned location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+      { label: "Planned sections", value: "Open + Beginner" },
+      { label: "Planned format", value: "Saturday mornings, 9:00 AM to lunch" },
+    ],
+    highlightSection: {
+      eyebrow: "What we are planning",
+      title: "Built for students who want real tournament structure",
+      intro: "This is the planned approach, not a schedule of upcoming events.",
+    },
+    highlights: [
+      {
+        title: "Scholastic tournaments",
+        text: "Planned for school-age players who want a more organized NYC format built around real chess improvement.",
+      },
+      {
+        title: "Open and Beginner sections",
+        text: "The plan is to give experienced players and first-time competitors clearer placement from the start.",
+      },
+      {
+        title: "Shorter Saturday format",
+        text: "The goal is a serious tournament morning that starts at 9:00 AM and finishes around lunch.",
+      },
+    ],
+    usesSectionOptions: true,
+    sectionsSection: {
+      eyebrow: "Planned sections",
+      title: "Open and Beginner sections",
+      intro: "Section rules may be adjusted before registration opens.",
+    },
+    scheduleSection: {
+      eyebrow: "Planned event morning",
+      title: "How a tournament Saturday is planned to run",
+      intro: "No tournament dates are scheduled yet. Timing may change before the first event is announced.",
+    },
+    schedule: [
+      {
+        time: "8:30 AM",
+        title: "Check-in window",
+        text: "Families arrive, settle in, and get players ready before the first round begins.",
+      },
+      {
+        time: "9:00 AM",
+        title: "Rounds begin",
+        text: "Play starts on time, with Open and Beginner sections already separated clearly.",
+      },
+      {
+        time: "Around lunch",
+        title: "Wrap-up",
+        text: "The format is designed to finish by lunch so families get a serious event without losing the whole day.",
+      },
+    ],
+  },
+  afterSchool: {
+    eyebrow: "After-School Programs",
+    title: "After-school chess for NYC students.",
+    intro:
+      "We are preparing after-school chess programs for NYC students. Program details are still being finalized, and we will share them when they are confirmed.",
+    heroFacts: [
+      { label: "Program", value: "After-school chess" },
+      { label: "Details", value: "Being finalized" },
+      { label: "Updates", value: "Contact us to hear first" },
+    ],
+    highlightSection: {
+      eyebrow: "Where things stand",
+      title: "What we can share today",
+    },
+    highlights: [
+      {
+        title: "In preparation",
+        text: "We are finalizing the program format, schedule, and locations before announcing them.",
+      },
+      {
+        title: "Schools can reach out",
+        text: "Schools and parent groups interested in after-school chess can contact us to start a conversation.",
+      },
+      {
+        title: "Families can get updates",
+        text: "Contact us and we will let you know when program details and registration are announced.",
+      },
+    ],
+  },
+  dojo: {
+    eyebrow: "Chess Dojo",
+    title: "Master Training Dojo.",
+    intro:
+      "A premium coaching program for ambitious players who want more than a standard tournament entry. We are preparing the Dojo alongside our tournaments.",
+    heroFacts: [
+      { label: "For", value: "Ambitious tournament players" },
+      { label: "Focus", value: "Critical positions and game review" },
+      { label: "Planned format", value: "Coaching around tournament day" },
+    ],
+    highlightSection: {
+      eyebrow: "What the Dojo is",
+      title: "Extra coaching around tournament day",
+    },
+    highlights: [
+      {
+        title: "Coach-guided review",
+        text: "Review critical positions with coach guidance during the tournament day.",
+      },
+      {
+        title: "Competition plus training",
+        text: "Turn the event into both a competition experience and a training block.",
+      },
+      {
+        title: "More than an entry",
+        text: "Give ambitious players more value than a standard entry alone.",
+      },
+    ],
+    showsDojoFeature: true,
+  },
+};
 
 export const lessonMenuItems = [
   {
@@ -104,9 +276,9 @@ export const routeMeta = {
     "See the summer camp format, 62 E 92nd Street, New York, NY 10128 location, daily structure, and camp details for CHESS AND TRUCK.",
   },
   "/private-lessons": {
-    title: "Lessons | CHESS AND TRUCK",
+    title: "Private Chess Lessons | CHESS AND TRUCK",
     description:
-      "Chess lessons in NYC and online with game review, structured coaching, and clear lesson options for beginner and improving students.",
+      "Private, small-group, and online chess lessons in NYC with game review and structured coaching. Registration is opening soon.",
   },
   "/lessons/online": {
     title: "Online Lessons | CHESS AND TRUCK",
@@ -142,6 +314,21 @@ export const routeMeta = {
     title: "Registration | CHESS AND TRUCK",
     description:
       "Complete the CHESS AND TRUCK registration form and continue to secure checkout.",
+  },
+  "/tournaments": {
+    title: "Chess Tournaments | CHESS AND TRUCK",
+    description:
+      "NYC scholastic chess tournaments with Open and Beginner sections. Registration is opening soon.",
+  },
+  "/after-school": {
+    title: "After-School Programs | CHESS AND TRUCK",
+    description:
+      "After-school chess programs for NYC students are in preparation. Registration is opening soon.",
+  },
+  "/dojo": {
+    title: "Chess Dojo | CHESS AND TRUCK",
+    description:
+      "The Master Training Dojo adds coach-guided review around tournament day. Registration is opening soon.",
   },
   "/terms": {
     title: "Terms of Service | CHESS AND TRUCK",
@@ -1138,7 +1325,7 @@ export const contactPage = {
 };
 
 export const privateLessonsPage = {
-  eyebrow: "Services",
+  eyebrow: "Private Chess Lessons",
   title: "Chess lessons in NYC: private, small-group, and online.",
   intro:
     "Private, group, and online chess lessons for families who want clear coaching and a simple next step.",

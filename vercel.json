@@ -16,6 +16,18 @@
       "destination": "/index.html"
     },
     {
+      "source": "/tournaments",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/after-school",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dojo",
+      "destination": "/index.html"
+    },
+    {
       "source": "/faq",
       "destination": "/index.html"
     },

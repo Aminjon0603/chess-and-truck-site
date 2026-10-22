@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
 import { getNotificationRecipients, sendResendEmail } from "./_lib/resend.js";
 import { validateRegistrationFields } from "../src/lib/validation.js";
+import { getRegistrationUnavailableMessage, isProgramOpen } from "../src/lib/programs.js";
 
 const serviceLevels = {
   entry: { label: "Tournament Entry", amount: 5500 },
@@ -81,6 +82,13 @@ export default {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
     }
 
+    if (!isProgramOpen("tournaments")) {
+      return Response.json(
+        { error: getRegistrationUnavailableMessage("Tournament") },
+        { status: 409 }
+      );
+    }
+
     const limited = applyRateLimit(request, "registration", {
       limit: 6,
       windowMs: 15 * 60 * 1000,
@@ -144,6 +152,13 @@ export default {
 
     if (!serviceLevel) {
       return Response.json({ error: "Please choose a valid service level." }, { status: 400 });
+    }
+
+    if (data.serviceLevel === "entry-dojo" && !isProgramOpen("dojo")) {
+      return Response.json(
+        { error: getRegistrationUnavailableMessage("Chess Dojo") },
+        { status: 409 }
+      );
     }
 
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;

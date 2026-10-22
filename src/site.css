@@ -608,15 +608,20 @@ a,
   box-shadow: var(--shadow);
 }
 
-.camp-registration-closed {
+.program-status-notice {
   display: grid;
   justify-items: start;
   gap: 12px;
   margin-top: 24px;
 }
 
-.camp-registration-closed p {
+.program-status-notice p {
   margin: 0;
+}
+
+.program-card .slot-status-badge,
+.lesson-hero-copy .program-status-badge {
+  margin-bottom: 14px;
 }
 
 .surface-dark {

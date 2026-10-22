@@ -17,16 +17,26 @@ import {
   masterTrainingDojo,
   navigationItems,
   privateLessonsPage,
+  programOverview,
+  programPages,
+  programs,
   privacyPage,
   registerPage,
   routeMeta,
+  sectionOptions,
   serviceLevels,
   siteBrand,
   termsPage,
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
-import { CAMP_REGISTRATION_CLOSED_MESSAGE, CAMP_REGISTRATION_OPEN } from "./lib/campRegistration.js";
+import {
+  CAMP_REGISTRATION_CLOSED_MESSAGE,
+  PROGRAM_STATUS,
+  getProgramStatus,
+  getRegistrationUnavailableMessage,
+  isProgramOpen,
+} from "./lib/programs.js";
 import campOnlineVisual from "./assets/camp-online.svg";
 import campOverviewVisual from "./assets/camp-overview.svg";
 import campPrepVisual from "./assets/camp-prep.svg";
@@ -383,13 +393,10 @@ const knownRoutes = new Set([
   "/camps/prep",
   "/camps/online",
   "/about",
-  "/events",
-  "/events/chess-and-truck-tournament",
+  "/tournaments",
   "/private-lessons",
-  "/lessons/online",
-  "/lessons/in-person",
-  "/lessons/group",
-  "/lessons/manage",
+  "/after-school",
+  "/dojo",
   "/faq",
   "/contact",
   "/register",
@@ -398,11 +405,12 @@ const knownRoutes = new Set([
 ]);
 
 const legacyRouteRedirects = {
-  "/private-lessons": "/contact",
-  "/lessons/online": "/contact",
-  "/lessons/in-person": "/contact",
-  "/lessons/group": "/contact",
-  "/lessons/manage": "/contact",
+  "/events": "/tournaments",
+  "/events/chess-and-truck-tournament": "/tournaments",
+  "/lessons/online": "/private-lessons",
+  "/lessons/in-person": "/private-lessons",
+  "/lessons/group": "/private-lessons",
+  "/lessons/manage": "/private-lessons",
   "/camps/training": "/camps",
   "/camps/prep": "/camps",
   "/camps/online": "/camps",
@@ -418,6 +426,29 @@ const normalizePath = (path) => {
 
   return path.endsWith("/") ? path.slice(0, -1) : path;
 };
+
+const CAMP_REGISTRATION_OPEN = isProgramOpen("camps");
+
+const PROGRAM_STATUS_LABELS = {
+  [PROGRAM_STATUS.OPEN]: "Registration Open",
+  [PROGRAM_STATUS.COMING_SOON]: "Registration Opening Soon",
+  [PROGRAM_STATUS.CLOSED]: "Registration Closed",
+};
+
+const getProgramById = (programId) => programs.find((item) => item.id === programId);
+
+const getProgramStatusMessage = (programId) => {
+  if (programId === "camps" && !CAMP_REGISTRATION_OPEN) {
+    return CAMP_REGISTRATION_CLOSED_MESSAGE;
+  }
+
+  return getRegistrationUnavailableMessage(getProgramById(programId)?.name || "Program");
+};
+
+// The Dojo tournament add-on can only be bought once the Dojo itself is open.
+const availableServiceLevels = serviceLevels.filter(
+  (item) => item.id !== "entry-dojo" || isProgramOpen("dojo")
+);
 
 const lessonCarouselImages = {
   online: lessonOnlineVisual,
@@ -1036,7 +1067,11 @@ function DojoFeature({ currentPath, navigate }) {
 
       <div className="dojo-side">
         <span className="mini-tag">Add-on option</span>
-        <strong>+$100 with tournament entry</strong>
+        <strong>
+          {isProgramOpen("dojo")
+            ? "+$100 with tournament entry"
+            : PROGRAM_STATUS_LABELS[getProgramStatus("dojo")]}
+        </strong>
         <p>{masterTrainingDojo.highlight}</p>
         <AppLink
           to="/contact"
@@ -1048,6 +1083,232 @@ function DojoFeature({ currentPath, navigate }) {
         </AppLink>
       </div>
     </article>
+  );
+}
+
+function ProgramStatusBadge({ programId }) {
+  const status = getProgramStatus(programId);
+
+  return (
+    <span className={`slot-status-badge program-status-badge is-${status}`}>
+      {PROGRAM_STATUS_LABELS[status]}
+    </span>
+  );
+}
+
+function ProgramStatusNotice({ programId, currentPath, navigate }) {
+  const status = getProgramStatus(programId);
+
+  if (status === PROGRAM_STATUS.OPEN) {
+    return null;
+  }
+
+  return (
+    <article className="surface status-banner program-status-notice">
+      <strong>{PROGRAM_STATUS_LABELS[status]}</strong>
+      <p>{getProgramStatusMessage(programId)}</p>
+      <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+        Contact Us
+      </AppLink>
+    </article>
+  );
+}
+
+function ProgramsOverview({ currentPath, navigate }) {
+  return (
+    <section className="page-section" id="programs">
+      <div className="shell">
+        <SectionIntro
+          eyebrow={programOverview.eyebrow}
+          title={programOverview.title}
+          intro={programOverview.intro}
+        />
+        <div className="card-grid card-grid-three">
+          {programs.map((item) => (
+            <article className="surface card-link-card program-card" key={item.id}>
+              <ProgramStatusBadge programId={item.id} />
+              <h3>{item.name}</h3>
+              <p>{item.summary}</p>
+              <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="text-link">
+                Learn more
+              </AppLink>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProgramPage({ programId, currentPath, navigate }) {
+  const page = programPages[programId];
+  const program = getProgramById(programId);
+  const status = getProgramStatus(programId);
+  const canRegister = status === PROGRAM_STATUS.OPEN && Boolean(program.registrationPath);
+
+  return (
+    <>
+      <PageHero
+        eyebrow={page.eyebrow}
+        title={page.title}
+        intro={page.intro}
+        heroFacts={page.heroFacts}
+        currentPath={currentPath}
+        navigate={navigate}
+        actions={
+          <>
+            {canRegister ? (
+              <AppLink
+                to={program.registrationPath}
+                navigate={navigate}
+                currentPath={currentPath}
+                className="btn btn-primary"
+              >
+                Register Now
+              </AppLink>
+            ) : null}
+            <AppLink
+              to="/contact"
+              navigate={navigate}
+              currentPath={currentPath}
+              className={`btn ${canRegister ? "btn-secondary" : "btn-primary"}`}
+            >
+              Contact Us
+            </AppLink>
+            <AppLink to="/" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
+              See All Programs
+            </AppLink>
+          </>
+        }
+        aside={
+          <>
+            <span className="mini-tag mini-tag-dark">Program status</span>
+            <h2>{PROGRAM_STATUS_LABELS[status]}</h2>
+            <p>
+              {status === PROGRAM_STATUS.OPEN
+                ? `${program.name} registration is open.`
+                : getProgramStatusMessage(programId)}
+            </p>
+            <div className="fact-list">
+              <div>
+                <span>Program</span>
+                <strong>{program.name}</strong>
+              </div>
+              <div>
+                <span>Next step</span>
+                <strong>{canRegister ? "Register online" : "Contact us"}</strong>
+              </div>
+            </div>
+          </>
+        }
+      />
+
+      <section className="page-section">
+        <div className="shell">
+          <SectionIntro
+            eyebrow={page.highlightSection.eyebrow}
+            title={page.highlightSection.title}
+            intro={page.highlightSection.intro}
+          />
+          <div className="card-grid card-grid-three">
+            {page.highlights.map((item) => (
+              <article className="surface stat-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {page.usesSectionOptions ? (
+        <section className="page-section">
+          <div className="shell">
+            <SectionIntro
+              eyebrow={page.sectionsSection.eyebrow}
+              title={page.sectionsSection.title}
+              intro={page.sectionsSection.intro}
+            />
+            <div className="card-grid card-grid-two">
+              {sectionOptions.map((item) => (
+                <article className="surface stat-card" key={item.id}>
+                  <span className="mini-tag">{item.badge}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <ul className="checklist">
+                    {item.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {page.schedule ? (
+        <section className="page-section">
+          <div className="shell">
+            <SectionIntro
+              eyebrow={page.scheduleSection.eyebrow}
+              title={page.scheduleSection.title}
+              intro={page.scheduleSection.intro}
+            />
+            <div className="card-grid card-grid-three">
+              {page.schedule.map((item) => (
+                <article className="surface stat-card" key={item.title}>
+                  <span className="mini-tag">{item.time}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {page.showsDojoFeature ? (
+        <section className="page-section">
+          <div className="shell">
+            <DojoFeature currentPath={currentPath} navigate={navigate} />
+          </div>
+        </section>
+      ) : null}
+
+      <section className="page-section">
+        <div className="shell">
+          <article className="surface lesson-cta-panel">
+            <div className="lesson-cta-copy">
+              <span className="section-tag">{PROGRAM_STATUS_LABELS[status]}</span>
+              <h2>
+                {canRegister
+                  ? `${program.name} registration is open.`
+                  : `Want to hear when ${program.name} opens?`}
+              </h2>
+              <p>
+                {canRegister
+                  ? "Complete the registration form and continue to secure checkout."
+                  : getProgramStatusMessage(programId)}
+              </p>
+            </div>
+            <div className="cta-row lesson-cta-actions">
+              <AppLink
+                to={canRegister ? program.registrationPath : "/contact"}
+                navigate={navigate}
+                currentPath={currentPath}
+                className="btn btn-primary"
+              >
+                {canRegister ? "Register Now" : "Contact Us"}
+              </AppLink>
+              <a href={phoneContact.href} className="btn btn-secondary">
+                Call / Text {phoneContact.display}
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -2088,6 +2349,7 @@ function PrivateLessonsPage({ currentPath, navigate }) {
       <section className="page-hero lesson-page-hero">
         <div className="shell lesson-hero-grid">
           <div className="lesson-hero-copy">
+            <ProgramStatusBadge programId="lessons" />
             <span className="section-tag">{privateLessonsPage.eyebrow}</span>
             <h1>{privateLessonsPage.title}</h1>
             <p className="page-intro">{privateLessonsPage.intro}</p>
@@ -2180,9 +2442,11 @@ function PrivateLessonsPage({ currentPath, navigate }) {
         <div className="shell">
           <article className="surface lesson-cta-panel">
             <div className="lesson-cta-copy">
-              <span className="section-tag">Lesson inquiry</span>
+              <span className="section-tag">{PROGRAM_STATUS_LABELS[getProgramStatus("lessons")]}</span>
               <h2>{privateLessonsPage.ctaTitle}</h2>
-              <p>{privateLessonsPage.ctaText}</p>
+              <p>
+                {isProgramOpen("lessons") ? privateLessonsPage.ctaText : getProgramStatusMessage("lessons")}
+              </p>
             </div>
             <div className="cta-row lesson-cta-actions">
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
@@ -2210,6 +2474,7 @@ function CampsOverviewPage({
   selectedCampOptionId = CAMP_PURCHASE_OPTIONS[0]?.id,
   isCampBookingFormVisible = false,
   openCampBooking = () => {},
+  showProgramsOverview = false,
 }) {
   const selectedOption =
     CAMP_PURCHASE_OPTION_MAP.get(selectedCampOptionId) || CAMP_PURCHASE_OPTIONS[0];
@@ -2312,6 +2577,8 @@ function CampsOverviewPage({
         </div>
       </section>
 
+      {showProgramsOverview ? <ProgramsOverview currentPath={currentPath} navigate={navigate} /> : null}
+
       <section className="page-section" id="camp-booking">
         <div className="shell">
           <SectionIntro
@@ -2388,13 +2655,7 @@ function CampsOverviewPage({
             </div>
 
           ) : (
-            <article className="surface status-banner camp-registration-closed">
-              <strong>Registration closed</strong>
-              <p>{CAMP_REGISTRATION_CLOSED_MESSAGE}</p>
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Contact Us
-              </AppLink>
-            </article>
+            <ProgramStatusNotice programId="camps" currentPath={currentPath} navigate={navigate} />
           )}
 
           {CAMP_REGISTRATION_OPEN && (isCampBookingFormVisible || campCheckoutState.status !== "idle") ? (
@@ -2908,14 +3169,6 @@ function LessonDetailPage({ page, currentPath, navigate }) {
   );
 }
 
-function EventsPage({ currentPath, navigate }) {
-  return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
-}
-
-function TournamentDetailPage({ currentPath, navigate }) {
-  return <CampsOverviewPage currentPath={currentPath} navigate={navigate} />;
-}
-
 function FaqPage({ currentPath, navigate }) {
   return (
     <>
@@ -3293,7 +3546,7 @@ function RegisterPage({
                       aria-invalid={registrationErrors.serviceLevel ? "true" : "false"}
                     >
                       <option value="">Select service level</option>
-                      {serviceLevels.map((item) => (
+                      {availableServiceLevels.map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.label} - {formatCurrency(item.amount)}
                         </option>
@@ -3526,7 +3779,7 @@ function RegisterPage({
               <article className="surface">
                 <span className="mini-tag">Service levels</span>
                 <div className="service-stack">
-                  {serviceLevels.map((item) => (
+                  {availableServiceLevels.map((item) => (
                     <article className="service-card" key={item.id}>
                       <div>
                         <h3>{item.label}</h3>
@@ -4150,6 +4403,7 @@ function ChessTruckApp() {
         case "/":
           return (
             <CampsOverviewPage
+              showProgramsOverview
               currentPath={currentPath}
               navigate={navigate}
               campCheckoutState={campCheckoutState}
@@ -4219,26 +4473,14 @@ function ChessTruckApp() {
           );
         case "/about":
           return <AboutPage currentPath={currentPath} navigate={navigate} />;
-      case "/events":
-        return <EventsPage currentPath={currentPath} navigate={navigate} />;
-      case "/events/chess-and-truck-tournament":
-        return <TournamentDetailPage currentPath={currentPath} navigate={navigate} />;
+      case "/tournaments":
+        return <ProgramPage programId="tournaments" currentPath={currentPath} navigate={navigate} />;
       case "/private-lessons":
-      case "/lessons/online":
-      case "/lessons/in-person":
-      case "/lessons/group":
-      case "/lessons/manage":
-        return (
-          <ContactPage
-            currentPath={currentPath}
-            navigate={navigate}
-            contactState={contactState}
-            contactErrors={contactErrors}
-            contactSubmitState={contactSubmitState}
-            updateContactField={updateContactField}
-            handleContactSubmit={handleContactSubmit}
-          />
-        );
+        return <PrivateLessonsPage currentPath={currentPath} navigate={navigate} />;
+      case "/after-school":
+        return <ProgramPage programId="afterSchool" currentPath={currentPath} navigate={navigate} />;
+      case "/dojo":
+        return <ProgramPage programId="dojo" currentPath={currentPath} navigate={navigate} />;
       case "/faq":
         return <FaqPage currentPath={currentPath} navigate={navigate} />;
       case "/terms":
@@ -4258,6 +4500,11 @@ function ChessTruckApp() {
           />
         );
       case "/register":
+        // Tournament registration stays behind the program status, even via direct URL.
+        if (!isProgramOpen("tournaments")) {
+          return <ProgramPage programId="tournaments" currentPath={currentPath} navigate={navigate} />;
+        }
+
         return (
           <RegisterPage
             currentPath={currentPath}
@@ -4313,18 +4560,6 @@ function ChessTruckApp() {
               if (item.label === "Camps") {
                 return (
                   <CampsMenu
-                    key={`${item.label}-${currentPath}-${isCompactViewport ? "mobile" : "desktop"}`}
-                    currentPath={currentPath}
-                    navigate={navigate}
-                    isCompactViewport={isCompactViewport}
-                    closeNavigation={() => setIsMobileNavOpen(false)}
-                  />
-                );
-              }
-
-              if (item.label === "Lessons") {
-                return (
-                  <LessonsMenu
                     key={`${item.label}-${currentPath}-${isCompactViewport ? "mobile" : "desktop"}`}
                     currentPath={currentPath}
                     navigate={navigate}
