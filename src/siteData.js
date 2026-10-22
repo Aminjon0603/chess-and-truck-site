@@ -2,9 +2,9 @@ export const siteBrand = {
   name: "Chess & Truck",
   short: "CT",
   city: "New York City",
-  tagline: "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128",
+  tagline: "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training in NYC",
   footerNote:
-    "Our summer chess program runs on weekdays on the Upper East Side, and next season's dates will be announced when registration opens. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "We are preparing the first Chess & Truck summer chess camp in New York City. Dates and location will be announced when registration opens. Planned camp days include chess instruction, structured play, and outdoor time.",
   // Brand slogan and summary for the shared header and footer.
   slogan: "Big Moves Start Small.",
   brandNote:
@@ -117,33 +117,28 @@ export const academyHomePage = {
 };
 
 // Redesigned inner pages (camps, tournaments, private lessons).
-// Planned details are labelled as planned; last season's camp schedule is labelled as such.
+// Planned details are labelled as planned. The camp schedule is the proposed plan for the first camp.
 export const campsPageContent = {
   hero: {
     eyebrow: "Chess Camps",
-    title: "Summer chess camp on the Upper East Side.",
+    title: "Our first summer chess camp.",
     intro:
-      "A full camp day of chess lessons, games, and outdoor time, two blocks from Central Park. Next season's dates and pricing will be posted here when registration opens.",
+      "We are preparing the first Chess & Truck summer camp: full days of chess lessons, games, and outdoor time. Dates, location, and pricing will be posted here when registration opens.",
   },
   glance: [
-    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
-    { label: "Camp day", value: "9:00 AM - 3:00 PM (last season)" },
-    { label: "Ages", value: "4 - 17 (last season)" },
-    { label: "Next season", value: "Dates coming soon" },
+    { label: "Location", value: "To be announced" },
+    { label: "Planned camp day", value: "9:00 AM - 3:00 PM" },
+    { label: "Proposed ages", value: "4 - 17" },
+    { label: "Dates", value: "To be announced" },
   ],
   daySection: {
-    eyebrow: "A camp day",
-    title: "What a camp day looks like",
-    intro: "Based on last season's schedule. Next season's timing may change.",
+    eyebrow: "Planned schedule",
+    title: "Camp Daily Schedule",
+    intro: "This is the planned schedule for our first camp and is subject to change.",
   },
   learnSection: {
-    eyebrow: "What students work on",
+    eyebrow: "What students will work on",
     title: "Real chess skills, one day at a time",
-  },
-  locationSection: {
-    eyebrow: "Location",
-    title: "Two blocks from Central Park",
-    intro: "Camp was held at 62 E 92nd Street on the Upper East Side, with outdoor time in Central Park.",
   },
   faqSection: {
     eyebrow: "Camp questions",
@@ -153,31 +148,31 @@ export const campsPageContent = {
     {
       question: "Is camp suitable for beginners?",
       answer:
-        "Yes. Beginners are welcome. Last season, coaches started each day with warm-up games and grouped students by level.",
+        "Yes. Beginners will be welcome. The planned camp day starts with warm-up games so coaches can group students by level.",
     },
     {
       question: "Who leads instruction?",
       answer:
-        "Coaching details for next season will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
+        "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
     },
     {
       question: "What should students bring?",
       answer:
-        "Last season, students brought a water bottle, sunscreen, a change of clothes, and a packed lunch. Next season's list will be posted with registration.",
+        "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
     },
     {
       question: "Are campers supervised?",
-      answer: "Yes. Students are supervised throughout the camp day.",
+      answer: "Yes. Students will be supervised throughout the camp day.",
     },
     {
       question: "Are early drop-off and extended day options available?",
       answer:
-        "Ask us about early drop-off and extended day. Options for next season will be confirmed when registration opens.",
+        "Early drop-off and extended day options have not been decided yet. Any options will be listed when registration opens.",
     },
   ],
   status: {
     title: "Camp registration is opening soon",
-    text: "Camp registration and payments are not open yet. Dates, pricing, and enrollment options for next season will be posted on this page when registration opens.",
+    text: "Camp registration and payments are not open yet. Dates, location, pricing, and enrollment options will be posted on this page when registration opens.",
   },
 };
 
@@ -359,7 +354,7 @@ export const programs = [
     name: "Chess Camps",
     path: "/camps",
     summary:
-      "Weekday summer camp on the Upper East Side with chess lessons, games, and outdoor time.",
+      "Our first summer camp is in preparation, with planned days of chess lessons, games, and outdoor time.",
   },
   {
     id: "tournaments",
@@ -549,7 +544,7 @@ export const campMenuFeature = {
   eyebrow: "Summer camp",
   title: "Summer camp | Weekdays",
   text:
-    "Our summer chess program runs on weekdays on the Upper East Side, and next season's dates will be announced when registration opens. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "We are preparing the first Chess & Truck summer chess camp in New York City. Dates and location will be announced when registration opens. Planned camp days include chess instruction, structured play, and outdoor time.",
   ctaLabel: "View Full Camp Details",
   ctaPath: "/camps",
 };
@@ -568,12 +563,12 @@ export const routeMeta = {
   "/camps": {
     title: "Chess Camps | Chess & Truck",
     description:
-      "Summer chess camp on the Upper East Side: a typical camp day, what students work on, location, and registration status.",
+      "Chess & Truck is preparing its first summer chess camp in New York City: the planned daily schedule, what students will work on, and registration status.",
   },
   "/camps/book": {
     title: "Camp Booking | Chess & Truck",
     description:
-    "Choose a summer camp option, add family details, and continue to secure checkout for Chess & Truck camps at 62 E 92nd Street, New York, NY 10128.",
+    "Chess & Truck summer camp booking. Camp registration is opening soon.",
   },
   "/camps/confirmed": {
     title: "Camp Confirmation | Chess & Truck",
@@ -598,12 +593,12 @@ export const routeMeta = {
   "/events": {
     title: "Camps | Chess & Truck",
     description:
-    "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128 with dates, format, daily structure, and clear next steps for families.",
+    "Chess & Truck tournaments in New York City. Registration is opening soon.",
   },
   "/events/chess-and-truck-tournament": {
     title: "Summer Camp | Chess & Truck",
     description:
-    "See the summer camp format, 62 E 92nd Street, New York, NY 10128 location, daily structure, and camp details for Chess & Truck.",
+    "Chess & Truck tournaments in New York City. Registration is opening soon.",
   },
   "/private-lessons": {
     title: "Private Chess Lessons | Chess & Truck",
@@ -675,14 +670,14 @@ export const routeMeta = {
 export const featuredTournament = {
   slug: "summer-camp",
   title: "Summer Chess Camp",
-  city: "62 E 92nd Street, New York, NY 10128",
+  city: "Location to be announced",
   scheduleLabel: "Weekdays | Dates coming soon",
-  formatLabel: "9:00 AM - 3:00 PM",
-  pricingLabel: "Camp details available now",
-  venueLabel: "62 E 92nd Street, New York, NY 10128",
-  shortSummary: "A full-day program combining expert instruction, structured play, outdoor time, and plenty of FUN.",
+  formatLabel: "9:00 AM - 3:00 PM (planned)",
+  pricingLabel: "Camp details coming soon",
+  venueLabel: "Location to be announced",
+  shortSummary: "Our first summer camp is in preparation: a planned full-day program of chess lessons, structured play, and outdoor time.",
   longSummary:
-    "Our summer chess program runs on weekdays on the Upper East Side, and next season's dates will be announced when registration opens. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "We are preparing the first Chess & Truck summer chess camp in New York City. Dates and location will be announced when registration opens. Planned camp days include chess instruction, structured play, and outdoor time.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -1060,7 +1055,7 @@ export const campOverviewPage = {
     },
     {
       question: "Who leads instruction?",
-      answer: "Coaching details for next season will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
+      answer: "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
     },
     {
       question: "What should students bring?",
@@ -1343,14 +1338,14 @@ export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
   title: "A Smarter Chess Program for NYC Families",
   intro: [
-    "Chess and Truck makes it easy for New York City families to find a high-quality chess camp -- without the guesswork. Clear options, seamless communication, and expert coaching your child will actually benefit from.",
+    "Chess & Truck is building chess programs for New York City families: clear options, direct communication, and coaching your child will actually benefit from.",
     "Our coaching blends structured learning with a fun, engaging approach kids enjoy.",
-    "Real progress. Real coaches. Real results.",
+    "Real games. Real coaching. Real progress.",
   ],
   heroFacts: [
     { label: "Focus", value: "Scholastic chess" },
     { label: "City", value: "New York City" },
-    { label: "Programs", value: "Summer camps" },
+    { label: "Programs", value: "Camps, tournaments, lessons" },
   ],
   introSection: {
     eyebrow: "What matters most to families",
@@ -1378,7 +1373,7 @@ export const aboutPage = {
     },
     {
       title: "Substantive instruction",
-      text: "Each camp day is designed to develop analytical thinking and measurable improvement.",
+      text: "Our programs are designed to build analytical thinking through real games and guided review.",
     },
     {
       title: "Clear lines of communication",
@@ -1510,30 +1505,30 @@ export const faqPage = {
   intro: "The answers parents usually want before booking.",
   heroFacts: [
     { label: "Camp dates", value: "Coming soon" },
-    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
-    { label: "Camp time", value: "9:00 AM - 3:00 PM" },
+    { label: "Location", value: "To be announced" },
+    { label: "Planned camp time", value: "9:00 AM - 3:00 PM" },
     { label: "Support", value: "Call, text, or email" },
   ],
   quickCards: [
     {
       title: "Is this suitable for beginners?",
-      text: "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join!",
+      text: "Yes. Beginners will be welcome. The planned camp day starts with warm-up games so coaches can group students by level.",
     },
     {
       title: "Who leads instruction?",
-      text: "Coaching details for next season will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
+      text: "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
     },
     {
       title: "What should students bring?",
-      text: "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
+      text: "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
     },
     {
       title: "Are campers supervised at all times?",
-      text: "Yes. Students are supervised at all times throughout the day.",
+      text: "Yes. Students will be supervised at all times throughout the camp day.",
     },
     {
       title: "Are early drop-off and extended day options available?",
-      text: "Yes. Both options are available during enrollment.",
+      text: "Early drop-off and extended day options have not been decided yet. Any options will be listed when registration opens.",
     },
   ],
   prepSection: {
@@ -1600,7 +1595,7 @@ export const contactPage = {
   topicCards: [
     {
       title: "Camp questions",
-      text: "Ask about dates, Central Park location, daily format, pricing, or whether camp fits your family.",
+      text: "Ask about our first camp, the planned daily format, or whether camp fits your family.",
     },
     {
       title: "Lesson inquiries",
@@ -2246,7 +2241,7 @@ export const faqItems = [
   {
     question: "What ages is camp for?",
     answer:
-      "Camp is designed for ages 4 - 17.",
+      "The proposed age range is 4 - 17. Final ages will be confirmed when registration opens.",
   },
   {
     question: "Is this good for beginners?",
@@ -2256,12 +2251,12 @@ export const faqItems = [
   {
     question: "Are students grouped by level?",
     answer:
-      "Yes. Students are grouped by level so the coaching, games, and activities feel right for the group.",
+      "That is the plan. Students will be grouped by level so the coaching, games, and activities feel right for the group.",
   },
   {
     question: "What is a typical camp day like?",
     answer:
-      "Camp runs from 9:00 AM to 3:00 PM and includes chess instruction, rated games, lunch, outdoor park time, and fun activities.",
+      "The planned camp day runs from 9:00 AM to 3:00 PM with chess instruction, rated games, lunch, outdoor park time, and fun activities. The schedule is subject to change.",
   },
   {
     question: "What should my child bring?",

@@ -1703,7 +1703,7 @@ function CampsPage({ currentPath, navigate, bookingProps }) {
         actions={
           <>
             <a href="#camp-day" className="ac-btn ac-btn-primary" onClick={scrollToSection("camp-day")}>
-              See a camp day
+              See the daily schedule
             </a>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
               Ask about camp
@@ -1741,31 +1741,6 @@ function CampsPage({ currentPath, navigate, bookingProps }) {
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      <section className="ac-section" aria-labelledby="camp-location-title">
-        <div className="ac-shell pg-location">
-          <div className="pg-location-copy">
-            <AcademySectionHeading id="camp-location-title" {...content.locationSection} />
-            <p className="pg-address">{campOverviewPage.mapSection.address}</p>
-            <a
-              href={campOverviewPage.mapSection.directionsHref}
-              target="_blank"
-              rel="noreferrer"
-              className="ac-btn ac-btn-secondary"
-            >
-              Open in Google Maps
-            </a>
-          </div>
-          <div className="pg-map">
-            <iframe
-              title="Map of 62 E 92nd Street, New York"
-              src={campOverviewPage.mapSection.embedSrc}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
         </div>
       </section>
 
