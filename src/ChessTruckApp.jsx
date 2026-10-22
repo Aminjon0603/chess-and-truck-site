@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
+  academyHomePage,
   campBookingPage,
   campMenuFeature,
   campMenuItems,
@@ -30,6 +31,7 @@ import {
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
+import brandCrest from "./assets/chess-truck-crest.png";
 import {
   CAMP_REGISTRATION_CLOSED_MESSAGE,
   PROGRAM_STATUS,
@@ -435,6 +437,15 @@ const PROGRAM_STATUS_LABELS = {
   [PROGRAM_STATUS.CLOSED]: "Registration Closed",
 };
 
+const PROGRAM_STATUS_SHORT_LABELS = {
+  [PROGRAM_STATUS.OPEN]: "Open",
+  [PROGRAM_STATUS.COMING_SOON]: "Opening soon",
+  [PROGRAM_STATUS.CLOSED]: "Closed",
+};
+
+// The header switches to the menu button below this width so it stays one row.
+const NAV_COMPACT_QUERY = "(max-width: 1179px)";
+
 const getProgramById = (programId) => programs.find((item) => item.id === programId);
 
 const getProgramStatusMessage = (programId) => {
@@ -455,6 +466,14 @@ const lessonCarouselImages = {
   inperson: lessonInPersonVisual,
   group: lessonGroupVisual,
   manage: lessonManageVisual,
+};
+
+const programIcons = {
+  camps: campOverviewVisual,
+  tournaments: trophyBadge,
+  lessons: lessonInPersonVisual,
+  afterSchool: lessonGroupVisual,
+  dojo: dojoMark,
 };
 
 const campMenuImages = {
@@ -671,6 +690,7 @@ function AppLink({ to, navigate, children, className = "", currentPath, onNaviga
     <a
       href={to}
       className={`${className}${isActive ? " is-active" : ""}`.trim()}
+      aria-current={isActive ? "page" : undefined}
       onClick={handleClick}
       {...rest}
     >
@@ -1312,102 +1332,279 @@ function ProgramPage({ programId, currentPath, navigate }) {
   );
 }
 
-function SiteFooter({ currentPath, navigate }) {
+function BrandMark({ tone = "light" }) {
   return (
-    <footer className="site-footer">
-      <div className="shell">
-        <div className="surface footer-panel">
-          <div className="footer-top">
-            <div className="footer-brand-block">
-              <div className="footer-brand-row">
-                <div className="footer-logo-wrap">
-                  <img src={brandLogo} alt={`${siteBrand.name} logo`} className="footer-logo" />
-                </div>
-              </div>
-              <p>{siteBrand.footerNote}</p>
-              <AppLink
-                to="/contact"
-                navigate={navigate}
-                currentPath={currentPath}
-                className="btn btn-primary footer-cta"
-              >
-                Inquire
+    <span className={`ac-brandmark ac-brandmark-${tone}`}>
+      <img src={brandCrest} alt="" className="ac-brandmark-crest" width="48" height="51" />
+      <span className="ac-brandmark-text">
+        <span className="ac-brandmark-name">{siteBrand.name}</span>
+        <span className="ac-brandmark-tagline">{siteBrand.academyTagline}</span>
+      </span>
+    </span>
+  );
+}
+
+function ProgramCard({ program, currentPath, navigate }) {
+  return (
+    <AppLink to={program.path} navigate={navigate} currentPath={currentPath} className="ac-program-card">
+      <span className="ac-program-card-top">
+        <span className="ac-program-icon">
+          <img src={programIcons[program.iconKey]} alt="" width="56" height="56" />
+        </span>
+        <ProgramStatusBadge programId={program.id} />
+      </span>
+      <h3>{program.name}</h3>
+      <p>{program.summary}</p>
+      <span className="ac-program-link">
+        View program <span aria-hidden="true">&rarr;</span>
+      </span>
+    </AppLink>
+  );
+}
+
+function AcademySectionHeading({ id, eyebrow, title, intro }) {
+  return (
+    <div className="ac-section-heading">
+      <span className="ac-eyebrow">{eyebrow}</span>
+      <h2 id={id}>{title}</h2>
+      {intro ? <p>{intro}</p> : null}
+    </div>
+  );
+}
+
+function AcademyHomePage({ currentPath, navigate }) {
+  const { hero, programsSection, whySection, coachesSection, howSection, faqSection, contactCard } =
+    academyHomePage;
+  const coach = aboutPage.coachSpotlight;
+
+  const scrollToPrograms = (event) => {
+    const section = document.getElementById("programs");
+
+    if (!section) {
+      return;
+    }
+
+    event.preventDefault();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  };
+
+  return (
+    <div className="ac-home">
+      <section className="ac-hero" aria-labelledby="home-title">
+        <div className="ac-shell ac-hero-grid">
+          <div className="ac-hero-copy">
+            <span className="ac-eyebrow">{hero.eyebrow}</span>
+            <h1 id="home-title">{hero.title}</h1>
+            <p className="ac-lead">{hero.intro}</p>
+            <div className="ac-actions">
+              <a href="#programs" className="ac-btn ac-btn-primary" onClick={scrollToPrograms}>
+                Explore programs
+              </a>
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+                Contact us
               </AppLink>
             </div>
+            <ul className="ac-hero-facts">
+              {hero.facts.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="ac-hero-visual" aria-hidden="true">
+            <img src={brandCrest} alt="" className="ac-hero-crest" width="336" height="357" />
+          </div>
+        </div>
+      </section>
 
-            <div className="footer-column">
-              <span className="mini-tag">Explore Programs</span>
-              <div className="footer-nav">
-                {navigationItems.map((item) => (
-                  <AppLink
-                    key={item.path}
-                    to={item.path}
-                    navigate={navigate}
-                    currentPath={currentPath}
-                    className="footer-link"
-                  >
-                    {item.label}
-                  </AppLink>
+      <section className="ac-section ac-section-programs" id="programs" aria-labelledby="programs-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="programs-title" {...programsSection} />
+          <div className="ac-program-grid">
+            {programs.map((item) => (
+              <ProgramCard key={item.id} program={item} currentPath={currentPath} navigate={navigate} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="why-title">
+        <div className="ac-shell ac-why-grid">
+          <AcademySectionHeading id="why-title" {...whySection} />
+          <ul className="ac-pillars">
+            {whySection.pillars.map((item) => (
+              <li key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="coaches-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="coaches-title" {...coachesSection} />
+          <article className="ac-coach">
+            <img
+              src={andreaPhoto}
+              alt="Andrea, Chess & Truck coach, at an outdoor chess table"
+              className="ac-coach-photo"
+              width="647"
+              height="480"
+              loading="lazy"
+            />
+            <div className="ac-coach-copy">
+              <h3>Andrea</h3>
+              <p className="ac-coach-role">{coach.intro}</p>
+              <p>{coach.paragraphs[0]}</p>
+              <ul className="ac-chip-list">
+                {coach.highlights.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
-                <AppLink
-                  to="/contact"
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  className="footer-link"
-                >
-            Contact Us
-                </AppLink>
-              </div>
-              <div className="footer-legal-links">
-                {footerLegalLinks.map((item) => (
-                  <AppLink
-                    key={item.path}
-                    to={item.path}
-                    navigate={navigate}
-                    currentPath={currentPath}
-                    className="footer-link footer-link-legal"
-                  >
-                    {item.label}
-                  </AppLink>
-                ))}
-              </div>
+              </ul>
+              <AppLink to="/about" navigate={navigate} currentPath={currentPath} className="ac-text-link">
+                More about Chess &amp; Truck <span aria-hidden="true">&rarr;</span>
+              </AppLink>
             </div>
+          </article>
+        </div>
+      </section>
 
-            <div className="footer-column">
-              <span className="mini-tag">Support</span>
-              <div className="footer-contact-stack">
-                {footerContactMethods.map((item) => (
-                  <a href={item.href} key={item.display} className="footer-contact-link">
-                    <span>{item.label}</span>
-                    <strong>{item.display}</strong>
+      <section className="ac-section ac-section-tint" aria-labelledby="how-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="how-title" eyebrow={howSection.eyebrow} title={howSection.title} />
+          <ol className="ac-steps">
+            {howSection.steps.map((item, index) => (
+              <li key={item.title}>
+                <span className="ac-step-number" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="faq-title">
+        <div className="ac-shell ac-faq-grid">
+          <div>
+            <AcademySectionHeading id="faq-title" eyebrow={faqSection.eyebrow} title={faqSection.title} />
+            <div className="ac-faq-list">
+              {faqSection.items.map((item) => (
+                <details className="ac-faq-item" key={item.question}>
+                  <summary>{item.question}</summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+          <aside className="ac-contact-card" aria-labelledby="contact-card-title">
+            <h2 id="contact-card-title">{contactCard.title}</h2>
+            <p>{contactCard.text}</p>
+            <ul className="ac-contact-list">
+              {footerContactMethods.map((item) => (
+                <li key={item.display}>
+                  <span>{item.label}</span>
+                  <a href={item.href}>{item.display}</a>
+                </li>
+              ))}
+            </ul>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+              Send a message
+            </AppLink>
+          </aside>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function SiteFooter({ currentPath, navigate }) {
+  const academyLinks = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "FAQ", path: "/faq" },
+    { label: "Contact", path: "/contact" },
+  ];
+
+  return (
+    <footer className="ac-footer">
+      <div className="ac-shell">
+        <div className="ac-footer-grid">
+          <div className="ac-footer-brand">
+            <BrandMark tone="dark" />
+            <p>{siteBrand.academyNote}</p>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+              Contact Us
+            </AppLink>
+          </div>
+
+          <nav className="ac-footer-col" aria-label="Programs">
+            <h2 className="ac-footer-heading">Programs</h2>
+            <ul className="ac-footer-programs">
+              {programs.map((item) => {
+                const status = getProgramStatus(item.id);
+
+                return (
+                  <li key={item.id}>
+                    <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-footer-link">
+                      {item.name}
+                    </AppLink>
+                    <span className={`ac-footer-status is-${status}`}>{PROGRAM_STATUS_SHORT_LABELS[status]}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <nav className="ac-footer-col" aria-label="Academy">
+            <h2 className="ac-footer-heading">Academy</h2>
+            <ul>
+              {academyLinks.map((item) => (
+                <li key={item.path}>
+                  <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-footer-link">
+                    {item.label}
+                  </AppLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="ac-footer-col">
+            <h2 className="ac-footer-heading">Contact</h2>
+            <ul className="ac-footer-contact">
+              {footerContactMethods.map((item) => (
+                <li key={item.display}>
+                  <span>{item.label}</span>
+                  <a href={item.href} className="ac-footer-link">
+                    {item.display}
                   </a>
-                ))}
-              </div>
-            </div>
-
-            <div className="footer-column footer-event-column">
-              <span className="mini-tag">Featured camps</span>
-              <h3>{campOverviewPage.title}</h3>
-              <p>{campOverviewPage.intro}</p>
-              <div className="footer-meta">
-                <span>{featuredTournament.venueLabel || "62 E 92nd Street, New York, NY 10128"}</span>
-                <strong>{featuredTournament.scheduleLabel || "June 15 - June 19 | Weekdays"}</strong>
-              </div>
-              <AppLink
-                to="/camps"
-                navigate={navigate}
-                currentPath={currentPath}
-                className="text-link"
-              >
-                View Full Camp Details
-              </AppLink>
-            </div>
+                </li>
+              ))}
+              <li>
+                <span>Location</span>
+                {siteBrand.city}
+              </li>
+            </ul>
           </div>
+        </div>
 
-          <div className="footer-bottom">
-            <span>{siteBrand.city}</span>
-            <small>&copy; {new Date().getFullYear()} {siteBrand.name}</small>
-          </div>
+        <div className="ac-footer-bottom">
+          <small>
+            &copy; {new Date().getFullYear()} {siteBrand.name}
+          </small>
+          <ul>
+            {footerLegalLinks.map((item) => (
+              <li key={item.path}>
+                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-footer-link">
+                  {item.label}
+                </AppLink>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>
@@ -3846,6 +4043,7 @@ function ChessTruckApp() {
     () => window.matchMedia(COMPACT_VIEWPORT_QUERY).matches
   );
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isNavCompact, setIsNavCompact] = useState(() => window.matchMedia(NAV_COMPACT_QUERY).matches);
   const [activeRegistrationStep, setActiveRegistrationStep] = useState(0);
   const mainRef = useRef(null);
   const currentPath = route.pathname;
@@ -3859,10 +4057,6 @@ function ChessTruckApp() {
     const media = window.matchMedia(COMPACT_VIEWPORT_QUERY);
     const handleViewportChange = (event) => {
       setIsCompactViewport(event.matches);
-
-      if (!event.matches) {
-        setIsMobileNavOpen(false);
-      }
     };
 
     if (typeof media.addEventListener === "function") {
@@ -3875,16 +4069,38 @@ function ChessTruckApp() {
   }, []);
 
   useEffect(() => {
-    if (!isCompactViewport) {
+    const media = window.matchMedia(NAV_COMPACT_QUERY);
+    const handleNavBreakpointChange = (event) => {
+      setIsNavCompact(event.matches);
+
+      if (!event.matches) {
+        setIsMobileNavOpen(false);
+      }
+    };
+
+    media.addEventListener("change", handleNavBreakpointChange);
+    return () => media.removeEventListener("change", handleNavBreakpointChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isNavCompact || !isMobileNavOpen) {
       return undefined;
     }
 
-    document.body.style.overflow = isMobileNavOpen ? "hidden" : "";
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setIsMobileNavOpen(false);
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isCompactViewport, isMobileNavOpen]);
+  }, [isNavCompact, isMobileNavOpen]);
 
   const syncStateForRoute = (nextRoute) => {
     setIsMobileNavOpen(false);
@@ -4401,21 +4617,7 @@ function ChessTruckApp() {
   const pageContent = (() => {
     switch (currentPath) {
         case "/":
-          return (
-            <CampsOverviewPage
-              showProgramsOverview
-              currentPath={currentPath}
-              navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
-            />
-          );
+          return <AcademyHomePage currentPath={currentPath} navigate={navigate} />;
         case "/camps":
           return (
             <CampsOverviewPage
@@ -4536,67 +4738,63 @@ function ChessTruckApp() {
       <div className="page-aura page-aura-left" />
       <div className="page-aura page-aura-right" />
 
-      <header className="site-header">
-        <div className={`shell header-row${isMobileNavOpen ? " nav-open" : ""}`}>
+      <header className="ac-header">
+        <div className="ac-shell ac-header-row">
           <AppLink
             to="/"
             navigate={navigate}
             currentPath={currentPath}
-            className="brand-link"
+            className="ac-brand"
             aria-label={`${siteBrand.name} home`}
             onNavigate={() => setIsMobileNavOpen(false)}
           >
-            <span className="brand-mark">
-              <img src={brandLogo} alt={`${siteBrand.name} logo`} className="brand-mark-image" />
-            </span>
+            <BrandMark />
           </AppLink>
 
           <nav
             id="primary-navigation"
-            className={`site-nav${isMobileNavOpen ? " is-open" : ""}`}
+            className={`ac-nav${isMobileNavOpen ? " is-open" : ""}`}
             aria-label="Primary navigation"
-            >
-            {navigationItems.map((item) => {
-              if (item.label === "Camps") {
-                return (
-                  <CampsMenu
-                    key={`${item.label}-${currentPath}-${isCompactViewport ? "mobile" : "desktop"}`}
-                    currentPath={currentPath}
+          >
+            <ul className="ac-nav-list">
+              {navigationItems.map((item) => (
+                <li key={item.path} className={item.path === "/" ? "ac-nav-home" : undefined}>
+                  <AppLink
+                    to={item.path}
                     navigate={navigate}
-                    isCompactViewport={isCompactViewport}
-                    closeNavigation={() => setIsMobileNavOpen(false)}
-                  />
-                );
-              }
-
-              return (
-                <AppLink
-                  key={item.path}
-                  to={item.path}
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  className="nav-link"
-                  onNavigate={() => setIsMobileNavOpen(false)}
-                >
-                  {item.label}
-                </AppLink>
-              );
-            })}
-          </nav>
-
-          <div className="header-actions">
+                    currentPath={currentPath}
+                    className="ac-nav-link"
+                    onNavigate={() => setIsMobileNavOpen(false)}
+                  >
+                    {item.label}
+                  </AppLink>
+                </li>
+              ))}
+            </ul>
             <AppLink
               to="/contact"
               navigate={navigate}
               currentPath={currentPath}
-              className="btn btn-primary header-button"
+              className="ac-btn ac-btn-primary ac-nav-contact"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-                {isCompactViewport ? "Contact" : "Contact Us"}
+              Contact Us
+            </AppLink>
+          </nav>
+
+          <div className="ac-header-actions">
+            <AppLink
+              to="/contact"
+              navigate={navigate}
+              currentPath={currentPath}
+              className="ac-btn ac-btn-primary ac-header-cta"
+              onNavigate={() => setIsMobileNavOpen(false)}
+            >
+              Contact Us
             </AppLink>
             <button
               type="button"
-              className={`nav-toggle${isMobileNavOpen ? " is-open" : ""}`}
+              className={`ac-nav-toggle${isMobileNavOpen ? " is-open" : ""}`}
               aria-label={isMobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileNavOpen}
               aria-controls="primary-navigation"

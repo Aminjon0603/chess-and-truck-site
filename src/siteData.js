@@ -5,6 +5,10 @@ export const siteBrand = {
   tagline: "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128",
   footerNote:
     "Our summer chess program runs June 15 through June 19, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+  // Academy-wide wording for the shared header and footer.
+  academyTagline: "Chess Academy · New York City",
+  academyNote:
+    "Chess education for New York City families: camps, tournaments, private lessons, after-school programs, and the Chess Dojo.",
 };
 
 export const navigationItems = [
@@ -18,6 +22,92 @@ export const navigationItems = [
   { label: "FAQ", path: "/faq" },
 ];
 
+export const academyHomePage = {
+  hero: {
+    eyebrow: "Chess & Truck Academy",
+    title: "Chess coaching for New York City kids.",
+    intro:
+      "Camps, tournaments, private lessons, after-school programs, and the Chess Dojo. Structured instruction from experienced coaches, with an approach kids genuinely enjoy.",
+    facts: ["Led by Chess Masters", "Beginner to advanced", "New York City"],
+  },
+  programsSection: {
+    eyebrow: "Our programs",
+    title: "Five ways to learn, train, and compete",
+    intro: "Each program shows where registration stands today.",
+  },
+  whySection: {
+    eyebrow: "Why Chess & Truck",
+    title: "Serious chess, taught with clarity and fun",
+    intro:
+      "Our handpicked team of coaches brings 25+ years of combined NYC experience, blending structured learning with a genuinely fun, engaging approach kids love.",
+    pillars: [
+      {
+        title: "Transparent program design",
+        text: "Schedules, settings, and structure are clear from the outset.",
+      },
+      {
+        title: "Substantive instruction",
+        text: "Every session is designed to build analytical thinking and measurable improvement.",
+      },
+      {
+        title: "Clear communication",
+        text: "Parents stay informed and supported, without needing to chase information.",
+      },
+    ],
+  },
+  coachesSection: {
+    eyebrow: "Meet our coaches",
+    title: "Learn from experienced chess masters",
+  },
+  howSection: {
+    eyebrow: "How it works",
+    title: "Getting started is simple",
+    steps: [
+      {
+        title: "Choose a program",
+        text: "Browse camps, tournaments, lessons, after-school programs, and the Dojo, and check each program's registration status.",
+      },
+      {
+        title: "Tell us about your student",
+        text: "Send age, level, and what you are looking for. We will recommend the best fit.",
+      },
+      {
+        title: "Register when it opens",
+        text: "When registration is open, you register online and pay through secure Stripe checkout. We follow up with the details.",
+      },
+    ],
+  },
+  faqSection: {
+    eyebrow: "Questions",
+    title: "Frequently asked questions",
+    items: [
+      {
+        question: "Is Chess & Truck suitable for beginners?",
+        answer:
+          "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join.",
+      },
+      {
+        question: "Who leads instruction?",
+        answer: "All instruction is led by Chess Masters with more than 25 years of experience in the field.",
+      },
+      {
+        question: "When does registration open?",
+        answer:
+          "Each program above shows its current status. Programs marked Registration Opening Soon or Registration Closed are not taking registrations yet. Contact us and we will let you know when registration opens.",
+      },
+      {
+        question: "How do payments work?",
+        answer:
+          "When a program's registration is open, you register on this site and pay through secure Stripe checkout.",
+      },
+    ],
+  },
+  contactCard: {
+    title: "Have a question? Talk to us.",
+    text: "Call, text, or email, and we will point you to the right program.",
+  },
+};
+
 // Program names, summaries, and page content. Registration status lives in
 // src/lib/programs.js so it can be shared with the checkout API.
 export const programOverview = {
@@ -30,6 +120,7 @@ export const programOverview = {
 export const programs = [
   {
     id: "camps",
+    iconKey: "camps",
     name: "Chess Camps",
     path: "/camps",
     summary:
@@ -37,6 +128,7 @@ export const programs = [
   },
   {
     id: "tournaments",
+    iconKey: "tournaments",
     name: "Chess Tournaments",
     path: "/tournaments",
     registrationPath: "/register",
@@ -45,6 +137,7 @@ export const programs = [
   },
   {
     id: "lessons",
+    iconKey: "lessons",
     name: "Private Chess Lessons",
     path: "/private-lessons",
     summary:
@@ -52,6 +145,7 @@ export const programs = [
   },
   {
     id: "afterSchool",
+    iconKey: "afterSchool",
     name: "After-School Programs",
     path: "/after-school",
     summary:
@@ -59,6 +153,7 @@ export const programs = [
   },
   {
     id: "dojo",
+    iconKey: "dojo",
     name: "Chess Dojo",
     path: "/dojo",
     summary:
@@ -226,9 +321,9 @@ export const campMenuFeature = {
 
 export const routeMeta = {
   "/": {
-    title: "CHESS AND TRUCK | NYC Chess Camps",
+    title: "CHESS AND TRUCK | Chess Academy in New York City",
     description:
-    "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128 from June 15 to June 19, with weekday half-day sessions and practical details for families.",
+      "Chess & Truck is a New York City chess academy: camps, tournaments, private lessons, after-school programs, and the Chess Dojo for beginner through advanced students.",
   },
   "/about": {
     title: "About | CHESS AND TRUCK",
