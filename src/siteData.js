@@ -338,6 +338,182 @@ export const lessonsPageContent = {
   },
 };
 
+export const afterSchoolPageContent = {
+  hero: {
+    eyebrow: "After-School Programs",
+    title: "Chess after the school bell.",
+    intro:
+      "We are planning after-school chess for NYC students, designed to work for families and for schools. Schedules, locations, and pricing have not been set yet.",
+  },
+  glance: [
+    { label: "For", value: "School-age students" },
+    { label: "Beginners", value: "Welcome" },
+    { label: "Schedule", value: "To be announced" },
+    { label: "Locations", value: "To be announced" },
+  ],
+  audienceSection: {
+    eyebrow: "Who it's for",
+    title: "Planned for families and schools",
+  },
+  audiences: [
+    {
+      id: "parents",
+      tag: "For parents",
+      title: "A structured way to keep playing",
+      points: [
+        "Regular chess practice in a group setting after school",
+        "Beginners welcome, with room to grow for stronger players",
+        "Schedule, location, and pricing will be posted here when registration opens",
+      ],
+      cta: "Ask a question",
+    },
+    {
+      id: "schools",
+      tag: "For schools and administrators",
+      title: "Interested in chess at your school?",
+      points: [
+        "We are open to conversations with schools about hosting after-school chess",
+        "Tell us about your students, available space, and preferred days",
+        "Format and terms would be agreed with each school before anything is scheduled",
+      ],
+      cta: "Start a conversation",
+    },
+  ],
+  benefitsSection: {
+    eyebrow: "Why chess after school",
+    title: "What structured chess can help children practice",
+    intro: "Every child is different. These are skills chess gives children a regular chance to practice.",
+  },
+  benefits: [
+    { title: "Focus and patience", text: "Thinking a move through before playing it." },
+    { title: "Planning", text: "Setting a goal on the board and working toward it." },
+    { title: "Learning from mistakes", text: "Reviewing games to see what to change next time." },
+    { title: "Good sportsmanship", text: "Winning and losing graciously with friends." },
+  ],
+  sessionSection: {
+    eyebrow: "A planned session",
+    title: "What a session could look like",
+    intro: "A proposed outline. The final format will be set with each program.",
+  },
+  session: [
+    { time: "Start", title: "Short lesson", text: "One idea taught clearly, with examples on the board." },
+    { time: "Middle", title: "Supervised games", text: "Students play and try the idea in real games." },
+    { time: "End", title: "Review and wrap-up", text: "A quick look at key moments before pick-up." },
+  ],
+  faqSection: {
+    eyebrow: "After-school questions",
+    title: "Before the program opens",
+  },
+  faqs: [
+    {
+      question: "Is this available at my child's school?",
+      answer:
+        "Not yet. We have not announced any school programs. If your school is interested in hosting after-school chess, please contact us.",
+    },
+    {
+      question: "When and where will sessions take place?",
+      answer: "Schedules and locations have not been set. They will be posted on this page when registration opens.",
+    },
+    {
+      question: "Does my child need chess experience?",
+      answer: "No. Beginners will be welcome.",
+    },
+  ],
+  status: {
+    title: "After-school registration is opening soon",
+    text: "After-school registration and payments are not open yet. Schedules, locations, and pricing will be posted on this page when registration opens.",
+  },
+};
+
+export const dojoPageContent = {
+  hero: {
+    eyebrow: "Chess Dojo",
+    title: "Training for competitive players.",
+    intro:
+      "The Chess Dojo is our planned training program for players who want to prepare seriously for tournaments, built around game analysis and practical training.",
+  },
+  glance: [
+    { label: "Focus", value: "Tournament preparation" },
+    { label: "Method", value: "Game analysis and practical training" },
+    { label: "For", value: "Players who compete or plan to" },
+    { label: "Schedule", value: "To be announced" },
+  ],
+  compareSection: {
+    eyebrow: "How the Dojo fits",
+    title: "Between lessons and tournaments",
+    intro: "Each program has a different job. The Dojo connects practice to competition.",
+  },
+  compare: [
+    {
+      id: "lessons",
+      name: "Private Lessons",
+      text: "One-on-one coaching built around a single student's needs and pace.",
+      path: "/private-lessons",
+      link: "See Private Lessons",
+    },
+    {
+      id: "dojo",
+      name: "Chess Dojo",
+      text: "Training for competitive play: preparing before events and learning from games after them.",
+    },
+    {
+      id: "tournaments",
+      name: "Tournaments",
+      text: "Rated and beginner-friendly competition where players put their preparation to the test.",
+      path: "/tournaments",
+      link: "See Tournaments",
+    },
+  ],
+  focusSection: {
+    eyebrow: "Training focus",
+    title: "What Dojo training works on",
+    intro:
+      "Progress depends on each player's practice. The Dojo focuses on habits and understanding, not promised ratings or results.",
+  },
+  focus: [
+    {
+      title: "Tournament preparation",
+      text: "Opening ideas, time management, and a calm routine before each round.",
+    },
+    {
+      title: "Game analysis",
+      text: "Going through players' own games to find turning points and recurring mistakes.",
+    },
+    {
+      title: "Practical training",
+      text: "Calculation, endgames, and training games with a clock.",
+    },
+    {
+      title: "Competition habits",
+      text: "Notation, clock use, and handling the ups and downs of a tournament day.",
+    },
+  ],
+  faqSection: {
+    eyebrow: "Dojo questions",
+    title: "Before the Dojo opens",
+  },
+  faqs: [
+    {
+      question: "How is the Dojo different from private lessons?",
+      answer:
+        "Private lessons follow one student's needs. The Dojo is planned around competition: preparing for events and analyzing tournament games.",
+    },
+    {
+      question: "Do players need to enter Chess & Truck tournaments?",
+      answer:
+        "The Dojo is planned to work alongside our tournaments. How it connects to tournament entry will be confirmed when registration opens.",
+    },
+    {
+      question: "Who will coach the Dojo?",
+      answer: "Coaching arrangements have not been confirmed yet. They will be shared on this page when registration opens.",
+    },
+  ],
+  status: {
+    title: "Dojo registration is opening soon",
+    text: "Dojo registration and payments are not open yet. Schedule, format, and pricing will be posted on this page when registration opens.",
+  },
+};
+
 // Program names, summaries, and page content. Registration status lives in
 // src/lib/programs.js so it can be shared with the checkout API.
 export const programOverview = {
@@ -475,7 +651,7 @@ export const programPages = {
       },
       {
         title: "Families can get updates",
-        text: "Contact us and we will let you know when program details and registration are announced.",
+        text: "Program details and registration will be posted on this page when they are ready.",
       },
     ],
   },

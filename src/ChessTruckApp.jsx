@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
   academyHomePage,
+  afterSchoolPageContent,
   campBookingPage,
   campMenuFeature,
   campMenuItems,
@@ -10,6 +11,7 @@ import {
   contactEmails,
   contactNumbers,
   contactPage,
+  dojoPageContent,
   faqPage,
   featuredTournament,
   footerLegalLinks,
@@ -1958,6 +1960,176 @@ function LessonsPage({ currentPath, navigate }) {
       <RegistrationStatusPanel
         id="lesson-registration"
         programId="lessons"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+      />
+    </div>
+  );
+}
+
+function AfterSchoolPage({ currentPath, navigate }) {
+  const content = afterSchoolPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="after-school"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="afterSchool"
+        actions={
+          <>
+            <a href="#audiences" className="ac-btn ac-btn-primary" onClick={scrollToSection("audiences")}>
+              Parents and schools
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="At a glance" iconKey="afterSchool" items={content.glance} tone="light" />}
+      />
+
+      <section className="ac-section" id="audiences" aria-labelledby="audiences-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="audiences-title" {...content.audienceSection} />
+          <div className="pg-audiences">
+            {content.audiences.map((item) => (
+              <article className={`pg-audience pg-audience-${item.id}`} key={item.id}>
+                <span className="pg-section-tag">{item.tag}</span>
+                <h3>{item.title}</h3>
+                <ul>
+                  {item.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+                <AppLink
+                  to="/contact"
+                  navigate={navigate}
+                  currentPath={currentPath}
+                  className={`ac-btn ${item.id === "schools" ? "ac-btn-gold" : "ac-btn-primary"}`}
+                >
+                  {item.cta}
+                </AppLink>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="benefits-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="benefits-title" {...content.benefitsSection} />
+          <ul className="pg-skill-grid pg-skill-grid-four">
+            {content.benefits.map((item) => (
+              <li key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="session-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="session-title" {...content.sessionSection} />
+          <ol className="pg-morning">
+            {content.session.map((item) => (
+              <li key={item.title}>
+                <span className="pg-morning-time">{item.time}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <FaqBlock id="after-school-faq-title" {...content.faqSection} items={content.faqs} />
+
+      <RegistrationStatusPanel
+        id="after-school-registration"
+        programId="afterSchool"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+      />
+    </div>
+  );
+}
+
+function DojoPage({ currentPath, navigate }) {
+  const content = dojoPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="dojo"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="dojo"
+        actions={
+          <>
+            <a href="#dojo-focus" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-focus")}>
+              What the Dojo works on
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="Planned focus" iconKey="dojo" items={content.glance} tone="dark" />}
+      />
+
+      <section className="ac-section" aria-labelledby="dojo-compare-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="dojo-compare-title" {...content.compareSection} />
+          <div className="pg-compare">
+            {content.compare.map((item) => (
+              <article className={`pg-compare-card${item.id === "dojo" ? " is-featured" : ""}`} key={item.id}>
+                <span className="ac-program-icon">
+                  <ProgramIcon iconKey={item.id} />
+                </span>
+                <h3>{item.name}</h3>
+                <p>{item.text}</p>
+                {item.path ? (
+                  <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-text-link">
+                    {item.link} <span aria-hidden="true">&rarr;</span>
+                  </AppLink>
+                ) : (
+                  <ProgramStatusBadge programId="dojo" />
+                )}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section pg-dark-section" id="dojo-focus" aria-labelledby="dojo-focus-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="dojo-focus-title" {...content.focusSection} />
+          <div className="pg-section-cards pg-focus-cards">
+            {content.focus.map((item) => (
+              <article className="pg-section-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />
+
+      <RegistrationStatusPanel
+        id="dojo-registration"
+        programId="dojo"
         title={content.status.title}
         text={content.status.text}
         currentPath={currentPath}
@@ -5109,9 +5281,9 @@ function ChessTruckApp() {
       case "/private-lessons":
         return <LessonsPage currentPath={currentPath} navigate={navigate} />;
       case "/after-school":
-        return <ProgramPage programId="afterSchool" currentPath={currentPath} navigate={navigate} />;
+        return <AfterSchoolPage currentPath={currentPath} navigate={navigate} />;
       case "/dojo":
-        return <ProgramPage programId="dojo" currentPath={currentPath} navigate={navigate} />;
+        return <DojoPage currentPath={currentPath} navigate={navigate} />;
       case "/faq":
         return <FaqPage currentPath={currentPath} navigate={navigate} />;
       case "/terms":

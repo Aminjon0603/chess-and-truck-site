@@ -2228,6 +2228,210 @@
   }
 }
 
+/* ------------------------------------------- after-school and dojo pages */
+
+.pg-hero-after-school {
+  background:
+    radial-gradient(ellipse at 88% 15%, rgba(196, 149, 73, 0.16), transparent 55%),
+    radial-gradient(ellipse at 0% 0%, rgba(47, 116, 104, 0.08), transparent 45%),
+    var(--ac-cream);
+}
+
+.pg-hero-dojo {
+  background:
+    radial-gradient(ellipse at 85% 20%, rgba(23, 53, 48, 0.12), transparent 55%),
+    var(--ac-cream);
+}
+
+/* after-school: parents and schools */
+
+.pg-audiences {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.pg-audience {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  justify-items: start;
+  padding: 32px;
+  border-radius: 22px;
+}
+
+.pg-audience-parents {
+  background: var(--ac-paper);
+  border: 1px solid var(--ac-line);
+  box-shadow: 0 20px 44px -28px rgba(17, 29, 25, 0.3);
+}
+
+.pg-audience-schools {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(220, 185, 120, 0.16), transparent 50%),
+    linear-gradient(160deg, var(--ac-green-900), var(--ac-green-950));
+  color: #e7ede9;
+}
+
+.pg-audience h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ac-ink);
+}
+
+.pg-audience-schools h3 {
+  color: #fff;
+}
+
+.pg-audience-schools .pg-section-tag {
+  color: var(--ac-gold-light);
+}
+
+.pg-audience ul {
+  display: grid;
+  gap: 10px;
+  margin: 4px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-audience li {
+  position: relative;
+  padding-left: 22px;
+  line-height: 1.55;
+  color: var(--ac-ink-soft);
+}
+
+.pg-audience-schools li {
+  color: #c9d3ce;
+}
+
+.pg-audience li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: var(--ac-gold);
+}
+
+/* after-school: four benefits */
+
+.pg-skill-grid-four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* dojo: lessons / dojo / tournaments */
+
+.pg-compare {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.pg-compare-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  justify-items: start;
+  padding: 28px;
+  border-radius: 22px;
+  background: var(--ac-paper);
+  border: 1px solid var(--ac-line);
+}
+
+/* The icon tile carries a grid-area from the homepage cards; reset it here. */
+.pg-compare-card .ac-program-icon {
+  grid-area: auto;
+}
+
+.pg-compare-card h3 {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ac-ink);
+}
+
+.pg-compare-card p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--ac-ink-soft);
+}
+
+.pg-compare-card .ac-text-link {
+  align-self: end;
+}
+
+.pg-compare-card.is-featured {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(220, 185, 120, 0.18), transparent 50%),
+    linear-gradient(160deg, var(--ac-green-900), var(--ac-green-950));
+  border-color: rgba(220, 185, 120, 0.45);
+  box-shadow: 0 24px 48px -24px rgba(16, 34, 30, 0.5);
+}
+
+.pg-compare-card.is-featured h3 {
+  color: #fff;
+}
+
+.pg-compare-card.is-featured p {
+  color: #c9d3ce;
+}
+
+.pg-compare-card.is-featured .program-status-badge {
+  align-self: end;
+}
+
+.pg-focus-cards .pg-section-card {
+  gap: 8px;
+}
+
+.pg-focus-cards .pg-section-card h3 {
+  font-size: 1.3rem;
+}
+
+@media (max-width: 1023px) {
+  .pg-audiences,
+  .pg-compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pg-skill-grid-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* keep the Dojo card first on smaller screens */
+  .pg-compare-card.is-featured {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .pg-audience,
+  .pg-compare-card {
+    padding: 22px;
+  }
+
+  .pg-audience h3 {
+    font-size: 1.3rem;
+  }
+
+  .pg-audience .ac-btn {
+    width: 100%;
+  }
+
+  .pg-focus-cards .pg-section-card h3 {
+    font-size: 1.15rem;
+  }
+}
+
 /* ------------------------------------------------- accessibility patches */
 
 /* Camp schedule times were gold on white at 2.7:1; this darker gold is 6.5:1. */
