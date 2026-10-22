@@ -384,7 +384,7 @@ export default {
     params.set("metadata[notes]", notes);
     params.set("metadata[qa_mode]", isQaEligible ? "enabled" : "disabled");
 
-    Object.entries(selectedExtraServices).forEach(([serviceId, item], index) => {
+    Object.values(selectedExtraServices).forEach((item, index) => {
       const lineItemIndex = index + 1;
       params.set(`line_items[${lineItemIndex}][quantity]`, "1");
       params.set(`line_items[${lineItemIndex}][price_data][currency]`, "usd");

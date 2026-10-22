@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
   campBookingPage,
-  campDetailPages,
   campMenuFeature,
   campMenuItems,
   campOverviewPage,
@@ -13,7 +12,6 @@ import {
   featuredTournament,
   footerLegalLinks,
   homePage,
-  lessonDetailPages,
   lessonMenuFeature,
   lessonMenuItems,
   masterTrainingDojo,
@@ -266,11 +264,6 @@ const calculateCampAddOnTotal = (addOnIds = []) =>
     0
   );
 
-const formatCampAddOnSummary = (addOnIds = []) => {
-  const labels = CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).map((item) => item.label);
-  return labels.length ? labels.join(", ") : "None";
-};
-
 const normalizeCampServiceSelections = (value) => {
   const current = value && typeof value === "object" ? value : {};
 
@@ -301,20 +294,6 @@ const hasSelectedCampExtraServices = (serviceSelections = {}) =>
     const selection = serviceSelections[item.id];
     return selection && selection.option === "selected";
   });
-
-const formatCampExtraServicesSummary = (serviceSelections = {}) => {
-  const summary = CAMP_EXTRA_SERVICES.flatMap((item) => {
-    const selection = serviceSelections[item.id];
-
-    if (!selection || selection.option !== "selected") {
-      return [];
-    }
-
-    return [`${item.label} (+${formatCurrency(item.amount)})`];
-  });
-
-  return summary.length ? summary.join(", ") : "None";
-};
 
 const getCampAddOnChargeMode = (optionId) => {
   if (CAMP_FLEX_PACK_OPTION_IDS.has(optionId)) {
@@ -453,10 +432,173 @@ const campMenuImages = {
   online: campOnlineVisual,
 };
 
-const readLocation = () => ({
-  pathname: normalizePath(window.location.pathname),
-  search: window.location.search,
-});
+const readLocation = () => {
+  const pathname = normalizePath(window.location.pathname);
+  const redirectPath = legacyRouteRedirects[pathname];
+
+  if (redirectPath) {
+    window.history.replaceState({}, "", redirectPath);
+    return { pathname: redirectPath, search: "" };
+  }
+
+  return { pathname, search: window.location.search };
+};
+
+const COMPACT_VIEWPORT_QUERY = "(max-width: 780px)";
+
+const readRegistrationDraft = () => {
+  try {
+    const parsedDraft = JSON.parse(window.localStorage.getItem(REGISTRATION_DRAFT_KEY) || "null");
+
+    if (!parsedDraft || typeof parsedDraft !== "object") {
+      return registrationInitialState;
+    }
+
+    return Object.fromEntries(
+      Object.keys(registrationInitialState).map((key) => [
+        key,
+        parsedDraft[key] ?? registrationInitialState[key],
+      ])
+    );
+  } catch {
+    // Ignore malformed local drafts.
+    return registrationInitialState;
+  }
+};
+
+const CAMP_PAYMENT_RETURN_PATHS = new Set(["/", "/camps", "/camps/book", "/camps/confirmed"]);
+const CAMP_OPTION_REQUEST_PATHS = new Set(["/", "/camps", "/camps/book"]);
+
+// Stripe sends families back with ?payment=...&session_id=... on a full page load,
+// so those params are read and stripped from the URL once, before the first render.
+const consumePaymentReturn = () => {
+  const currentUrl = new URL(window.location.href);
+  const pathname = normalizePath(currentUrl.pathname);
+  const payment = currentUrl.searchParams.get("payment");
+  const scope =
+    pathname === "/register" ? "register" : CAMP_PAYMENT_RETURN_PATHS.has(pathname) ? "camp" : "";
+
+  if (!payment || !scope) {
+    return null;
+  }
+
+  const sessionId = currentUrl.searchParams.get("session_id");
+
+  if (scope === "register") {
+    window.history.replaceState({}, "", "/register");
+  } else {
+    currentUrl.searchParams.delete("payment");
+    currentUrl.searchParams.delete("session_id");
+    const cleanedSearch = currentUrl.searchParams.toString();
+    window.history.replaceState({}, "", `${pathname}${cleanedSearch ? `?${cleanedSearch}` : ""}`);
+  }
+
+  return { scope, payment, sessionId };
+};
+
+const initialPaymentReturn = consumePaymentReturn();
+let isInitialPaymentReturnHandled = false;
+
+const isPaymentReturnPending = (scope) =>
+  initialPaymentReturn?.scope === scope &&
+  initialPaymentReturn.payment === "success" &&
+  Boolean(initialPaymentReturn.sessionId);
+
+const isPaymentReturnCancelled = (scope) =>
+  initialPaymentReturn?.scope === scope && initialPaymentReturn.payment === "cancel";
+
+const readStoredCampConfirmation = () => {
+  try {
+    const parsedConfirmation = JSON.parse(
+      window.sessionStorage.getItem(CAMP_CONFIRMATION_STORAGE_KEY) || "null"
+    );
+
+    if (
+      parsedConfirmation &&
+      typeof parsedConfirmation === "object" &&
+      parsedConfirmation.status === "success"
+    ) {
+      return {
+        status: parsedConfirmation.status,
+        message: parsedConfirmation.message || "",
+        details: parsedConfirmation.details || null,
+        activeOption: "",
+      };
+    }
+  } catch {
+    window.sessionStorage.removeItem(CAMP_CONFIRMATION_STORAGE_KEY);
+  }
+
+  return null;
+};
+
+const getInitialCampCheckoutState = () => {
+  if (isPaymentReturnCancelled("camp")) {
+    return {
+      status: "cancelled",
+      message: "Checkout was cancelled. You can return to camp booking whenever you are ready.",
+      details: null,
+      activeOption: "",
+    };
+  }
+
+  if (isPaymentReturnPending("camp")) {
+    return { status: "loading", message: "", details: null, activeOption: "" };
+  }
+
+  if (normalizePath(window.location.pathname) === "/camps/confirmed") {
+    return readStoredCampConfirmation() || campCheckoutInitialState;
+  }
+
+  return campCheckoutInitialState;
+};
+
+const getInitialPaymentState = () => {
+  if (isPaymentReturnCancelled("register")) {
+    return {
+      status: "cancelled",
+      message:
+        "Checkout was cancelled. Your registration details are still here, so you can continue whenever you are ready.",
+      details: null,
+    };
+  }
+
+  if (isPaymentReturnPending("register")) {
+    return { status: "loading", message: "", details: null };
+  }
+
+  return { status: "idle", message: "", details: null };
+};
+
+const findRequestedCampOption = (nextRoute) => {
+  if (!CAMP_OPTION_REQUEST_PATHS.has(nextRoute.pathname)) {
+    return null;
+  }
+
+  return CAMP_PURCHASE_OPTION_MAP.get(new URLSearchParams(nextRoute.search).get("option")) || null;
+};
+
+const withFallbackCampSchedule = (bookingState, option) => {
+  const fallbackSchedule =
+    getCampScheduleOptions(option.id)[0]?.value || option.defaultSchedulePreference;
+
+  if (bookingState.schedulePreference.trim() || !fallbackSchedule) {
+    return bookingState;
+  }
+
+  return {
+    ...bookingState,
+    schedulePreference: fallbackSchedule,
+    selectedDays:
+      CAMP_WEEKLY_OPTION_IDS.has(option.id)
+        ? getWeekDaysForSchedulePreference(fallbackSchedule)
+        : CAMP_DATE_SELECTION_OPTION_IDS.has(option.id) && bookingState.selectedDays.length
+          ? bookingState.selectedDays
+          : CAMP_DATE_SELECTION_OPTION_IDS.has(option.id) && fallbackSchedule
+            ? [fallbackSchedule]
+            : [],
+  };
+};
 
 const formatCurrency = (amount) =>
   new Intl.NumberFormat("en-US", {
@@ -1356,15 +1498,6 @@ function CampBookingFormPanel({
     updateCampBookingField("serviceSelections", nextSelections);
   };
 
-  const toggleSelectedWeekDay = (day) => {
-    const currentDays = Array.isArray(campBookingState.selectedDays) ? campBookingState.selectedDays : [];
-    const nextDays = currentDays.includes(day)
-      ? currentDays.filter((item) => item !== day)
-      : sortCampDays([...currentDays, day]);
-
-    updateCampBookingField("selectedDays", nextDays);
-  };
-
   const toggleSelectedSingleDay = (day) => {
     const currentDays = Array.isArray(campBookingState.selectedDays) ? campBookingState.selectedDays : [];
     const nextDays = currentDays.includes(day)
@@ -1682,7 +1815,6 @@ function CampBookingFormPanel({
             <div className="camp-service-request-grid">
               {CAMP_EXTRA_SERVICES.map((item) => {
                 const selection = selectedServiceSelections[item.id];
-                const isSelected = selection.option === "selected";
 
                 return (
                   <div className="camp-service-request-row" key={item.id}>
@@ -3421,23 +3553,33 @@ function NotFoundPage({ currentPath, navigate }) {
 
 function ChessTruckApp() {
   const [route, setRoute] = useState(readLocation);
-  const [registrationState, setRegistrationState] = useState(registrationInitialState);
+  const [registrationState, setRegistrationState] = useState(readRegistrationDraft);
   const [registrationErrors, setRegistrationErrors] = useState({});
-  const [paymentState, setPaymentState] = useState({ status: "idle", message: "", details: null });
-  const [campCheckoutState, setCampCheckoutState] = useState(campCheckoutInitialState);
-  const [campBookingState, setCampBookingState] = useState(campBookingInitialState);
+  const [paymentState, setPaymentState] = useState(getInitialPaymentState);
+  const [campCheckoutState, setCampCheckoutState] = useState(getInitialCampCheckoutState);
+  const [initialCampOption] = useState(() => findRequestedCampOption(route));
+  const [campBookingState, setCampBookingState] = useState(() =>
+    initialCampOption
+      ? withFallbackCampSchedule(campBookingInitialState, initialCampOption)
+      : campBookingInitialState
+  );
   const [campBookingErrors, setCampBookingErrors] = useState({});
-  const [isCampBookingFormVisible, setIsCampBookingFormVisible] = useState(false);
+  const [isCampBookingFormVisible, setIsCampBookingFormVisible] = useState(
+    () => Boolean(initialCampOption) || isPaymentReturnCancelled("camp")
+  );
   const [selectedCampOptionId, setSelectedCampOptionId] = useState(
-    CAMP_PURCHASE_OPTIONS.find((item) => item.id === "single-day")?.id ||
+    () =>
+      initialCampOption?.id ||
+      CAMP_PURCHASE_OPTIONS.find((item) => item.id === "single-day")?.id ||
       CAMP_PURCHASE_OPTIONS[0]?.id ||
       ""
   );
   const [contactState, setContactState] = useState(contactInitialState);
   const [contactErrors, setContactErrors] = useState({});
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
-  const [hasLoadedRegistrationDraft, setHasLoadedRegistrationDraft] = useState(false);
-  const [isCompactViewport, setIsCompactViewport] = useState(false);
+  const [isCompactViewport, setIsCompactViewport] = useState(
+    () => window.matchMedia(COMPACT_VIEWPORT_QUERY).matches
+  );
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [activeRegistrationStep, setActiveRegistrationStep] = useState(0);
   const mainRef = useRef(null);
@@ -3449,12 +3591,14 @@ function ChessTruckApp() {
   );
 
   useEffect(() => {
-    const media = window.matchMedia("(max-width: 780px)");
+    const media = window.matchMedia(COMPACT_VIEWPORT_QUERY);
     const handleViewportChange = (event) => {
       setIsCompactViewport(event.matches);
-    };
 
-    setIsCompactViewport(media.matches);
+      if (!event.matches) {
+        setIsMobileNavOpen(false);
+      }
+    };
 
     if (typeof media.addEventListener === "function") {
       media.addEventListener("change", handleViewportChange);
@@ -3464,27 +3608,6 @@ function ChessTruckApp() {
     media.addListener(handleViewportChange);
     return () => media.removeListener(handleViewportChange);
   }, []);
-
-  useEffect(() => {
-    if (!isCompactViewport) {
-      setIsMobileNavOpen(false);
-    }
-  }, [isCompactViewport]);
-
-  useEffect(() => {
-    const redirectPath = legacyRouteRedirects[currentPath];
-
-    if (!redirectPath) {
-      return;
-    }
-
-    window.history.replaceState({}, "", redirectPath);
-    setRoute({ pathname: redirectPath, search: "" });
-  }, [currentPath]);
-
-  useEffect(() => {
-    setIsMobileNavOpen(false);
-  }, [currentPath]);
 
   useEffect(() => {
     if (!isCompactViewport) {
@@ -3498,9 +3621,29 @@ function ChessTruckApp() {
     };
   }, [isCompactViewport, isMobileNavOpen]);
 
+  const syncStateForRoute = (nextRoute) => {
+    setIsMobileNavOpen(false);
+
+    if (nextRoute.pathname === "/camps/confirmed") {
+      setCampCheckoutState((current) =>
+        current.status === "idle" ? readStoredCampConfirmation() || current : current
+      );
+    }
+
+    const requestedOption = findRequestedCampOption(nextRoute);
+
+    if (requestedOption) {
+      setSelectedCampOptionId(requestedOption.id);
+      setIsCampBookingFormVisible(true);
+      setCampBookingState((current) => withFallbackCampSchedule(current, requestedOption));
+    }
+  };
+
   useEffect(() => {
     const handlePopState = () => {
-      setRoute(readLocation());
+      const nextRoute = readLocation();
+      setRoute(nextRoute);
+      syncStateForRoute(nextRoute);
       window.scrollTo({ top: 0, behavior: "auto" });
     };
 
@@ -3509,38 +3652,6 @@ function ChessTruckApp() {
   }, []);
 
   useEffect(() => {
-    try {
-      const storedDraft = window.localStorage.getItem(REGISTRATION_DRAFT_KEY);
-
-      if (!storedDraft) {
-        setHasLoadedRegistrationDraft(true);
-        return;
-      }
-
-      const parsedDraft = JSON.parse(storedDraft);
-
-      if (!parsedDraft || typeof parsedDraft !== "object") {
-        return;
-      }
-
-      setRegistrationState((current) => ({
-        ...current,
-        ...Object.fromEntries(
-          Object.keys(registrationInitialState).map((key) => [key, parsedDraft[key] ?? current[key]])
-        ),
-      }));
-    } catch {
-      // Ignore malformed local drafts.
-    } finally {
-      setHasLoadedRegistrationDraft(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!hasLoadedRegistrationDraft) {
-      return;
-    }
-
     const hasMeaningfulDraft = Object.entries(registrationState).some(([key, value]) => {
       if (key === "acceptSms") {
         return value === true;
@@ -3555,7 +3666,7 @@ function ChessTruckApp() {
     }
 
     window.localStorage.setItem(REGISTRATION_DRAFT_KEY, JSON.stringify(registrationState));
-  }, [hasLoadedRegistrationDraft, registrationState]);
+  }, [registrationState]);
 
   useEffect(() => {
     const meta = routeMeta[currentPath] || routeMeta["/"];
@@ -3576,77 +3687,52 @@ function ChessTruckApp() {
   }, [currentPath]);
 
   useEffect(() => {
-    if (
-      currentPath !== "/" &&
-      currentPath !== "/camps" &&
-      currentPath !== "/camps/book" &&
-      currentPath !== "/camps/confirmed"
-    ) {
+    if (!initialPaymentReturn || isInitialPaymentReturnHandled) {
       return;
     }
 
-    const currentUrl = new URL(window.location.href);
-    const payment = currentUrl.searchParams.get("payment");
-    const sessionId = currentUrl.searchParams.get("session_id");
+    isInitialPaymentReturnHandled = true;
+    const { scope, payment, sessionId } = initialPaymentReturn;
 
-    if (!payment) {
-      return;
-    }
-
-    currentUrl.searchParams.delete("payment");
-    currentUrl.searchParams.delete("session_id");
-    const cleanedSearch = currentUrl.searchParams.toString();
-    const cleanedUrl = `${currentPath}${cleanedSearch ? `?${cleanedSearch}` : ""}`;
-
-    window.history.replaceState({}, "", cleanedUrl);
-    setRoute({ pathname: currentPath, search: cleanedSearch ? `?${cleanedSearch}` : "" });
-
-    if (payment === "cancel") {
+    if (scope === "camp" && payment === "cancel") {
       window.sessionStorage.removeItem(CAMP_CONFIRMATION_STORAGE_KEY);
-      setIsCampBookingFormVisible(true);
-      setCampCheckoutState({
-        status: "cancelled",
-        message:
-          "Checkout was cancelled. You can return to camp booking whenever you are ready.",
-        details: null,
-        activeOption: "",
-      });
       return;
     }
 
-    if (payment === "success" && sessionId) {
-      setCampCheckoutState({ status: "loading", message: "", details: null, activeOption: "" });
+    if (payment !== "success" || !sessionId) {
+      return;
+    }
 
-      fetch("/api/checkout-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId }),
-      })
-        .then(async (response) => {
-          const payload = await response.json().catch(() => ({}));
+    const checkoutStatusRequest = fetch("/api/checkout-status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId }),
+    }).then(async (response) => {
+      const payload = await response.json().catch(() => ({}));
 
-          if (!response.ok || payload.status !== "paid") {
-            throw new Error(payload.error || "Payment confirmation could not be verified yet.");
-          }
+      if (!response.ok || payload.status !== "paid") {
+        throw new Error(payload.error || "Payment confirmation could not be verified yet.");
+      }
 
-          setCampCheckoutState({
+      return payload;
+    });
+
+    if (scope === "camp") {
+      checkoutStatusRequest
+        .then((payload) => {
+          const confirmedState = {
             status: "success",
             message:
               payload.message ||
               "Camp payment confirmed. We will follow up with the next registration details.",
             details: payload,
             activeOption: "",
-          });
+          };
+
+          setCampCheckoutState(confirmedState);
           window.sessionStorage.setItem(
             CAMP_CONFIRMATION_STORAGE_KEY,
-            JSON.stringify({
-              status: "success",
-              message:
-                payload.message ||
-                "Camp payment confirmed. We will follow up with the next registration details.",
-              details: payload,
-              activeOption: "",
-            })
+            JSON.stringify(confirmedState)
           );
         })
         .catch((error) => {
@@ -3661,146 +3747,44 @@ function ChessTruckApp() {
             activeOption: "",
           });
         });
-    }
-  }, [currentPath, route.search]);
-
-  useEffect(() => {
-    if (currentPath !== "/camps/confirmed" || campCheckoutState.status !== "idle") {
       return;
     }
 
-    try {
-      const storedConfirmation = window.sessionStorage.getItem(CAMP_CONFIRMATION_STORAGE_KEY);
-
-      if (!storedConfirmation) {
-        return;
-      }
-
-      const parsedConfirmation = JSON.parse(storedConfirmation);
-
-      if (
-        parsedConfirmation &&
-        typeof parsedConfirmation === "object" &&
-        parsedConfirmation.status === "success"
-      ) {
-        setCampCheckoutState({
-          status: parsedConfirmation.status,
-          message: parsedConfirmation.message || "",
-          details: parsedConfirmation.details || null,
-          activeOption: "",
+    checkoutStatusRequest
+      .then((payload) => {
+        setPaymentState({
+          status: "success",
+          message:
+            payload.message ||
+            "Payment confirmed. The registration has been recorded successfully.",
+          details: payload,
         });
-      }
-    } catch {
-      window.sessionStorage.removeItem(CAMP_CONFIRMATION_STORAGE_KEY);
-    }
-  }, [currentPath, campCheckoutState.status]);
-
-  useEffect(() => {
-    if (currentPath !== "/" && currentPath !== "/camps" && currentPath !== "/camps/book") {
-      return;
-    }
-
-    const requestedOptionId = new URLSearchParams(route.search).get("option");
-    const matchedOption = CAMP_PURCHASE_OPTION_MAP.get(requestedOptionId);
-
-    if (!matchedOption) {
-      return;
-    }
-
-    setSelectedCampOptionId(matchedOption.id);
-    setIsCampBookingFormVisible(true);
-
-    const fallbackSchedule =
-      getCampScheduleOptions(matchedOption.id)[0]?.value || matchedOption.defaultSchedulePreference;
-
-    if (!campBookingState.schedulePreference.trim() && fallbackSchedule) {
-      setCampBookingState((current) => ({
-        ...current,
-        schedulePreference: fallbackSchedule,
-        selectedDays:
-          CAMP_WEEKLY_OPTION_IDS.has(matchedOption.id)
-            ? getWeekDaysForSchedulePreference(fallbackSchedule)
-            : CAMP_DATE_SELECTION_OPTION_IDS.has(matchedOption.id) && current.selectedDays.length
-              ? current.selectedDays
-              : CAMP_DATE_SELECTION_OPTION_IDS.has(matchedOption.id) && fallbackSchedule
-                ? [fallbackSchedule]
-                : [],
-      }));
-    }
-  }, [currentPath, route.search, campBookingState.schedulePreference]);
-
-  useEffect(() => {
-    if (currentPath !== "/register") {
-      return;
-    }
-
-    const currentUrl = new URL(window.location.href);
-    const payment = currentUrl.searchParams.get("payment");
-    const sessionId = currentUrl.searchParams.get("session_id");
-
-    if (!payment) {
-      return;
-    }
-
-    window.history.replaceState({}, "", "/register");
-    setRoute({ pathname: "/register", search: "" });
-
-    if (payment === "cancel") {
-      setPaymentState({
-        status: "cancelled",
-        message:
-          "Checkout was cancelled. Your registration details are still here, so you can continue whenever you are ready.",
-        details: null,
-      });
-      return;
-    }
-
-    if (payment === "success" && sessionId) {
-      setPaymentState({ status: "loading", message: "", details: null });
-
-      fetch("/api/checkout-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId }),
+        setRegistrationState(registrationInitialState);
+        setRegistrationErrors({});
+        setActiveRegistrationStep(0);
+        window.localStorage.removeItem(REGISTRATION_DRAFT_KEY);
       })
-        .then(async (response) => {
-          const payload = await response.json().catch(() => ({}));
-
-          if (!response.ok || payload.status !== "paid") {
-            throw new Error(payload.error || "Payment confirmation could not be verified yet.");
-          }
-
-          setPaymentState({
-            status: "success",
-            message:
-              payload.message ||
-              "Payment confirmed. The registration has been recorded successfully.",
-            details: payload,
-          });
-          setRegistrationState(registrationInitialState);
-          setRegistrationErrors({});
-          setActiveRegistrationStep(0);
-          window.localStorage.removeItem(REGISTRATION_DRAFT_KEY);
-        })
-        .catch((error) => {
-          setPaymentState({
-            status: "error",
-            message:
-              error instanceof Error
-                ? error.message
-                : "Payment confirmation could not be verified yet.",
-            details: null,
-          });
+      .catch((error) => {
+        setPaymentState({
+          status: "error",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Payment confirmation could not be verified yet.",
+          details: null,
         });
-    }
-  }, [currentPath, route.search]);
+      });
+  }, []);
 
   const navigate = (to) => {
     const nextUrl = new URL(to, window.location.origin);
-    const nextRoute = {
-      pathname: normalizePath(nextUrl.pathname),
-      search: nextUrl.search,
-    };
+    const nextPathname = normalizePath(nextUrl.pathname);
+    const redirectPath = legacyRouteRedirects[nextPathname];
+    const nextRoute = redirectPath
+      ? { pathname: redirectPath, search: "" }
+      : { pathname: nextPathname, search: nextUrl.search };
+
+    syncStateForRoute(nextRoute);
 
     if (nextRoute.pathname === route.pathname && nextRoute.search === route.search) {
       window.scrollTo({ top: 0, behavior: "smooth" });
