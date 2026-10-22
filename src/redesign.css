@@ -1,5 +1,5 @@
 /*
-  Chess & Truck academy redesign (iteration 1): shared header, footer, program
+  Chess & Truck redesign (iteration 1): shared header, footer, program
   cards, status badges, and the homepage. Uses the existing brand palette and
   type (Archivo + Public Sans). Small text colors are chosen to pass WCAG AA.
 */
@@ -170,14 +170,16 @@
   font-size: 1.08rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+  text-transform: uppercase; /* echoes the lockup in the logo artwork */
   line-height: 1.1;
   color: var(--ac-green-900);
 }
 
 .ac-brandmark-tagline {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  font-style: italic;
+  letter-spacing: 0.01em;
   color: var(--ac-gold-text);
 }
 

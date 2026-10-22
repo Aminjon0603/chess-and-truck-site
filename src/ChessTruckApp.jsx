@@ -1397,7 +1397,7 @@ function BrandMark({ tone = "light" }) {
       <img src={brandCrest} alt="" className="ac-brandmark-crest" width="48" height="51" />
       <span className="ac-brandmark-text">
         <span className="ac-brandmark-name">{siteBrand.name}</span>
-        <span className="ac-brandmark-tagline">{siteBrand.academyTagline}</span>
+        <span className="ac-brandmark-tagline">{siteBrand.slogan}</span>
       </span>
     </span>
   );
@@ -1595,7 +1595,7 @@ function SiteFooter({ currentPath, navigate }) {
         <div className="ac-footer-grid">
           <div className="ac-footer-brand">
             <BrandMark tone="dark" />
-            <p>{siteBrand.academyNote}</p>
+            <p>{siteBrand.brandNote}</p>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
               Contact Us
             </AppLink>
@@ -1619,8 +1619,8 @@ function SiteFooter({ currentPath, navigate }) {
             </ul>
           </nav>
 
-          <nav className="ac-footer-col" aria-label="Academy">
-            <h2 className="ac-footer-heading">Academy</h2>
+          <nav className="ac-footer-col" aria-label="Explore">
+            <h2 className="ac-footer-heading">Explore</h2>
             <ul>
               {academyLinks.map((item) => (
                 <li key={item.path}>

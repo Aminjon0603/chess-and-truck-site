@@ -1,14 +1,14 @@
 export const siteBrand = {
-  name: "CHESS AND TRUCK",
+  name: "Chess & Truck",
   short: "CT",
   city: "New York City",
   tagline: "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128",
   footerNote:
     "Our summer chess program runs on weekdays on the Upper East Side, and next season's dates will be announced when registration opens. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
-  // Academy-wide wording for the shared header and footer.
-  academyTagline: "Chess Academy · New York City",
-  academyNote:
-    "Chess education for New York City families: camps, tournaments, private lessons, after-school programs, and the Chess Dojo.",
+  // Brand slogan and summary for the shared header and footer.
+  slogan: "Big Moves Start Small.",
+  brandNote:
+    "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City families.",
 };
 
 export const navigationItems = [
@@ -24,10 +24,10 @@ export const navigationItems = [
 
 export const academyHomePage = {
   hero: {
-    eyebrow: "Chess & Truck Academy",
+    eyebrow: "Chess programs for NYC kids",
     title: "Your Next Move Starts Here.",
     intro:
-      "Chess camps, tournaments, private lessons, after-school programs, and the Chess Dojo for New York City kids, taught by experienced coaches.",
+      "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City kids, taught by experienced coaches.",
     facts: ["Led by Chess Masters", "Beginner to advanced", "New York City"],
   },
   programsSection: {
@@ -321,119 +321,119 @@ export const campMenuFeature = {
 
 export const routeMeta = {
   "/": {
-    title: "CHESS AND TRUCK | Chess Academy in New York City",
+    title: "Chess & Truck | Chess Camps, Tournaments & Lessons in NYC",
     description:
-      "Chess & Truck is a New York City chess academy: camps, tournaments, private lessons, after-school programs, and the Chess Dojo for beginner through advanced students.",
+      "Chess & Truck offers chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for kids in New York City.",
   },
   "/about": {
-    title: "About | CHESS AND TRUCK",
+    title: "About | Chess & Truck",
     description:
-      "Learn why CHESS AND TRUCK is built for NYC families and how summer camp and direct parent communication are being structured.",
+      "Learn why Chess & Truck is built for NYC families and how summer camp and direct parent communication are being structured.",
   },
   "/camps": {
-    title: "Camps | CHESS AND TRUCK",
+    title: "Camps | Chess & Truck",
     description:
-    "See summer camp dates, the 62 E 92nd Street, New York, NY 10128 location, daily format, and what students will do at CHESS AND TRUCK camps.",
+    "See summer camp dates, the 62 E 92nd Street, New York, NY 10128 location, daily format, and what students will do at Chess & Truck camps.",
   },
   "/camps/book": {
-    title: "Camp Booking | CHESS AND TRUCK",
+    title: "Camp Booking | Chess & Truck",
     description:
-    "Choose a summer camp option, add family details, and continue to secure checkout for CHESS AND TRUCK camps at 62 E 92nd Street, New York, NY 10128.",
+    "Choose a summer camp option, add family details, and continue to secure checkout for Chess & Truck camps at 62 E 92nd Street, New York, NY 10128.",
   },
   "/camps/confirmed": {
-    title: "Camp Confirmation | CHESS AND TRUCK",
+    title: "Camp Confirmation | Chess & Truck",
     description:
-      "Review your CHESS AND TRUCK camp payment confirmation, receipt details, and the next step after Stripe checkout.",
+      "Review your Chess & Truck camp payment confirmation, receipt details, and the next step after Stripe checkout.",
   },
   "/camps/training": {
-    title: "Training Camps | CHESS AND TRUCK",
+    title: "Training Camps | Chess & Truck",
     description:
       "Daily training camp format for students who want structured chess work, strong rhythm, and coach-led practice.",
   },
   "/camps/prep": {
-    title: "Advanced Training Camps | CHESS AND TRUCK",
+    title: "Advanced Training Camps | Chess & Truck",
     description:
       "Advanced training camp blocks for students who want sharper game review, stronger calculation, and more focused summer work.",
   },
   "/camps/online": {
-    title: "Online Camps | CHESS AND TRUCK",
+    title: "Online Camps | Chess & Truck",
     description:
       "Online camp format for students who want a structured remote chess week with clear coaching and daily direction.",
   },
   "/events": {
-    title: "Camps | CHESS AND TRUCK",
+    title: "Camps | Chess & Truck",
     description:
     "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128 with dates, format, daily structure, and clear next steps for families.",
   },
   "/events/chess-and-truck-tournament": {
-    title: "Summer Camp | CHESS AND TRUCK",
+    title: "Summer Camp | Chess & Truck",
     description:
-    "See the summer camp format, 62 E 92nd Street, New York, NY 10128 location, daily structure, and camp details for CHESS AND TRUCK.",
+    "See the summer camp format, 62 E 92nd Street, New York, NY 10128 location, daily structure, and camp details for Chess & Truck.",
   },
   "/private-lessons": {
-    title: "Private Chess Lessons | CHESS AND TRUCK",
+    title: "Private Chess Lessons | Chess & Truck",
     description:
       "Private, small-group, and online chess lessons in NYC with game review and structured coaching. Registration is opening soon.",
   },
   "/lessons/online": {
-    title: "Online Lessons | CHESS AND TRUCK",
+    title: "Online Lessons | Chess & Truck",
     description:
       "Online chess lessons for students who want focused coaching, cleaner structure, and a clear private lesson path.",
   },
   "/lessons/in-person": {
-    title: "In Person Lessons | CHESS AND TRUCK",
+    title: "In Person Lessons | Chess & Truck",
     description:
       "In-person chess lessons in New York City for students who benefit from direct board work and face-to-face coaching.",
   },
   "/lessons/group": {
-    title: "Group Lessons | CHESS AND TRUCK",
+    title: "Group Lessons | Chess & Truck",
     description:
       "Small-group chess lessons for students who learn well through shared pace, focused instruction, and strong level matching.",
   },
   "/lessons/manage": {
-    title: "Manage Lessons | CHESS AND TRUCK",
+    title: "Manage Lessons | Chess & Truck",
     description:
       "Lesson support for current and incoming families who need scheduling help, coaching guidance, or next-step coordination.",
   },
   "/faq": {
-    title: "FAQ | CHESS AND TRUCK",
+    title: "FAQ | Chess & Truck",
     description:
       "Get answers about summer camp, student fit, what to bring, and how to get the next step.",
   },
   "/contact": {
-    title: "Contact | CHESS AND TRUCK",
+    title: "Contact | Chess & Truck",
     description:
-      "Reach the CHESS AND TRUCK team by phone, email, or the contact form for camp questions.",
+      "Reach the Chess & Truck team by phone, email, or the contact form for camp questions.",
   },
   "/register": {
-    title: "Registration | CHESS AND TRUCK",
+    title: "Registration | Chess & Truck",
     description:
-      "Complete the CHESS AND TRUCK registration form and continue to secure checkout.",
+      "Complete the Chess & Truck registration form and continue to secure checkout.",
   },
   "/tournaments": {
-    title: "Chess Tournaments | CHESS AND TRUCK",
+    title: "Chess Tournaments | Chess & Truck",
     description:
       "NYC scholastic chess tournaments with Open and Beginner sections. Registration is opening soon.",
   },
   "/after-school": {
-    title: "After-School Programs | CHESS AND TRUCK",
+    title: "After-School Programs | Chess & Truck",
     description:
       "After-school chess programs for NYC students are in preparation. Registration is opening soon.",
   },
   "/dojo": {
-    title: "Chess Dojo | CHESS AND TRUCK",
+    title: "Chess Dojo | Chess & Truck",
     description:
       "The Master Training Dojo adds coach-guided review around tournament day. Registration is opening soon.",
   },
   "/terms": {
-    title: "Terms of Service | CHESS AND TRUCK",
+    title: "Terms of Service | Chess & Truck",
     description:
-      "Review CHESS AND TRUCK terms covering camp inquiries, payments, cancellations, and program participation.",
+      "Review Chess & Truck terms covering camp inquiries, payments, cancellations, and program participation.",
   },
   "/privacy": {
-    title: "Privacy Policy | CHESS AND TRUCK",
+    title: "Privacy Policy | Chess & Truck",
     description:
-      "See how CHESS AND TRUCK uses contact and payment-related information for camp and family communication.",
+      "See how Chess & Truck uses contact and payment-related information for camp and family communication.",
   },
 };
 
