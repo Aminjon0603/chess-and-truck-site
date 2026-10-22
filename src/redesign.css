@@ -642,10 +642,14 @@
   overflow: hidden;
 }
 
-.ac-program-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.ac-program-icon {
+  color: var(--ac-gold-light);
+  box-shadow: inset 0 0 0 1px rgba(220, 185, 120, 0.35);
+}
+
+.ac-program-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
 .ac-program-card h3 {

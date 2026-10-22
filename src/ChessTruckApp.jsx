@@ -468,13 +468,72 @@ const lessonCarouselImages = {
   manage: lessonManageVisual,
 };
 
-const programIcons = {
-  camps: campOverviewVisual,
-  tournaments: trophyBadge,
-  lessons: lessonInPersonVisual,
-  afterSchool: lessonGroupVisual,
-  dojo: dojoMark,
+// One line-icon set for the program cards: same 24px grid, stroke, and color.
+const programIconPaths = {
+  camps: (
+    <>
+      <path d="M3 20h18" />
+      <path d="M4.5 20 12 6l7.5 14" />
+      <path d="M9.5 20 12 15l2.5 5" />
+      <path d="M12 6V3l3 1-3 1" />
+    </>
+  ),
+  tournaments: (
+    <>
+      <path d="M8 4h8v5a4 4 0 0 1-8 0V4Z" />
+      <path d="M8 6H5.5a2 2 0 0 0 0 4H8" />
+      <path d="M16 6h2.5a2 2 0 0 1 0 4H16" />
+      <path d="M12 13v4" />
+      <path d="M9 17h6" />
+      <path d="M8 20h8" />
+    </>
+  ),
+  lessons: (
+    <>
+      <rect x="3" y="4" width="18" height="12" rx="1.5" />
+      <path d="M12 16v4" />
+      <path d="M8.5 20h7" />
+      <circle cx="12" cy="8.2" r="1.6" />
+      <path d="M9.8 13.5c.4-1.7 1.1-2.7 2.2-3.3 1.1.6 1.8 1.6 2.2 3.3Z" />
+    </>
+  ),
+  afterSchool: (
+    <>
+      <path d="M7 9.5a5 5 0 0 1 10 0V19a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V9.5Z" />
+      <path d="M10 4.8V4.5a2 2 0 0 1 4 0v.3" />
+      <path d="M7 12.5h10" />
+      <path d="M9.5 15h5v3h-5z" />
+    </>
+  ),
+  dojo: (
+    <>
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="4.5" />
+      <circle cx="12" cy="12" r="1" />
+      <path d="M12 12l6-6" />
+      <path d="M16 5.5h2.5V8" />
+    </>
+  ),
 };
+
+function ProgramIcon({ iconKey }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="28"
+      height="28"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {programIconPaths[iconKey]}
+    </svg>
+  );
+}
 
 const campMenuImages = {
   overview: campOverviewVisual,
@@ -1349,7 +1408,7 @@ function ProgramCard({ program, currentPath, navigate }) {
     <AppLink to={program.path} navigate={navigate} currentPath={currentPath} className="ac-program-card">
       <span className="ac-program-card-top">
         <span className="ac-program-icon">
-          <img src={programIcons[program.iconKey]} alt="" width="56" height="56" />
+          <ProgramIcon iconKey={program.iconKey} />
         </span>
         <ProgramStatusBadge programId={program.id} />
       </span>

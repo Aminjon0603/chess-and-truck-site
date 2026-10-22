@@ -25,9 +25,9 @@ export const navigationItems = [
 export const academyHomePage = {
   hero: {
     eyebrow: "Chess & Truck Academy",
-    title: "Chess coaching for New York City kids.",
+    title: "Your Next Move Starts Here.",
     intro:
-      "Camps, tournaments, private lessons, after-school programs, and the Chess Dojo. Structured instruction from experienced coaches, with an approach kids genuinely enjoy.",
+      "Chess camps, tournaments, private lessons, after-school programs, and the Chess Dojo for New York City kids, taught by experienced coaches.",
     facts: ["Led by Chess Masters", "Beginner to advanced", "New York City"],
   },
   programsSection: {
