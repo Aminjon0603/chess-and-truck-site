@@ -1907,7 +1907,7 @@ function CampsPage({ currentPath, navigate, bookingProps }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Camp at a glance" iconKey="camps" items={content.glance} tone="dark" />}
+        aside={<FactPanel title="Camp details" iconKey="camps" items={content.glance} tone="dark" />}
       />
 
       <section className="ac-section pg-day-section" id="camp-day" aria-labelledby="camp-day-title">
@@ -2185,7 +2185,7 @@ function AfterSchoolPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="At a glance" iconKey="afterSchool" items={content.glance} tone="light" />}
+        aside={<FactPanel title="Program details" iconKey="afterSchool" items={content.glance} tone="light" />}
       />
 
       <section className="ac-section" id="audiences" aria-labelledby="audiences-title">
@@ -2279,7 +2279,7 @@ function DojoPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="At a glance" iconKey="dojo" items={content.glance} tone="dark" />}
+        aside={<FactPanel title="Program details" iconKey="dojo" items={content.glance} tone="dark" />}
       />
 
       <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />
