@@ -489,6 +489,18 @@ const run = async () => {
     assert.doesNotMatch(statements, /child|birth|rating|medical|student/i, "no child data columns");
   });
 
+  await test("unconfirmed signups are purged after 30 days on a daily schedule", async () => {
+    const base = readFileSync(new URL("../supabase/migrations/20261023120000_program_interest.sql", import.meta.url), "utf8");
+    assert.match(base, /delete from public\.interest_signups\s+where status = 'pending' and created_at < now\(\) - interval '30 days'/);
+
+    const sql = readFileSync(new URL("../supabase/migrations/20261023140000_schedule_interest_purge.sql", import.meta.url), "utf8");
+    const statements = sql.replace(/--[^\n]*/g, "");
+    assert.match(statements, /create extension if not exists pg_cron/);
+    assert.match(statements, /cron\.unschedule\(jobid\) from cron\.job where jobname = 'purge-stale-interest-data'/);
+    assert.match(statements, /cron\.schedule\(\s*'purge-stale-interest-data',\s*'15 4 \* \* \*',\s*\$\$select public\.purge_stale_interest_data\(\);\$\$/);
+    assert.doesNotMatch(statements, /grant|revoke|create policy|alter table|drop /i, "scheduling only: no access or schema changes");
+  });
+
   console.log(`Interest list tests passed (${results.length}):`);
   results.forEach((name) => console.log(`  ok - ${name}`));
 };

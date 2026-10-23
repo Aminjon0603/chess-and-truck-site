@@ -703,6 +703,25 @@ const updateMetaTag = (selector, content) => {
   }
 };
 
+const SITE_ORIGIN = "https://www.chessandtruck.com";
+
+// Pages that show another page's content point search engines at that page.
+const canonicalPathAliases = {
+  "/camps/book": "/camps",
+  "/register": "/tournaments",
+};
+
+// Private, one-time pages that should never appear in search results.
+const isNoIndexPath = (path) => path === "/camps/confirmed" || path.startsWith("/interest/");
+
+const updateCanonicalLink = (href) => {
+  const element = document.querySelector("link[rel='canonical']");
+
+  if (element) {
+    element.setAttribute("href", href);
+  }
+};
+
 function AppLink({ to, navigate, children, className = "", currentPath, onNavigate, ...rest }) {
   const isActive = normalizePath(to) === currentPath;
 
@@ -1888,7 +1907,7 @@ function CampsPage({ currentPath, navigate, bookingProps }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Camp at a glance" iconKey="camps" items={content.glance} tone="dark" />}
+        aside={<FactPanel title="Camp details" iconKey="camps" items={content.glance} tone="dark" />}
       />
 
       <section className="ac-section pg-day-section" id="camp-day" aria-labelledby="camp-day-title">
@@ -1968,7 +1987,7 @@ function TournamentsPage({ currentPath, navigate }) {
         <div className="ac-shell">
           <AcademySectionHeading id="sections-title" {...content.sectionsSection} />
           <div className="pg-section-cards">
-            {sectionOptions.map((item) => (
+            {content.sectionCards.map((item) => (
               <article className="pg-section-card" key={item.id}>
                 <span className="pg-section-tag">{item.badge}</span>
                 <h3>{item.title}</h3>
@@ -2166,7 +2185,7 @@ function AfterSchoolPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="At a glance" iconKey="afterSchool" items={content.glance} tone="light" />}
+        aside={<FactPanel title="Program details" iconKey="afterSchool" items={content.glance} tone="light" />}
       />
 
       <section className="ac-section" id="audiences" aria-labelledby="audiences-title">
@@ -2252,54 +2271,16 @@ function DojoPage({ currentPath, navigate }) {
         programId="dojo"
         actions={
           <>
-            <a href="#dojo-focus" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-focus")}>
-              What we'll work on
+            <a href="#dojo-faq-title" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-faq-title")}>
+              Dojo questions
             </a>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
               Contact us
             </AppLink>
           </>
         }
-        aside={<FactPanel title="At a glance" iconKey="dojo" items={content.glance} tone="dark" />}
+        aside={<FactPanel title="Program details" iconKey="dojo" items={content.glance} tone="dark" />}
       />
-
-      <section className="ac-section" aria-labelledby="dojo-compare-title">
-        <div className="ac-shell">
-          <AcademySectionHeading id="dojo-compare-title" {...content.compareSection} />
-          <div className="pg-compare">
-            {content.compare.map((item) => (
-              <article className={`pg-compare-card${item.id === "dojo" ? " is-featured" : ""}`} key={item.id}>
-                <span className="ac-program-icon">
-                  <ProgramIcon iconKey={item.id} />
-                </span>
-                <h3>{item.name}</h3>
-                <p>{item.text}</p>
-                {item.path ? (
-                  <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-text-link">
-                    {item.link} <span aria-hidden="true">&rarr;</span>
-                  </AppLink>
-                ) : (
-                  <ProgramStatusBadge programId="dojo" />
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="ac-section pg-dark-section" id="dojo-focus" aria-labelledby="dojo-focus-title">
-        <div className="ac-shell">
-          <AcademySectionHeading id="dojo-focus-title" {...content.focusSection} />
-          <div className="pg-section-cards pg-focus-cards">
-            {content.focus.map((item) => (
-              <article className="pg-section-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />
 
@@ -3163,7 +3144,7 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Age range</span>
-                <strong>Ages 4 - 17</strong>
+                <strong>Will be announced</strong>
               </div>
               {allowsAddOns ? (
                 <div>
@@ -3622,7 +3603,7 @@ function CampsOverviewPage({
                 className="btn btn-secondary"
                 onClick={scrollToCampSection("camp-location")}
               >
-                Two Blocks Away from Central Park
+                Camp location
               </a>
             </div>
 
@@ -5006,6 +4987,11 @@ function ChessTruckApp() {
     updateMetaTag("meta[property='og:description']", meta.description);
     updateMetaTag("meta[name='twitter:title']", meta.title);
     updateMetaTag("meta[name='twitter:description']", meta.description);
+
+    const canonicalUrl = `${SITE_ORIGIN}${canonicalPathAliases[currentPath] || currentPath}`;
+    updateCanonicalLink(canonicalUrl);
+    updateMetaTag("meta[property='og:url']", canonicalUrl);
+    updateMetaTag("meta[name='robots']", isNoIndexPath(currentPath) ? "noindex,nofollow" : "index,follow");
   }, [currentPath]);
 
   useEffect(() => {
