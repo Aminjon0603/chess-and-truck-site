@@ -48,7 +48,7 @@ assert.deepEqual(splitAdditionalEmails("a@test.com, b@test.com;\nc@test.com"), [
 
   assert.equal(errors.email, "Enter a valid email address.");
   assert.equal(errors.phone, "Enter a valid phone number.");
-  assert.equal(errors.message, "Please add a little more detail so the team can help.");
+  assert.equal(errors.message, "Please add a bit more detail so we can help.");
 }
 
 console.log("Validation smoke tests passed.");

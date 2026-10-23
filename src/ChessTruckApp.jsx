@@ -977,17 +977,17 @@ function LessonDetailHero({ page, currentPath, navigate }) {
 function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts, currentPath, navigate }) {
   const asideContent = aside || (
     <>
-      <span className="mini-tag mini-tag-dark">Camp focus</span>
-      <h2>{featuredTournament.title}</h2>
-      <p>{featuredTournament.shortSummary}</p>
+      <span className="mini-tag mini-tag-dark">Questions?</span>
+      <h2>Talk to us</h2>
+      <p>All five programs are opening soon. Call, text, or email with any question.</p>
       <div className="fact-list">
         <div>
-          <span>Location</span>
-          <strong>{featuredTournament.city}</strong>
+          <span>{phoneContact.label}</span>
+          <strong>{phoneContact.display}</strong>
         </div>
         <div>
-          <span>Camp Hours</span>
-          <strong>{featuredTournament.formatLabel}</strong>
+          <span>{emailContact.label}</span>
+          <strong>{emailContact.display}</strong>
         </div>
       </div>
     </>
@@ -1165,7 +1165,7 @@ function ProgramStatusNotice({ programId, currentPath, navigate }) {
       <strong>{PROGRAM_STATUS_LABELS[status]}</strong>
       <p>{getProgramStatusMessage(programId)}</p>
       <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-        Contact Us
+        Contact us
       </AppLink>
     </article>
   );
@@ -1391,7 +1391,7 @@ function ProgramCard({ program, currentPath, navigate }) {
       <h3>{program.name}</h3>
       <p>{program.summary}</p>
       <span className="ac-program-link">
-        View program
+        Learn more
         <span className="ac-program-arrow" aria-hidden="true">
           &rarr;
         </span>
@@ -1437,7 +1437,7 @@ function AcademyHomePage({ currentPath, navigate }) {
             <p className="ac-lead">{hero.intro}</p>
             <div className="ac-actions">
               <a href="#programs" className="ac-btn ac-btn-primary" onClick={scrollToPrograms}>
-                Explore programs
+                See our programs
               </a>
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
                 Contact us
@@ -1504,7 +1504,7 @@ function AcademyHomePage({ currentPath, navigate }) {
                 ))}
               </dl>
               <AppLink to="/about" navigate={navigate} currentPath={currentPath} className="ac-text-link">
-                More about Chess &amp; Truck <span aria-hidden="true">&rarr;</span>
+                More about Andrea <span aria-hidden="true">&rarr;</span>
               </AppLink>
             </div>
           </article>
@@ -1668,8 +1668,8 @@ function RegistrationStatusPanel({ id, programId, title, text, currentPath, navi
 }
 
 const NOTIFY_FALLBACK_SUCCESS =
-  "Thanks. If this address can receive email, we sent a link to confirm it. Check your inbox.";
-const NOTIFY_FALLBACK_ERROR = "Something went wrong. Please try again later.";
+  "Thanks! Check your inbox for a link to confirm your email.";
+const NOTIFY_FALLBACK_ERROR = "Sorry, something went wrong. Please try again later.";
 
 function NotifyMeForm({ programId, currentPath, navigate }) {
   const programName = getProgramById(programId)?.name || "this program";
@@ -1722,7 +1722,7 @@ function NotifyMeForm({ programId, currentPath, navigate }) {
   return (
     <form className="pg-notify" onSubmit={handleSubmit} noValidate aria-labelledby={`${idBase}-title`}>
       <h3 id={`${idBase}-title`}>Get an email when registration opens</h3>
-      <p className="pg-notify-note">We only ask for your email, and we will send a link to confirm it first.</p>
+      <p className="pg-notify-note">Just your email. We'll send a link to confirm it first.</p>
       <div className="pg-notify-row">
         <label htmlFor={`${idBase}-email`} className="pg-notify-label">
           Email address
@@ -1788,12 +1788,12 @@ function NotifyMeForm({ programId, currentPath, navigate }) {
 const INTEREST_ACTION_COPY = {
   confirm: {
     title: "Confirm your email",
-    intro: "Press the button to confirm you want an email when registration opens.",
+    intro: "Click below to confirm. We'll email you once, when registration opens.",
     button: "Confirm my email",
   },
   unsubscribe: {
     title: "Unsubscribe",
-    intro: "Press the button to stop emails about this program.",
+    intro: "Click below to stop emails about this program.",
     button: "Unsubscribe",
   },
 };
@@ -1839,7 +1839,7 @@ function InterestActionPage({ action, currentPath, navigate }) {
             <span className="ac-eyebrow">Chess &amp; Truck</span>
             <h1 id="interest-title">{copy.title}</h1>
             {!token ? (
-              <p className="ac-lead">This link is incomplete. Please use the link from your email.</p>
+              <p className="ac-lead">This link is missing part of the address. Please use the link in your email.</p>
             ) : state.status === "done" || state.status === "error" ? (
               <p className="ac-lead" role="status">
                 {state.message}
@@ -1884,7 +1884,7 @@ function CampsPage({ currentPath, navigate, bookingProps }) {
               See the daily schedule
             </a>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
-              Ask about camp
+              Ask a question
             </AppLink>
           </>
         }
@@ -2052,7 +2052,7 @@ function LessonsPage({ currentPath, navigate }) {
               How a lesson works
             </a>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
-              Ask about lessons
+              Ask a question
             </AppLink>
           </>
         }
@@ -2159,7 +2159,7 @@ function AfterSchoolPage({ currentPath, navigate }) {
         actions={
           <>
             <a href="#audiences" className="ac-btn ac-btn-primary" onClick={scrollToSection("audiences")}>
-              Parents and schools
+              For parents and schools
             </a>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
               Contact us
@@ -2253,14 +2253,14 @@ function DojoPage({ currentPath, navigate }) {
         actions={
           <>
             <a href="#dojo-focus" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-focus")}>
-              What the Dojo works on
+              What we'll work on
             </a>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
               Contact us
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Planned focus" iconKey="dojo" items={content.glance} tone="dark" />}
+        aside={<FactPanel title="At a glance" iconKey="dojo" items={content.glance} tone="dark" />}
       />
 
       <section className="ac-section" aria-labelledby="dojo-compare-title">
@@ -2331,7 +2331,7 @@ function SiteFooter({ currentPath, navigate }) {
             <BrandMark tone="dark" />
             <p>{siteBrand.brandNote}</p>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
-              Contact Us
+              Contact us
             </AppLink>
           </div>
 
@@ -2378,7 +2378,7 @@ function SiteFooter({ currentPath, navigate }) {
                 </li>
               ))}
               <li>
-                <span>Location</span>
+                <span>Based in</span>
                 {siteBrand.city}
               </li>
             </ul>
@@ -2465,11 +2465,9 @@ function ContactForm({
 }) {
   return (
     <form className="surface contact-form" onSubmit={handleContactSubmit}>
-      <span className="mini-tag">CONTACT OUR TEAM</span>
-      <h3>Have questions before enrolling?</h3>
-      <p>
-        Ask about availability, group placement, scheduling, or anything else - we're happy to help.
-      </p>
+      <span className="mini-tag">Send a message</span>
+      <h3>Ask us anything</h3>
+      <p>Fields marked * are required.</p>
 
       <label className={getFieldClassName(contactErrors.name)}>
         <span>Name *</span>
@@ -2501,13 +2499,13 @@ function ContactForm({
       </label>
 
       <label className={getFieldClassName(contactErrors.phone)}>
-        <span>Phone</span>
+        <span>Phone (optional)</span>
         <input
           name="phone"
           type="tel"
           value={contactState.phone}
           onChange={updateContactField}
-          placeholder="+1 ..."
+          placeholder="(212) 555-0123"
           autoComplete="tel"
           inputMode="tel"
           aria-invalid={contactErrors.phone ? "true" : "false"}
@@ -2533,7 +2531,7 @@ function ContactForm({
           value={contactState.message}
           onChange={updateContactField}
           rows="5"
-          placeholder="Let us know how we can help."
+          placeholder="Your question, plus your child's age and chess level if you know it."
           autoComplete="off"
           aria-invalid={contactErrors.message ? "true" : "false"}
           required
@@ -2542,12 +2540,12 @@ function ContactForm({
       </label>
 
       <button type="submit" className="btn btn-primary btn-full" disabled={contactSubmitState.status === "loading"}>
-        {contactSubmitState.status === "loading" ? "Sending..." : "Send Message"}
+        {contactSubmitState.status === "loading" ? "Sending..." : "Send message"}
       </button>
 
       <small className={`status-copy status-${contactSubmitState.status}`} aria-live="polite">
         {contactSubmitState.status === "idle"
-          ? "We'll get back to you shortly."
+          ? "We'll reply by email or phone."
           : contactSubmitState.message}
       </small>
     </form>
@@ -3256,11 +3254,11 @@ function AboutPage({ currentPath, navigate }) {
         navigate={navigate}
         actions={
           <>
-            <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-              Explore Camps
+            <AppLink to="/" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+              See our programs
             </AppLink>
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Get in Touch
+                Contact us
               </AppLink>
           </>
         }
@@ -3290,7 +3288,7 @@ function AboutPage({ currentPath, navigate }) {
             <div className="coach-spotlight-media">
               <img
                 src={andreaPhoto}
-                alt="Andrea teaching chess outdoors with a board set up in front of him"
+                alt="Andrea at an outdoor chess table"
                 className="coach-spotlight-image"
               />
             </div>
@@ -3659,7 +3657,7 @@ function CampsOverviewPage({
                   navigate={navigate}
                   currentPath={currentPath}
                   className="fact-list-card-link"
-                  aria-label={`Contact Us about ${item.label.toLowerCase()}`}
+                  aria-label={`Contact us about ${item.label.toLowerCase()}`}
                 >
                   <span>{item.label}</span>
                   <strong>{item.value}</strong>
@@ -3899,7 +3897,7 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
       ? "Please wait a moment while we verify the Stripe checkout session."
       : isError
         ? campCheckoutState.message || "Please contact us if you were charged but do not see a confirmation."
-        : "This page shows your camp confirmation after checkout finishes.";
+        : "Your payment status will show here after checkout.";
 
   return (
     <>
@@ -3944,10 +3942,10 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
 
             <div className="cta-row">
               <AppLink to="/camps" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Back to Camps
+                Back to camps
               </AppLink>
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Contact Us
+                Contact us
               </AppLink>
             </div>
           </article>
@@ -3958,14 +3956,14 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
         <div className="shell card-grid card-grid-three">
           <article className="surface">
             <h3>What happens next</h3>
-            <p>We will review the booking and send the next camp details after the Stripe confirmation.</p>
+            <p>We'll review your registration and email you the camp details.</p>
           </article>
           <article className="surface">
             <h3>Need to change something?</h3>
-            <p>Reply to the receipt email or use the contact page if you need to update the day, week, or family details.</p>
+            <p>Reply to your receipt email or contact us to change the day, week, or family details.</p>
           </article>
           <article className="surface">
-            <h3>Prefer direct contact?</h3>
+            <h3>Rather talk to us?</h3>
             <p>
               Call or text <a href={phoneContact.href} className="inline-link">{phoneContact.display}</a> or email{" "}
               <a href={emailContact.href} className="inline-link">{emailContact.display}</a>.
@@ -4043,7 +4041,7 @@ function CampDetailPage({ page, currentPath, navigate }) {
             <p>{page.ctaText}</p>
             <div className="cta-row">
               <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                Contact Us
+                Contact us
               </AppLink>
               <a href={phoneContact.href} className="btn btn-secondary">
                 Call / Text {phoneContact.display}
@@ -4142,7 +4140,7 @@ function LessonDetailPage({ page, currentPath, navigate }) {
               <p>{page.ctaText}</p>
               <div className="cta-row">
                 <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                  Contact Us
+                  Contact us
                 </AppLink>
                 <a href={phoneContact.href} className="btn btn-secondary">
                   Call / Text {phoneContact.display}
@@ -4160,7 +4158,7 @@ function LessonDetailPage({ page, currentPath, navigate }) {
               <p>{page.ctaText}</p>
               <div className="cta-row">
                 <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-                  Contact Us
+                  Contact us
                 </AppLink>
                 <a href={phoneContact.href} className="btn btn-secondary">
                   Call / Text {phoneContact.display}
@@ -4186,14 +4184,14 @@ function FaqPage({ currentPath, navigate }) {
         navigate={navigate}
         actions={
           <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-            Ask About Camp
+            Ask a question
           </AppLink>
         }
       />
 
       <section className="page-section">
         <div className="shell">
-          <SectionIntro eyebrow="FAQ" title="Common Questions" />
+          <SectionIntro eyebrow="All programs" title="Common questions" />
           <div className="card-grid card-grid-three">
             {faqPage.quickCards.map((item) => (
               <article className="surface" key={item.title}>
@@ -4226,6 +4224,16 @@ function ContactPage({
         heroFacts={contactPage.heroFacts}
         currentPath={currentPath}
         navigate={navigate}
+        aside={
+          <>
+            <span className="mini-tag mini-tag-dark">What happens next</span>
+            <h2>After you write</h2>
+            <p>
+              Your message comes straight to us, and we'll reply by email or phone. Telling us your child's age and
+              chess level helps us answer faster.
+            </p>
+          </>
+        }
       />
 
       <section className="page-section">
@@ -4808,13 +4816,10 @@ function NotFoundPage({ currentPath, navigate }) {
     <section className="page-hero not-found-page">
       <div className="shell not-found-card">
         <span className="section-tag">Page not found</span>
-        <h1>This page does not exist yet</h1>
-        <p>
-          The route you opened is not part of the live site. Use the navigation or go back to the
-          home page.
-        </p>
+        <h1>We can't find that page</h1>
+        <p>The link may be old or mistyped. Try the menu above, or go back to the home page.</p>
         <AppLink to="/" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
-          Back to Home
+          Back to home
         </AppLink>
       </div>
     </section>
@@ -5419,7 +5424,7 @@ function ChessTruckApp() {
       focusFirstErrorField(contactErrors);
       setContactSubmitState({
         status: "error",
-        message: Object.values(contactErrors)[0] || "Please review the contact form and try again.",
+        message: Object.values(contactErrors)[0] || "Please check the form and try again.",
       });
       return;
     }
@@ -5436,16 +5441,16 @@ function ChessTruckApp() {
       const payload = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(payload.error || "Your message could not be sent right now.");
+        throw new Error(payload.error || "Sorry, your message didn't go through. Please try again.");
       }
 
-      setContactSubmitState({ status: "success", message: payload.message || "Message sent." });
+      setContactSubmitState({ status: "success", message: payload.message || "Thanks! We got your message." });
       setContactState(contactInitialState);
     } catch (error) {
       setContactSubmitState({
         status: "error",
         message:
-          error instanceof Error ? error.message : "Your message could not be sent right now.",
+          error instanceof Error ? error.message : "Sorry, your message didn't go through. Please try again.",
       });
     }
   };
@@ -5601,7 +5606,7 @@ function ChessTruckApp() {
               className="ac-btn ac-btn-primary ac-nav-contact"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Contact Us
+              Contact us
             </AppLink>
           </nav>
 
@@ -5613,7 +5618,7 @@ function ChessTruckApp() {
               className="ac-btn ac-btn-primary ac-header-cta"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Contact Us
+              Contact us
             </AppLink>
             <button
               type="button"

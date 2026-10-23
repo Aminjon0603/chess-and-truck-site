@@ -2,13 +2,13 @@ export const siteBrand = {
   name: "Chess & Truck",
   short: "CT",
   city: "New York City",
-  tagline: "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training in NYC",
+  tagline: "Chess camps, tournaments, lessons, after-school chess, and Chess Dojo for kids in NYC",
   footerNote:
-    "We are preparing the first Chess & Truck summer chess camp in New York City. Dates and location will be announced when registration opens. Planned camp days include chess instruction, structured play, and outdoor time.",
+    "We're planning our first Chess & Truck summer camp in New York City. Dates and location will be posted when registration opens.",
   // Brand slogan and summary for the shared header and footer.
   slogan: "Big Moves Start Small.",
   brandNote:
-    "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City families.",
+    "Chess camps, tournaments, lessons, after-school chess, and Chess Dojo for kids in New York City.",
 };
 
 export const navigationItems = [
@@ -24,95 +24,94 @@ export const navigationItems = [
 
 export const academyHomePage = {
   hero: {
-    eyebrow: "Chess programs for NYC kids",
-    title: "Your Next Move Starts Here.",
+    eyebrow: "Chess & Truck",
+    title: "Chess Programs for Kids in NYC",
     intro:
-      "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City kids. Structured lessons, real games, and an approach kids enjoy.",
-    facts: ["Beginners welcome", "Direct parent support", "New York City"],
+      "Explore chess camps, tournaments, private lessons, after-school programs, and Chess Dojo. Registration for all five opens soon.",
+    facts: ["Beginners welcome", "Talk to the coach directly", "Based in NYC"],
   },
   programsSection: {
     eyebrow: "Programs",
-    title: "Five ways to play, learn, and compete",
-    intro: "Explore what each program offers and where registration stands.",
+    title: "Our five programs",
+    intro: "All five are still being planned. None are taking sign-ups yet.",
   },
   whySection: {
-    eyebrow: "Why Chess & Truck",
-    title: "Serious chess, taught with clarity and fun",
-    intro:
-      "We keep chess structured enough to build real skills and fun enough that kids want to come back.",
+    eyebrow: "How we teach",
+    title: "Real chess, taught so kids enjoy it",
+    intro: "Every lesson has a plan, and kids spend most of their time playing.",
     pillars: [
       {
-        title: "Clear program details",
-        text: "We share schedules, locations, and what each program includes before families register.",
+        title: "Details before sign-up",
+        text: "Each program page will list the dates, location, price, and what's included before registration opens.",
       },
       {
-        title: "Real games, real progress",
-        text: "Lessons combine real games with guided analysis, so students understand what to repeat and what to change.",
+        title: "Play, then review",
+        text: "Kids play real games, then go over them with a coach to see what worked and what to change.",
       },
       {
-        title: "Direct communication",
-        text: "Parents can reach us by phone, text, or email for a clear answer and next step.",
+        title: "Talk to us directly",
+        text: "Call, text, or email. You'll hear back from the people who run the program.",
       },
     ],
   },
   coachSection: {
-    eyebrow: "Coach spotlight",
+    eyebrow: "Your coach",
     title: "Meet Andrea",
-    role: "Chess & Truck coach",
+    role: "Coach",
     summary:
-      "Andrea is based in New York and has taught chess through camps, private lessons, after-school programs, and events in the U.S. and Canada.",
+      "Andrea lives in New York and has taught chess for 24 years in camps, private lessons, after-school programs, and events in the U.S. and Canada.",
     facts: [
       { value: "24 years", label: "teaching chess" },
-      { value: "U.S. & Canada", label: "teaching experience" },
+      { value: "U.S. & Canada", label: "where he's taught" },
     ],
   },
   howSection: {
-    eyebrow: "How it works",
-    title: "Getting started is simple",
+    eyebrow: "Getting started",
+    title: "How to get started",
     steps: [
       {
-        title: "Choose a program",
-        text: "Browse camps, tournaments, private lessons, after-school programs, and the Chess Dojo.",
+        title: "Pick a program",
+        text: "Read about each program and see which one fits your child.",
       },
       {
-        title: "Tell us about your student",
-        text: "Share your child's age, experience, and goals, and we will suggest a good starting point.",
+        title: "Tell us about your child",
+        text: "Share their age and how much chess they've played. We'll suggest where to start.",
       },
       {
-        title: "Register when it opens",
-        text: "Schedules, pricing, and registration details will be posted on each program page when it opens.",
+        title: "Sign up when it opens",
+        text: "Dates, prices, and sign-up will be posted on each program page when registration opens.",
       },
     ],
   },
   faqSection: {
     eyebrow: "Questions",
-    title: "Frequently asked questions",
+    title: "Common questions",
     items: [
       {
-        question: "Is Chess & Truck suitable for beginners?",
+        question: "Is this OK for beginners?",
         answer:
-          "Yes. Beginners are welcome. Tell us your child's age and experience, and we will suggest the best place to start.",
+          "Yes. Kids with no chess experience are welcome. Tell us your child's age and level, and we'll suggest where to start.",
       },
       {
-        question: "Who leads instruction?",
+        question: "Who teaches?",
         answer:
-          "Andrea has 24 years of chess teaching experience. We will share coaching details for each program when its registration opens.",
+          "Andrea, who has taught chess for 24 years. We'll share who coaches each program when its registration opens.",
       },
       {
         question: "When does registration open?",
         answer:
-          "Each program above shows its current status. While a program shows Registration Opening Soon, we are not taking registrations or payments for it. Registration details will be posted on each program page.",
+          "We haven't set dates yet. Until a program page says registration is open, we aren't taking sign-ups or payments for it.",
       },
       {
-        question: "How do payments work?",
+        question: "How much does it cost?",
         answer:
-          "We will share pricing and payment details for each program when its registration opens. Payments made on this website are processed securely by Stripe.",
+          "We'll post prices when each program opens. You'll pay online by card through Stripe, a secure payment service.",
       },
     ],
   },
   contactCard: {
-    title: "Questions? Talk to us.",
-    text: "Call, text, or email, and we will point you to the right program.",
+    title: "Have a question?",
+    text: "Call, text, or email. We're happy to help you figure out which program fits.",
   },
 };
 
@@ -121,197 +120,196 @@ export const academyHomePage = {
 export const campsPageContent = {
   hero: {
     eyebrow: "Chess Camps",
-    title: "Our first summer chess camp.",
+    title: "Our first summer chess camp",
     intro:
-      "We are preparing the first Chess & Truck summer camp: full days of chess lessons, games, and outdoor time. Dates, location, and pricing will be posted here when registration opens.",
+      "We're planning our first summer camp: full days of chess lessons, games, and time outside. We'll post the dates, location, and price here when registration opens.",
   },
   glance: [
-    { label: "Location", value: "To be announced" },
-    { label: "Planned camp day", value: "9:00 AM - 3:00 PM" },
-    { label: "Proposed ages", value: "4 - 17" },
-    { label: "Dates", value: "To be announced" },
+    { label: "Location", value: "Not announced yet" },
+    { label: "Camp day", value: "9:00 AM - 3:00 PM (planned)" },
+    { label: "Ages", value: "4 - 17 (planned)" },
+    { label: "Dates", value: "Not announced yet" },
   ],
   daySection: {
     eyebrow: "Planned schedule",
     title: "Camp Daily Schedule",
-    intro: "This is the planned schedule for our first camp and is subject to change.",
+    intro: "This is our planned schedule for the first camp. It may change before camp starts.",
   },
   learnSection: {
-    eyebrow: "What students will work on",
-    title: "Real chess skills, one day at a time",
+    eyebrow: "What kids will learn",
+    title: "What we'll teach at camp",
   },
   faqSection: {
     eyebrow: "Camp questions",
-    title: "What parents ask about camp",
+    title: "Questions parents ask about camp",
   },
   faqs: [
     {
-      question: "Is camp suitable for beginners?",
+      question: "Is camp OK for beginners?",
       answer:
-        "Yes. Beginners will be welcome. The planned camp day starts with warm-up games so coaches can group students by level.",
+        "Yes. Each day starts with warm-up games, so coaches can see every child's level and put kids in groups.",
     },
     {
-      question: "Who leads instruction?",
+      question: "Who will teach at camp?",
       answer:
-        "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
+        "We'll share the coaching staff when registration opens. You can read about Andrea on the About page.",
     },
     {
-      question: "What should students bring?",
+      question: "What should my child bring?",
       answer:
-        "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
+        "We'll post a packing list with registration. Plan on a water bottle, sunscreen, a change of clothes, and a packed lunch.",
     },
     {
-      question: "Are campers supervised?",
-      answer: "Yes. Students will be supervised throughout the camp day.",
+      question: "Will kids be supervised?",
+      answer: "Yes, all day, from drop-off to pick-up.",
     },
     {
-      question: "Are early drop-off and extended day options available?",
-      answer:
-        "Early drop-off and extended day options have not been decided yet. Any options will be listed when registration opens.",
+      question: "Is there early drop-off or a later pick-up?",
+      answer: "We haven't decided yet. If we offer either one, it will be listed when registration opens.",
     },
   ],
   status: {
     title: "Camp registration is opening soon",
-    text: "Camp registration and payments are not open yet. Dates, location, pricing, and enrollment options will be posted on this page when registration opens.",
+    text: "We're not taking camp sign-ups or payments yet. The dates, location, and price will be posted here first.",
   },
 };
 
 export const tournamentsPageContent = {
   hero: {
     eyebrow: "Chess Tournaments",
-    title: "Scholastic chess tournaments for NYC players.",
+    title: "Chess tournaments for NYC kids",
     intro:
-      "We are preparing Open and Beginner tournaments for school-age players. Dates and the venue have not been announced, and the format below may change before registration opens.",
+      "We're planning Saturday-morning tournaments for school-age kids, with one section for experienced players and one for beginners. We haven't announced dates or a venue, and the plan below may change.",
   },
   plannedFormat: [
     { label: "Day", value: "Saturday mornings" },
-    { label: "Start", value: "9:00 AM, finishing around lunch" },
+    { label: "Time", value: "9:00 AM to about lunchtime" },
     { label: "Sections", value: "Open (rated) and Beginner" },
-    { label: "Venue", value: "To be announced" },
+    { label: "Venue", value: "Not announced yet" },
   ],
   sectionsSection: {
     eyebrow: "Planned sections",
-    title: "Two sections, so every player starts in the right place",
-    intro: "Section rules may be adjusted before registration opens.",
+    title: "Two sections, by experience",
+    intro: "Kids play others at a similar level. Section rules may change before registration opens.",
   },
   morningSection: {
-    eyebrow: "Planned tournament morning",
-    title: "How a tournament Saturday is planned to run",
+    eyebrow: "Tournament morning",
+    title: "What a tournament morning will look like",
   },
   morning: [
     {
       time: "8:30 AM",
       title: "Check-in",
-      text: "Families arrive, settle in, and get players ready before the first round.",
+      text: "Arrive, check in, and find your child's section before the first round.",
     },
     {
       time: "9:00 AM",
-      title: "Rounds begin",
-      text: "Play starts on time, with Open and Beginner sections separated.",
+      title: "First round",
+      text: "Games start on time. The Open and Beginner sections play separately.",
     },
     {
       time: "Around lunch",
-      title: "Wrap-up",
-      text: "The format is designed to finish by lunch, so the day stays manageable for families.",
+      title: "Done for the day",
+      text: "We plan to finish by lunchtime, so families have the rest of the day.",
     },
   ],
   registrationSection: {
     eyebrow: "Registration",
     title: "How registration will work",
-    intro: "Registration is not open yet. When it opens, it will follow these steps on this website.",
+    intro: "Registration isn't open yet. When it opens, you'll sign up right here in three steps.",
   },
   registrationSteps: [
     {
-      title: "Choose a section",
-      text: "Open section players need an active US Chess membership and ID. Beginner section players do not.",
+      title: "Pick a section",
+      text: "The Open section needs a US Chess membership and ID. The Beginner section doesn't.",
     },
     {
-      title: "Complete the form",
-      text: "Enter player, parent or guardian, and emergency contact details.",
+      title: "Fill out the form",
+      text: "Enter the player's details, a parent or guardian, and an emergency contact.",
     },
     {
       title: "Pay online",
-      text: "Pay the entry fee through secure Stripe checkout and receive a confirmation.",
+      text: "Pay the entry fee by card through Stripe. You'll get a confirmation email.",
     },
   ],
   faqSection: {
     eyebrow: "Tournament questions",
-    title: "Before the first tournament",
+    title: "Questions about tournaments",
   },
   faqs: [
     {
       question: "When is the first tournament?",
-      answer: "No tournament dates have been announced yet. Dates will be posted on this page when registration opens.",
+      answer: "We haven't set a date yet. It will be posted on this page when registration opens.",
     },
     {
       question: "Does my child need a US Chess membership?",
       answer:
-        "Only for the Open section, which is planned as a rated section. Beginner section players do not need a membership.",
+        "Only for the Open section, because those games are planned to be rated. The Beginner section doesn't need one.",
     },
     {
       question: "Where will tournaments be held?",
-      answer: "The venue has not been announced yet. It will be listed here with the tournament dates.",
+      answer: "We haven't picked a venue yet. We'll post it here along with the dates.",
     },
   ],
   status: {
     title: "Tournament registration is opening soon",
-    text: "Tournament registration and payments are not open yet. Dates, the venue, and entry details will be posted on this page when registration opens.",
+    text: "We're not taking tournament sign-ups or payments yet. The dates, venue, and entry fee will be posted here first.",
   },
 };
 
 export const lessonsPageContent = {
   hero: {
     eyebrow: "Private Chess Lessons",
-    title: "Coaching built around your child.",
+    title: "Chess lessons at your child's pace",
     intro:
-      "Private lessons focus on one student: real games, guided analysis, and practice that connects from one session to the next.",
+      "In a private lesson, the coach works with just your child. They play a game, go over it together, and practice what came up. Each lesson builds on the last.",
   },
-  includesTitle: "Every lesson is built around",
+  includesTitle: "Every lesson includes",
   includes: [
-    { title: "A real game", text: "The coach sees decisions in real time, not only puzzle answers." },
-    { title: "Analysis that teaches", text: "Moves are reviewed so the student knows what to repeat and what to change." },
-    { title: "A clear next focus", text: "Key notes or homework direction can follow the session when useful." },
+    { title: "A real game", text: "The coach sees how your child thinks during a game, not just on puzzles." },
+    { title: "A review", text: "They go over the key moves together and talk about what to change." },
+    { title: "Something to work on", text: "When it helps, your child leaves with notes or practice for next time." },
   ],
   sessionSection: {
     eyebrow: "How a lesson works",
     title: "Play, review, practice",
-    intro: "A typical session moves through three parts. The balance depends on the student.",
+    intro: "Most lessons have three parts. The mix depends on your child.",
   },
   session: [
     {
       title: "Play",
-      text: "A practice game, often at 10+10 or 15+10 once the student is ready for clock play.",
+      text: "A practice game. Once your child is ready, it's played with a chess clock, usually 10 or 15 minutes each.",
     },
     {
       title: "Review",
-      text: "Coach and student go through the key moments together and talk through better options.",
+      text: "Coach and student look at the key moments and talk through better moves.",
     },
     {
       title: "Practice",
-      text: "Targeted training work on the ideas that came up, from tactics to endgames.",
+      text: "Exercises on whatever came up in the game, from tactics to endgames.",
     },
   ],
   formatsSection: {
     eyebrow: "Planned formats",
-    title: "Choose the setting that fits",
-    intro: "Formats and scheduling will be confirmed when lesson registration opens.",
+    title: "Three ways to take lessons",
+    intro: "We'll confirm formats and times when lesson registration opens.",
   },
   fitSection: {
-    eyebrow: "Who lessons help",
-    title: "A good fit for",
+    eyebrow: "Who it's for",
+    title: "Lessons work well for",
   },
   fit: [
     {
-      title: "Beginners who need real fundamentals",
-      text: "Students still building board vision, notation, good habits, and simple tactical awareness.",
+      title: "Beginners",
+      text: "Kids learning the basics: how the pieces work together, writing down moves, and simple tactics.",
     },
     {
-      title: "Developing players who need game review",
-      text: "Students already playing serious games who need clearer analysis, calculation, and decision-making.",
+      title: "Kids who already compete",
+      text: "Players who want help going over their games and making better decisions.",
     },
     {
-      title: "Families who want consistency",
-      text: "A steady lesson rhythm that builds over time instead of changing direction every week.",
+      title: "Families who want a routine",
+      text: "A regular weekly lesson, where each session builds on the one before.",
     },
   ],
   stepsSection: {
@@ -320,197 +318,197 @@ export const lessonsPageContent = {
   },
   steps: [
     {
-      title: "Tell us about your student",
-      text: "Share age, level, and whether you prefer private, group, online, or in-person lessons.",
+      title: "Tell us about your child",
+      text: "Their age, their level, and whether you'd like private, group, online, or in-person lessons.",
     },
     {
-      title: "We suggest a fit",
-      text: "We recommend the format that suits your student best.",
+      title: "We'll suggest a format",
+      text: "Based on what you tell us, we'll recommend the setup that makes the most sense.",
     },
     {
       title: "Book when lessons open",
-      text: "Lesson options and pricing will be posted on this page when registration opens.",
+      text: "Lesson options and prices will be posted on this page.",
     },
   ],
   status: {
     title: "Lesson registration is opening soon",
-    text: "Lesson booking and payments are not open yet. Lesson options and pricing will be posted on this page when registration opens.",
+    text: "We're not booking lessons or taking payments yet. Options and prices will be posted here first.",
   },
 };
 
 export const afterSchoolPageContent = {
   hero: {
     eyebrow: "After-School Programs",
-    title: "Chess after the school bell.",
+    title: "After-school chess for NYC kids",
     intro:
-      "We are planning after-school chess for NYC students, designed to work for families and for schools. Schedules, locations, and pricing have not been set yet.",
+      "We're planning after-school chess classes for NYC students. Kids would learn a new idea, then play games with other kids. We haven't set schedules, locations, or prices yet.",
   },
   glance: [
-    { label: "For", value: "School-age students" },
+    { label: "For", value: "School-age kids" },
     { label: "Beginners", value: "Welcome" },
-    { label: "Schedule", value: "To be announced" },
-    { label: "Locations", value: "To be announced" },
+    { label: "Schedule", value: "Not set yet" },
+    { label: "Locations", value: "Not set yet" },
   ],
   audienceSection: {
     eyebrow: "Who it's for",
-    title: "Planned for families and schools",
+    title: "For parents and for schools",
   },
   audiences: [
     {
       id: "parents",
       tag: "For parents",
-      title: "A structured way to keep playing",
+      title: "Weekly chess after school",
       points: [
-        "Regular chess practice in a group setting after school",
-        "Beginners welcome, with room to grow for stronger players",
-        "Schedule, location, and pricing will be posted here when registration opens",
+        "Regular chess with other kids in a group",
+        "Beginners welcome, and stronger players get harder material",
+        "Schedule, location, and price will be posted here when registration opens",
       ],
       cta: "Ask a question",
     },
     {
       id: "schools",
-      tag: "For schools and administrators",
-      title: "Interested in chess at your school?",
+      tag: "For schools",
+      title: "Want chess at your school?",
       points: [
-        "We are open to conversations with schools about hosting after-school chess",
-        "Tell us about your students, available space, and preferred days",
-        "Format and terms would be agreed with each school before anything is scheduled",
+        "We'd like to hear from schools interested in an after-school chess program",
+        "Tell us about your students, your space, and which days work",
+        "We'd agree on the format and terms with your school before anything is scheduled",
       ],
-      cta: "Start a conversation",
+      cta: "Contact us",
     },
   ],
   benefitsSection: {
     eyebrow: "Why chess after school",
-    title: "What structured chess can help children practice",
-    intro: "Every child is different. These are skills chess gives children a regular chance to practice.",
+    title: "What kids practice in chess",
+    intro: "Every child is different, but chess gives kids regular practice with these skills.",
   },
   benefits: [
     { title: "Focus and patience", text: "Thinking a move through before playing it." },
     { title: "Planning", text: "Setting a goal on the board and working toward it." },
-    { title: "Learning from mistakes", text: "Reviewing games to see what to change next time." },
-    { title: "Good sportsmanship", text: "Winning and losing graciously with friends." },
+    { title: "Learning from mistakes", text: "Looking back at a game to see what to change next time." },
+    { title: "Good sportsmanship", text: "Winning and losing well." },
   ],
   sessionSection: {
-    eyebrow: "A planned session",
-    title: "What a session could look like",
-    intro: "A proposed outline. The final format will be set with each program.",
+    eyebrow: "A planned class",
+    title: "What a class might look like",
+    intro: "This is a rough plan. The final format may be different at each school.",
   },
   session: [
-    { time: "Start", title: "Short lesson", text: "One idea taught clearly, with examples on the board." },
-    { time: "Middle", title: "Supervised games", text: "Students play and try the idea in real games." },
-    { time: "End", title: "Review and wrap-up", text: "A quick look at key moments before pick-up." },
+    { time: "Start", title: "Short lesson", text: "One new idea, shown on a demo board." },
+    { time: "Middle", title: "Games", text: "Kids play each other and try the idea, with a coach watching." },
+    { time: "End", title: "Wrap-up", text: "A quick look at a few key moments before pick-up." },
   ],
   faqSection: {
     eyebrow: "After-school questions",
-    title: "Before the program opens",
+    title: "Questions about after-school chess",
   },
   faqs: [
     {
-      question: "Is this available at my child's school?",
+      question: "Is this offered at my child's school?",
       answer:
-        "Not yet. We have not announced any school programs. If your school is interested in hosting after-school chess, please contact us.",
+        "Not yet. We haven't announced any schools. If your school might be interested, please get in touch.",
     },
     {
-      question: "When and where will sessions take place?",
-      answer: "Schedules and locations have not been set. They will be posted on this page when registration opens.",
+      question: "When and where are classes?",
+      answer: "We haven't set them yet. They'll be posted on this page when registration opens.",
     },
     {
-      question: "Does my child need chess experience?",
-      answer: "No. Beginners will be welcome.",
+      question: "Does my child need to know how to play?",
+      answer: "No. Beginners are welcome.",
     },
   ],
   status: {
     title: "After-school registration is opening soon",
-    text: "After-school registration and payments are not open yet. Schedules, locations, and pricing will be posted on this page when registration opens.",
+    text: "We're not taking after-school sign-ups or payments yet. Schedules, locations, and prices will be posted here first.",
   },
 };
 
 export const dojoPageContent = {
   hero: {
     eyebrow: "Chess Dojo",
-    title: "Training for competitive players.",
+    title: "Tournament training for kids who compete",
     intro:
-      "The Chess Dojo is our planned training program for players who want to prepare seriously for tournaments, built around game analysis and practical training.",
+      "The Chess Dojo is a training group we're planning for kids who play in tournaments. Like a karate dojo, it's a place to practice. Players get ready before tournaments and go over their games afterward.",
   },
   glance: [
-    { label: "Focus", value: "Tournament preparation" },
-    { label: "Method", value: "Game analysis and practical training" },
-    { label: "For", value: "Players who compete or plan to" },
-    { label: "Schedule", value: "To be announced" },
+    { label: "What it is", value: "Training for tournaments" },
+    { label: "How", value: "Reviewing games and practice" },
+    { label: "For", value: "Kids who compete or want to start" },
+    { label: "Schedule", value: "Not set yet" },
   ],
   compareSection: {
-    eyebrow: "How the Dojo fits",
+    eyebrow: "How the Dojo fits in",
     title: "Between lessons and tournaments",
-    intro: "Each program has a different job. The Dojo connects practice to competition.",
+    intro: "Lessons teach the game. Tournaments are where kids compete. The Dojo connects the two.",
   },
   compare: [
     {
       id: "lessons",
       name: "Private Lessons",
-      text: "One-on-one coaching built around a single student's needs and pace.",
+      text: "One-on-one coaching at your child's pace.",
       path: "/private-lessons",
-      link: "See Private Lessons",
+      link: "See lessons",
     },
     {
       id: "dojo",
       name: "Chess Dojo",
-      text: "Training for competitive play: preparing before events and learning from games after them.",
+      text: "Getting ready for tournaments, then going over the games afterward.",
     },
     {
       id: "tournaments",
       name: "Tournaments",
-      text: "Rated and beginner-friendly competition where players put their preparation to the test.",
+      text: "Rated and beginner sections where kids play real tournament games.",
       path: "/tournaments",
-      link: "See Tournaments",
+      link: "See tournaments",
     },
   ],
   focusSection: {
-    eyebrow: "Training focus",
-    title: "What Dojo training works on",
+    eyebrow: "What we'll work on",
+    title: "What Dojo training covers",
     intro:
-      "Progress depends on each player's practice. The Dojo focuses on habits and understanding, not promised ratings or results.",
+      "We can't promise rating points or wins. We focus on good habits and understanding, and progress depends on how much each player practices.",
   },
   focus: [
     {
-      title: "Tournament preparation",
-      text: "Opening ideas, time management, and a calm routine before each round.",
+      title: "Before a tournament",
+      text: "Openings, managing the clock, and a calm routine before each round.",
     },
     {
-      title: "Game analysis",
-      text: "Going through players' own games to find turning points and recurring mistakes.",
+      title: "Going over games",
+      text: "Reviewing each player's own games to find the key moments and repeated mistakes.",
     },
     {
-      title: "Practical training",
-      text: "Calculation, endgames, and training games with a clock.",
+      title: "Practice",
+      text: "Calculating moves, endgames, and timed practice games.",
     },
     {
-      title: "Competition habits",
-      text: "Notation, clock use, and handling the ups and downs of a tournament day.",
+      title: "Tournament habits",
+      text: "Writing down moves, using the clock, and staying steady after a tough game.",
     },
   ],
   faqSection: {
     eyebrow: "Dojo questions",
-    title: "Before the Dojo opens",
+    title: "Questions about the Dojo",
   },
   faqs: [
     {
       question: "How is the Dojo different from private lessons?",
       answer:
-        "Private lessons follow one student's needs. The Dojo is planned around competition: preparing for events and analyzing tournament games.",
+        "Private lessons follow your child's needs. The Dojo is all about tournaments: getting ready for them and going over the games.",
     },
     {
-      question: "Do players need to enter Chess & Truck tournaments?",
+      question: "Does my child have to play in Chess & Truck tournaments?",
       answer:
-        "The Dojo is planned to work alongside our tournaments. How it connects to tournament entry will be confirmed when registration opens.",
+        "We're planning the Dojo to work alongside our tournaments. We'll explain how they connect when registration opens.",
     },
     {
       question: "Who will coach the Dojo?",
-      answer: "Coaching arrangements have not been confirmed yet. They will be shared on this page when registration opens.",
+      answer: "We haven't confirmed that yet. We'll post it on this page when registration opens.",
     },
   ],
   status: {
     title: "Dojo registration is opening soon",
-    text: "Dojo registration and payments are not open yet. Schedule, format, and pricing will be posted on this page when registration opens.",
+    text: "We're not taking Dojo sign-ups or payments yet. The schedule, format, and price will be posted here first.",
   },
 };
 
@@ -518,9 +516,9 @@ export const dojoPageContent = {
 // src/lib/programs.js so it can be shared with the checkout API.
 export const programOverview = {
   eyebrow: "Our programs",
-  title: "Chess education for every stage",
+  title: "Our five programs",
   intro:
-    "Camps, tournaments, lessons, after-school programs, and the Chess Dojo. Here is what each program is and where registration stands today.",
+    "Camps, tournaments, lessons, after-school chess, and the Chess Dojo. Here's what each one is and where registration stands.",
 };
 
 export const programs = [
@@ -530,7 +528,7 @@ export const programs = [
     name: "Chess Camps",
     path: "/camps",
     summary:
-      "Our first summer camp is in preparation, with planned days of chess lessons, games, and outdoor time.",
+      "We're planning our first summer camp: full days of chess lessons, games, and time outside.",
   },
   {
     id: "tournaments",
@@ -539,7 +537,7 @@ export const programs = [
     path: "/tournaments",
     registrationPath: "/register",
     summary:
-      "Planned scholastic tournaments with Open and Beginner sections. Tournament dates have not been announced yet.",
+      "Saturday-morning tournaments for kids, with one section for experienced players and one for beginners. No dates yet.",
   },
   {
     id: "lessons",
@@ -547,7 +545,7 @@ export const programs = [
     name: "Private Chess Lessons",
     path: "/private-lessons",
     summary:
-      "Private, small-group, and online coaching with real games, guided analysis, and structured improvement.",
+      "One-on-one, small-group, or online lessons. Your child plays a game, then goes over it with the coach.",
   },
   {
     id: "afterSchool",
@@ -555,7 +553,7 @@ export const programs = [
     name: "After-School Programs",
     path: "/after-school",
     summary:
-      "After-school chess for NYC students. Program details are still being finalized.",
+      "Weekly chess classes after school for NYC students. We're still working out the details.",
   },
   {
     id: "dojo",
@@ -563,7 +561,7 @@ export const programs = [
     name: "Chess Dojo",
     path: "/dojo",
     summary:
-      "Extra coaching around tournament day, turning competition into both a playing experience and a training block.",
+      "Training for kids who play in tournaments: getting ready before an event and going over the games after.",
   },
 ];
 
@@ -727,29 +725,29 @@ export const campMenuFeature = {
 
 export const routeMeta = {
   "/": {
-    title: "Chess & Truck | Chess Camps, Tournaments & Lessons in NYC",
+    title: "Chess & Truck | Chess Programs for Kids in NYC",
     description:
-      "Chess & Truck offers chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for kids in New York City.",
+      "Chess camps, tournaments, private lessons, after-school chess, and Chess Dojo for kids in New York City. Registration opens soon.",
   },
   "/about": {
     title: "About | Chess & Truck",
     description:
-      "Learn why Chess & Truck is built for NYC families and how summer camp and direct parent communication are being structured.",
+      "Meet Chess & Truck, a chess program for kids in New York City, and coach Andrea.",
   },
   "/camps": {
     title: "Chess Camps | Chess & Truck",
     description:
-      "Chess & Truck is preparing its first summer chess camp in New York City: the planned daily schedule, what students will work on, and registration status.",
+      "Our first summer chess camp in New York City: the planned daily schedule, what kids will learn, and when registration opens.",
   },
   "/camps/book": {
-    title: "Camp Booking | Chess & Truck",
+    title: "Chess Camps | Chess & Truck",
     description:
-    "Chess & Truck summer camp booking. Camp registration is opening soon.",
+    "Our first summer chess camp in New York City. Camp registration is opening soon.",
   },
   "/camps/confirmed": {
     title: "Camp Confirmation | Chess & Truck",
     description:
-      "Review your Chess & Truck camp payment confirmation, receipt details, and the next step after Stripe checkout.",
+      "Your Chess & Truck camp payment confirmation.",
   },
   "/camps/training": {
     title: "Training Camps | Chess & Truck",
@@ -779,7 +777,7 @@ export const routeMeta = {
   "/private-lessons": {
     title: "Private Chess Lessons | Chess & Truck",
     description:
-      "Private, small-group, and online chess lessons in NYC with game review and structured coaching. Registration is opening soon.",
+      "Private, small-group, and online chess lessons for kids in NYC. Your child plays, reviews the game with a coach, and practices. Registration opens soon.",
   },
   "/lessons/online": {
     title: "Online Lessons | Chess & Truck",
@@ -804,50 +802,50 @@ export const routeMeta = {
   "/faq": {
     title: "FAQ | Chess & Truck",
     description:
-      "Get answers about summer camp, student fit, what to bring, and how to get the next step.",
+      "Answers to common parent questions about Chess & Truck camps, tournaments, lessons, after-school chess, and Chess Dojo.",
   },
   "/contact": {
     title: "Contact | Chess & Truck",
     description:
-      "Reach the Chess & Truck team by phone, email, or the contact form for camp questions.",
+      "Call, text, or email Chess & Truck with questions about any of our chess programs for kids in NYC.",
   },
   "/register": {
-    title: "Registration | Chess & Truck",
+    title: "Tournament Registration | Chess & Truck",
     description:
-      "Complete the Chess & Truck registration form and continue to secure checkout.",
+      "Tournament registration for Chess & Truck. Registration is opening soon.",
   },
   "/tournaments": {
     title: "Chess Tournaments | Chess & Truck",
     description:
-      "NYC scholastic chess tournaments with Open and Beginner sections. Registration is opening soon.",
+      "Chess tournaments for kids in NYC, with an Open (rated) section and a Beginner section. Registration is opening soon.",
   },
   "/after-school": {
     title: "After-School Programs | Chess & Truck",
     description:
-      "After-school chess programs for NYC students are in preparation. Registration is opening soon.",
+      "After-school chess classes for kids in NYC, now in planning. Registration is opening soon.",
   },
   "/dojo": {
     title: "Chess Dojo | Chess & Truck",
     description:
-      "The Master Training Dojo adds coach-guided review around tournament day. Registration is opening soon.",
+      "Chess Dojo: tournament training for kids who compete. Prepare before events and review games after. Registration is opening soon.",
   },
   "/interest/confirm": {
     title: "Confirm your email | Chess & Truck",
-    description: "Confirm your Chess & Truck program interest email.",
+    description: "Confirm that you'd like an email when Chess & Truck registration opens.",
   },
   "/interest/unsubscribe": {
     title: "Unsubscribe | Chess & Truck",
-    description: "Stop Chess & Truck program interest emails.",
+    description: "Stop emails about a Chess & Truck program.",
   },
   "/terms": {
     title: "Terms of Service | Chess & Truck",
     description:
-      "Review Chess & Truck terms covering camp inquiries, payments, cancellations, and program participation.",
+      "Chess & Truck terms for registration, payments, cancellations, and program conduct.",
   },
   "/privacy": {
     title: "Privacy Policy | Chess & Truck",
     description:
-      "See how Chess & Truck uses contact and payment-related information for camp and family communication.",
+      "How Chess & Truck collects, uses, and protects family and payment information.",
   },
 };
 
@@ -1141,12 +1139,12 @@ export const campOverviewPage = {
     intro: "Core chess areas.",
   },
   learningCards: [
-    { title: "Tactics", text: "Patterns and calculation." },
-    { title: "Openings", text: "Clean development habits." },
-    { title: "Strategy", text: "Planning and piece activity." },
-    { title: "Endgames", text: "Core winning methods." },
-    { title: "Tournament habits", text: "Clock use and focus." },
-    { title: "Thinking process", text: "Slower, better decisions." },
+    { title: "Tactics", text: "Spotting forks, pins, and quick wins." },
+    { title: "Openings", text: "Starting a game with a good plan." },
+    { title: "Strategy", text: "Making a plan and using every piece." },
+    { title: "Endgames", text: "Winning when only a few pieces are left." },
+    { title: "Tournament habits", text: "Using a chess clock and staying focused." },
+    { title: "Thinking it through", text: "Slowing down before each move." },
   ],
   cards: [
     {
@@ -1457,61 +1455,60 @@ export const campDetailPages = {
 };
 
 export const aboutPage = {
-  eyebrow: "About CHESS AND TRUCK",
-  title: "A Smarter Chess Program for NYC Families",
+  eyebrow: "About us",
+  title: "A small chess program for NYC kids",
   intro: [
-    "Chess & Truck is building chess programs for New York City families: clear options, direct communication, and coaching your child will actually benefit from.",
-    "Our coaching blends structured learning with a fun, engaging approach kids enjoy.",
-    "Real games. Real coaching. Real progress.",
+    "Chess & Truck teaches chess to kids in New York City. Our coach is Andrea, who has taught chess for 24 years.",
+    "We're starting with five programs: camps, tournaments, lessons, after-school chess, and the Chess Dojo. None are open for registration yet.",
   ],
   heroFacts: [
-    { label: "Focus", value: "Scholastic chess" },
-    { label: "City", value: "New York City" },
-    { label: "Programs", value: "Camps, tournaments, lessons" },
+    { label: "Who", value: "Kids and teens" },
+    { label: "Where", value: "New York City" },
+    { label: "Programs", value: "Camps, tournaments, lessons, after-school, Dojo" },
   ],
   introSection: {
-    eyebrow: "What matters most to families",
-    title: "What Matters Most to Families",
-    intro: "We prioritize fun, clarity, structure, and meaningful instruction -- every step of the way.",
+    eyebrow: "How we teach",
+    title: "How we teach",
+    intro: "Lessons have a plan, but kids still have fun.",
   },
   coachSpotlight: {
-    eyebrow: "Coach spotlight",
+    eyebrow: "Your coach",
     title: "Meet Andrea",
-    intro: "24 years of teaching experience",
+    intro: "24 years teaching chess",
     paragraphs: [
-      "Based in New York, Andrea has spent nearly 24 years teaching chess through camps, private lessons, after-school programs, birthday events, and promotional programs in both the U.S. and Canada.",
-      "He brings a rare mix of structure, energy, and joy to every lesson, helping young players discover the beauty of chess through serious instruction that still feels genuinely fun.",
+      "Andrea has taught chess for 24 years in the U.S. and Canada, at camps, private lessons, after-school programs, and birthday parties. He lives in New York.",
+      "His lessons are organized and take chess seriously, and kids still have fun.",
     ],
     highlights: [
       "24 years teaching chess",
-      "Camps, lessons, events, and after-school programs",
-      "NYC-based with international coaching experience",
+      "Camps, lessons, after-school, and events",
+      "Has taught in the U.S. and Canada",
     ],
   },
   pillars: [
     {
-      title: "Transparent program design",
-      text: "All essential details -- schedule, setting, and daily structure -- are clear from the outset.",
+      title: "Real games",
+      text: "Kids learn by playing, not just by listening.",
     },
     {
-      title: "Substantive instruction",
-      text: "Our programs are designed to build analytical thinking through real games and guided review.",
+      title: "Going over the game",
+      text: "After a game, a coach helps kids see what worked and what to try next time.",
     },
     {
-      title: "Clear lines of communication",
-      text: "Parents stay informed and supported, without needing to chase information.",
+      title: "Easy to reach",
+      text: "Parents can call, text, or email the people who run the program.",
     },
   ],
   whySection: {
-    eyebrow: "Why Parents Trust Us",
-    title: "The Standard Families Should Expect",
-    intro: "Clarity, trust, and a clear sense of what comes next.",
+    eyebrow: "Before you sign up",
+    title: "What you can expect from us",
+    intro: "A few things we promise while our programs are getting ready.",
   },
   standards: [
-    "Thoughtful level placement prior to enrollment",
-    "Direct, accessible communication",
-    "Transparent updates -- no vague timelines",
-    "Programs that feel structured from the very first interaction",
+    "We'll post dates, location, and price on each program page before registration opens",
+    "We won't take any payment until a program's registration is open",
+    "Beginners are welcome, and we'll help you pick the right program",
+    "You can call, text, or email us with any question",
   ],
 };
 
@@ -1623,34 +1620,58 @@ export const tournamentPage = {
 
 export const faqPage = {
   eyebrow: "FAQ",
-  title: "Camp FAQ",
-  intro: "The answers parents usually want before booking.",
+  title: "Questions parents ask",
+  intro: "Answers about all five programs. If your question isn't here, call, text, or email us.",
   heroFacts: [
-    { label: "Camp dates", value: "Coming soon" },
-    { label: "Location", value: "To be announced" },
-    { label: "Planned camp time", value: "9:00 AM - 3:00 PM" },
-    { label: "Support", value: "Call, text, or email" },
+    { label: "Registration", value: "Opening soon" },
+    { label: "Payments", value: "Not taken yet" },
+    { label: "Where", value: "New York City" },
+    { label: "Questions", value: "Call, text, or email" },
   ],
   quickCards: [
     {
-      title: "Is this suitable for beginners?",
-      text: "Yes. Beginners will be welcome. The planned camp day starts with warm-up games so coaches can group students by level.",
+      title: "Is anything open for registration?",
+      text: "Not yet. All five programs are still being planned. We aren't taking sign-ups or payments until a program page says registration is open.",
     },
     {
-      title: "Who leads instruction?",
-      text: "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
+      title: "How much will programs cost?",
+      text: "We haven't set prices yet. Each program's price will be posted on its page before registration opens.",
     },
     {
-      title: "What should students bring?",
-      text: "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
+      title: "Does my child need chess experience?",
+      text: "No. Beginners are welcome. Tell us your child's age and level, and we'll suggest the right program to start with.",
     },
     {
-      title: "Are campers supervised at all times?",
-      text: "Yes. Students will be supervised at all times throughout the camp day.",
+      title: "Who teaches?",
+      text: "Andrea, who has taught chess for 24 years. We'll share who coaches each program when its registration opens.",
     },
     {
-      title: "Are early drop-off and extended day options available?",
-      text: "Early drop-off and extended day options have not been decided yet. Any options will be listed when registration opens.",
+      title: "Where are programs held?",
+      text: "In New York City. We haven't announced specific locations yet. Each program page will list its location before registration opens.",
+    },
+    {
+      title: "What happens at the summer camp?",
+      text: "Full days of chess lessons, games, and time outside. The planned day and schedule are on the Camps page.",
+    },
+    {
+      title: "Does my child need a US Chess membership for tournaments?",
+      text: "Only for the Open section, which is planned to be rated. The Beginner section doesn't need one.",
+    },
+    {
+      title: "Is after-school chess offered at my child's school?",
+      text: "Not yet. We haven't announced any schools. If your school might be interested, please get in touch.",
+    },
+    {
+      title: "What is the Chess Dojo?",
+      text: "A planned training group for kids who play in tournaments. Players get ready before events and go over their games after.",
+    },
+    {
+      title: "What should my child bring to camp?",
+      text: "We'll post a packing list with registration. Plan on a water bottle, sunscreen, a change of clothes, and a packed lunch.",
+    },
+    {
+      title: "Will kids be supervised at camp?",
+      text: "Yes, all day, from drop-off to pick-up.",
     },
   ],
   prepSection: {
@@ -1697,18 +1718,9 @@ export const faqPage = {
 
 export const contactPage = {
   eyebrow: "Contact",
-  title: "Have questions? We’re here to help",
-  intro: "",
-  heroFacts: [
-    {
-      label: "Phone",
-      lines: ["Call or Text", "(646) 251-7087", "(646) 494-5363"],
-    },
-    {
-      label: "Email",
-      lines: ["info@chessandtruck.com"],
-    },
-  ],
+  title: "Contact us",
+  intro: "Questions about a program, your child's level, or timing? Call, text, email, or send a message below.",
+  heroFacts: [],
   topicSection: {
     eyebrow: "What to contact us about",
     title: "Three common reasons families reach out",
@@ -1800,19 +1812,19 @@ export const privateLessonsPage = {
   ],
   formatCards: [
     {
-      eyebrow: "Remote",
+      eyebrow: "Online",
       title: "Online lessons",
-      text: "Remote coaching with game review and a clean weekly rhythm.",
+      text: "Lessons over video, with the same game review.",
     },
     {
-      eyebrow: "Face to face",
+      eyebrow: "In person",
       title: "In-person lessons",
-      text: "Board-first coaching for students who focus better live.",
+      text: "At a real board, for kids who focus better face to face.",
     },
     {
-      eyebrow: "Shared training",
+      eyebrow: "Small group",
       title: "Group lessons",
-      text: "Small groups with stronger pace and better level matching.",
+      text: "A few kids at a similar level, learning together.",
     },
   ],
   getSection: {
@@ -2245,23 +2257,23 @@ export const sectionOptions = [
   {
     id: "open",
     title: "Open Section",
-    badge: "Rated division",
-    description: "For players ready for rated competition.",
+    badge: "Rated section",
+    description: "For kids who have played in tournaments before. Games are planned to count toward an official US Chess rating.",
     bullets: [
-      "Active USCF membership required",
-      "USCF ID must be included in registration",
-      "Best fit for experienced scholastic competitors",
+      "Needs a current US Chess membership",
+      "You'll enter your child's US Chess ID when you register",
+      "Best for kids with tournament experience",
     ],
   },
   {
     id: "beginner",
     title: "Beginner Section",
-    badge: "Unrated division",
-    description: "For players newer to tournament chess.",
+    badge: "Unrated section",
+    description: "For kids playing in their first tournaments.",
     bullets: [
-      "No USCF membership required",
-      "A friendlier entry point into tournament play",
-      "Good fit for younger or less experienced players",
+      "No US Chess membership needed",
+      "A relaxed first tournament experience",
+      "Good for younger or newer players",
     ],
   },
 ];
@@ -2414,12 +2426,12 @@ export const faqItems = [
 
 export const contactNumbers = [
   {
-    label: "Primary Contact",
+    label: "Call or text",
     display: "(646) 251-7087",
     href: "tel:+16462517087",
   },
   {
-    label: "Alternate Contact",
+    label: "Second number",
     display: "(646) 494-5363",
     href: "tel:+16464945363",
   },
@@ -2427,7 +2439,7 @@ export const contactNumbers = [
 
 export const contactEmails = [
   {
-    label: "General Inquiries",
+    label: "Write to us",
     display: "info@chessandtruck.com",
     href: "mailto:info@chessandtruck.com",
   },
@@ -2435,9 +2447,9 @@ export const contactEmails = [
 
 export const termsPage = {
   eyebrow: "Terms of Service",
-  title: "Program terms for families and students",
+  title: "Terms of Service",
   intro:
-    "These terms explain how CHESS AND TRUCK handles camp inquiries, payments, cancellations, and participation expectations.",
+    "These terms explain how CHESS AND TRUCK handles inquiries, payments, cancellations, and participation in its programs.",
   sections: [
     {
       title: "Inquiry accuracy",
@@ -2474,9 +2486,9 @@ export const termsPage = {
 
 export const privacyPage = {
   eyebrow: "Privacy Policy",
-  title: "How registration and contact information is used",
+  title: "Privacy Policy",
   intro:
-    "CHESS AND TRUCK collects only the information needed to operate camp, communicate with families, and process secure payments.",
+    "CHESS AND TRUCK collects only the information needed to run its programs, communicate with families, and process secure payments.",
   sections: [
     {
       title: "Information collected",

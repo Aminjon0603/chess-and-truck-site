@@ -37,12 +37,12 @@ export const INTEREST_LIMITS = {
 // Every successful-looking subscribe request gets exactly this reply, whether
 // the email is new, pending, already confirmed, or the request was spam.
 export const GENERIC_SUBSCRIBE_MESSAGE =
-  "Thanks. If this address can receive email, we sent a link to confirm it. Check your inbox.";
-export const CONFIRMED_MESSAGE = "Your email is confirmed. We will email you when registration opens.";
-export const INVALID_CONFIRM_MESSAGE = "This confirmation link is invalid or has expired. Please sign up again.";
-export const UNSUBSCRIBED_MESSAGE = "You are unsubscribed and will not receive emails about this program.";
-const UNAVAILABLE_MESSAGE = "Notify Me is not available right now. Please try again later.";
-const RATE_LIMITED_MESSAGE = "Too many requests. Please try again later.";
+  "Thanks! Check your inbox for a link to confirm your email.";
+export const CONFIRMED_MESSAGE = "You're all set. We'll email you when registration opens.";
+export const INVALID_CONFIRM_MESSAGE = "This link has expired or was already used. Please sign up again on the program page.";
+export const UNSUBSCRIBED_MESSAGE = "You're unsubscribed. We won't email you about this program.";
+const UNAVAILABLE_MESSAGE = "Sorry, email sign-up isn't available right now. Please try again later.";
+const RATE_LIMITED_MESSAGE = "Too many tries. Please wait a few minutes and try again.";
 
 const json = (body, status) =>
   Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
@@ -55,14 +55,14 @@ const buildConfirmationEmail = ({ programName, confirmUrl, unsubscribeUrl, hours
   text: [
     "Hi,",
     "",
-    `Please confirm that you want an email from Chess & Truck when ${programName} registration opens:`,
+    `Please confirm you'd like an email from Chess & Truck when ${programName} registration opens:`,
     confirmUrl,
     "",
-    `This link expires in ${hours} hours. If you did not ask for this, ignore this email and you will not be added.`,
+    `This link expires in ${hours} hours. If you didn't sign up, you can ignore this email and you won't be added.`,
     "",
     `Unsubscribe: ${unsubscribeUrl}`,
     "",
-    "Chess & Truck - Big Moves Start Small.",
+    "Chess & Truck",
   ].join("\n"),
 });
 
