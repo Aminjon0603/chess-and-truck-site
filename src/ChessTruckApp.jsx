@@ -38,9 +38,9 @@ import {
 import brandLogo from "./assets/chess-truck-logo.png";
 import brandCrest from "./assets/chess-truck-crest.png";
 import heroVideoDesktop from "./assets/hero/hero-chess-1280.mp4";
-import heroVideoMobile from "./assets/hero/hero-chess-540x960.mp4";
+import heroVideoMobile from "./assets/hero/hero-chess-720sq.mp4";
 import heroPosterDesktop from "./assets/hero/hero-chess-1280-poster.webp";
-import heroPosterMobile from "./assets/hero/hero-chess-540x960-poster.webp";
+import heroPosterMobile from "./assets/hero/hero-chess-720sq-poster.webp";
 import {
   CAMP_REGISTRATION_CLOSED_MESSAGE,
   PROGRAM_STATUS,
@@ -1498,9 +1498,10 @@ function AcademySectionHeading({ id, eyebrow, title, intro }) {
   );
 }
 
-// Homepage hero background: a 12-second stock clip (Anastasia Shuraeva, Pexels).
-// Phones get a portrait crop. Reduced-motion and Data Saver visitors get the still
-// poster only, and the video never downloads for them.
+/// Homepage hero background: a 12-second stock clip (Anastasia Shuraeva, Pexels).
+// Phones get a square crop that keeps the children and the board in view.
+// Reduced-motion and Data Saver visitors get the still poster only, and the
+// video never downloads for them.
 const heroMedia = {
   desktop: { video: heroVideoDesktop, poster: heroPosterDesktop },
   mobile: { video: heroVideoMobile, poster: heroPosterMobile },
@@ -1508,6 +1509,8 @@ const heroMedia = {
 
 function HeroVideo() {
   const videoRef = useRef(null);
+  // Set when the visitor pauses, or when the browser refuses autoplay: from then on
+  // only the button starts the video, never scrolling back to the hero.
   const userPausedRef = useRef(false);
   const [media] = useState(() =>
     window.matchMedia("(max-width: 640px)").matches ? heroMedia.mobile : heroMedia.desktop
@@ -1516,6 +1519,8 @@ function HeroVideo() {
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !navigator.connection?.saveData
   );
   const [isPaused, setIsPaused] = useState(false);
+  // The file could not load: show the poster with no play button, since it could not work.
+  const [hasFailed, setHasFailed] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -1527,7 +1532,15 @@ function HeroVideo() {
     // React sets `muted` as a property only; iOS needs it before autoplay will start.
     video.muted = true;
     video.defaultMuted = true;
-    video.play().catch(() => setIsPaused(true));
+    video.play().catch((error) => {
+      if (video.error) {
+        setHasFailed(true);
+      } else if (error.name === "NotAllowedError") {
+        // Autoplay refused (for example Low Power Mode): poster plus a manual Play button.
+        userPausedRef.current = true;
+        setIsPaused(true);
+      }
+    });
 
     // Save battery and data: stop while the hero is off screen.
     const observer = new IntersectionObserver(([entry]) => {
@@ -1555,8 +1568,11 @@ function HeroVideo() {
 
     if (video.paused) {
       userPausedRef.current = false;
-      video.play().catch(() => {});
       setIsPaused(false);
+      video.play().catch(() => {
+        userPausedRef.current = true;
+        setIsPaused(true);
+      });
     } else {
       userPausedRef.current = true;
       video.pause();
@@ -1564,17 +1580,29 @@ function HeroVideo() {
     }
   };
 
+  const showVideo = canPlay && !hasFailed;
+
   return (
     <>
       <div className="ac-hero-media" aria-hidden="true">
-        {canPlay ? (
-          <video ref={videoRef} src={media.video} poster={media.poster} autoPlay muted loop playsInline preload="auto" />
+        {showVideo ? (
+          <video
+            ref={videoRef}
+            src={media.video}
+            poster={media.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onError={() => setHasFailed(true)}
+          />
         ) : (
           <img src={media.poster} alt="" />
         )}
       </div>
-      <div className="ac-shell ac-hero-media-bar">
-        {canPlay ? (
+      {showVideo ? (
+        <div className="ac-shell ac-hero-media-bar">
           <button
             type="button"
             className={`ac-hero-video-toggle${isPaused ? " is-paused" : ""}`}
@@ -1583,8 +1611,8 @@ function HeroVideo() {
           >
             <span aria-hidden="true" />
           </button>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </>
   );
 }

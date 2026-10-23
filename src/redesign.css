@@ -3105,25 +3105,43 @@
   padding-top: 72px;
 }
 
+/* Desktop: a smaller crest board leaves more of the video in view. */
+.ac-hero-cinematic .ac-hero-visual {
+  max-width: 300px;
+}
+
 @media (max-width: 640px) {
   .ac-hero-cinematic + .ac-section-programs {
     padding-top: 44px;
   }
 
-  /* Phones: portrait clip, text at the bottom over a deeper gradient. */
+  /* Phones: a square clip of the children and the board sits at the top; the text
+     follows on solid green. The gradient only covers the clip's lower edge, where
+     the eyebrow begins, so the children and the board stay clear. */
   .ac-hero-cinematic {
-    align-content: end;
-    min-height: min(86svh, 660px);
-    padding: 120px 0 84px;
+    align-content: start;
+    min-height: 0;
+    padding: calc(100vw - 44px) 0 40px;
+  }
+
+  .ac-hero-media {
+    inset: 0 0 auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .ac-hero-media video,
+  .ac-hero-media img {
+    object-position: center;
   }
 
   .ac-hero-cinematic::before {
     background: linear-gradient(
       180deg,
-      rgba(16, 34, 30, 0.35) 0%,
-      rgba(16, 34, 30, 0.62) 38%,
-      rgba(16, 34, 30, 0.9) 66%,
-      rgba(16, 34, 30, 0.96) 100%
+      transparent 0,
+      transparent calc(100vw - 150px),
+      rgba(16, 34, 30, 0.82) calc(100vw - 44px),
+      var(--ac-green-950) 100vw,
+      var(--ac-green-950) 100%
     );
   }
 
@@ -3131,13 +3149,10 @@
     content: none;
   }
 
-  .ac-hero-media video,
-  .ac-hero-media img {
-    object-position: center top;
-  }
-
+  /* Pause button in the clip's top-right corner. */
   .ac-hero-media-bar {
-    bottom: 18px;
+    top: 14px;
+    bottom: auto;
   }
 }
 
