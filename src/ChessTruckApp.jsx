@@ -1987,7 +1987,7 @@ function TournamentsPage({ currentPath, navigate }) {
         <div className="ac-shell">
           <AcademySectionHeading id="sections-title" {...content.sectionsSection} />
           <div className="pg-section-cards">
-            {sectionOptions.map((item) => (
+            {content.sectionCards.map((item) => (
               <article className="pg-section-card" key={item.id}>
                 <span className="pg-section-tag">{item.badge}</span>
                 <h3>{item.title}</h3>
@@ -2271,8 +2271,8 @@ function DojoPage({ currentPath, navigate }) {
         programId="dojo"
         actions={
           <>
-            <a href="#dojo-focus" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-focus")}>
-              What we'll work on
+            <a href="#dojo-faq-title" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-faq-title")}>
+              Dojo questions
             </a>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
               Contact us
@@ -2281,44 +2281,6 @@ function DojoPage({ currentPath, navigate }) {
         }
         aside={<FactPanel title="At a glance" iconKey="dojo" items={content.glance} tone="dark" />}
       />
-
-      <section className="ac-section" aria-labelledby="dojo-compare-title">
-        <div className="ac-shell">
-          <AcademySectionHeading id="dojo-compare-title" {...content.compareSection} />
-          <div className="pg-compare">
-            {content.compare.map((item) => (
-              <article className={`pg-compare-card${item.id === "dojo" ? " is-featured" : ""}`} key={item.id}>
-                <span className="ac-program-icon">
-                  <ProgramIcon iconKey={item.id} />
-                </span>
-                <h3>{item.name}</h3>
-                <p>{item.text}</p>
-                {item.path ? (
-                  <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-text-link">
-                    {item.link} <span aria-hidden="true">&rarr;</span>
-                  </AppLink>
-                ) : (
-                  <ProgramStatusBadge programId="dojo" />
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="ac-section pg-dark-section" id="dojo-focus" aria-labelledby="dojo-focus-title">
-        <div className="ac-shell">
-          <AcademySectionHeading id="dojo-focus-title" {...content.focusSection} />
-          <div className="pg-section-cards pg-focus-cards">
-            {content.focus.map((item) => (
-              <article className="pg-section-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />
 

@@ -67,11 +67,42 @@ When the preview test passes, add the same variables for **Production**
 (with `SITE_URL=https://chessandtruck.com`), set `VITE_INTEREST_FORM_ENABLED=true`
 for Production, and redeploy. To hide the form again, set it back to `false` and redeploy.
 
-## 7. Housekeeping (optional, recommended)
+## 7. Automatic 30-day cleanup (required before turning on Notify Me in Production)
 
-Unconfirmed signups are meant to be deleted after 30 days. In Supabase, open
-**Integrations → Cron** and schedule `select public.purge_stale_interest_data();`
-once a day, or run it manually from the SQL Editor.
+The Privacy Policy says unconfirmed signups are deleted after 30 days. That is
+only true once this daily job is scheduled and tested.
+
+1. In **SQL Editor**, run `supabase/migrations/20261023140000_schedule_interest_purge.sql`
+   (or `supabase db push` with the CLI). It turns on Supabase Cron and schedules
+   `public.purge_stale_interest_data()` every day at 04:15 UTC.
+2. Check that the job exists:
+
+   ```sql
+   select jobname, schedule, active from cron.job where jobname = 'purge-stale-interest-data';
+   ```
+
+   You should see one row with `active = true`.
+3. Test the cleanup with a fake old signup (no real data involved):
+
+   ```sql
+   insert into public.interest_signups (email, program_id, consent_at, consent_version, created_at)
+   values ('retention-test@example.com', 'camps', now() - interval '31 days', 'retention-test', now() - interval '31 days');
+
+   select public.purge_stale_interest_data();
+
+   select count(*) from public.interest_signups where email = 'retention-test@example.com';
+   ```
+
+   The last query should return `0`.
+4. After the first scheduled run (the next 04:15 UTC), confirm it succeeded:
+
+   ```sql
+   select status, start_time from cron.job_run_details
+   where jobid = (select jobid from cron.job where jobname = 'purge-stale-interest-data')
+   order by start_time desc limit 5;
+   ```
+
+   `status` should be `succeeded`.
 
 ## Expected monthly costs
 
