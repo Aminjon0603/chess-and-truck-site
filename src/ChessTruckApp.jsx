@@ -703,6 +703,25 @@ const updateMetaTag = (selector, content) => {
   }
 };
 
+const SITE_ORIGIN = "https://www.chessandtruck.com";
+
+// Pages that show another page's content point search engines at that page.
+const canonicalPathAliases = {
+  "/camps/book": "/camps",
+  "/register": "/tournaments",
+};
+
+// Private, one-time pages that should never appear in search results.
+const isNoIndexPath = (path) => path === "/camps/confirmed" || path.startsWith("/interest/");
+
+const updateCanonicalLink = (href) => {
+  const element = document.querySelector("link[rel='canonical']");
+
+  if (element) {
+    element.setAttribute("href", href);
+  }
+};
+
 function AppLink({ to, navigate, children, className = "", currentPath, onNavigate, ...rest }) {
   const isActive = normalizePath(to) === currentPath;
 
@@ -3163,7 +3182,7 @@ function CampBookingFormPanel({
               </div>
               <div>
                 <span>Age range</span>
-                <strong>Ages 4 - 17</strong>
+                <strong>Will be announced</strong>
               </div>
               {allowsAddOns ? (
                 <div>
@@ -3622,7 +3641,7 @@ function CampsOverviewPage({
                 className="btn btn-secondary"
                 onClick={scrollToCampSection("camp-location")}
               >
-                Two Blocks Away from Central Park
+                Camp location
               </a>
             </div>
 
@@ -5006,6 +5025,11 @@ function ChessTruckApp() {
     updateMetaTag("meta[property='og:description']", meta.description);
     updateMetaTag("meta[name='twitter:title']", meta.title);
     updateMetaTag("meta[name='twitter:description']", meta.description);
+
+    const canonicalUrl = `${SITE_ORIGIN}${canonicalPathAliases[currentPath] || currentPath}`;
+    updateCanonicalLink(canonicalUrl);
+    updateMetaTag("meta[property='og:url']", canonicalUrl);
+    updateMetaTag("meta[name='robots']", isNoIndexPath(currentPath) ? "noindex,nofollow" : "index,follow");
   }, [currentPath]);
 
   useEffect(() => {

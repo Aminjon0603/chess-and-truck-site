@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /interest/
+Disallow: /camps/confirmed
+
+Sitemap: https://www.chessandtruck.com/sitemap.xml

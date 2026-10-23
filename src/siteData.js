@@ -38,7 +38,7 @@ export const academyHomePage = {
   whySection: {
     eyebrow: "How we teach",
     title: "Real chess, taught so kids enjoy it",
-    intro: "Every lesson has a plan, and kids spend most of their time playing.",
+    intro: "Every lesson has a plan, and kids learn by playing real games.",
     pillars: [
       {
         title: "Details before sign-up",
@@ -127,7 +127,7 @@ export const campsPageContent = {
   glance: [
     { label: "Location", value: "Not announced yet" },
     { label: "Camp day", value: "9:00 AM - 3:00 PM (planned)" },
-    { label: "Ages", value: "4 - 17 (planned)" },
+    { label: "Ages", value: "Will be announced" },
     { label: "Dates", value: "Not announced yet" },
   ],
   daySection: {
@@ -184,7 +184,7 @@ export const tournamentsPageContent = {
   plannedFormat: [
     { label: "Day", value: "Saturday mornings" },
     { label: "Time", value: "9:00 AM to about lunchtime" },
-    { label: "Sections", value: "Open (rated) and Beginner" },
+    { label: "Sections", value: "Open and Beginner" },
     { label: "Venue", value: "Not announced yet" },
   ],
   sectionsSection: {
@@ -457,7 +457,7 @@ export const dojoPageContent = {
     {
       id: "tournaments",
       name: "Tournaments",
-      text: "Rated and beginner sections where kids play real tournament games.",
+      text: "Open and Beginner sections where kids play real tournament games.",
       path: "/tournaments",
       link: "See tournaments",
     },
@@ -817,7 +817,7 @@ export const routeMeta = {
   "/tournaments": {
     title: "Chess Tournaments | Chess & Truck",
     description:
-      "Chess tournaments for kids in NYC, with an Open (rated) section and a Beginner section. Registration is opening soon.",
+      "Chess tournaments for kids in NYC, with an Open section and a Beginner section. Registration is opening soon.",
   },
   "/after-school": {
     title: "After-School Programs | Chess & Truck",
@@ -876,7 +876,7 @@ export const homePage = {
   heroFacts: [
     { label: "Dates", value: "Coming soon" },
     { label: "Location", value: "To be announced" },
-    { label: "Age range", value: "Ages 4 - 17" },
+    { label: "Age range", value: "Will be announced" },
     { label: "Levels", value: "Beginner through Advanced" },
   ],
   offerSection: {
@@ -956,13 +956,13 @@ export const campOverviewPage = {
     { label: "Dates", value: "Coming soon" },
     { label: "Location", value: "To be announced" },
     { label: "Levels", value: "Beginner through Advanced" },
-    { label: "Age range", value: "Ages 4 - 17" },
+    { label: "Age range", value: "Will be announced" },
   ],
   portraitCaption: "Simple camp booking with real chess structure.",
   asideTag: "Opening soon",
   asideTitle: "Program Overview",
   asideText:
-      "Full-day program with chess lessons, rated matches, lunch, outdoor park time, and a fun, engaging environment students look forward to each day.",
+      "A planned full-day program with chess lessons, practice games, lunch, and outdoor time.",
   asideFacts: [
     { label: "Schedule", value: "9:00 AM - 3:00 PM" },
       { label: "Coaching", value: "Details coming soon" },
@@ -1004,8 +1004,8 @@ export const campOverviewPage = {
     { title: "Location", text: "To be announced" },
     { title: "Dates", text: "Next season's dates coming soon" },
     { title: "Time", text: "9:00 AM - 3:00 PM" },
-    { title: "Age range", text: "Ages 4 - 17" },
-    { title: "Rated matches", text: "Included during camp sessions" },
+    { title: "Age range", text: "Will be announced" },
+    { title: "Practice games", text: "Played during camp sessions" },
     { title: "Skill levels", text: "Beginner through advanced groupings" },
     { title: "Contact", text: "Contact Us for availability and next steps" },
   ],
@@ -1025,7 +1025,7 @@ export const campOverviewPage = {
       scheduleText: "9:00 AM - 3:00 PM",
       details: [
         "Daily chess instruction",
-        "Rated games, lunch break, and outdoor park time",
+        "Practice games, lunch break, and outdoor time",
         "Fun, engaging activities throughout the day",
       ],
       availability: "Limited group size",
@@ -1041,8 +1041,8 @@ export const campOverviewPage = {
       scheduleText: "9:00 AM - 3:00 PM",
       details: [
         "Chess instruction",
-        "Rated games and structured play",
-        "Lunch, outdoor park time, and fun activities",
+        "Practice games and structured play",
+        "Lunch, outdoor time, and fun activities",
       ],
       availability: "Limited group size",
       cta: "Enroll",
@@ -1109,13 +1109,13 @@ export const campOverviewPage = {
     },
     {
       time: "10:00 - 11:00 AM",
-      title: "Central Park fun",
-      text: "Soccer, playground time, board games, tag, and other organized outdoor games keep the morning active and social.",
+      title: "Outdoor time",
+      text: "Soccer, playground time, tag, and other organized outdoor games. The outdoor location hasn't been announced yet.",
     },
     {
       time: "11:00 AM - 12:00 PM",
       title: "Chess lessons and organized activities",
-      text: "Puzzles, simuls, blitz games, the $1 beat-the-coach challenge, and other fun structured chess activities.",
+      text: "Puzzles, simuls (one coach playing many kids at once), fast games, and other structured chess activities.",
     },
     {
       time: "12:00 - 1:00 PM",
@@ -1124,8 +1124,8 @@ export const campOverviewPage = {
     },
     {
       time: "1:00 - 2:30 PM",
-      title: "Chess lessons, rated matches, and analysis",
-      text: "The afternoon block includes instruction, rated games, group post-game analysis, and an ice cream break.",
+      title: "Chess lessons, practice games, and analysis",
+      text: "The afternoon includes a lesson, practice games, going over games as a group, and an ice cream break.",
     },
     {
       time: "2:30 - 3:00 PM",
@@ -1226,7 +1226,7 @@ export const campDetailPages = {
     title: "Daily camp rhythm for students who need more than casual chess.",
     intro:
       "A summer camp format built around instruction, supervised play, review, and daily habits that actually move a student forward.",
-    chips: ["Daily rhythm", "Summer camp", "Central Park"],
+    chips: ["Daily rhythm", "Summer camp", "Outdoor time"],
     portraitCaption:
       "A strong training camp should feel focused and alive, not like a room where chess is just one activity in the background.",
     asideTag: "Training camp fit",
@@ -1462,7 +1462,7 @@ export const aboutPage = {
     "We're starting with five programs: camps, tournaments, lessons, after-school chess, and the Chess Dojo. None are open for registration yet.",
   ],
   heroFacts: [
-    { label: "Who", value: "Kids and teens" },
+    { label: "Who", value: "Kids" },
     { label: "Where", value: "New York City" },
     { label: "Programs", value: "Camps, tournaments, lessons, after-school, Dojo" },
   ],
@@ -2257,8 +2257,8 @@ export const sectionOptions = [
   {
     id: "open",
     title: "Open Section",
-    badge: "Rated section",
-    description: "For kids who have played in tournaments before. Games are planned to count toward an official US Chess rating.",
+    badge: "Planned rated section",
+    description: "For kids who have played in tournaments before. We plan to make this section US Chess rated and will confirm before registration opens.",
     bullets: [
       "Needs a current US Chess membership",
       "You'll enter your child's US Chess ID when you register",
@@ -2375,7 +2375,7 @@ export const faqItems = [
   {
     question: "What ages is camp for?",
     answer:
-      "The proposed age range is 4 - 17. Final ages will be confirmed when registration opens.",
+      "Age eligibility will be announced when registration opens.",
   },
   {
     question: "Is this good for beginners?",
@@ -2390,7 +2390,7 @@ export const faqItems = [
   {
     question: "What is a typical camp day like?",
     answer:
-      "The planned camp day runs from 9:00 AM to 3:00 PM with chess instruction, rated games, lunch, outdoor park time, and fun activities. The schedule is subject to change.",
+      "The planned camp day runs from 9:00 AM to 3:00 PM with chess lessons, practice games, lunch, outdoor time, and fun activities. The schedule may change.",
   },
   {
     question: "What should my child bring?",
