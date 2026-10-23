@@ -24,6 +24,17 @@
   --ac-shadow: 0 1px 2px rgba(17, 29, 25, 0.06), 0 12px 32px rgba(17, 29, 25, 0.07);
   --ac-shadow-hover: 0 2px 4px rgba(17, 29, 25, 0.08), 0 18px 40px rgba(17, 29, 25, 0.12);
   --ac-header-height: 84px;
+
+  /* Motion tokens. Chess & Truck moves like a deliberate chess move: a quick,
+     decisive start that settles calmly. Every transition and animation uses these. */
+  --ct-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ct-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ct-dur-fast: 160ms;
+  --ct-dur-base: 260ms;
+  --ct-dur-reveal: 560ms;
+  --ct-dur-enter: 720ms;
+  --ct-rise: 14px;
+  --ct-stagger: 70ms;
 }
 
 /* `overflow: hidden` on the app shell stops the sticky header from sticking;
@@ -946,30 +957,40 @@
   display: none;
 }
 
+/* The plus is drawn with two bars so it can turn and fold into a minus. */
 .ac-faq-item summary::after {
-  content: "+";
+  content: "";
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
   width: 32px;
   height: 32px;
   border-radius: 50%;
   border: 1px solid var(--ac-line-strong);
-  font-size: 1.2rem;
-  font-weight: 600;
   color: var(--ac-green-900);
-  transition: background-color 160ms ease, color 160ms ease;
+  background-color: transparent;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 12px 2px, 2px 12px;
+  transition:
+    background-color var(--ct-dur-fast) var(--ct-ease),
+    border-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    background-size var(--ct-dur-base) var(--ct-ease),
+    transform var(--ct-dur-base) var(--ct-ease);
 }
 
 .ac-faq-item summary:hover::after,
 .ac-faq-item[open] summary::after {
-  background: var(--ac-green-900);
+  background-color: var(--ac-green-900);
   border-color: var(--ac-green-900);
   color: var(--ac-gold-light);
 }
 
 .ac-faq-item[open] summary::after {
-  content: "\2212";
+  background-size: 12px 2px, 2px 0;
+  transform: rotate(180deg);
 }
 
 .ac-faq-item p {
@@ -2529,24 +2550,6 @@
   color: var(--ac-ink);
 }
 
-@keyframes faq-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .faq-group .ac-faq-item[open] p {
-    animation: faq-reveal 180ms ease-out;
-  }
-}
-
 @media (max-width: 640px) {
   .faq-groups {
     gap: 40px;
@@ -2696,4 +2699,285 @@
 /* Camp schedule times were gold on white at 2.7:1; this darker gold is 6.5:1. */
 .camp-schedule-time {
   color: var(--ac-gold-text);
+}
+
+/* ------------------------------------------------------------ motion system */
+/* Original Chess & Truck motion: short, decisive moves that settle calmly, a
+   one-time knight's move on the homepage board, and gentle reveals as content
+   comes into view. Only transform, opacity, and clip-path animate, so nothing
+   shifts the layout. Everything here is skipped for reduced-motion users. */
+
+/* Interactive elements share one timing. */
+.ac-btn {
+  transition:
+    background-color var(--ct-dur-fast) var(--ct-ease),
+    border-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    box-shadow var(--ct-dur-base) var(--ct-ease),
+    transform var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ac-btn:hover {
+  transform: translateY(-1px);
+}
+
+.ac-btn:active {
+  transform: translateY(0);
+  transition-duration: 60ms;
+}
+
+.ac-btn-primary:hover {
+  box-shadow: 0 10px 20px -12px rgba(23, 53, 48, 0.6);
+}
+
+.ac-btn-gold:hover {
+  box-shadow: 0 10px 20px -12px rgba(122, 85, 34, 0.55);
+}
+
+.ac-program-card {
+  transition:
+    transform var(--ct-dur-base) var(--ct-ease),
+    box-shadow var(--ct-dur-base) var(--ct-ease),
+    border-color var(--ct-dur-base) var(--ct-ease);
+}
+
+.ac-program-card:hover {
+  transform: translateY(-3px);
+}
+
+.ac-program-arrow,
+.ac-text-link span,
+.faq-topics a span {
+  transition:
+    background-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    transform var(--ct-dur-base) var(--ct-ease);
+}
+
+.ac-text-link:hover span {
+  transform: translateX(3px);
+}
+
+.ac-faq-item summary {
+  transition: color var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ac-faq-item summary:hover {
+  color: var(--ac-green-700);
+}
+
+@keyframes ct-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--ct-rise);
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ct-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ct-settle {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* A knight's move on the 8x8 board, beside the crest: one gold square steps two up
+   and one across (b2 to b4 to a4), then stays softly lit. */
+@keyframes ct-knight-move {
+  0% {
+    opacity: 0;
+    translate: 0 0;
+  }
+
+  18% {
+    opacity: 1;
+    translate: 0 0;
+    animation-timing-function: var(--ct-ease-in-out);
+  }
+
+  58% {
+    translate: 0 -200%;
+    animation-timing-function: var(--ct-ease-in-out);
+  }
+
+  84% {
+    opacity: 1;
+    translate: -100% -200%;
+  }
+
+  100% {
+    opacity: 0.7;
+    translate: -100% -200%;
+  }
+}
+
+/* Andrea's photo opens like a curtain, left to right. */
+@keyframes ct-unveil {
+  from {
+    clip-path: inset(0 100% 0 0);
+    scale: 1.05;
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    scale: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Page entrances: hero text, buttons, and side panels arrive in order. */
+  .ac-hero-copy > *,
+  .pg-hero-copy > * {
+    animation: ct-rise var(--ct-dur-enter) var(--ct-ease) both;
+  }
+
+  .ac-hero-copy > :nth-child(2),
+  .pg-hero-copy > :nth-child(2) {
+    animation-delay: calc(var(--ct-stagger) * 1);
+  }
+
+  .ac-hero-copy > :nth-child(3),
+  .pg-hero-copy > :nth-child(3) {
+    animation-delay: calc(var(--ct-stagger) * 2);
+  }
+
+  .ac-hero-copy > :nth-child(4),
+  .pg-hero-copy > :nth-child(4) {
+    animation-delay: calc(var(--ct-stagger) * 3);
+  }
+
+  .ac-hero-copy > :nth-child(5),
+  .pg-hero-copy > :nth-child(5) {
+    animation-delay: calc(var(--ct-stagger) * 4);
+  }
+
+  .pg-hero-grid > :nth-child(2) {
+    animation: ct-rise var(--ct-dur-enter) var(--ct-ease) calc(var(--ct-stagger) * 3) both;
+  }
+
+  .pg-hero-grid > :nth-child(2) dl > div,
+  .pg-hero-grid > :nth-child(2) li {
+    animation: ct-fade var(--ct-dur-reveal) var(--ct-ease) both;
+  }
+
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(1) { animation-delay: 380ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(2) { animation-delay: 450ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(3) { animation-delay: 520ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(4) { animation-delay: 590ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(n + 5) { animation-delay: 660ms; }
+
+  /* Homepage board: it settles in, then one square makes a knight's move. */
+  .ac-hero-visual {
+    animation: ct-settle 900ms var(--ct-ease) 120ms both;
+  }
+
+  .ac-hero-visual::before {
+    content: "";
+    position: absolute;
+    left: 12.5%;
+    top: 75%;
+    width: 12.5%;
+    height: 12.5%;
+    background: rgba(220, 185, 120, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(220, 185, 120, 0.6);
+    pointer-events: none;
+    animation: ct-knight-move 1500ms linear 700ms both;
+  }
+
+  .ac-hero-crest {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Scroll reveals. Elements are only hidden once the script has marked the
+     page (html.ct-motion), so content stays visible if JavaScript fails. */
+  .ct-motion .ct-reveal:not(.is-revealed) {
+    opacity: 0;
+  }
+
+  .ct-motion .ct-reveal.is-revealed {
+    animation: ct-rise var(--ct-dur-reveal) var(--ct-ease) var(--ct-reveal-delay, 0ms) both;
+  }
+
+  /* Coach: photo unveils, then the experience facts arrive one by one. */
+  .ct-motion .ac-coach.ct-reveal:not(.is-revealed) .ac-coach-photo {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .ct-motion .ac-coach.is-revealed .ac-coach-photo {
+    animation: ct-unveil 1000ms var(--ct-ease) 120ms both;
+  }
+
+  .ct-motion .ac-coach.ct-reveal:not(.is-revealed) .ac-coach-facts > div {
+    opacity: 0;
+  }
+
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div {
+    animation: ct-rise var(--ct-dur-reveal) var(--ct-ease) both;
+  }
+
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div:nth-child(1) { animation-delay: 420ms; }
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div:nth-child(2) { animation-delay: 500ms; }
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div:nth-child(3) { animation-delay: 580ms; }
+
+  /* FAQ: answers slide open and closed where the browser supports it
+     (::details-content); elsewhere they open instantly and fade in. */
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  .ac-faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size var(--ct-dur-base) var(--ct-ease),
+      content-visibility var(--ct-dur-base) allow-discrete;
+  }
+
+  .ac-faq-item[open]::details-content {
+    block-size: auto;
+  }
+
+  .ac-faq-item[open] p {
+    animation: ct-fade var(--ct-dur-base) var(--ct-ease) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-btn,
+  .ac-btn:hover,
+  .ac-program-card:hover {
+    transform: none;
+  }
+
+  .ac-faq-item summary::after,
+  .ac-program-arrow,
+  .ac-text-link span,
+  .faq-topics a span {
+    transition: none;
+  }
+
+  .ac-text-link:hover span,
+  .faq-topics a:hover span {
+    transform: none;
+  }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
   academyHomePage,
@@ -713,6 +713,71 @@ const canonicalPathAliases = {
 
 // Private, one-time pages that should never appear in search results.
 const isNoIndexPath = (path) => path === "/camps/confirmed" || path.startsWith("/interest/");
+
+// Scroll reveals: these blocks fade and rise into place once, as they enter the
+// viewport. Siblings are staggered. Hero content is animated by CSS instead.
+const REVEAL_SELECTORS = [
+  ".ac-section-heading",
+  ".ac-program-grid > *",
+  ".ac-pillars > li",
+  ".ac-steps > li",
+  ".ac-coach",
+  ".ac-faq-list",
+  ".ac-contact-card",
+  ".pg-timeline > li",
+  ".pg-skill-grid > li",
+  ".pg-section-cards > *",
+  ".pg-morning > li",
+  ".pg-flow > li",
+  ".pg-format-list > li",
+  ".pg-audiences > *",
+  ".pg-status",
+  ".faq-group",
+].join(",");
+
+const useRevealOnScroll = (routeKey) => {
+  // Runs before paint, so content is never shown and then hidden again.
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      root.classList.remove("ct-motion");
+      return undefined;
+    }
+
+    // Content is hidden only after this class is set, so it stays visible if scripts fail.
+    root.classList.add("ct-motion");
+
+    const targets = [...document.querySelectorAll(REVEAL_SELECTORS)].filter(
+      (element) => !element.closest(".ac-hero, .pg-hero, .page-hero")
+    );
+    const siblingCounts = new Map();
+
+    targets.forEach((element) => {
+      const index = siblingCounts.get(element.parentElement) || 0;
+      siblingCounts.set(element.parentElement, index + 1);
+      element.style.setProperty("--ct-reveal-delay", `${Math.min(index, 5) * 70}ms`);
+      element.classList.add("ct-reveal");
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
+    );
+
+    targets.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, [routeKey]);
+};
 
 const updateCanonicalLink = (href) => {
   const element = document.querySelector("link[rel='canonical']");
@@ -5039,6 +5104,8 @@ function ChessTruckApp() {
     updateMetaTag("meta[property='og:url']", canonicalUrl);
     updateMetaTag("meta[name='robots']", isNoIndexPath(currentPath) ? "noindex,nofollow" : "index,follow");
   }, [currentPath]);
+
+  useRevealOnScroll(currentPath);
 
   useEffect(() => {
     const focusTimer = window.requestAnimationFrame(() => {
