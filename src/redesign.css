@@ -2432,6 +2432,127 @@
   }
 }
 
+/* ---------------------------------------------------- about and faq pages */
+/* Built on the program-page hero, homepage sections, and the shared FAQ accordion. */
+
+.pg-hero-about {
+  background:
+    radial-gradient(ellipse at 85% 15%, rgba(196, 149, 73, 0.16), transparent 55%),
+    var(--ac-cream);
+}
+
+.pg-hero-faq {
+  background:
+    radial-gradient(ellipse at 90% 20%, rgba(47, 116, 104, 0.12), transparent 55%),
+    var(--ac-cream);
+}
+
+.pg-fact-panel-crest {
+  display: block;
+  width: 28px;
+  height: auto;
+}
+
+/* A third coach fact spans the full row instead of sitting alone in a half. */
+.ac-coach-facts div:nth-child(3):last-child {
+  grid-column: 1 / -1;
+}
+
+/* faq: topic list in the hero */
+
+.faq-topics h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ac-ink);
+}
+
+.faq-topics ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq-topics a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 0;
+  border-top: 1px solid var(--ac-line);
+  font-weight: 600;
+  color: var(--ac-ink);
+  text-decoration: none;
+}
+
+.faq-topics a span {
+  color: var(--ac-gold-text);
+  transition: transform 160ms ease;
+}
+
+.faq-topics a:hover {
+  color: var(--ac-green-900);
+}
+
+.faq-topics a:hover span {
+  transform: translateX(3px);
+}
+
+.faq-topics a:focus-visible {
+  outline: 3px solid var(--ac-gold);
+  outline-offset: 3px;
+}
+
+/* faq: grouped accordions */
+
+.faq-groups {
+  display: grid;
+  gap: 56px;
+  max-width: 860px;
+}
+
+.faq-group {
+  display: grid;
+  gap: 14px;
+}
+
+.faq-group h2 {
+  margin: 0;
+  scroll-margin-top: calc(var(--ac-header-height) + 24px);
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ac-ink);
+}
+
+@keyframes faq-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq-group .ac-faq-item[open] p {
+    animation: faq-reveal 180ms ease-out;
+  }
+}
+
+@media (max-width: 640px) {
+  .faq-groups {
+    gap: 40px;
+  }
+}
+
 /* ------------------------------------------------------ notify me form */
 /* Shown inside the dark registration status panel when enabled. */
 

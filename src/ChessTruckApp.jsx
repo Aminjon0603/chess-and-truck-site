@@ -1600,7 +1600,7 @@ function InnerHero({ eyebrow, title, intro, programId, actions, aside, variant }
         <div className="pg-hero-copy">
           <div className="pg-hero-kicker">
             <span className="ac-eyebrow">{eyebrow}</span>
-            <ProgramStatusBadge programId={programId} />
+            {programId ? <ProgramStatusBadge programId={programId} /> : null}
           </div>
           <h1 id="page-title">{title}</h1>
           <p className="ac-lead">{intro}</p>
@@ -1612,12 +1612,12 @@ function InnerHero({ eyebrow, title, intro, programId, actions, aside, variant }
   );
 }
 
-function FactPanel({ title, iconKey, items, tone }) {
+function FactPanel({ title, iconKey, icon, items, tone }) {
   return (
     <aside className={`pg-fact-panel pg-fact-panel-${tone}`} aria-label={title}>
       <div className="pg-fact-panel-head">
         <span className="ac-program-icon">
-          <ProgramIcon iconKey={iconKey} />
+          {icon || <ProgramIcon iconKey={iconKey} />}
         </span>
         <h2>{title}</h2>
       </div>
@@ -3223,92 +3223,115 @@ function CampBookingFormPanel({
   );
 }
 
-function AboutPage({ currentPath, navigate }) {
+// Dark contact panel at the end of About and FAQ; same look as the program pages' status panel.
+function ContactPanel({ id, title, text, currentPath, navigate }) {
   return (
-    <>
-      <PageHero
-        eyebrow={aboutPage.eyebrow}
-        title={aboutPage.title}
-        intro={aboutPage.intro}
-        heroFacts={aboutPage.heroFacts}
-        currentPath={currentPath}
-        navigate={navigate}
+    <section className="ac-section pg-status-section" aria-labelledby={`${id}-title`}>
+      <div className="ac-shell">
+        <div className="pg-status">
+          <div className="pg-status-copy">
+            <h2 id={`${id}-title`}>{title}</h2>
+            <p>{text}</p>
+          </div>
+          <div className="pg-status-actions">
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+              Contact us
+            </AppLink>
+            <a href={phoneContact.href} className="ac-btn pg-btn-on-dark">
+              Call or text {phoneContact.display}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AboutPage({ currentPath, navigate }) {
+  const content = aboutPage;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="about"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
         actions={
           <>
-            <AppLink to="/" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+            <a href="#about-programs" className="ac-btn ac-btn-primary" onClick={scrollToSection("about-programs")}>
               See our programs
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
             </AppLink>
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Contact us
-              </AppLink>
           </>
+        }
+        aside={
+          <FactPanel
+            title="Chess & Truck"
+            icon={<img src={brandCrest} alt="" className="pg-fact-panel-crest" width="28" height="30" />}
+            items={content.facts}
+            tone="dark"
+          />
         }
       />
 
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={aboutPage.introSection.eyebrow}
-            title={aboutPage.introSection.title}
-            intro={aboutPage.introSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {aboutPage.pillars.map((item) => (
-              <article className="surface" key={item.title}>
+      <section className="ac-section" aria-labelledby="about-who-title">
+        <div className="ac-shell ac-why-grid">
+          <AcademySectionHeading id="about-who-title" {...content.whoSection} />
+          <ul className="ac-pillars">
+            {content.whoPoints.map((item) => (
+              <li key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
-              </article>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" id="about-programs" aria-labelledby="about-programs-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="about-programs-title" {...content.programsSection} />
+          <div className="ac-program-grid">
+            {programs.map((item) => (
+              <ProgramCard key={item.id} program={item} currentPath={currentPath} navigate={navigate} />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="page-section">
-        <div className="shell">
-          <div className="surface coach-spotlight">
-            <div className="coach-spotlight-media">
-              <img
-                src={andreaPhoto}
-                alt="Andrea at an outdoor chess table"
-                className="coach-spotlight-image"
-              />
-            </div>
-            <div className="coach-spotlight-copy">
-              <span className="section-tag">{aboutPage.coachSpotlight.eyebrow}</span>
-              <h2>{aboutPage.coachSpotlight.title}</h2>
-              <p className="coach-spotlight-role">{aboutPage.coachSpotlight.intro}</p>
-              <div className="coach-spotlight-text">
-                {aboutPage.coachSpotlight.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+      <section className="ac-section" aria-labelledby="about-coach-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="about-coach-title" eyebrow={content.coach.eyebrow} title={content.coach.title} />
+          <article className="ac-coach">
+            <img
+              src={andreaPhoto}
+              alt="Andrea at an outdoor chess table"
+              className="ac-coach-photo"
+              width="647"
+              height="480"
+              loading="lazy"
+            />
+            <div className="ac-coach-copy">
+              <span className="ac-coach-role">{content.coach.role}</span>
+              <p>{content.coach.bio}</p>
+              <dl className="ac-coach-facts">
+                {content.coach.facts.map((item) => (
+                  <div key={item.label}>
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
+                  </div>
                 ))}
-              </div>
-              <ul className="coach-spotlight-highlights">
-                {aboutPage.coachSpotlight.highlights.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+              </dl>
             </div>
-          </div>
+          </article>
         </div>
       </section>
 
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={aboutPage.whySection.eyebrow}
-            title={aboutPage.whySection.title}
-            intro={aboutPage.whySection.intro}
-          />
-          <div className="surface checklist-surface">
-            <ul className="checklist">
-              {aboutPage.standards.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-    </>
+      <ContactPanel id="about-contact" {...content.contact} currentPath={currentPath} navigate={navigate} />
+    </div>
   );
 }
 
@@ -4154,36 +4177,59 @@ function LessonDetailPage({ page, currentPath, navigate }) {
 }
 
 function FaqPage({ currentPath, navigate }) {
+  const content = faqPage;
+
   return (
-    <>
-      <PageHero
-        eyebrow={faqPage.eyebrow}
-        title={faqPage.title}
-        intro={faqPage.intro}
-        heroFacts={faqPage.heroFacts}
-        currentPath={currentPath}
-        navigate={navigate}
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="faq"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
         actions={
-          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-primary">
             Ask a question
           </AppLink>
         }
+        aside={
+          <nav className="pg-fact-panel pg-fact-panel-light faq-topics" aria-labelledby="faq-topics-title">
+            <h2 id="faq-topics-title">Jump to a topic</h2>
+            <ul>
+              {content.categories.map((category) => (
+                <li key={category.id}>
+                  <a href={`#${category.id}`} onClick={scrollToSection(category.id)}>
+                    {category.title}
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        }
       />
 
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro eyebrow="All programs" title="Common questions" />
-          <div className="card-grid card-grid-three">
-            {faqPage.quickCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
+      <section className="ac-section" aria-label="Frequently asked questions">
+        <div className="ac-shell">
+          <div className="faq-groups">
+            {content.categories.map((category) => (
+              <div className="faq-group" key={category.id}>
+                <h2 id={category.id}>{category.title}</h2>
+                <div className="ac-faq-list">
+                  {category.items.map((item) => (
+                    <details className="ac-faq-item" key={item.question}>
+                      <summary>{item.question}</summary>
+                      <p>{item.answer}</p>
+                    </details>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
-    </>
+
+      <ContactPanel id="faq-contact" {...content.contact} currentPath={currentPath} navigate={navigate} />
+    </div>
   );
 }
 
