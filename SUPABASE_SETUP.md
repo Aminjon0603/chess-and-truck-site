@@ -72,37 +72,107 @@ for Production, and redeploy. To hide the form again, set it back to `false` and
 The Privacy Policy says unconfirmed signups are deleted after 30 days. That is
 only true once this daily job is scheduled and tested.
 
-1. In **SQL Editor**, run `supabase/migrations/20261023140000_schedule_interest_purge.sql`
-   (or `supabase db push` with the CLI). It turns on Supabase Cron and schedules
-   `public.purge_stale_interest_data()` every day at 04:15 UTC.
-2. Check that the job exists:
+What the cleanup deletes, and nothing else:
 
-   ```sql
-   select jobname, schedule, active from cron.job where jobname = 'purge-stale-interest-data';
-   ```
+- `interest_signups` rows with `status = 'pending'` whose latest request
+  (`consent_at`) is more than 30 days old. Confirmed and unsubscribed rows are
+  never deleted.
+- `interest_rate_limits` rows older than 2 days (each limit only lasts one hour).
 
-   You should see one row with `active = true`.
-3. Test the cleanup with a fake old signup (no real data involved):
+Run each step in **SQL Editor**, one at a time. Every check below returns
+counts or yes/no values only, never email addresses.
 
-   ```sql
-   insert into public.interest_signups (email, program_id, consent_at, consent_version, created_at)
-   values ('retention-test@example.com', 'camps', now() - interval '31 days', 'retention-test', now() - interval '31 days');
+**Step 1: check the starting point (read-only).**
 
-   select public.purge_stale_interest_data();
+```sql
+select
+  (select count(*) from pg_proc where proname = 'purge_stale_interest_data') as cleanup_function_exists,
+  (select count(*) from pg_extension where extname = 'pg_cron') as cron_enabled,
+  (select count(*) from public.interest_signups) as total_signups,
+  (select count(*) from public.interest_signups where status = 'pending') as pending,
+  (select count(*) from public.interest_signups
+     where status = 'pending' and consent_at < now() - interval '30 days') as would_be_deleted_now;
+```
 
-   select count(*) from public.interest_signups where email = 'retention-test@example.com';
-   ```
+`cleanup_function_exists` must be `1` (the first migration is applied).
+`would_be_deleted_now` is how many rows the first run will remove; these are
+exactly the unconfirmed requests the Privacy Policy says must be deleted.
 
-   The last query should return `0`.
-4. After the first scheduled run (the next 04:15 UTC), confirm it succeeded:
+**Step 2: apply the migration.** Paste and run the whole file
+`supabase/migrations/20261023140000_schedule_interest_purge.sql`. It updates
+the cleanup rule and schedules it for every day at 04:15 UTC. It deletes
+nothing by itself.
 
-   ```sql
-   select status, start_time from cron.job_run_details
-   where jobid = (select jobid from cron.job where jobname = 'purge-stale-interest-data')
-   order by start_time desc limit 5;
-   ```
+**Step 3: confirm the job and the rule (read-only).**
 
-   `status` should be `succeeded`.
+```sql
+select
+  (select count(*) from cron.job where jobname = 'purge-stale-interest-data') as job_count,
+  (select schedule from cron.job where jobname = 'purge-stale-interest-data') as schedule,
+  (select active from cron.job where jobname = 'purge-stale-interest-data') as active,
+  position('consent_at < now() - interval ''30 days''' in pg_get_functiondef('public.purge_stale_interest_data()'::regprocedure)) > 0 as counts_from_latest_request;
+```
+
+Expected: `job_count = 1`, `schedule = 15 4 * * *`, `active = true`,
+`counts_from_latest_request = true`.
+
+**Step 4: safe test (nothing is saved).** This adds five fake signups, runs
+the cleanup, reports what is left, and then deliberately stops with an error
+so everything, including any real deletions during the test, is undone.
+
+```sql
+do $$
+declare
+  remaining text;
+begin
+  insert into public.interest_signups
+    (email, program_id, status, consent_at, consent_version, confirmed_at, unsubscribed_at, created_at)
+  values
+    ('retention-test-old-pending@example.com',    'camps', 'pending',      now() - interval '31 days', 'retention-test', null,                       null,                       now() - interval '31 days'),
+    ('retention-test-new-pending@example.com',    'camps', 'pending',      now() - interval '1 day',   'retention-test', null,                       null,                       now() - interval '1 day'),
+    ('retention-test-resubscribed@example.com',   'camps', 'pending',      now() - interval '1 day',   'retention-test', null,                       null,                       now() - interval '90 days'),
+    ('retention-test-old-confirmed@example.com',  'camps', 'confirmed',    now() - interval '90 days', 'retention-test', now() - interval '89 days', null,                       now() - interval '90 days'),
+    ('retention-test-old-unsubscribed@example.com','camps', 'unsubscribed', now() - interval '90 days', 'retention-test', null,                       now() - interval '60 days', now() - interval '90 days');
+
+  perform public.purge_stale_interest_data();
+
+  select string_agg(replace(split_part(email, '@', 1), 'retention-test-', ''), ', ' order by email)
+    into remaining
+    from public.interest_signups
+    where email like 'retention-test-%@example.com';
+
+  raise exception 'TEST ONLY - nothing was saved. Kept after cleanup: %', remaining;
+end $$;
+```
+
+The SQL Editor shows this as an **error**, which is expected. The message must read:
+
+`TEST ONLY - nothing was saved. Kept after cleanup: new-pending, old-confirmed, old-unsubscribed, resubscribed`
+
+`old-pending` must be missing (it was deleted); the other four must be kept.
+
+**Step 5: confirm the test left nothing behind (read-only).**
+
+```sql
+select count(*) as leftover_test_rows
+from public.interest_signups
+where email like 'retention-test-%@example.com';
+```
+
+Expected: `0`.
+
+**Step 6: confirm a real scheduled run (after the next 04:15 UTC).**
+
+```sql
+select status, return_message, start_time, end_time
+from cron.job_run_details
+where jobid = (select jobid from cron.job where jobname = 'purge-stale-interest-data')
+order by start_time desc
+limit 5;
+```
+
+At least one row with `status = succeeded` means the daily job is working.
+Until you see that, treat the cleanup as scheduled but not yet observed.
 
 ## Expected monthly costs
 
