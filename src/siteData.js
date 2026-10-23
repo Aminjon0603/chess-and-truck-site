@@ -58,7 +58,7 @@ export const academyHomePage = {
   coachSection: {
     eyebrow: "Coach spotlight",
     title: "Meet Andrea",
-    role: "Italian Chess Master",
+    role: "Chess & Truck coach",
     summary:
       "Andrea is based in New York and has taught chess through camps, private lessons, after-school programs, and events in the U.S. and Canada.",
     facts: [
@@ -96,7 +96,7 @@ export const academyHomePage = {
       {
         question: "Who leads instruction?",
         answer:
-          "Andrea is an Italian Chess Master with 24 years of teaching experience. We will share coaching details for each program when its registration opens.",
+          "Andrea has 24 years of chess teaching experience. We will share coaching details for each program when its registration opens.",
       },
       {
         question: "When does registration open?",
@@ -1477,7 +1477,7 @@ export const aboutPage = {
   coachSpotlight: {
     eyebrow: "Coach spotlight",
     title: "Meet Andrea",
-    intro: "Italian Chess Master • 24 years of teaching experience",
+    intro: "24 years of teaching experience",
     paragraphs: [
       "Based in New York, Andrea has spent nearly 24 years teaching chess through camps, private lessons, after-school programs, birthday events, and promotional programs in both the U.S. and Canada.",
       "He brings a rare mix of structure, energy, and joy to every lesson, helping young players discover the beauty of chess through serious instruction that still feels genuinely fun.",
