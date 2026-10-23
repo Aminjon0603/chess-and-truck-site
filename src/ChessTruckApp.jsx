@@ -1,17 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
+  academyHomePage,
+  afterSchoolPageContent,
   campBookingPage,
   campMenuFeature,
   campMenuItems,
   campOverviewPage,
+  campsPageContent,
   contactEmails,
   contactNumbers,
   contactPage,
+  dojoPageContent,
   faqPage,
   featuredTournament,
   footerLegalLinks,
   homePage,
+  lessonsPageContent,
   lessonMenuFeature,
   lessonMenuItems,
   masterTrainingDojo,
@@ -27,16 +32,31 @@ import {
   serviceLevels,
   siteBrand,
   termsPage,
+  tournamentsPageContent,
   upcomingTournaments,
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
+import brandCrest from "./assets/chess-truck-crest.png";
 import {
   CAMP_REGISTRATION_CLOSED_MESSAGE,
   PROGRAM_STATUS,
   getProgramStatus,
   getRegistrationUnavailableMessage,
+  hasOpenConfiguredStatus,
   isProgramOpen,
+  setRegistrationAvailability,
 } from "./lib/programs.js";
+import {
+  getInterestConsentText,
+  validateInterestRequest,
+} from "./lib/interestValidation.js";
+import {
+  getCampDayOptions,
+  getCampDayOrder,
+  getCampWeekOptions,
+  parseAvailabilityResponse,
+  setApprovedCampSessions,
+} from "./lib/registrationAvailability.js";
 import campOnlineVisual from "./assets/camp-online.svg";
 import campOverviewVisual from "./assets/camp-overview.svg";
 import campPrepVisual from "./assets/camp-prep.svg";
@@ -167,60 +187,8 @@ const CAMP_EXTRA_SERVICES = [
   },
 ];
 
-const campDayFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "long",
-  month: "long",
-  day: "numeric",
-});
-
-const campShortDateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-});
-
-const campShortWeekdayFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-});
-
-const buildCampDayOptions = () => {
-  const options = [];
-  const endDate = new Date(2026, 5, 19);
-
-  for (let current = new Date(2026, 5, 15); current <= endDate; ) {
-    if (current.getDay() !== 0 && current.getDay() !== 6) {
-      const label = campDayFormatter.format(current);
-      options.push({
-        value: label,
-        label,
-        dayOfWeek: current.getDay(),
-        shortLabel: campShortDateFormatter.format(current),
-        compactLabel: `${campShortWeekdayFormatter.format(current)}, ${campShortDateFormatter.format(current)}`,
-        isoDate: current.toISOString().slice(0, 10),
-      });
-    }
-
-    current = new Date(current.getFullYear(), current.getMonth(), current.getDate() + 1);
-  }
-
-  return options;
-};
-
-const CAMP_DAY_OPTIONS = buildCampDayOptions();
-const CAMP_DAY_ORDER = new Map(CAMP_DAY_OPTIONS.map((item, index) => [item.value, index]));
-const CAMP_WEEK_OPTIONS = CAMP_DAY_OPTIONS.filter((item) => item.dayOfWeek === 1).map((item) => {
-  const startIndex = CAMP_DAY_OPTIONS.findIndex((day) => day.isoDate === item.isoDate);
-  const weekDays = CAMP_DAY_OPTIONS.slice(startIndex, startIndex + 5);
-  const weekLabel = `Week of ${item.label.replace(/^[^,]+,\s*/, "")}`;
-  const rangeLabel = `${weekDays[0]?.shortLabel || ""} - ${weekDays[weekDays.length - 1]?.shortLabel || ""}`;
-
-  return {
-    value: weekLabel,
-    label: `${weekLabel} (${rangeLabel})`,
-    rangeLabel,
-    days: weekDays.map((day) => day.label),
-  };
-});
-
+// Camp day and week options come only from approved sessions confirmed by the
+// server (see src/lib/registrationAvailability.js). Until then there are none.
 const buildCampPurchaseOptions = (cards = []) =>
   cards.flatMap((card) => {
     if (Array.isArray(card.actions) && card.actions.length) {
@@ -253,21 +221,26 @@ const buildCampPurchaseOptions = (cards = []) =>
 const CAMP_PURCHASE_OPTIONS = buildCampPurchaseOptions(campOverviewPage.bookingCards);
 const CAMP_PURCHASE_OPTION_MAP = new Map(CAMP_PURCHASE_OPTIONS.map((item) => [item.id, item]));
 
+const formatApprovedCampDateRange = () => {
+  const days = getCampDayOptions();
+  return days.length ? `${days[0].shortLabel} - ${days[days.length - 1].shortLabel} | Weekdays` : "To be announced";
+};
+
 const getCampScheduleOptions = (optionId) =>
   CAMP_WEEKLY_OPTION_IDS.has(optionId)
-    ? CAMP_WEEK_OPTIONS
+    ? getCampWeekOptions()
     : CAMP_DATE_SELECTION_OPTION_IDS.has(optionId)
-      ? CAMP_DAY_OPTIONS
+      ? getCampDayOptions()
       : [];
 
 const getSelectedCampWeekOption = (schedulePreference) =>
-  CAMP_WEEK_OPTIONS.find((item) => item.value === schedulePreference) || null;
+  getCampWeekOptions().find((item) => item.value === schedulePreference) || null;
 
 const getWeekDaysForSchedulePreference = (schedulePreference) =>
   getSelectedCampWeekOption(schedulePreference)?.days || [];
 
 const sortCampDays = (days = []) =>
-  [...days].sort((left, right) => (CAMP_DAY_ORDER.get(left) ?? 0) - (CAMP_DAY_ORDER.get(right) ?? 0));
+  [...days].sort((left, right) => (getCampDayOrder().get(left) ?? 0) - (getCampDayOrder().get(right) ?? 0));
 
 const calculateCampAddOnTotal = (addOnIds = []) =>
   CAMP_ADD_ONS.filter((item) => addOnIds.includes(item.id)).reduce(
@@ -402,6 +375,8 @@ const knownRoutes = new Set([
   "/register",
   "/terms",
   "/privacy",
+  "/interest/confirm",
+  "/interest/unsubscribe",
 ]);
 
 const legacyRouteRedirects = {
@@ -427,7 +402,13 @@ const normalizePath = (path) => {
   return path.endsWith("/") ? path.slice(0, -1) : path;
 };
 
-const CAMP_REGISTRATION_OPEN = isProgramOpen("camps");
+// The Notify Me form stays hidden until the interest backend (Supabase, Resend,
+// secrets) is configured and tested. Set VITE_INTEREST_FORM_ENABLED=true in
+// Vercel to show it. See SUPABASE_SETUP.md.
+const INTEREST_FORM_ENABLED = import.meta.env.VITE_INTEREST_FORM_ENABLED === "true";
+
+// Evaluated at render time: availability can change after the server check loads.
+const isCampRegistrationOpen = () => isProgramOpen("camps");
 
 const PROGRAM_STATUS_LABELS = {
   [PROGRAM_STATUS.OPEN]: "Registration Open",
@@ -435,10 +416,19 @@ const PROGRAM_STATUS_LABELS = {
   [PROGRAM_STATUS.CLOSED]: "Registration Closed",
 };
 
+const PROGRAM_STATUS_SHORT_LABELS = {
+  [PROGRAM_STATUS.OPEN]: "Open",
+  [PROGRAM_STATUS.COMING_SOON]: "Opening soon",
+  [PROGRAM_STATUS.CLOSED]: "Closed",
+};
+
+// The header switches to the menu button below this width so it stays one row.
+const NAV_COMPACT_QUERY = "(max-width: 1179px)";
+
 const getProgramById = (programId) => programs.find((item) => item.id === programId);
 
 const getProgramStatusMessage = (programId) => {
-  if (programId === "camps" && !CAMP_REGISTRATION_OPEN) {
+  if (programId === "camps" && getProgramStatus("camps") === PROGRAM_STATUS.CLOSED) {
     return CAMP_REGISTRATION_CLOSED_MESSAGE;
   }
 
@@ -446,9 +436,8 @@ const getProgramStatusMessage = (programId) => {
 };
 
 // The Dojo tournament add-on can only be bought once the Dojo itself is open.
-const availableServiceLevels = serviceLevels.filter(
-  (item) => item.id !== "entry-dojo" || isProgramOpen("dojo")
-);
+const getAvailableServiceLevels = () =>
+  serviceLevels.filter((item) => item.id !== "entry-dojo" || isProgramOpen("dojo"));
 
 const lessonCarouselImages = {
   online: lessonOnlineVisual,
@@ -456,6 +445,73 @@ const lessonCarouselImages = {
   group: lessonGroupVisual,
   manage: lessonManageVisual,
 };
+
+// One line-icon set for the program cards: same 24px grid, stroke, and color.
+const programIconPaths = {
+  camps: (
+    <>
+      <path d="M3 20h18" />
+      <path d="M4.5 20 12 6l7.5 14" />
+      <path d="M9.5 20 12 15l2.5 5" />
+      <path d="M12 6V3l3 1-3 1" />
+    </>
+  ),
+  tournaments: (
+    <>
+      <path d="M8 4h8v5a4 4 0 0 1-8 0V4Z" />
+      <path d="M8 6H5.5a2 2 0 0 0 0 4H8" />
+      <path d="M16 6h2.5a2 2 0 0 1 0 4H16" />
+      <path d="M12 13v4" />
+      <path d="M9 17h6" />
+      <path d="M8 20h8" />
+    </>
+  ),
+  lessons: (
+    <>
+      <rect x="3" y="4" width="18" height="12" rx="1.5" />
+      <path d="M12 16v4" />
+      <path d="M8.5 20h7" />
+      <circle cx="12" cy="8.2" r="1.6" />
+      <path d="M9.8 13.5c.4-1.7 1.1-2.7 2.2-3.3 1.1.6 1.8 1.6 2.2 3.3Z" />
+    </>
+  ),
+  afterSchool: (
+    <>
+      <path d="M7 9.5a5 5 0 0 1 10 0V19a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V9.5Z" />
+      <path d="M10 4.8V4.5a2 2 0 0 1 4 0v.3" />
+      <path d="M7 12.5h10" />
+      <path d="M9.5 15h5v3h-5z" />
+    </>
+  ),
+  dojo: (
+    <>
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="4.5" />
+      <circle cx="12" cy="12" r="1" />
+      <path d="M12 12l6-6" />
+      <path d="M16 5.5h2.5V8" />
+    </>
+  ),
+};
+
+function ProgramIcon({ iconKey }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="28"
+      height="28"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {programIconPaths[iconKey]}
+    </svg>
+  );
+}
 
 const campMenuImages = {
   overview: campOverviewVisual,
@@ -603,7 +659,7 @@ const getInitialPaymentState = () => {
 };
 
 const findRequestedCampOption = (nextRoute) => {
-  if (!CAMP_REGISTRATION_OPEN || !CAMP_OPTION_REQUEST_PATHS.has(nextRoute.pathname)) {
+  if (!isCampRegistrationOpen() || !CAMP_OPTION_REQUEST_PATHS.has(nextRoute.pathname)) {
     return null;
   }
 
@@ -671,6 +727,7 @@ function AppLink({ to, navigate, children, className = "", currentPath, onNaviga
     <a
       href={to}
       className={`${className}${isActive ? " is-active" : ""}`.trim()}
+      aria-current={isActive ? "page" : undefined}
       onClick={handleClick}
       {...rest}
     >
@@ -1312,102 +1369,1035 @@ function ProgramPage({ programId, currentPath, navigate }) {
   );
 }
 
-function SiteFooter({ currentPath, navigate }) {
+function BrandMark({ tone = "light" }) {
   return (
-    <footer className="site-footer">
-      <div className="shell">
-        <div className="surface footer-panel">
-          <div className="footer-top">
-            <div className="footer-brand-block">
-              <div className="footer-brand-row">
-                <div className="footer-logo-wrap">
-                  <img src={brandLogo} alt={`${siteBrand.name} logo`} className="footer-logo" />
-                </div>
-              </div>
-              <p>{siteBrand.footerNote}</p>
-              <AppLink
-                to="/contact"
-                navigate={navigate}
-                currentPath={currentPath}
-                className="btn btn-primary footer-cta"
-              >
-                Inquire
+    <span className={`ac-brandmark ac-brandmark-${tone}`}>
+      <img src={brandCrest} alt="" className="ac-brandmark-crest" width="48" height="51" />
+      <span className="ac-brandmark-text">
+        <span className="ac-brandmark-name">{siteBrand.name}</span>
+        <span className="ac-brandmark-tagline">{siteBrand.slogan}</span>
+      </span>
+    </span>
+  );
+}
+
+function ProgramCard({ program, currentPath, navigate }) {
+  return (
+    <AppLink to={program.path} navigate={navigate} currentPath={currentPath} className="ac-program-card">
+      <span className="ac-program-icon">
+        <ProgramIcon iconKey={program.iconKey} />
+      </span>
+      <ProgramStatusBadge programId={program.id} />
+      <h3>{program.name}</h3>
+      <p>{program.summary}</p>
+      <span className="ac-program-link">
+        View program
+        <span className="ac-program-arrow" aria-hidden="true">
+          &rarr;
+        </span>
+      </span>
+    </AppLink>
+  );
+}
+
+function AcademySectionHeading({ id, eyebrow, title, intro }) {
+  return (
+    <div className="ac-section-heading">
+      <span className="ac-eyebrow">{eyebrow}</span>
+      <h2 id={id}>{title}</h2>
+      {intro ? <p>{intro}</p> : null}
+    </div>
+  );
+}
+
+function AcademyHomePage({ currentPath, navigate }) {
+  const { hero, programsSection, whySection, coachSection, howSection, faqSection, contactCard } =
+    academyHomePage;
+  const homeContactMethods = [contactNumbers[0], emailContact].filter(Boolean);
+
+  const scrollToPrograms = (event) => {
+    const section = document.getElementById("programs");
+
+    if (!section) {
+      return;
+    }
+
+    event.preventDefault();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  };
+
+  return (
+    <div className="ac-home">
+      <section className="ac-hero" aria-labelledby="home-title">
+        <div className="ac-shell ac-hero-grid">
+          <div className="ac-hero-copy">
+            <span className="ac-eyebrow">{hero.eyebrow}</span>
+            <h1 id="home-title">{hero.title}</h1>
+            <p className="ac-lead">{hero.intro}</p>
+            <div className="ac-actions">
+              <a href="#programs" className="ac-btn ac-btn-primary" onClick={scrollToPrograms}>
+                Explore programs
+              </a>
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+                Contact us
               </AppLink>
             </div>
+            <ul className="ac-hero-facts">
+              {hero.facts.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="ac-hero-visual" aria-hidden="true">
+            <img src={brandCrest} alt="" className="ac-hero-crest" width="336" height="357" />
+          </div>
+        </div>
+      </section>
 
-            <div className="footer-column">
-              <span className="mini-tag">Explore Programs</span>
-              <div className="footer-nav">
-                {navigationItems.map((item) => (
-                  <AppLink
-                    key={item.path}
-                    to={item.path}
-                    navigate={navigate}
-                    currentPath={currentPath}
-                    className="footer-link"
-                  >
-                    {item.label}
-                  </AppLink>
+      <section className="ac-section ac-section-programs" id="programs" aria-labelledby="programs-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="programs-title" {...programsSection} />
+          <div className="ac-program-grid">
+            {programs.map((item) => (
+              <ProgramCard key={item.id} program={item} currentPath={currentPath} navigate={navigate} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="why-title">
+        <div className="ac-shell ac-why-grid">
+          <AcademySectionHeading id="why-title" {...whySection} />
+          <ul className="ac-pillars">
+            {whySection.pillars.map((item) => (
+              <li key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="coach-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="coach-title" eyebrow={coachSection.eyebrow} title={coachSection.title} />
+          <article className="ac-coach">
+            <img
+              src={andreaPhoto}
+              alt="Andrea at an outdoor chess table"
+              className="ac-coach-photo"
+              width="647"
+              height="480"
+              loading="lazy"
+            />
+            <div className="ac-coach-copy">
+              <span className="ac-coach-role">{coachSection.role}</span>
+              <p>{coachSection.summary}</p>
+              <dl className="ac-coach-facts">
+                {coachSection.facts.map((item) => (
+                  <div key={item.label}>
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
+                  </div>
                 ))}
+              </dl>
+              <AppLink to="/about" navigate={navigate} currentPath={currentPath} className="ac-text-link">
+                More about Chess &amp; Truck <span aria-hidden="true">&rarr;</span>
+              </AppLink>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="how-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="how-title" eyebrow={howSection.eyebrow} title={howSection.title} />
+          <ol className="ac-steps">
+            {howSection.steps.map((item, index) => (
+              <li key={item.title}>
+                <span className="ac-step-number" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="faq-title">
+        <div className="ac-shell ac-faq-grid">
+          <div>
+            <AcademySectionHeading id="faq-title" eyebrow={faqSection.eyebrow} title={faqSection.title} />
+            <div className="ac-faq-list">
+              {faqSection.items.map((item) => (
+                <details className="ac-faq-item" key={item.question}>
+                  <summary>{item.question}</summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+          <aside className="ac-contact-card" aria-labelledby="contact-card-title">
+            <h2 id="contact-card-title">{contactCard.title}</h2>
+            <p>{contactCard.text}</p>
+            <ul className="ac-contact-list">
+              {homeContactMethods.map((item) => (
+                <li key={item.display}>
+                  <span>{item.label}</span>
+                  <a href={item.href}>{item.display}</a>
+                </li>
+              ))}
+            </ul>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+              Send a message
+            </AppLink>
+          </aside>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+const scrollToSection = (sectionId) => (event) => {
+  const section = document.getElementById(sectionId);
+
+  if (!section) {
+    return;
+  }
+
+  event.preventDefault();
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+};
+
+function InnerHero({ eyebrow, title, intro, programId, actions, aside, variant }) {
+  return (
+    <section className={`pg-hero pg-hero-${variant}`} aria-labelledby="page-title">
+      <div className="ac-shell pg-hero-grid">
+        <div className="pg-hero-copy">
+          <div className="pg-hero-kicker">
+            <span className="ac-eyebrow">{eyebrow}</span>
+            <ProgramStatusBadge programId={programId} />
+          </div>
+          <h1 id="page-title">{title}</h1>
+          <p className="ac-lead">{intro}</p>
+          <div className="ac-actions">{actions}</div>
+        </div>
+        {aside}
+      </div>
+    </section>
+  );
+}
+
+function FactPanel({ title, iconKey, items, tone }) {
+  return (
+    <aside className={`pg-fact-panel pg-fact-panel-${tone}`} aria-label={title}>
+      <div className="pg-fact-panel-head">
+        <span className="ac-program-icon">
+          <ProgramIcon iconKey={iconKey} />
+        </span>
+        <h2>{title}</h2>
+      </div>
+      <dl>
+        {items.map((item) => (
+          <div key={item.label}>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+  );
+}
+
+function FaqBlock({ id, eyebrow, title, items }) {
+  return (
+    <section className="ac-section" aria-labelledby={id}>
+      <div className="ac-shell pg-faq">
+        <AcademySectionHeading id={id} eyebrow={eyebrow} title={title} />
+        <div className="ac-faq-list">
+          {items.map((item) => (
+            <details className="ac-faq-item" key={item.question}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RegistrationStatusPanel({ id, programId, title, text, currentPath, navigate, openAction }) {
+  const isOpen = isProgramOpen(programId);
+
+  return (
+    <section className="ac-section pg-status-section" id={id} aria-labelledby={`${id}-title`}>
+      <div className="ac-shell">
+        <div className="pg-status">
+          <div className="pg-status-copy">
+            <ProgramStatusBadge programId={programId} />
+            <h2 id={`${id}-title`}>{title}</h2>
+            <p>{text}</p>
+          </div>
+          <div className="pg-status-actions">
+            {isOpen && openAction ? openAction : null}
+            <AppLink
+              to="/contact"
+              navigate={navigate}
+              currentPath={currentPath}
+              className={`ac-btn ${isOpen && openAction ? "pg-btn-on-dark" : "ac-btn-gold"}`}
+            >
+              Contact us
+            </AppLink>
+            <a href={phoneContact.href} className="ac-btn pg-btn-on-dark">
+              Call or text {phoneContact.display}
+            </a>
+          </div>
+          {INTEREST_FORM_ENABLED && !isOpen ? (
+            <NotifyMeForm programId={programId} currentPath={currentPath} navigate={navigate} />
+          ) : null}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const NOTIFY_FALLBACK_SUCCESS =
+  "Thanks. If this address can receive email, we sent a link to confirm it. Check your inbox.";
+const NOTIFY_FALLBACK_ERROR = "Something went wrong. Please try again later.";
+
+function NotifyMeForm({ programId, currentPath, navigate }) {
+  const programName = getProgramById(programId)?.name || "this program";
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState("");
+  const [state, setState] = useState({ status: "idle", message: "", errors: {} });
+  const idBase = `notify-${programId}`;
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { ok, errors, value } = validateInterestRequest({ email, programId, consent });
+
+    if (!ok) {
+      setState({ status: "error", message: "", errors });
+      return;
+    }
+
+    setState({ status: "sending", message: "", errors: {} });
+
+    try {
+      const response = await fetch("/api/interest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "subscribe", email: value.email, programId, consent: true, website }),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        setState({ status: "sent", message: payload.message || NOTIFY_FALLBACK_SUCCESS, errors: {} });
+        setEmail("");
+        setConsent(false);
+      } else {
+        setState({ status: "error", message: payload.error || NOTIFY_FALLBACK_ERROR, errors: payload.fieldErrors || {} });
+      }
+    } catch {
+      setState({ status: "error", message: NOTIFY_FALLBACK_ERROR, errors: {} });
+    }
+  };
+
+  if (state.status === "sent") {
+    return (
+      <div className="pg-notify" role="status">
+        <h3>Check your inbox</h3>
+        <p>{state.message}</p>
+      </div>
+    );
+  }
+
+  return (
+    <form className="pg-notify" onSubmit={handleSubmit} noValidate aria-labelledby={`${idBase}-title`}>
+      <h3 id={`${idBase}-title`}>Get an email when registration opens</h3>
+      <p className="pg-notify-note">We only ask for your email, and we will send a link to confirm it first.</p>
+      <div className="pg-notify-row">
+        <label htmlFor={`${idBase}-email`} className="pg-notify-label">
+          Email address
+        </label>
+        <input
+          id={`${idBase}-email`}
+          type="email"
+          name="email"
+          autoComplete="email"
+          inputMode="email"
+          maxLength={254}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          aria-invalid={state.errors.email ? "true" : "false"}
+          aria-describedby={state.errors.email ? `${idBase}-email-error` : undefined}
+        />
+        <button type="submit" className="ac-btn ac-btn-gold" disabled={state.status === "sending"}>
+          {state.status === "sending" ? "Sending..." : "Notify me"}
+        </button>
+      </div>
+      {state.errors.email ? (
+        <p id={`${idBase}-email-error`} className="pg-notify-error">
+          {state.errors.email}
+        </p>
+      ) : null}
+      <label className="pg-notify-consent" htmlFor={`${idBase}-consent`}>
+        <input
+          id={`${idBase}-consent`}
+          type="checkbox"
+          checked={consent}
+          onChange={(event) => setConsent(event.target.checked)}
+          aria-invalid={state.errors.consent ? "true" : "false"}
+        />
+        <span>
+          {getInterestConsentText(programName)}{" "}
+          <AppLink to="/privacy" navigate={navigate} currentPath={currentPath}>
+            Privacy Policy
+          </AppLink>
+        </span>
+      </label>
+      {state.errors.consent ? <p className="pg-notify-error">{state.errors.consent}</p> : null}
+      <div className="pg-notify-trap" aria-hidden="true">
+        <label htmlFor={`${idBase}-website`}>Leave this field empty</label>
+        <input
+          id={`${idBase}-website`}
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(event) => setWebsite(event.target.value)}
+        />
+      </div>
+      {state.status === "error" && state.message ? (
+        <p className="pg-notify-error" role="alert">
+          {state.message}
+        </p>
+      ) : null}
+    </form>
+  );
+}
+
+const INTEREST_ACTION_COPY = {
+  confirm: {
+    title: "Confirm your email",
+    intro: "Press the button to confirm you want an email when registration opens.",
+    button: "Confirm my email",
+  },
+  unsubscribe: {
+    title: "Unsubscribe",
+    intro: "Press the button to stop emails about this program.",
+    button: "Unsubscribe",
+  },
+};
+
+// Confirmation and unsubscribe links land here. The action runs only when the
+// visitor presses the button, so email link scanners cannot trigger it, and the
+// token is removed from the address bar right away.
+function InterestActionPage({ action, currentPath, navigate }) {
+  const copy = INTEREST_ACTION_COPY[action];
+  const [token] = useState(() => new URLSearchParams(window.location.search).get("token") || "");
+  const [state, setState] = useState({ status: "idle", message: "" });
+
+  useEffect(() => {
+    if (window.location.search) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
+  const handleAction = async () => {
+    setState({ status: "sending", message: "" });
+
+    try {
+      const response = await fetch("/api/interest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, token }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      setState({
+        status: response.ok ? "done" : "error",
+        message: response.ok ? payload.message : payload.error || NOTIFY_FALLBACK_ERROR,
+      });
+    } catch {
+      setState({ status: "error", message: NOTIFY_FALLBACK_ERROR });
+    }
+  };
+
+  return (
+    <div className="ac-home pg-page">
+      <section className="pg-hero pg-interest-hero" aria-labelledby="interest-title">
+        <div className="ac-shell">
+          <div className="pg-interest-card">
+            <span className="ac-eyebrow">Chess &amp; Truck</span>
+            <h1 id="interest-title">{copy.title}</h1>
+            {!token ? (
+              <p className="ac-lead">This link is incomplete. Please use the link from your email.</p>
+            ) : state.status === "done" || state.status === "error" ? (
+              <p className="ac-lead" role="status">
+                {state.message}
+              </p>
+            ) : (
+              <>
+                <p className="ac-lead">{copy.intro}</p>
+                <button
+                  type="button"
+                  className="ac-btn ac-btn-primary"
+                  onClick={handleAction}
+                  disabled={state.status === "sending"}
+                >
+                  {state.status === "sending" ? "Working..." : copy.button}
+                </button>
+              </>
+            )}
+            <AppLink to="/" navigate={navigate} currentPath={currentPath} className="ac-text-link">
+              Back to the home page <span aria-hidden="true">&rarr;</span>
+            </AppLink>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CampsPage({ currentPath, navigate, bookingProps }) {
+  const content = campsPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="camps"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="camps"
+        actions={
+          <>
+            <a href="#camp-day" className="ac-btn ac-btn-primary" onClick={scrollToSection("camp-day")}>
+              See the daily schedule
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Ask about camp
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="Camp at a glance" iconKey="camps" items={content.glance} tone="dark" />}
+      />
+
+      <section className="ac-section pg-day-section" id="camp-day" aria-labelledby="camp-day-title">
+        <div className="ac-shell pg-day-grid">
+          <AcademySectionHeading id="camp-day-title" {...content.daySection} />
+          <ol className="pg-timeline">
+            {campOverviewPage.sampleSchedule.map((item) => (
+              <li key={item.time}>
+                <span className="pg-timeline-time">{item.time}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="camp-learn-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="camp-learn-title" {...content.learnSection} />
+          <ul className="pg-skill-grid">
+            {campOverviewPage.learningCards.map((item) => (
+              <li key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <FaqBlock id="camp-faq-title" {...content.faqSection} items={content.faqs} />
+
+      {isProgramOpen("camps") ? (
+        <CampsOverviewPage currentPath={currentPath} navigate={navigate} {...bookingProps} bookingOnly />
+      ) : (
+        <RegistrationStatusPanel
+          id="camp-registration"
+          programId="camps"
+          title={content.status.title}
+          text={content.status.text}
+          currentPath={currentPath}
+          navigate={navigate}
+        />
+      )}
+    </div>
+  );
+}
+
+function TournamentsPage({ currentPath, navigate }) {
+  const content = tournamentsPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="tournaments"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="tournaments"
+        actions={
+          <>
+            <a href="#sections" className="ac-btn ac-btn-primary" onClick={scrollToSection("sections")}>
+              See the sections
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="Planned format" iconKey="tournaments" items={content.plannedFormat} tone="light" />}
+      />
+
+      <section className="ac-section pg-dark-section" id="sections" aria-labelledby="sections-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="sections-title" {...content.sectionsSection} />
+          <div className="pg-section-cards">
+            {sectionOptions.map((item) => (
+              <article className="pg-section-card" key={item.id}>
+                <span className="pg-section-tag">{item.badge}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <ul>
+                  {item.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="morning-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="morning-title" {...content.morningSection} />
+          <ol className="pg-morning">
+            {content.morning.map((item) => (
+              <li key={item.time}>
+                <span className="pg-morning-time">{item.time}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="registration-steps-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="registration-steps-title" {...content.registrationSection} />
+          <ol className="ac-steps">
+            {content.registrationSteps.map((item, index) => (
+              <li key={item.title}>
+                <span className="ac-step-number" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <FaqBlock id="tournament-faq-title" {...content.faqSection} items={content.faqs} />
+
+      <RegistrationStatusPanel
+        id="tournament-registration"
+        programId="tournaments"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+        openAction={
+          <AppLink to="/register" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+            Register now
+          </AppLink>
+        }
+      />
+    </div>
+  );
+}
+
+function LessonsPage({ currentPath, navigate }) {
+  const content = lessonsPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="lessons"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="lessons"
+        actions={
+          <>
+            <a href="#lesson-flow" className="ac-btn ac-btn-primary" onClick={scrollToSection("lesson-flow")}>
+              How a lesson works
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Ask about lessons
+            </AppLink>
+          </>
+        }
+        aside={
+          <aside className="pg-includes" aria-labelledby="lesson-includes-title">
+            <h2 id="lesson-includes-title">{content.includesTitle}</h2>
+            <ul>
+              {content.includes.map((item) => (
+                <li key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        }
+      />
+
+      <section className="ac-section" id="lesson-flow" aria-labelledby="lesson-flow-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="lesson-flow-title" {...content.sessionSection} />
+          <ol className="pg-flow">
+            {content.session.map((item, index) => (
+              <li key={item.title}>
+                <span className="pg-flow-step" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="lesson-formats-title">
+        <div className="ac-shell pg-two-col">
+          <div>
+            <AcademySectionHeading id="lesson-formats-title" {...content.formatsSection} />
+            <ul className="pg-format-list">
+              {privateLessonsPage.formatCards.map((item) => (
+                <li key={item.title}>
+                  <span className="pg-section-tag">{item.eyebrow}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <AcademySectionHeading id="lesson-fit-title" {...content.fitSection} />
+            <ul className="ac-pillars">
+              {content.fit.map((item) => (
+                <li key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="lesson-steps-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="lesson-steps-title" {...content.stepsSection} />
+          <ol className="ac-steps">
+            {content.steps.map((item, index) => (
+              <li key={item.title}>
+                <span className="ac-step-number" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <RegistrationStatusPanel
+        id="lesson-registration"
+        programId="lessons"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+      />
+    </div>
+  );
+}
+
+function AfterSchoolPage({ currentPath, navigate }) {
+  const content = afterSchoolPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="after-school"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="afterSchool"
+        actions={
+          <>
+            <a href="#audiences" className="ac-btn ac-btn-primary" onClick={scrollToSection("audiences")}>
+              Parents and schools
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="At a glance" iconKey="afterSchool" items={content.glance} tone="light" />}
+      />
+
+      <section className="ac-section" id="audiences" aria-labelledby="audiences-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="audiences-title" {...content.audienceSection} />
+          <div className="pg-audiences">
+            {content.audiences.map((item) => (
+              <article className={`pg-audience pg-audience-${item.id}`} key={item.id}>
+                <span className="pg-section-tag">{item.tag}</span>
+                <h3>{item.title}</h3>
+                <ul>
+                  {item.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
                 <AppLink
                   to="/contact"
                   navigate={navigate}
                   currentPath={currentPath}
-                  className="footer-link"
+                  className={`ac-btn ${item.id === "schools" ? "ac-btn-gold" : "ac-btn-primary"}`}
                 >
-            Contact Us
+                  {item.cta}
                 </AppLink>
-              </div>
-              <div className="footer-legal-links">
-                {footerLegalLinks.map((item) => (
-                  <AppLink
-                    key={item.path}
-                    to={item.path}
-                    navigate={navigate}
-                    currentPath={currentPath}
-                    className="footer-link footer-link-legal"
-                  >
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" aria-labelledby="benefits-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="benefits-title" {...content.benefitsSection} />
+          <ul className="pg-skill-grid pg-skill-grid-four">
+            {content.benefits.map((item) => (
+              <li key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ac-section" aria-labelledby="session-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="session-title" {...content.sessionSection} />
+          <ol className="pg-morning">
+            {content.session.map((item) => (
+              <li key={item.title}>
+                <span className="pg-morning-time">{item.time}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <FaqBlock id="after-school-faq-title" {...content.faqSection} items={content.faqs} />
+
+      <RegistrationStatusPanel
+        id="after-school-registration"
+        programId="afterSchool"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+      />
+    </div>
+  );
+}
+
+function DojoPage({ currentPath, navigate }) {
+  const content = dojoPageContent;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="dojo"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
+        programId="dojo"
+        actions={
+          <>
+            <a href="#dojo-focus" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-focus")}>
+              What the Dojo works on
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
+            </AppLink>
+          </>
+        }
+        aside={<FactPanel title="Planned focus" iconKey="dojo" items={content.glance} tone="dark" />}
+      />
+
+      <section className="ac-section" aria-labelledby="dojo-compare-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="dojo-compare-title" {...content.compareSection} />
+          <div className="pg-compare">
+            {content.compare.map((item) => (
+              <article className={`pg-compare-card${item.id === "dojo" ? " is-featured" : ""}`} key={item.id}>
+                <span className="ac-program-icon">
+                  <ProgramIcon iconKey={item.id} />
+                </span>
+                <h3>{item.name}</h3>
+                <p>{item.text}</p>
+                {item.path ? (
+                  <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-text-link">
+                    {item.link} <span aria-hidden="true">&rarr;</span>
+                  </AppLink>
+                ) : (
+                  <ProgramStatusBadge programId="dojo" />
+                )}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ac-section pg-dark-section" id="dojo-focus" aria-labelledby="dojo-focus-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="dojo-focus-title" {...content.focusSection} />
+          <div className="pg-section-cards pg-focus-cards">
+            {content.focus.map((item) => (
+              <article className="pg-section-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />
+
+      <RegistrationStatusPanel
+        id="dojo-registration"
+        programId="dojo"
+        title={content.status.title}
+        text={content.status.text}
+        currentPath={currentPath}
+        navigate={navigate}
+      />
+    </div>
+  );
+}
+
+function SiteFooter({ currentPath, navigate }) {
+  const academyLinks = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "FAQ", path: "/faq" },
+    { label: "Contact", path: "/contact" },
+  ];
+
+  return (
+    <footer className="ac-footer">
+      <div className="ac-shell">
+        <div className="ac-footer-grid">
+          <div className="ac-footer-brand">
+            <BrandMark tone="dark" />
+            <p>{siteBrand.brandNote}</p>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+              Contact Us
+            </AppLink>
+          </div>
+
+          <nav className="ac-footer-col" aria-label="Programs">
+            <h2 className="ac-footer-heading">Programs</h2>
+            <ul className="ac-footer-programs">
+              {programs.map((item) => {
+                const status = getProgramStatus(item.id);
+
+                return (
+                  <li key={item.id}>
+                    <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-footer-link">
+                      {item.name}
+                    </AppLink>
+                    <span className={`ac-footer-status is-${status}`}>{PROGRAM_STATUS_SHORT_LABELS[status]}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <nav className="ac-footer-col" aria-label="Explore">
+            <h2 className="ac-footer-heading">Explore</h2>
+            <ul>
+              {academyLinks.map((item) => (
+                <li key={item.path}>
+                  <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-footer-link">
                     {item.label}
                   </AppLink>
-                ))}
-              </div>
-            </div>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-            <div className="footer-column">
-              <span className="mini-tag">Support</span>
-              <div className="footer-contact-stack">
-                {footerContactMethods.map((item) => (
-                  <a href={item.href} key={item.display} className="footer-contact-link">
-                    <span>{item.label}</span>
-                    <strong>{item.display}</strong>
+          <div className="ac-footer-col">
+            <h2 className="ac-footer-heading">Contact</h2>
+            <ul className="ac-footer-contact">
+              {footerContactMethods.map((item) => (
+                <li key={item.display}>
+                  <span>{item.label}</span>
+                  <a href={item.href} className="ac-footer-link">
+                    {item.display}
                   </a>
-                ))}
-              </div>
-            </div>
-
-            <div className="footer-column footer-event-column">
-              <span className="mini-tag">Featured camps</span>
-              <h3>{campOverviewPage.title}</h3>
-              <p>{campOverviewPage.intro}</p>
-              <div className="footer-meta">
-                <span>{featuredTournament.venueLabel || "62 E 92nd Street, New York, NY 10128"}</span>
-                <strong>{featuredTournament.scheduleLabel || "June 15 - June 19 | Weekdays"}</strong>
-              </div>
-              <AppLink
-                to="/camps"
-                navigate={navigate}
-                currentPath={currentPath}
-                className="text-link"
-              >
-                View Full Camp Details
-              </AppLink>
-            </div>
+                </li>
+              ))}
+              <li>
+                <span>Location</span>
+                {siteBrand.city}
+              </li>
+            </ul>
           </div>
+        </div>
 
-          <div className="footer-bottom">
-            <span>{siteBrand.city}</span>
-            <small>&copy; {new Date().getFullYear()} {siteBrand.name}</small>
-          </div>
+        <div className="ac-footer-bottom">
+          <small>
+            &copy; {new Date().getFullYear()} {siteBrand.name}
+          </small>
+          <ul>
+            {footerLegalLinks.map((item) => (
+              <li key={item.path}>
+                <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-footer-link">
+                  {item.label}
+                </AppLink>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>
@@ -1700,7 +2690,7 @@ function CampBookingFormPanel({
   const selectedScheduleOptions = getCampScheduleOptions(selectedOption.id);
   const selectedSchedule =
     campBookingState.schedulePreference?.trim() || selectedOption.defaultSchedulePreference || "";
-  const selectedDayOption = CAMP_DAY_OPTIONS.find((item) => item.value === selectedSchedule) || null;
+  const selectedDayOption = getCampDayOptions().find((item) => item.value === selectedSchedule) || null;
   const selectedSingleDays =
     isDateSelectionOption
       ? Array.isArray(campBookingState.selectedDays) && campBookingState.selectedDays.length
@@ -1865,7 +2855,7 @@ function CampBookingFormPanel({
               <strong>{selectedSingleDays.length ? "Weekdays only" : "No dates selected yet"}</strong>
             </div>
             <div className="camp-week-days camp-day-chip-grid">
-              {CAMP_DAY_OPTIONS.map((day) => {
+              {getCampDayOptions().map((day) => {
                 const isSelected = selectedSingleDays.includes(day.value);
 
                 return (
@@ -2131,11 +3121,11 @@ function CampBookingFormPanel({
             <div className="summary-list summary-list-booking">
               <div>
                 <span>Dates</span>
-                <strong>June 15 - June 19 | Weekdays</strong>
+                <strong>{formatApprovedCampDateRange()}</strong>
               </div>
               <div>
                 <span>Location</span>
-                    <strong>62 E 92nd Street, New York, NY 10128</strong>
+                <strong>Included in your confirmation email</strong>
               </div>
               <div>
                 <span>{isWeeklyOption ? "Week" : "Dates"}</span>
@@ -2475,6 +3465,7 @@ function CampsOverviewPage({
   isCampBookingFormVisible = false,
   openCampBooking = () => {},
   showProgramsOverview = false,
+  bookingOnly = false,
 }) {
   const selectedOption =
     CAMP_PURCHASE_OPTION_MAP.get(selectedCampOptionId) || CAMP_PURCHASE_OPTIONS[0];
@@ -2492,93 +3483,7 @@ function CampsOverviewPage({
     });
   };
 
-  return (
-    <>
-      <section className="page-hero lesson-page-hero camp-overview-hero">
-        <div className="shell lesson-hero-grid lesson-detail-hero-grid camp-overview-hero-grid">
-          <div className="lesson-hero-copy lesson-detail-hero-copy camp-overview-hero-copy">
-            <span className="section-tag">{campOverviewPage.eyebrow}</span>
-            <h1>{campOverviewPage.title}</h1>
-            {campOverviewPage.intro ? <p className="page-intro">{campOverviewPage.intro}</p> : null}
-
-            {campOverviewPage.chips.length ? (
-              <div className="lesson-chip-row">
-                {campOverviewPage.chips.map((item) => (
-                  <span key={item} className="lesson-chip">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            <div className="cta-row">
-              <a
-                href="#camp-booking"
-                className="btn btn-primary btn-emphasis"
-                onClick={scrollToCampSection("camp-booking")}
-              >
-                {CAMP_REGISTRATION_OPEN ? "Enroll Now" : "Registration Closed"}
-              </a>
-              <a
-                href="#camp-schedule"
-                className="btn btn-secondary"
-                onClick={scrollToCampSection("camp-schedule")}
-              >
-                View Schedule
-              </a>
-              <a
-                href="#camp-location"
-                className="btn btn-secondary"
-                onClick={scrollToCampSection("camp-location")}
-              >
-                Two Blocks Away from Central Park
-              </a>
-            </div>
-
-            <div className="fact-list fact-list-hero camp-hero-facts">
-              {campOverviewPage.heroFacts.map((item) => (
-                <div key={item.label}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel camp-overview-hero-panel">
-            <div className="lesson-hero-top">
-              <div className="lesson-photo-shell">
-                <img src={brandLogo} alt={`${siteBrand.name} logo`} className="lesson-photo lesson-detail-photo camp-logo-photo" />
-              </div>
-
-              <div className="lesson-hero-note">
-                <span className="mini-tag mini-tag-dark">{campOverviewPage.asideTag}</span>
-                <h2>{campOverviewPage.asideTitle}</h2>
-                <p>{campOverviewPage.asideText}</p>
-              </div>
-            </div>
-
-            <div className="fact-list lesson-fact-grid">
-              {campOverviewPage.asideFacts.map((item) => (
-                <AppLink
-                  key={item.label}
-                  to="/contact"
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  className="fact-list-card-link"
-                  aria-label={`Contact Us about ${item.label.toLowerCase()}`}
-                >
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </AppLink>
-              ))}
-            </div>
-          </article>
-        </div>
-      </section>
-
-      {showProgramsOverview ? <ProgramsOverview currentPath={currentPath} navigate={navigate} /> : null}
-
+  const bookingSection = (
       <section className="page-section" id="camp-booking">
         <div className="shell">
           <SectionIntro
@@ -2589,7 +3494,7 @@ function CampsOverviewPage({
           {campOverviewPage.bookingSection.note ? (
             <p className="camp-booking-note">{campOverviewPage.bookingSection.note}</p>
           ) : null}
-          {CAMP_REGISTRATION_OPEN ? (
+          {isCampRegistrationOpen() ? (
             <div className="camp-booking-grid">
               {campOverviewPage.bookingCards.map((item) => {
                 const isSelected =
@@ -2658,7 +3563,7 @@ function CampsOverviewPage({
             <ProgramStatusNotice programId="camps" currentPath={currentPath} navigate={navigate} />
           )}
 
-          {CAMP_REGISTRATION_OPEN && (isCampBookingFormVisible || campCheckoutState.status !== "idle") ? (
+          {isCampRegistrationOpen() && (isCampBookingFormVisible || campCheckoutState.status !== "idle") ? (
             <>
               <CampCheckoutStatusBanner campCheckoutState={campCheckoutState} />
               <CampBookingFormPanel
@@ -2674,6 +3579,100 @@ function CampsOverviewPage({
           ) : null}
         </div>
       </section>
+  );
+
+  if (bookingOnly) {
+    return bookingSection;
+  }
+
+  return (
+    <>
+      <section className="page-hero lesson-page-hero camp-overview-hero">
+        <div className="shell lesson-hero-grid lesson-detail-hero-grid camp-overview-hero-grid">
+          <div className="lesson-hero-copy lesson-detail-hero-copy camp-overview-hero-copy">
+            <span className="section-tag">{campOverviewPage.eyebrow}</span>
+            <h1>{campOverviewPage.title}</h1>
+            {campOverviewPage.intro ? <p className="page-intro">{campOverviewPage.intro}</p> : null}
+
+            {campOverviewPage.chips.length ? (
+              <div className="lesson-chip-row">
+                {campOverviewPage.chips.map((item) => (
+                  <span key={item} className="lesson-chip">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="cta-row">
+              <a
+                href="#camp-booking"
+                className="btn btn-primary btn-emphasis"
+                onClick={scrollToCampSection("camp-booking")}
+              >
+                {isCampRegistrationOpen() ? "Enroll Now" : PROGRAM_STATUS_LABELS[getProgramStatus("camps")]}
+              </a>
+              <a
+                href="#camp-schedule"
+                className="btn btn-secondary"
+                onClick={scrollToCampSection("camp-schedule")}
+              >
+                View Schedule
+              </a>
+              <a
+                href="#camp-location"
+                className="btn btn-secondary"
+                onClick={scrollToCampSection("camp-location")}
+              >
+                Two Blocks Away from Central Park
+              </a>
+            </div>
+
+            <div className="fact-list fact-list-hero camp-hero-facts">
+              {campOverviewPage.heroFacts.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <article className="surface surface-dark lesson-hero-panel lesson-detail-hero-panel camp-overview-hero-panel">
+            <div className="lesson-hero-top">
+              <div className="lesson-photo-shell">
+                <img src={brandLogo} alt={`${siteBrand.name} logo`} className="lesson-photo lesson-detail-photo camp-logo-photo" />
+              </div>
+
+              <div className="lesson-hero-note">
+                <span className="mini-tag mini-tag-dark">{campOverviewPage.asideTag}</span>
+                <h2>{campOverviewPage.asideTitle}</h2>
+                <p>{campOverviewPage.asideText}</p>
+              </div>
+            </div>
+
+            <div className="fact-list lesson-fact-grid">
+              {campOverviewPage.asideFacts.map((item) => (
+                <AppLink
+                  key={item.label}
+                  to="/contact"
+                  navigate={navigate}
+                  currentPath={currentPath}
+                  className="fact-list-card-link"
+                  aria-label={`Contact Us about ${item.label.toLowerCase()}`}
+                >
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </AppLink>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {showProgramsOverview ? <ProgramsOverview currentPath={currentPath} navigate={navigate} /> : null}
+
+      {bookingSection}
 
       <section className="page-section" id="camp-location">
         <div className="shell">
@@ -2879,8 +3878,12 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
   const isSuccess = campCheckoutState.status === "success" && campCheckoutState.details;
   const isLoading = campCheckoutState.status === "loading";
   const isError = campCheckoutState.status === "error";
+  // Payments for a program that is not open are received but not confirmed.
+  const needsReview = Boolean(isSuccess && campCheckoutState.details.requiresReview);
 
-  const title = isSuccess
+  const title = needsReview
+    ? "Thank you. We received your payment."
+    : isSuccess
     ? "Thank you. Your camp spot is confirmed."
     : isLoading
       ? "Confirming your camp payment..."
@@ -2888,7 +3891,9 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
         ? "We could not confirm the camp payment yet."
         : "Camp confirmation";
 
-  const intro = isSuccess
+  const intro = needsReview
+    ? "Our team will contact you about your registration shortly."
+    : isSuccess
     ? `A Stripe receipt was sent to ${campCheckoutState.details.customerEmail || "your email"}. We will follow up with the next camp details shortly.`
     : isLoading
       ? "Please wait a moment while we verify the Stripe checkout session."
@@ -2901,14 +3906,14 @@ function CampConfirmationPage({ currentPath, navigate, campCheckoutState }) {
       <section className="page-hero lesson-page-hero">
         <div className="shell">
           <article className="surface camp-confirmation-card">
-            <span className="section-tag">{isSuccess ? "Camp confirmed" : "Camp checkout"}</span>
+            <span className="section-tag">{isSuccess && !needsReview ? "Camp confirmed" : "Camp checkout"}</span>
             <h1>{title}</h1>
             <p className="page-intro">{intro}</p>
 
             {campCheckoutState.status !== "idle" ? (
               <article className={`status-banner status-banner-${campCheckoutState.status}`}>
                 <strong>
-                  {isSuccess && "Payment confirmed"}
+                  {isSuccess && (needsReview ? "Payment received" : "Payment confirmed")}
                   {isLoading && "Checking payment"}
                   {isError && "Confirmation needs attention"}
                 </strong>
@@ -3546,7 +4551,7 @@ function RegisterPage({
                       aria-invalid={registrationErrors.serviceLevel ? "true" : "false"}
                     >
                       <option value="">Select service level</option>
-                      {availableServiceLevels.map((item) => (
+                      {getAvailableServiceLevels().map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.label} - {formatCurrency(item.amount)}
                         </option>
@@ -3779,7 +4784,7 @@ function RegisterPage({
               <article className="surface">
                 <span className="mini-tag">Service levels</span>
                 <div className="service-stack">
-                  {availableServiceLevels.map((item) => (
+                  {getAvailableServiceLevels().map((item) => (
                     <article className="service-card" key={item.id}>
                       <div>
                         <h3>{item.label}</h3>
@@ -3846,6 +4851,9 @@ function ChessTruckApp() {
     () => window.matchMedia(COMPACT_VIEWPORT_QUERY).matches
   );
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isNavCompact, setIsNavCompact] = useState(() => window.matchMedia(NAV_COMPACT_QUERY).matches);
+  // Bumped when the server's registration availability arrives so the page re-renders.
+  const [, setAvailabilityVersion] = useState(0);
   const [activeRegistrationStep, setActiveRegistrationStep] = useState(0);
   const mainRef = useRef(null);
   const currentPath = route.pathname;
@@ -3859,10 +4867,6 @@ function ChessTruckApp() {
     const media = window.matchMedia(COMPACT_VIEWPORT_QUERY);
     const handleViewportChange = (event) => {
       setIsCompactViewport(event.matches);
-
-      if (!event.matches) {
-        setIsMobileNavOpen(false);
-      }
     };
 
     if (typeof media.addEventListener === "function") {
@@ -3874,17 +4878,73 @@ function ChessTruckApp() {
     return () => media.removeListener(handleViewportChange);
   }, []);
 
+  // Registration opens only when the server confirms a program passed its launch
+  // check. Nothing is requested while no program is marked "open".
   useEffect(() => {
-    if (!isCompactViewport) {
+    if (!hasOpenConfiguredStatus()) {
       return undefined;
     }
 
-    document.body.style.overflow = isMobileNavOpen ? "hidden" : "";
+    let cancelled = false;
+
+    fetch("/api/program-availability", { headers: { Accept: "application/json" }, cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload) => {
+        if (cancelled) {
+          return;
+        }
+
+        // Malformed or missing data parses to "everything closed".
+        const { programs: availablePrograms, campSessions } = parseAvailabilityResponse(
+          payload,
+          programs.map((item) => item.id)
+        );
+        setApprovedCampSessions(campSessions);
+        setRegistrationAvailability(availablePrograms);
+        setAvailabilityVersion((version) => version + 1);
+      })
+      .catch(() => {
+        // Stay closed if the check cannot be reached.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia(NAV_COMPACT_QUERY);
+    const handleNavBreakpointChange = (event) => {
+      setIsNavCompact(event.matches);
+
+      if (!event.matches) {
+        setIsMobileNavOpen(false);
+      }
+    };
+
+    media.addEventListener("change", handleNavBreakpointChange);
+    return () => media.removeEventListener("change", handleNavBreakpointChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isNavCompact || !isMobileNavOpen) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setIsMobileNavOpen(false);
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isCompactViewport, isMobileNavOpen]);
+  }, [isNavCompact, isMobileNavOpen]);
 
   const syncStateForRoute = (nextRoute) => {
     setIsMobileNavOpen(false);
@@ -4401,49 +5461,23 @@ function ChessTruckApp() {
   const pageContent = (() => {
     switch (currentPath) {
         case "/":
-          return (
-            <CampsOverviewPage
-              showProgramsOverview
-              currentPath={currentPath}
-              navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
-            />
-          );
+          return <AcademyHomePage currentPath={currentPath} navigate={navigate} />;
         case "/camps":
-          return (
-            <CampsOverviewPage
-              currentPath={currentPath}
-              navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
-            />
-          );
         case "/camps/book":
           return (
-            <CampsOverviewPage
+            <CampsPage
               currentPath={currentPath}
               navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
+              bookingProps={{
+                campCheckoutState,
+                campBookingState,
+                campBookingErrors,
+                updateCampBookingField,
+                handleCampBookingSubmit,
+                selectedCampOptionId,
+                isCampBookingFormVisible,
+                openCampBooking,
+              }}
             />
           );
         case "/camps/confirmed":
@@ -4457,34 +5491,25 @@ function ChessTruckApp() {
         case "/camps/training":
         case "/camps/prep":
         case "/camps/online":
-          return (
-            <CampsOverviewPage
-              currentPath={currentPath}
-              navigate={navigate}
-              campCheckoutState={campCheckoutState}
-              campBookingState={campBookingState}
-              campBookingErrors={campBookingErrors}
-              updateCampBookingField={updateCampBookingField}
-              handleCampBookingSubmit={handleCampBookingSubmit}
-              selectedCampOptionId={selectedCampOptionId}
-              isCampBookingFormVisible={isCampBookingFormVisible}
-              openCampBooking={openCampBooking}
-            />
-          );
+          return <CampsPage currentPath={currentPath} navigate={navigate} bookingProps={{}} />;
         case "/about":
           return <AboutPage currentPath={currentPath} navigate={navigate} />;
       case "/tournaments":
-        return <ProgramPage programId="tournaments" currentPath={currentPath} navigate={navigate} />;
+        return <TournamentsPage currentPath={currentPath} navigate={navigate} />;
       case "/private-lessons":
-        return <PrivateLessonsPage currentPath={currentPath} navigate={navigate} />;
+        return <LessonsPage currentPath={currentPath} navigate={navigate} />;
       case "/after-school":
-        return <ProgramPage programId="afterSchool" currentPath={currentPath} navigate={navigate} />;
+        return <AfterSchoolPage currentPath={currentPath} navigate={navigate} />;
       case "/dojo":
-        return <ProgramPage programId="dojo" currentPath={currentPath} navigate={navigate} />;
+        return <DojoPage currentPath={currentPath} navigate={navigate} />;
       case "/faq":
         return <FaqPage currentPath={currentPath} navigate={navigate} />;
       case "/terms":
         return <LegalPage {...termsPage} currentPath={currentPath} navigate={navigate} />;
+      case "/interest/confirm":
+        return <InterestActionPage action="confirm" currentPath={currentPath} navigate={navigate} />;
+      case "/interest/unsubscribe":
+        return <InterestActionPage action="unsubscribe" currentPath={currentPath} navigate={navigate} />;
       case "/privacy":
         return <LegalPage {...privacyPage} currentPath={currentPath} navigate={navigate} />;
       case "/contact":
@@ -4502,7 +5527,7 @@ function ChessTruckApp() {
       case "/register":
         // Tournament registration stays behind the program status, even via direct URL.
         if (!isProgramOpen("tournaments")) {
-          return <ProgramPage programId="tournaments" currentPath={currentPath} navigate={navigate} />;
+          return <TournamentsPage currentPath={currentPath} navigate={navigate} />;
         }
 
         return (
@@ -4536,67 +5561,63 @@ function ChessTruckApp() {
       <div className="page-aura page-aura-left" />
       <div className="page-aura page-aura-right" />
 
-      <header className="site-header">
-        <div className={`shell header-row${isMobileNavOpen ? " nav-open" : ""}`}>
+      <header className="ac-header">
+        <div className="ac-shell ac-header-row">
           <AppLink
             to="/"
             navigate={navigate}
             currentPath={currentPath}
-            className="brand-link"
+            className="ac-brand"
             aria-label={`${siteBrand.name} home`}
             onNavigate={() => setIsMobileNavOpen(false)}
           >
-            <span className="brand-mark">
-              <img src={brandLogo} alt={`${siteBrand.name} logo`} className="brand-mark-image" />
-            </span>
+            <BrandMark />
           </AppLink>
 
           <nav
             id="primary-navigation"
-            className={`site-nav${isMobileNavOpen ? " is-open" : ""}`}
+            className={`ac-nav${isMobileNavOpen ? " is-open" : ""}`}
             aria-label="Primary navigation"
-            >
-            {navigationItems.map((item) => {
-              if (item.label === "Camps") {
-                return (
-                  <CampsMenu
-                    key={`${item.label}-${currentPath}-${isCompactViewport ? "mobile" : "desktop"}`}
-                    currentPath={currentPath}
+          >
+            <ul className="ac-nav-list">
+              {navigationItems.map((item) => (
+                <li key={item.path} className={item.path === "/" ? "ac-nav-home" : undefined}>
+                  <AppLink
+                    to={item.path}
                     navigate={navigate}
-                    isCompactViewport={isCompactViewport}
-                    closeNavigation={() => setIsMobileNavOpen(false)}
-                  />
-                );
-              }
-
-              return (
-                <AppLink
-                  key={item.path}
-                  to={item.path}
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  className="nav-link"
-                  onNavigate={() => setIsMobileNavOpen(false)}
-                >
-                  {item.label}
-                </AppLink>
-              );
-            })}
-          </nav>
-
-          <div className="header-actions">
+                    currentPath={currentPath}
+                    className="ac-nav-link"
+                    onNavigate={() => setIsMobileNavOpen(false)}
+                  >
+                    {item.label}
+                  </AppLink>
+                </li>
+              ))}
+            </ul>
             <AppLink
               to="/contact"
               navigate={navigate}
               currentPath={currentPath}
-              className="btn btn-primary header-button"
+              className="ac-btn ac-btn-primary ac-nav-contact"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-                {isCompactViewport ? "Contact" : "Contact Us"}
+              Contact Us
+            </AppLink>
+          </nav>
+
+          <div className="ac-header-actions">
+            <AppLink
+              to="/contact"
+              navigate={navigate}
+              currentPath={currentPath}
+              className="ac-btn ac-btn-primary ac-header-cta"
+              onNavigate={() => setIsMobileNavOpen(false)}
+            >
+              Contact Us
             </AppLink>
             <button
               type="button"
-              className={`nav-toggle${isMobileNavOpen ? " is-open" : ""}`}
+              className={`ac-nav-toggle${isMobileNavOpen ? " is-open" : ""}`}
               aria-label={isMobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileNavOpen}
               aria-controls="primary-navigation"

@@ -1,10 +1,14 @@
 export const siteBrand = {
-  name: "CHESS AND TRUCK",
+  name: "Chess & Truck",
   short: "CT",
   city: "New York City",
-  tagline: "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128",
+  tagline: "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training in NYC",
   footerNote:
-    "Our summer chess program runs June 15 through June 19, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "We are preparing the first Chess & Truck summer chess camp in New York City. Dates and location will be announced when registration opens. Planned camp days include chess instruction, structured play, and outdoor time.",
+  // Brand slogan and summary for the shared header and footer.
+  slogan: "Big Moves Start Small.",
+  brandNote:
+    "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City families.",
 };
 
 export const navigationItems = [
@@ -18,6 +22,498 @@ export const navigationItems = [
   { label: "FAQ", path: "/faq" },
 ];
 
+export const academyHomePage = {
+  hero: {
+    eyebrow: "Chess programs for NYC kids",
+    title: "Your Next Move Starts Here.",
+    intro:
+      "Chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for New York City kids. Structured lessons, real games, and an approach kids enjoy.",
+    facts: ["Beginners welcome", "Direct parent support", "New York City"],
+  },
+  programsSection: {
+    eyebrow: "Programs",
+    title: "Five ways to play, learn, and compete",
+    intro: "Explore what each program offers and where registration stands.",
+  },
+  whySection: {
+    eyebrow: "Why Chess & Truck",
+    title: "Serious chess, taught with clarity and fun",
+    intro:
+      "We keep chess structured enough to build real skills and fun enough that kids want to come back.",
+    pillars: [
+      {
+        title: "Clear program details",
+        text: "We share schedules, locations, and what each program includes before families register.",
+      },
+      {
+        title: "Real games, real progress",
+        text: "Lessons combine real games with guided analysis, so students understand what to repeat and what to change.",
+      },
+      {
+        title: "Direct communication",
+        text: "Parents can reach us by phone, text, or email for a clear answer and next step.",
+      },
+    ],
+  },
+  coachSection: {
+    eyebrow: "Coach spotlight",
+    title: "Meet Andrea",
+    role: "Chess & Truck coach",
+    summary:
+      "Andrea is based in New York and has taught chess through camps, private lessons, after-school programs, and events in the U.S. and Canada.",
+    facts: [
+      { value: "24 years", label: "teaching chess" },
+      { value: "U.S. & Canada", label: "teaching experience" },
+    ],
+  },
+  howSection: {
+    eyebrow: "How it works",
+    title: "Getting started is simple",
+    steps: [
+      {
+        title: "Choose a program",
+        text: "Browse camps, tournaments, private lessons, after-school programs, and the Chess Dojo.",
+      },
+      {
+        title: "Tell us about your student",
+        text: "Share your child's age, experience, and goals, and we will suggest a good starting point.",
+      },
+      {
+        title: "Register when it opens",
+        text: "Schedules, pricing, and registration details will be posted on each program page when it opens.",
+      },
+    ],
+  },
+  faqSection: {
+    eyebrow: "Questions",
+    title: "Frequently asked questions",
+    items: [
+      {
+        question: "Is Chess & Truck suitable for beginners?",
+        answer:
+          "Yes. Beginners are welcome. Tell us your child's age and experience, and we will suggest the best place to start.",
+      },
+      {
+        question: "Who leads instruction?",
+        answer:
+          "Andrea has 24 years of chess teaching experience. We will share coaching details for each program when its registration opens.",
+      },
+      {
+        question: "When does registration open?",
+        answer:
+          "Each program above shows its current status. While a program shows Registration Opening Soon, we are not taking registrations or payments for it. Registration details will be posted on each program page.",
+      },
+      {
+        question: "How do payments work?",
+        answer:
+          "We will share pricing and payment details for each program when its registration opens. Payments made on this website are processed securely by Stripe.",
+      },
+    ],
+  },
+  contactCard: {
+    title: "Questions? Talk to us.",
+    text: "Call, text, or email, and we will point you to the right program.",
+  },
+};
+
+// Redesigned inner pages (camps, tournaments, private lessons).
+// Planned details are labelled as planned. The camp schedule is the proposed plan for the first camp.
+export const campsPageContent = {
+  hero: {
+    eyebrow: "Chess Camps",
+    title: "Our first summer chess camp.",
+    intro:
+      "We are preparing the first Chess & Truck summer camp: full days of chess lessons, games, and outdoor time. Dates, location, and pricing will be posted here when registration opens.",
+  },
+  glance: [
+    { label: "Location", value: "To be announced" },
+    { label: "Planned camp day", value: "9:00 AM - 3:00 PM" },
+    { label: "Proposed ages", value: "4 - 17" },
+    { label: "Dates", value: "To be announced" },
+  ],
+  daySection: {
+    eyebrow: "Planned schedule",
+    title: "Camp Daily Schedule",
+    intro: "This is the planned schedule for our first camp and is subject to change.",
+  },
+  learnSection: {
+    eyebrow: "What students will work on",
+    title: "Real chess skills, one day at a time",
+  },
+  faqSection: {
+    eyebrow: "Camp questions",
+    title: "What parents ask about camp",
+  },
+  faqs: [
+    {
+      question: "Is camp suitable for beginners?",
+      answer:
+        "Yes. Beginners will be welcome. The planned camp day starts with warm-up games so coaches can group students by level.",
+    },
+    {
+      question: "Who leads instruction?",
+      answer:
+        "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
+    },
+    {
+      question: "What should students bring?",
+      answer:
+        "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
+    },
+    {
+      question: "Are campers supervised?",
+      answer: "Yes. Students will be supervised throughout the camp day.",
+    },
+    {
+      question: "Are early drop-off and extended day options available?",
+      answer:
+        "Early drop-off and extended day options have not been decided yet. Any options will be listed when registration opens.",
+    },
+  ],
+  status: {
+    title: "Camp registration is opening soon",
+    text: "Camp registration and payments are not open yet. Dates, location, pricing, and enrollment options will be posted on this page when registration opens.",
+  },
+};
+
+export const tournamentsPageContent = {
+  hero: {
+    eyebrow: "Chess Tournaments",
+    title: "Scholastic chess tournaments for NYC players.",
+    intro:
+      "We are preparing Open and Beginner tournaments for school-age players. Dates and the venue have not been announced, and the format below may change before registration opens.",
+  },
+  plannedFormat: [
+    { label: "Day", value: "Saturday mornings" },
+    { label: "Start", value: "9:00 AM, finishing around lunch" },
+    { label: "Sections", value: "Open (rated) and Beginner" },
+    { label: "Venue", value: "To be announced" },
+  ],
+  sectionsSection: {
+    eyebrow: "Planned sections",
+    title: "Two sections, so every player starts in the right place",
+    intro: "Section rules may be adjusted before registration opens.",
+  },
+  morningSection: {
+    eyebrow: "Planned tournament morning",
+    title: "How a tournament Saturday is planned to run",
+  },
+  morning: [
+    {
+      time: "8:30 AM",
+      title: "Check-in",
+      text: "Families arrive, settle in, and get players ready before the first round.",
+    },
+    {
+      time: "9:00 AM",
+      title: "Rounds begin",
+      text: "Play starts on time, with Open and Beginner sections separated.",
+    },
+    {
+      time: "Around lunch",
+      title: "Wrap-up",
+      text: "The format is designed to finish by lunch, so the day stays manageable for families.",
+    },
+  ],
+  registrationSection: {
+    eyebrow: "Registration",
+    title: "How registration will work",
+    intro: "Registration is not open yet. When it opens, it will follow these steps on this website.",
+  },
+  registrationSteps: [
+    {
+      title: "Choose a section",
+      text: "Open section players need an active US Chess membership and ID. Beginner section players do not.",
+    },
+    {
+      title: "Complete the form",
+      text: "Enter player, parent or guardian, and emergency contact details.",
+    },
+    {
+      title: "Pay online",
+      text: "Pay the entry fee through secure Stripe checkout and receive a confirmation.",
+    },
+  ],
+  faqSection: {
+    eyebrow: "Tournament questions",
+    title: "Before the first tournament",
+  },
+  faqs: [
+    {
+      question: "When is the first tournament?",
+      answer: "No tournament dates have been announced yet. Dates will be posted on this page when registration opens.",
+    },
+    {
+      question: "Does my child need a US Chess membership?",
+      answer:
+        "Only for the Open section, which is planned as a rated section. Beginner section players do not need a membership.",
+    },
+    {
+      question: "Where will tournaments be held?",
+      answer: "The venue has not been announced yet. It will be listed here with the tournament dates.",
+    },
+  ],
+  status: {
+    title: "Tournament registration is opening soon",
+    text: "Tournament registration and payments are not open yet. Dates, the venue, and entry details will be posted on this page when registration opens.",
+  },
+};
+
+export const lessonsPageContent = {
+  hero: {
+    eyebrow: "Private Chess Lessons",
+    title: "Coaching built around your child.",
+    intro:
+      "Private lessons focus on one student: real games, guided analysis, and practice that connects from one session to the next.",
+  },
+  includesTitle: "Every lesson is built around",
+  includes: [
+    { title: "A real game", text: "The coach sees decisions in real time, not only puzzle answers." },
+    { title: "Analysis that teaches", text: "Moves are reviewed so the student knows what to repeat and what to change." },
+    { title: "A clear next focus", text: "Key notes or homework direction can follow the session when useful." },
+  ],
+  sessionSection: {
+    eyebrow: "How a lesson works",
+    title: "Play, review, practice",
+    intro: "A typical session moves through three parts. The balance depends on the student.",
+  },
+  session: [
+    {
+      title: "Play",
+      text: "A practice game, often at 10+10 or 15+10 once the student is ready for clock play.",
+    },
+    {
+      title: "Review",
+      text: "Coach and student go through the key moments together and talk through better options.",
+    },
+    {
+      title: "Practice",
+      text: "Targeted training work on the ideas that came up, from tactics to endgames.",
+    },
+  ],
+  formatsSection: {
+    eyebrow: "Planned formats",
+    title: "Choose the setting that fits",
+    intro: "Formats and scheduling will be confirmed when lesson registration opens.",
+  },
+  fitSection: {
+    eyebrow: "Who lessons help",
+    title: "A good fit for",
+  },
+  fit: [
+    {
+      title: "Beginners who need real fundamentals",
+      text: "Students still building board vision, notation, good habits, and simple tactical awareness.",
+    },
+    {
+      title: "Developing players who need game review",
+      text: "Students already playing serious games who need clearer analysis, calculation, and decision-making.",
+    },
+    {
+      title: "Families who want consistency",
+      text: "A steady lesson rhythm that builds over time instead of changing direction every week.",
+    },
+  ],
+  stepsSection: {
+    eyebrow: "Getting started",
+    title: "How to start",
+  },
+  steps: [
+    {
+      title: "Tell us about your student",
+      text: "Share age, level, and whether you prefer private, group, online, or in-person lessons.",
+    },
+    {
+      title: "We suggest a fit",
+      text: "We recommend the format that suits your student best.",
+    },
+    {
+      title: "Book when lessons open",
+      text: "Lesson options and pricing will be posted on this page when registration opens.",
+    },
+  ],
+  status: {
+    title: "Lesson registration is opening soon",
+    text: "Lesson booking and payments are not open yet. Lesson options and pricing will be posted on this page when registration opens.",
+  },
+};
+
+export const afterSchoolPageContent = {
+  hero: {
+    eyebrow: "After-School Programs",
+    title: "Chess after the school bell.",
+    intro:
+      "We are planning after-school chess for NYC students, designed to work for families and for schools. Schedules, locations, and pricing have not been set yet.",
+  },
+  glance: [
+    { label: "For", value: "School-age students" },
+    { label: "Beginners", value: "Welcome" },
+    { label: "Schedule", value: "To be announced" },
+    { label: "Locations", value: "To be announced" },
+  ],
+  audienceSection: {
+    eyebrow: "Who it's for",
+    title: "Planned for families and schools",
+  },
+  audiences: [
+    {
+      id: "parents",
+      tag: "For parents",
+      title: "A structured way to keep playing",
+      points: [
+        "Regular chess practice in a group setting after school",
+        "Beginners welcome, with room to grow for stronger players",
+        "Schedule, location, and pricing will be posted here when registration opens",
+      ],
+      cta: "Ask a question",
+    },
+    {
+      id: "schools",
+      tag: "For schools and administrators",
+      title: "Interested in chess at your school?",
+      points: [
+        "We are open to conversations with schools about hosting after-school chess",
+        "Tell us about your students, available space, and preferred days",
+        "Format and terms would be agreed with each school before anything is scheduled",
+      ],
+      cta: "Start a conversation",
+    },
+  ],
+  benefitsSection: {
+    eyebrow: "Why chess after school",
+    title: "What structured chess can help children practice",
+    intro: "Every child is different. These are skills chess gives children a regular chance to practice.",
+  },
+  benefits: [
+    { title: "Focus and patience", text: "Thinking a move through before playing it." },
+    { title: "Planning", text: "Setting a goal on the board and working toward it." },
+    { title: "Learning from mistakes", text: "Reviewing games to see what to change next time." },
+    { title: "Good sportsmanship", text: "Winning and losing graciously with friends." },
+  ],
+  sessionSection: {
+    eyebrow: "A planned session",
+    title: "What a session could look like",
+    intro: "A proposed outline. The final format will be set with each program.",
+  },
+  session: [
+    { time: "Start", title: "Short lesson", text: "One idea taught clearly, with examples on the board." },
+    { time: "Middle", title: "Supervised games", text: "Students play and try the idea in real games." },
+    { time: "End", title: "Review and wrap-up", text: "A quick look at key moments before pick-up." },
+  ],
+  faqSection: {
+    eyebrow: "After-school questions",
+    title: "Before the program opens",
+  },
+  faqs: [
+    {
+      question: "Is this available at my child's school?",
+      answer:
+        "Not yet. We have not announced any school programs. If your school is interested in hosting after-school chess, please contact us.",
+    },
+    {
+      question: "When and where will sessions take place?",
+      answer: "Schedules and locations have not been set. They will be posted on this page when registration opens.",
+    },
+    {
+      question: "Does my child need chess experience?",
+      answer: "No. Beginners will be welcome.",
+    },
+  ],
+  status: {
+    title: "After-school registration is opening soon",
+    text: "After-school registration and payments are not open yet. Schedules, locations, and pricing will be posted on this page when registration opens.",
+  },
+};
+
+export const dojoPageContent = {
+  hero: {
+    eyebrow: "Chess Dojo",
+    title: "Training for competitive players.",
+    intro:
+      "The Chess Dojo is our planned training program for players who want to prepare seriously for tournaments, built around game analysis and practical training.",
+  },
+  glance: [
+    { label: "Focus", value: "Tournament preparation" },
+    { label: "Method", value: "Game analysis and practical training" },
+    { label: "For", value: "Players who compete or plan to" },
+    { label: "Schedule", value: "To be announced" },
+  ],
+  compareSection: {
+    eyebrow: "How the Dojo fits",
+    title: "Between lessons and tournaments",
+    intro: "Each program has a different job. The Dojo connects practice to competition.",
+  },
+  compare: [
+    {
+      id: "lessons",
+      name: "Private Lessons",
+      text: "One-on-one coaching built around a single student's needs and pace.",
+      path: "/private-lessons",
+      link: "See Private Lessons",
+    },
+    {
+      id: "dojo",
+      name: "Chess Dojo",
+      text: "Training for competitive play: preparing before events and learning from games after them.",
+    },
+    {
+      id: "tournaments",
+      name: "Tournaments",
+      text: "Rated and beginner-friendly competition where players put their preparation to the test.",
+      path: "/tournaments",
+      link: "See Tournaments",
+    },
+  ],
+  focusSection: {
+    eyebrow: "Training focus",
+    title: "What Dojo training works on",
+    intro:
+      "Progress depends on each player's practice. The Dojo focuses on habits and understanding, not promised ratings or results.",
+  },
+  focus: [
+    {
+      title: "Tournament preparation",
+      text: "Opening ideas, time management, and a calm routine before each round.",
+    },
+    {
+      title: "Game analysis",
+      text: "Going through players' own games to find turning points and recurring mistakes.",
+    },
+    {
+      title: "Practical training",
+      text: "Calculation, endgames, and training games with a clock.",
+    },
+    {
+      title: "Competition habits",
+      text: "Notation, clock use, and handling the ups and downs of a tournament day.",
+    },
+  ],
+  faqSection: {
+    eyebrow: "Dojo questions",
+    title: "Before the Dojo opens",
+  },
+  faqs: [
+    {
+      question: "How is the Dojo different from private lessons?",
+      answer:
+        "Private lessons follow one student's needs. The Dojo is planned around competition: preparing for events and analyzing tournament games.",
+    },
+    {
+      question: "Do players need to enter Chess & Truck tournaments?",
+      answer:
+        "The Dojo is planned to work alongside our tournaments. How it connects to tournament entry will be confirmed when registration opens.",
+    },
+    {
+      question: "Who will coach the Dojo?",
+      answer: "Coaching arrangements have not been confirmed yet. They will be shared on this page when registration opens.",
+    },
+  ],
+  status: {
+    title: "Dojo registration is opening soon",
+    text: "Dojo registration and payments are not open yet. Schedule, format, and pricing will be posted on this page when registration opens.",
+  },
+};
+
 // Program names, summaries, and page content. Registration status lives in
 // src/lib/programs.js so it can be shared with the checkout API.
 export const programOverview = {
@@ -30,13 +526,15 @@ export const programOverview = {
 export const programs = [
   {
     id: "camps",
+    iconKey: "camps",
     name: "Chess Camps",
     path: "/camps",
     summary:
-      "Weekday summer camp on the Upper East Side with expert instruction, structured play, and a fun camp experience.",
+      "Our first summer camp is in preparation, with planned days of chess lessons, games, and outdoor time.",
   },
   {
     id: "tournaments",
+    iconKey: "tournaments",
     name: "Chess Tournaments",
     path: "/tournaments",
     registrationPath: "/register",
@@ -45,6 +543,7 @@ export const programs = [
   },
   {
     id: "lessons",
+    iconKey: "lessons",
     name: "Private Chess Lessons",
     path: "/private-lessons",
     summary:
@@ -52,6 +551,7 @@ export const programs = [
   },
   {
     id: "afterSchool",
+    iconKey: "afterSchool",
     name: "After-School Programs",
     path: "/after-school",
     summary:
@@ -59,6 +559,7 @@ export const programs = [
   },
   {
     id: "dojo",
+    iconKey: "dojo",
     name: "Chess Dojo",
     path: "/dojo",
     summary:
@@ -73,7 +574,7 @@ export const programPages = {
     intro:
       "We are preparing scholastic tournaments for school-age players. No tournament dates have been announced yet. The details below describe the planned format and may change before registration opens.",
     heroFacts: [
-      { label: "Planned location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+      { label: "Planned location", value: "Venue to be announced" },
       { label: "Planned sections", value: "Open + Beginner" },
       { label: "Planned format", value: "Saturday mornings, 9:00 AM to lunch" },
     ],
@@ -150,7 +651,7 @@ export const programPages = {
       },
       {
         title: "Families can get updates",
-        text: "Contact us and we will let you know when program details and registration are announced.",
+        text: "Program details and registration will be posted on this page when they are ready.",
       },
     ],
   },
@@ -210,149 +711,157 @@ export const campMenuItems = [
     label: "Camp Overview",
     path: "/camps",
     description: "See dates, location, daily format, and how summer camp works before you register.",
-    signal: "June 15 - 19",
+    signal: "Opening soon",
     imageKey: "overview",
   },
 ];
 
 export const campMenuFeature = {
   eyebrow: "Summer camp",
-  title: "June 15 - June 19 | Weekdays",
+  title: "Summer camp | Weekdays",
   text:
-    "Our summer chess program runs June 15 through June 19, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "We are preparing the first Chess & Truck summer chess camp in New York City. Dates and location will be announced when registration opens. Planned camp days include chess instruction, structured play, and outdoor time.",
   ctaLabel: "View Full Camp Details",
   ctaPath: "/camps",
 };
 
 export const routeMeta = {
   "/": {
-    title: "CHESS AND TRUCK | NYC Chess Camps",
+    title: "Chess & Truck | Chess Camps, Tournaments & Lessons in NYC",
     description:
-    "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128 from June 15 to June 19, with weekday half-day sessions and practical details for families.",
+      "Chess & Truck offers chess camps, tournaments, private lessons, after-school programs, and Chess Dojo training for kids in New York City.",
   },
   "/about": {
-    title: "About | CHESS AND TRUCK",
+    title: "About | Chess & Truck",
     description:
-      "Learn why CHESS AND TRUCK is built for NYC families and how summer camp and direct parent communication are being structured.",
+      "Learn why Chess & Truck is built for NYC families and how summer camp and direct parent communication are being structured.",
   },
   "/camps": {
-    title: "Camps | CHESS AND TRUCK",
+    title: "Chess Camps | Chess & Truck",
     description:
-    "See summer camp dates, the 62 E 92nd Street, New York, NY 10128 location, daily format, and what students will do at CHESS AND TRUCK camps.",
+      "Chess & Truck is preparing its first summer chess camp in New York City: the planned daily schedule, what students will work on, and registration status.",
   },
   "/camps/book": {
-    title: "Camp Booking | CHESS AND TRUCK",
+    title: "Camp Booking | Chess & Truck",
     description:
-    "Choose a summer camp option, add family details, and continue to secure checkout for CHESS AND TRUCK camps at 62 E 92nd Street, New York, NY 10128.",
+    "Chess & Truck summer camp booking. Camp registration is opening soon.",
   },
   "/camps/confirmed": {
-    title: "Camp Confirmation | CHESS AND TRUCK",
+    title: "Camp Confirmation | Chess & Truck",
     description:
-      "Review your CHESS AND TRUCK camp payment confirmation, receipt details, and the next step after Stripe checkout.",
+      "Review your Chess & Truck camp payment confirmation, receipt details, and the next step after Stripe checkout.",
   },
   "/camps/training": {
-    title: "Training Camps | CHESS AND TRUCK",
+    title: "Training Camps | Chess & Truck",
     description:
       "Daily training camp format for students who want structured chess work, strong rhythm, and coach-led practice.",
   },
   "/camps/prep": {
-    title: "Advanced Training Camps | CHESS AND TRUCK",
+    title: "Advanced Training Camps | Chess & Truck",
     description:
       "Advanced training camp blocks for students who want sharper game review, stronger calculation, and more focused summer work.",
   },
   "/camps/online": {
-    title: "Online Camps | CHESS AND TRUCK",
+    title: "Online Camps | Chess & Truck",
     description:
       "Online camp format for students who want a structured remote chess week with clear coaching and daily direction.",
   },
   "/events": {
-    title: "Camps | CHESS AND TRUCK",
+    title: "Camps | Chess & Truck",
     description:
-    "NYC summer chess camps at 62 E 92nd Street, New York, NY 10128 with dates, format, daily structure, and clear next steps for families.",
+    "Chess & Truck tournaments in New York City. Registration is opening soon.",
   },
   "/events/chess-and-truck-tournament": {
-    title: "Summer Camp | CHESS AND TRUCK",
+    title: "Summer Camp | Chess & Truck",
     description:
-    "See the summer camp format, 62 E 92nd Street, New York, NY 10128 location, daily structure, and camp details for CHESS AND TRUCK.",
+    "Chess & Truck tournaments in New York City. Registration is opening soon.",
   },
   "/private-lessons": {
-    title: "Private Chess Lessons | CHESS AND TRUCK",
+    title: "Private Chess Lessons | Chess & Truck",
     description:
       "Private, small-group, and online chess lessons in NYC with game review and structured coaching. Registration is opening soon.",
   },
   "/lessons/online": {
-    title: "Online Lessons | CHESS AND TRUCK",
+    title: "Online Lessons | Chess & Truck",
     description:
       "Online chess lessons for students who want focused coaching, cleaner structure, and a clear private lesson path.",
   },
   "/lessons/in-person": {
-    title: "In Person Lessons | CHESS AND TRUCK",
+    title: "In Person Lessons | Chess & Truck",
     description:
       "In-person chess lessons in New York City for students who benefit from direct board work and face-to-face coaching.",
   },
   "/lessons/group": {
-    title: "Group Lessons | CHESS AND TRUCK",
+    title: "Group Lessons | Chess & Truck",
     description:
       "Small-group chess lessons for students who learn well through shared pace, focused instruction, and strong level matching.",
   },
   "/lessons/manage": {
-    title: "Manage Lessons | CHESS AND TRUCK",
+    title: "Manage Lessons | Chess & Truck",
     description:
       "Lesson support for current and incoming families who need scheduling help, coaching guidance, or next-step coordination.",
   },
   "/faq": {
-    title: "FAQ | CHESS AND TRUCK",
+    title: "FAQ | Chess & Truck",
     description:
       "Get answers about summer camp, student fit, what to bring, and how to get the next step.",
   },
   "/contact": {
-    title: "Contact | CHESS AND TRUCK",
+    title: "Contact | Chess & Truck",
     description:
-      "Reach the CHESS AND TRUCK team by phone, email, or the contact form for camp questions.",
+      "Reach the Chess & Truck team by phone, email, or the contact form for camp questions.",
   },
   "/register": {
-    title: "Registration | CHESS AND TRUCK",
+    title: "Registration | Chess & Truck",
     description:
-      "Complete the CHESS AND TRUCK registration form and continue to secure checkout.",
+      "Complete the Chess & Truck registration form and continue to secure checkout.",
   },
   "/tournaments": {
-    title: "Chess Tournaments | CHESS AND TRUCK",
+    title: "Chess Tournaments | Chess & Truck",
     description:
       "NYC scholastic chess tournaments with Open and Beginner sections. Registration is opening soon.",
   },
   "/after-school": {
-    title: "After-School Programs | CHESS AND TRUCK",
+    title: "After-School Programs | Chess & Truck",
     description:
       "After-school chess programs for NYC students are in preparation. Registration is opening soon.",
   },
   "/dojo": {
-    title: "Chess Dojo | CHESS AND TRUCK",
+    title: "Chess Dojo | Chess & Truck",
     description:
       "The Master Training Dojo adds coach-guided review around tournament day. Registration is opening soon.",
   },
+  "/interest/confirm": {
+    title: "Confirm your email | Chess & Truck",
+    description: "Confirm your Chess & Truck program interest email.",
+  },
+  "/interest/unsubscribe": {
+    title: "Unsubscribe | Chess & Truck",
+    description: "Stop Chess & Truck program interest emails.",
+  },
   "/terms": {
-    title: "Terms of Service | CHESS AND TRUCK",
+    title: "Terms of Service | Chess & Truck",
     description:
-      "Review CHESS AND TRUCK terms covering camp inquiries, payments, cancellations, and program participation.",
+      "Review Chess & Truck terms covering camp inquiries, payments, cancellations, and program participation.",
   },
   "/privacy": {
-    title: "Privacy Policy | CHESS AND TRUCK",
+    title: "Privacy Policy | Chess & Truck",
     description:
-      "See how CHESS AND TRUCK uses contact and payment-related information for camp and family communication.",
+      "See how Chess & Truck uses contact and payment-related information for camp and family communication.",
   },
 };
 
 export const featuredTournament = {
   slug: "summer-camp",
   title: "Summer Chess Camp",
-  city: "62 E 92nd Street, New York, NY 10128",
-  scheduleLabel: "June 15 - June 19 | Weekdays",
-  formatLabel: "9:00 AM - 3:00 PM",
-  pricingLabel: "Camp details available now",
-  venueLabel: "62 E 92nd Street, New York, NY 10128",
-  shortSummary: "A full-day program combining expert instruction, structured play, outdoor time, and plenty of FUN.",
+  city: "Location to be announced",
+  scheduleLabel: "Weekdays | Dates coming soon",
+  formatLabel: "9:00 AM - 3:00 PM (planned)",
+  pricingLabel: "Camp details coming soon",
+  venueLabel: "Location to be announced",
+  shortSummary: "Our first summer camp is in preparation: a planned full-day program of chess lessons, structured play, and outdoor time.",
   longSummary:
-    "Our summer chess program runs June 15 through June 19, with weekday sessions on the Upper East Side. Students enjoy expert instruction, structured play, and a fun, engaging camp experience.",
+    "We are preparing the first Chess & Truck summer chess camp in New York City. Dates and location will be announced when registration opens. Planned camp days include chess instruction, structured play, and outdoor time.",
   basePrice: 0,
   dojoPrice: 0,
 };
@@ -364,11 +873,11 @@ export const footerLegalLinks = [
 
 export const homePage = {
   eyebrow: "NYC chess camps",
-  title: "Summer chess camps at 62 E 92nd Street, New York, NY 10128.",
-    intro: "Weekday summer camp with Chess Masters at 62 E 92nd Street, New York, NY 10128.",
+  title: "Summer chess camp, coming soon.",
+    intro: "Our first summer chess camp is in preparation. Location and dates will be announced.",
   heroFacts: [
-    { label: "Dates", value: "June 15 - June 19 | Weekdays" },
-    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
+    { label: "Dates", value: "Coming soon" },
+    { label: "Location", value: "To be announced" },
     { label: "Age range", value: "Ages 4 - 17" },
     { label: "Levels", value: "Beginner through Advanced" },
   ],
@@ -442,23 +951,23 @@ export const carouselSlides = [
 
 export const campOverviewPage = {
   eyebrow: "Camps",
-  title: "Summer Chess Camps on the Upper East Side",
+  title: "Summer chess camp",
   intro: "",
   chips: [],
   heroFacts: [
-    { label: "Dates", value: "June 15 - June 19 | Weekdays" },
-    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
+    { label: "Dates", value: "Coming soon" },
+    { label: "Location", value: "To be announced" },
     { label: "Levels", value: "Beginner through Advanced" },
     { label: "Age range", value: "Ages 4 - 17" },
   ],
   portraitCaption: "Simple camp booking with real chess structure.",
-  asideTag: "June 15 - 19",
+  asideTag: "Opening soon",
   asideTitle: "Program Overview",
   asideText:
-      "Full-day program led by Chess Masters, with chess lessons, rated matches, lunch, outdoor park time, and a fun, engaging environment students look forward to each day.",
+      "Full-day program with chess lessons, rated matches, lunch, outdoor park time, and a fun, engaging environment students look forward to each day.",
   asideFacts: [
     { label: "Schedule", value: "9:00 AM - 3:00 PM" },
-      { label: "Coaches", value: "Chess Masters" },
+      { label: "Coaching", value: "Details coming soon" },
     { label: "Contact", value: "Contact Us" },
   ],
   overviewSection: {
@@ -494,8 +1003,8 @@ export const campOverviewPage = {
     intro: "Quick facts.",
   },
   detailsCards: [
-    { title: "Location", text: "62 E 92nd Street, New York, NY 10128" },
-    { title: "Dates", text: "June 15 - June 19 | Weekdays" },
+    { title: "Location", text: "To be announced" },
+    { title: "Dates", text: "Next season's dates coming soon" },
     { title: "Time", text: "9:00 AM - 3:00 PM" },
     { title: "Age range", text: "Ages 4 - 17" },
     { title: "Rated matches", text: "Included during camp sessions" },
@@ -514,10 +1023,10 @@ export const campOverviewPage = {
       eyebrow: "Weekly Pass",
       title: "Full Week Camp",
       price: "$700 per week",
-      defaultSchedulePreference: "Week of June 15",
-      scheduleText: "Jun 15 - Jun 19 | 9:00 AM - 3:00 PM",
+      defaultSchedulePreference: "",
+      scheduleText: "9:00 AM - 3:00 PM",
       details: [
-        "Daily chess instruction with Chess Masters",
+        "Daily chess instruction",
         "Rated games, lunch break, and outdoor park time",
         "Fun, engaging activities throughout the day",
       ],
@@ -530,10 +1039,10 @@ export const campOverviewPage = {
       eyebrow: "Daily Pass",
       title: "Single Day Camp",
       price: "$150 per day",
-      defaultSchedulePreference: "Monday, June 15",
+      defaultSchedulePreference: "",
       scheduleText: "9:00 AM - 3:00 PM",
       details: [
-        "Chess instruction with Chess Masters",
+        "Chess instruction",
         "Rated games and structured play",
         "Lunch, outdoor park time, and fun activities",
       ],
@@ -546,7 +1055,7 @@ export const campOverviewPage = {
       eyebrow: "AM/PM options",
       title: "Half Day",
       price: "$95 per half day",
-      defaultSchedulePreference: "Monday, June 15",
+      defaultSchedulePreference: "",
       scheduleText: "9:00 AM - 12:00 PM or 12:00 PM - 3:00 PM",
       details: [
         "Flexible for families and kids",
@@ -561,7 +1070,7 @@ export const campOverviewPage = {
           switcherTitle: "Half Day AM",
           scheduleText: "9:00 AM - 12:00 PM",
           price: "$95 per half day",
-          defaultSchedulePreference: "Monday, June 15",
+          defaultSchedulePreference: "",
           campTime: "9:00 AM - 12:00 PM",
           label: "ENROLL AM",
         },
@@ -571,85 +1080,23 @@ export const campOverviewPage = {
           switcherTitle: "Half Day PM",
           scheduleText: "12:00 PM - 3:00 PM",
           price: "$95 per half day",
-          defaultSchedulePreference: "Monday, June 15",
+          defaultSchedulePreference: "",
           campTime: "12:00 PM - 3:00 PM",
           label: "ENROLL PM",
         },
       ],
     },
   ],
-  bookingSchedule: [
-    {
-      id: "camp-day-1",
-      date: "Monday, June 15th, 2026",
-      relativeLabel: "Weekday session",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Monday, June 15",
-    },
-    {
-      id: "camp-day-2",
-      date: "Tuesday, June 16th, 2026",
-      relativeLabel: "Day 2",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Tuesday, June 16",
-    },
-    {
-      id: "camp-day-3",
-      date: "Wednesday, June 17th, 2026",
-      relativeLabel: "Midweek session",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Wednesday, June 17",
-    },
-    {
-      id: "camp-day-4",
-      date: "Thursday, June 18th, 2026",
-      relativeLabel: "Late-week session",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Thursday, June 18",
-    },
-    {
-      id: "camp-day-5",
-      date: "Friday, June 19th, 2026",
-      relativeLabel: "Wrap-up day",
-      time: "9:00 AM",
-      title: "Summer Camp Day",
-    subtitle: "Full day at 62 E 92nd Street, New York, NY 10128",
-      price: "$150.00",
-      spotsLeft: "12 spots left",
-      optionId: "single-day",
-      schedulePreference: "Friday, June 19",
-    },
-  ],
+  // Camp days now come only from approved launch sessions.
+  bookingSchedule: [],
   mapSection: {
     eyebrow: "Camp location",
     title: "Location",
-  intro: "62 E 92nd Street, New York, NY 10128.",
-    address: "62 E 92nd Street, New York, NY 10128",
+  intro: "Location to be announced.",
+    address: "Location to be announced",
     directionsLabel: "Open in Google Maps",
-    directionsHref:
-      "https://www.google.com/maps/search/?api=1&query=62%20E%2092nd%20Street%20New%20York%20NY%2010128",
-    embedSrc:
-      "https://www.google.com/maps?q=62%20E%2092nd%20Street%20New%20York%20NY%2010128&output=embed",
+    directionsHref: "",
+    embedSrc: "",
   },
   scheduleSection: {
     eyebrow: "FULL CAMP DAY",
@@ -730,11 +1177,11 @@ export const campOverviewPage = {
     },
     {
       question: "Who leads instruction?",
-      answer: "All instruction is led by Chess Masters with more than 25 years of experience in the field.",
+      answer: "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
     },
     {
       question: "What should students bring?",
-      answer: "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
+      answer: "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
     },
     {
       question: "Are campers supervised at all times?",
@@ -781,7 +1228,7 @@ export const campDetailPages = {
     title: "Daily camp rhythm for students who need more than casual chess.",
     intro:
       "A summer camp format built around instruction, supervised play, review, and daily habits that actually move a student forward.",
-    chips: ["Daily rhythm", "June 15 - June 19", "Central Park"],
+    chips: ["Daily rhythm", "Summer camp", "Central Park"],
     portraitCaption:
       "A strong training camp should feel focused and alive, not like a room where chess is just one activity in the background.",
     asideTag: "Training camp fit",
@@ -791,7 +1238,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Students building fundamentals" },
       { label: "Daily feel", value: "Coach-led and active" },
-      { label: "Season", value: "June 15 - June 19" },
+      { label: "Season", value: "Summer" },
     ],
     cards: [
       { title: "Daily instruction", text: "Coach-led camp blocks with a clear training theme instead of random activity shifts." },
@@ -813,7 +1260,7 @@ export const campDetailPages = {
           "Useful for students who need structure more than intensity right away",
         ],
         meta: "Founding camp release",
-        note: "Runs June 15 - June 19",
+        note: "Dates coming soon",
         cta: "Ask about intro camp week",
       },
       {
@@ -858,7 +1305,7 @@ export const campDetailPages = {
     title: "Shorter, sharper camp blocks for students who want deeper work.",
     intro:
       "This camp format is for students who already know the basics and want a more focused training week with stronger review and cleaner habits.",
-    chips: ["Advanced players", "June 15 - June 19", "Focused training"],
+    chips: ["Advanced players", "Summer camp", "Focused training"],
     portraitCaption:
       "Advanced camp should feel sharper than general camp: more game review, cleaner goals, and stronger daily focus.",
     asideTag: "Prep camp fit",
@@ -868,7 +1315,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Active competitors" },
       { label: "Works well for", value: "Game review and prep" },
-      { label: "Season", value: "June 15 - June 19" },
+      { label: "Season", value: "Summer" },
     ],
     cards: [
       { title: "Game review first", text: "The week should include real review of practical mistakes, not only abstract instruction." },
@@ -890,7 +1337,7 @@ export const campDetailPages = {
           "Useful for players who want a more competitive training focus",
         ],
         meta: "Short prep release",
-        note: "Runs June 15 - June 19",
+        note: "Dates coming soon",
         cta: "Ask about prep blocks",
       },
       {
@@ -935,7 +1382,7 @@ export const campDetailPages = {
     title: "Remote camp structure for families who still want a serious week.",
     intro:
       "For students who need a structured chess week without commuting, online camps can still feel focused, coach-led, and worth the time.",
-    chips: ["Remote format", "June 15 - June 19", "Structured days"],
+    chips: ["Remote format", "Summer camp", "Structured days"],
     portraitCaption:
       "Online camp should not feel passive. The right setup keeps the student engaged, moving, and accountable through the day.",
     asideTag: "Online camp fit",
@@ -945,7 +1392,7 @@ export const campDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Remote families" },
       { label: "Works well for", value: "Review and guided practice" },
-      { label: "Season", value: "June 15 - June 19" },
+      { label: "Season", value: "Summer" },
     ],
     cards: [
       { title: "Cleaner than random online time", text: "A camp week should give students structure, not more disconnected chess activity." },
@@ -967,7 +1414,7 @@ export const campDetailPages = {
           "Useful when a student benefits from shorter, more controlled camp blocks",
         ],
         meta: "Short online release",
-        note: "Runs June 15 - June 19",
+        note: "Dates coming soon",
         cta: "Ask about mini online camps",
       },
       {
@@ -1013,14 +1460,14 @@ export const aboutPage = {
   eyebrow: "About CHESS AND TRUCK",
   title: "A Smarter Chess Program for NYC Families",
   intro: [
-    "Chess and Truck makes it easy for New York City families to find a high-quality chess camp -- without the guesswork. Clear options, seamless communication, and expert coaching your child will actually benefit from.",
-    "Our handpicked team of premium coaches brings 25+ years of combined NYC experience, blending structured learning with a genuinely fun, engaging approach kids love.",
-    "Real progress. Real coaches. Real results.",
+    "Chess & Truck is building chess programs for New York City families: clear options, direct communication, and coaching your child will actually benefit from.",
+    "Our coaching blends structured learning with a fun, engaging approach kids enjoy.",
+    "Real games. Real coaching. Real progress.",
   ],
   heroFacts: [
     { label: "Focus", value: "Scholastic chess" },
     { label: "City", value: "New York City" },
-    { label: "Programs", value: "Summer camps" },
+    { label: "Programs", value: "Camps, tournaments, lessons" },
   ],
   introSection: {
     eyebrow: "What matters most to families",
@@ -1028,9 +1475,9 @@ export const aboutPage = {
     intro: "We prioritize fun, clarity, structure, and meaningful instruction -- every step of the way.",
   },
   coachSpotlight: {
-    eyebrow: "Meet the Chess Masters",
+    eyebrow: "Coach spotlight",
     title: "Meet Andrea",
-    intro: "Italian Chess Master • 24 years of teaching experience",
+    intro: "24 years of teaching experience",
     paragraphs: [
       "Based in New York, Andrea has spent nearly 24 years teaching chess through camps, private lessons, after-school programs, birthday events, and promotional programs in both the U.S. and Canada.",
       "He brings a rare mix of structure, energy, and joy to every lesson, helping young players discover the beauty of chess through serious instruction that still feels genuinely fun.",
@@ -1048,7 +1495,7 @@ export const aboutPage = {
     },
     {
       title: "Substantive instruction",
-      text: "Each camp day is designed to develop analytical thinking and measurable improvement.",
+      text: "Our programs are designed to build analytical thinking through real games and guided review.",
     },
     {
       title: "Clear lines of communication",
@@ -1074,7 +1521,7 @@ export const eventsPage = {
   intro:
     "Open and Beginner sections, a 9:00 AM start, and a morning schedule that wraps by lunch. Families can review the structure now and contact us for current tournament details.",
   heroFacts: [
-    { label: "Location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+    { label: "Location", value: "Venue to be announced" },
     { label: "Service", value: "Open + Beginner" },
     { label: "Status", value: "Current details available" },
   ],
@@ -1103,7 +1550,7 @@ export const eventsPage = {
     intro: "Dates are still being finalized, but the core event structure is already set.",
   },
   detailCards: [
-    { title: "Location", text: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+    { title: "Location", text: "Venue to be announced" },
     { title: "Dates", text: "Contact Us for current tournament dates" },
     { title: "Time", text: "Saturday mornings, 9:00 AM to lunch" },
     { title: "Service", text: "Rated and beginner-friendly divisions" },
@@ -1161,7 +1608,7 @@ export const tournamentPage = {
   title: "Chess & Truck Tournament",
     intro: "The format is set. Contact Us for current tournament details and the next step.",
   atAGlance: [
-    { label: "Location", value: "Brick Church, 62 E 92nd Street, New York, NY 10128" },
+    { label: "Location", value: "Venue to be announced" },
     { label: "Service", value: "Open & Beginner sections" },
     { label: "Schedule", value: "Saturday mornings, 9:00 AM to lunch" },
     { label: "Status", value: "Current details available" },
@@ -1179,31 +1626,31 @@ export const faqPage = {
   title: "Camp FAQ",
   intro: "The answers parents usually want before booking.",
   heroFacts: [
-    { label: "Camp dates", value: "June 15 - June 19 | Weekdays" },
-    { label: "Location", value: "62 E 92nd Street, New York, NY 10128" },
-    { label: "Camp time", value: "9:00 AM - 3:00 PM" },
+    { label: "Camp dates", value: "Coming soon" },
+    { label: "Location", value: "To be announced" },
+    { label: "Planned camp time", value: "9:00 AM - 3:00 PM" },
     { label: "Support", value: "Call, text, or email" },
   ],
   quickCards: [
     {
       title: "Is this suitable for beginners?",
-      text: "Yes. Beginners are welcome, and students are grouped thoughtfully by level. Even complete beginners may join!",
+      text: "Yes. Beginners will be welcome. The planned camp day starts with warm-up games so coaches can group students by level.",
     },
     {
       title: "Who leads instruction?",
-      text: "All instruction is led by Chess Masters with more than 25 years of experience in the field.",
+      text: "Coaching details for the camp will be shared when registration opens. You can read about Andrea, our featured coach, on the About page.",
     },
     {
       title: "What should students bring?",
-      text: "A water bottle, sunscreen, a change of clothes, and a packed lunch unless opting for our pizza option.",
+      text: "A packing list will be posted with registration. It is likely to include a water bottle, sunscreen, a change of clothes, and a packed lunch.",
     },
     {
       title: "Are campers supervised at all times?",
-      text: "Yes. Students are supervised at all times throughout the day.",
+      text: "Yes. Students will be supervised at all times throughout the camp day.",
     },
     {
       title: "Are early drop-off and extended day options available?",
-      text: "Yes. Both options are available during enrollment.",
+      text: "Early drop-off and extended day options have not been decided yet. Any options will be listed when registration opens.",
     },
   ],
   prepSection: {
@@ -1270,7 +1717,7 @@ export const contactPage = {
   topicCards: [
     {
       title: "Camp questions",
-      text: "Ask about dates, Central Park location, daily format, pricing, or whether camp fits your family.",
+      text: "Ask about our first camp, the planned daily format, or whether camp fits your family.",
     },
     {
       title: "Lesson inquiries",
@@ -1406,7 +1853,7 @@ export const privateLessonsPage = {
         "A clean first step for students who are just entering structured training",
       ],
       meta: "Single-session inquiry",
-      note: "Available now",
+      note: "Opening soon",
       cta: "Ask about starter lessons",
     },
     {
@@ -1418,7 +1865,7 @@ export const privateLessonsPage = {
         "Strong fit for families who want progress that builds month to month",
       ],
       meta: "Recurring private coaching",
-      note: "Priority scheduling available",
+      note: "Opening soon",
       cta: "Ask about weekly coaching",
     },
       {
@@ -1430,7 +1877,7 @@ export const privateLessonsPage = {
           "Best for players who want sharper preparation before the next training stretch",
         ],
         meta: "Pre-event coaching track",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about prep coaching",
     },
   ],
@@ -1490,7 +1937,7 @@ export const lessonDetailPages = {
     title: "Serious coaching, no commute required.",
     intro:
       "A clean remote lesson path for students who want consistency, game review, and a real training rhythm from home.",
-    chips: ["Zoom-based", "NYC families", "Available now"],
+    chips: ["Zoom-based", "NYC families", "Opening soon"],
     portraitCaption:
       "Remote lessons should still feel demanding, personal, and sharply structured from the first session.",
     asideTag: "Remote standard",
@@ -1500,7 +1947,7 @@ export const lessonDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Weekly rhythm" },
       { label: "Works well for", value: "Game review and calculation" },
-      { label: "Status", value: "Available now" },
+      { label: "Status", value: "Opening soon" },
     ],
     cards: [
       {
@@ -1531,7 +1978,7 @@ export const lessonDetailPages = {
           "A clean first step for students entering structured online work",
         ],
         meta: "Single online inquiry",
-        note: "Available now",
+        note: "Opening soon",
         cta: "Ask about online starters",
       },
       {
@@ -1543,7 +1990,7 @@ export const lessonDetailPages = {
           "Built for game review, calculation, and consistent progress from home",
         ],
         meta: "Recurring online coaching",
-        note: "Priority scheduling available",
+        note: "Opening soon",
         cta: "Ask about weekly online",
       },
       {
@@ -1555,7 +2002,7 @@ export const lessonDetailPages = {
           "Can sharpen openings, decision-making, and post-game understanding fast",
         ],
         meta: "Targeted online block",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about review blocks",
       },
     ],
@@ -1575,7 +2022,7 @@ export const lessonDetailPages = {
     title: "Board work feels different in the room.",
     intro:
       "For students who focus better face to face, in-person coaching keeps the board, the pace, and the lesson energy sharper.",
-    chips: ["NYC-based", "Face-to-face", "Available now"],
+    chips: ["NYC-based", "Face-to-face", "Opening soon"],
     portraitCaption:
       "Some students understand more quickly when the coach is right there at the board and the lesson pace can shift in real time.",
     asideTag: "In-person fit",
@@ -1585,7 +2032,7 @@ export const lessonDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Board-first learners" },
       { label: "Works well for", value: "Habits and fundamentals" },
-      { label: "Status", value: "Available now" },
+      { label: "Status", value: "Opening soon" },
     ],
     cards: [
       {
@@ -1616,7 +2063,7 @@ export const lessonDetailPages = {
           "Useful first step for younger students and board-first learners",
         ],
         meta: "Single in-person inquiry",
-        note: "Available now",
+        note: "Opening soon",
         cta: "Ask about board assessments",
       },
       {
@@ -1640,7 +2087,7 @@ export const lessonDetailPages = {
           "Best for players who want sharper preparation and cleaner follow-up work",
         ],
         meta: "Pre-event in-person track",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about prep coaching",
       },
     ],
@@ -1660,7 +2107,7 @@ export const lessonDetailPages = {
     title: "Small group training, not crowded filler.",
     intro:
       "The right group lesson creates pace, energy, and accountability without losing clarity.",
-    chips: ["Small groups", "Better level matching", "Available now"],
+    chips: ["Small groups", "Better level matching", "Opening soon"],
     portraitCaption:
       "A good group lesson does not feel generic. It feels fast, focused, and matched to the students actually in the room.",
     asideTag: "Group standard",
@@ -1670,7 +2117,7 @@ export const lessonDetailPages = {
     asideFacts: [
       { label: "Best for", value: "Shared pace" },
       { label: "Works well for", value: "Peer energy and repetition" },
-      { label: "Status", value: "Available now" },
+      { label: "Status", value: "Opening soon" },
     ],
     cards: [
       {
@@ -1701,7 +2148,7 @@ export const lessonDetailPages = {
           "Strong fit for students who like peer energy but still need structure",
         ],
         meta: "Early group interest",
-        note: "Available now",
+        note: "Opening soon",
         cta: "Ask about founding groups",
       },
       {
@@ -1725,7 +2172,7 @@ export const lessonDetailPages = {
           "Best for players who benefit from training beside motivated peers",
         ],
         meta: "Event-focused group track",
-        note: "Available on request",
+        note: "Opening soon",
         cta: "Ask about advanced groups",
       },
     ],
@@ -1850,7 +2297,7 @@ export const upcomingTournaments = [
   {
     id: "first-release",
     dateLabel: "Current details",
-    statusLabel: "Available now",
+    statusLabel: "Opening soon",
     timeLabel: "Saturday mornings",
     title: "First tournament date",
     meta: "Open & Beginner format already confirmed",
@@ -1916,7 +2363,7 @@ export const faqItems = [
   {
     question: "What ages is camp for?",
     answer:
-      "Camp is designed for ages 4 - 17.",
+      "The proposed age range is 4 - 17. Final ages will be confirmed when registration opens.",
   },
   {
     question: "Is this good for beginners?",
@@ -1926,12 +2373,12 @@ export const faqItems = [
   {
     question: "Are students grouped by level?",
     answer:
-      "Yes. Students are grouped by level so the coaching, games, and activities feel right for the group.",
+      "That is the plan. Students will be grouped by level so the coaching, games, and activities feel right for the group.",
   },
   {
     question: "What is a typical camp day like?",
     answer:
-      "Camp runs from 9:00 AM to 3:00 PM and includes chess instruction with Chess Masters, rated games, lunch, outdoor park time, and fun activities.",
+      "The planned camp day runs from 9:00 AM to 3:00 PM with chess instruction, rated games, lunch, outdoor park time, and fun activities. The schedule is subject to change.",
   },
   {
     question: "What should my child bring?",
@@ -2040,6 +2487,11 @@ export const privacyPage = {
       title: "How information is used",
       body:
         "Registration and inquiry information is used for program operations, support, eligibility review, emergency readiness, and family communication. Contact form submissions are used to respond to questions and support needs.",
+    },
+    {
+      title: "Program interest emails",
+      body:
+        "If you ask to hear when a program opens, we store your email address, the program, and when you consented and confirmed. We use it only to confirm your request and to email you when registration for that program opens. You can unsubscribe at any time with the link in our emails. Unconfirmed requests are deleted after 30 days, and we do not collect any information about children for this list.",
     },
     {
       title: "Payments",

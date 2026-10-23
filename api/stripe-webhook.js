@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { getNotificationRecipients, sendResendEmail } from "./_lib/resend.js";
+import { checkRegistrationGate } from "./_lib/registrationGate.js";
 
 const processedEvents = globalThis.__chessTruckProcessedStripeEvents || new Map();
 globalThis.__chessTruckProcessedStripeEvents = processedEvents;
@@ -222,11 +223,26 @@ export default {
     const metadata = session.metadata || {};
     const internalRecipients = getNotificationRecipients();
     const replyTo = metadata.parent_email || session.customer_details?.email || "";
+    const reference = metadata.registration_reference || session.client_reference_id || session.id;
+
+    // A paid session for a program that is not open (for example a session
+    // created before launch details changed) is flagged for manual review, and
+    // the family is not told their registration is confirmed.
+    const programId = metadata.program_id || (metadata.booking_type === "camp" ? "camps" : "tournaments");
+    const { ready: programIsOpen } = await checkRegistrationGate(programId).catch(() => ({ ready: false }));
 
     await sendResendEmail({
       to: internalRecipients,
-      subject: `Payment confirmed - ${metadata.service_level || metadata.player_name || "Checkout payment"} (${metadata.registration_reference || session.client_reference_id || session.id})`,
-      text: buildInternalText(session),
+      subject: programIsOpen
+        ? `Payment confirmed - ${metadata.service_level || metadata.player_name || "Checkout payment"} (${reference})`
+        : `[REVIEW NEEDED] Payment received while ${programId} registration is not open (${reference})`,
+      text: programIsOpen
+        ? buildInternalText(session)
+        : [
+            `This payment arrived while ${programId} registration is not open. Review it and refund if needed.`,
+            "",
+            buildInternalText(session),
+          ].join("\n"),
       replyTo,
     }).catch(() => null);
 
@@ -235,8 +251,18 @@ export default {
     if (customerEmail) {
       await sendResendEmail({
         to: [customerEmail],
-        subject: `${getProgramLabel(session)} payment confirmed`,
-        text: buildCustomerText(session),
+        subject: programIsOpen
+          ? `${getProgramLabel(session)} payment confirmed`
+          : `${getProgramLabel(session)} payment received`,
+        text: programIsOpen
+          ? buildCustomerText(session)
+          : [
+              `We received your payment for ${getProgramLabel(session)}.`,
+              "",
+              `Reference: ${reference}`,
+              "",
+              "Our team will contact you about your registration shortly.",
+            ].join("\n"),
       }).catch(() => null);
     }
 

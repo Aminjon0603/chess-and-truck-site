@@ -1,57 +1,10 @@
 import crypto from "node:crypto";
 import { applyRateLimit } from "./_lib/rate-limit.js";
-import { CAMP_REGISTRATION_CLOSED_MESSAGE, isProgramOpen } from "../src/lib/programs.js";
-
-const campOptions = {
-  "full-week": {
-    label: "Full Week Camp",
-    amount: 70000,
-    description: "Five full camp days in one week at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "9:00 AM - 3:00 PM",
-  },
-  "single-day": {
-    label: "Single Day Camp",
-    amount: 15000,
-    description: "One full camp day with Chess Masters, rated games, lunch, outdoor park time, and fun activities at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "9:00 AM - 3:00 PM",
-  },
-  "half-day-am": {
-    label: "Half Day AM",
-    amount: 9500,
-    description: "One half-day AM chess camp session at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "9:00 AM - 12:00 PM",
-  },
-  "half-day-pm": {
-    label: "Half Day PM",
-    amount: 9500,
-    description: "One half-day PM chess camp session at 62 E 92nd Street, New York, NY 10128.",
-    campTime: "12:00 PM - 3:00 PM",
-  },
-};
-
-const campAddOns = {
-  "early-drop-off": {
-    label: "Early Drop-Off (8:30 AM)",
-    amount: 3000,
-  },
-  "extended-day": {
-    label: "Late Pick-Up (until 3:30 PM)",
-    amount: 3000,
-  },
-};
-
-const campExtraServices = {
-  pizza: {
-    label: "Pizza",
-    description: "Pizza / lunch happens at 11:30",
-    amount: 700,
-  },
-  "ice-cream": {
-    label: "Ice-Cream",
-    description: "Ice-cream happens at 3:00",
-    amount: 500,
-  },
-};
+import { getRegistrationUnavailableMessage } from "../src/lib/programs.js";
+import { getApprovedSessionLabels } from "../src/lib/launchReadiness.js";
+import { campAddOns, campExtraServices, campOptions } from "./_lib/priceCatalog.js";
+import { checkRegistrationGate } from "./_lib/registrationGate.js";
+import { getCheckoutExpiresAt } from "./_lib/checkoutExpiry.js";
 
 const flexPackOptionIds = new Set();
 const dateSelectionOptionIds = new Set(["single-day", "half-day-am", "half-day-pm"]);
@@ -198,7 +151,12 @@ const normalizeQaEmail = (value) => sanitize(value, 180).toLowerCase();
 
 const normalizeQaPhone = (value) => sanitize(value, 40).replace(/\D/g, "");
 
-const isQaModeEnabled = () => String(process.env.CAMP_QA_MODE || "").toLowerCase() === "true";
+// $1 QA pricing is test-only: it needs the flag, a non-production deployment,
+// AND a Stripe test-mode key. With a live key or in production it is always off.
+export const isQaModeEnabled = (env = process.env) =>
+  String(env.CAMP_QA_MODE || "").toLowerCase() === "true" &&
+  env.VERCEL_ENV !== "production" &&
+  /^(sk|rk)_test_/.test(String(env.STRIPE_SECRET_KEY || ""));
 
 const isQaEligibleBooking = ({ email, phone }) => {
   if (!isQaModeEnabled()) {
@@ -219,6 +177,29 @@ const isQaEligibleBooking = ({ email, phone }) => {
 
 const getQaAmountOverride = (amount, isQaEligible) => (isQaEligible ? 100 : amount);
 
+const weeklyOptionIds = new Set(["full-week"]);
+
+// Only days and weeks inside approved launch sessions can be booked, so stale
+// or hand-crafted dates are rejected even after camps open.
+export const validateApprovedSchedule = ({ optionId, schedulePreference, selectedDays, sessions }) => {
+  const { days, weeks } = getApprovedSessionLabels(sessions);
+
+  if (weeklyOptionIds.has(optionId) && !weeks.has(schedulePreference)) {
+    return false;
+  }
+
+  if ((weeklyOptionIds.has(optionId) || dateSelectionOptionIds.has(optionId)) && selectedDays.length === 0) {
+    return false;
+  }
+
+  return selectedDays.every((day) => days.has(day));
+};
+
+const formatApprovedLocation = (location) =>
+  location?.type === "online"
+    ? `Online (${location.platform})`
+    : [location?.name, location?.address].filter(Boolean).join(", ");
+
 export const runtime = "nodejs";
 
 export default {
@@ -227,8 +208,14 @@ export default {
       return Response.json({ error: "Method not allowed." }, { status: 405 });
     }
 
-    if (!isProgramOpen("camps")) {
-      return Response.json({ error: CAMP_REGISTRATION_CLOSED_MESSAGE }, { status: 409 });
+    // Launch gate: runs before rate limiting, QA pricing, and Stripe.
+    const gate = await checkRegistrationGate("camps");
+
+    if (!gate.ready) {
+      return Response.json(
+        { error: getRegistrationUnavailableMessage("Camp") },
+        { status: 409 }
+      );
     }
 
     const limited = applyRateLimit(request, "camp-checkout", {
@@ -265,6 +252,20 @@ export default {
     if (Object.keys(fieldErrors).length > 0) {
       return Response.json(
         { error: "Please review the booking details and try again.", fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const scheduleIsApproved = validateApprovedSchedule({
+      optionId,
+      schedulePreference: sanitize(payload.schedulePreference, 140),
+      selectedDays: sanitizeSelectedDays(payload.selectedDays),
+      sessions: gate.config?.sessions,
+    });
+
+    if (!scheduleIsApproved) {
+      return Response.json(
+        { error: "Please choose an available camp date.", fieldErrors: { selectedDays: "Please choose an available camp date." } },
         { status: 400 }
       );
     }
@@ -340,6 +341,7 @@ export default {
     const params = new URLSearchParams();
 
     params.set("mode", "payment");
+    params.set("expires_at", String(getCheckoutExpiresAt()));
     params.set("success_url", successUrlString);
     params.set("cancel_url", cancelUrl.toString());
     params.set("adaptive_pricing[enabled]", "false");
@@ -367,10 +369,11 @@ export default {
     params.set("client_reference_id", reference);
     params.set("metadata[registration_reference]", reference);
     params.set("metadata[booking_type]", "camp");
+    params.set("metadata[program_id]", "camps");
     params.set("metadata[service_level]", selectedOption.label);
     params.set("metadata[camp_option]", optionId);
     params.set("metadata[program_name]", "Chess and Truck Summer Camp");
-    params.set("metadata[location]", "62 E 92nd Street, New York, NY 10128");
+    params.set("metadata[location]", formatApprovedLocation(gate.config?.location));
     params.set("metadata[camp_time]", selectedOption.campTime || "9:00 AM - 3:00 PM");
     params.set("metadata[parent_name]", `${parentFirstName} ${parentLastName}`.trim());
     params.set("metadata[parent_first_name]", parentFirstName);
