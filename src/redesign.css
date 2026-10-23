@@ -2981,3 +2981,162 @@
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------- cinematic hero */
+/* Homepage hero over a muted stock video, with a forest-green gradient so the
+   text stays readable. The poster image is the fallback and the reduced-motion view. */
+
+.ac-hero-cinematic {
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-content: center;
+  min-height: clamp(560px, 78vh, 760px);
+  padding: 88px 0 104px;
+  background: var(--ac-green-950);
+}
+
+.ac-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.ac-hero-media video,
+.ac-hero-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% center;
+}
+
+.ac-hero-cinematic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(16, 34, 30, 0.94) 0%, rgba(16, 34, 30, 0.82) 36%, rgba(16, 34, 30, 0.45) 66%, rgba(16, 34, 30, 0.28) 100%),
+    linear-gradient(180deg, rgba(16, 34, 30, 0.35) 0%, transparent 28%, transparent 70%, rgba(16, 34, 30, 0.6) 100%);
+  pointer-events: none;
+}
+
+.ac-hero-cinematic .ac-eyebrow {
+  color: var(--ac-gold-light);
+}
+
+.ac-hero-cinematic .ac-hero-copy h1 {
+  color: #fff;
+}
+
+.ac-hero-cinematic .ac-lead {
+  color: #e2e8e4;
+}
+
+.ac-hero-cinematic .ac-hero-facts li {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f4efe4;
+}
+
+.ac-hero-media-bar {
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.ac-hero-video-toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(16, 34, 30, 0.55);
+  color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    border-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    background-color var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ac-hero-video-toggle:hover {
+  border-color: var(--ac-gold-light);
+  color: var(--ac-gold-light);
+}
+
+.ac-hero-video-toggle:focus-visible {
+  outline: 3px solid var(--ac-gold);
+  outline-offset: 3px;
+}
+
+/* Pause icon: two bars. */
+.ac-hero-video-toggle span {
+  width: 12px;
+  height: 14px;
+  background:
+    linear-gradient(currentColor, currentColor) left / 4px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) right / 4px 100% no-repeat;
+}
+
+/* Play icon: a triangle. */
+.ac-hero-video-toggle.is-paused span {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 12px solid currentColor;
+  background: none;
+}
+
+/* The programs section was tuned to follow a cream hero; give it room after the video. */
+.ac-hero-cinematic + .ac-section-programs {
+  padding-top: 72px;
+}
+
+@media (max-width: 640px) {
+  .ac-hero-cinematic + .ac-section-programs {
+    padding-top: 44px;
+  }
+
+  /* Phones: portrait clip, text at the bottom over a deeper gradient. */
+  .ac-hero-cinematic {
+    align-content: end;
+    min-height: min(86svh, 660px);
+    padding: 120px 0 84px;
+  }
+
+  .ac-hero-cinematic::before {
+    background: linear-gradient(
+      180deg,
+      rgba(16, 34, 30, 0.35) 0%,
+      rgba(16, 34, 30, 0.62) 38%,
+      rgba(16, 34, 30, 0.9) 66%,
+      rgba(16, 34, 30, 0.96) 100%
+    );
+  }
+
+  .ac-hero-cinematic::after {
+    content: none;
+  }
+
+  .ac-hero-media video,
+  .ac-hero-media img {
+    object-position: center top;
+  }
+
+  .ac-hero-media-bar {
+    bottom: 18px;
+  }
+}

@@ -37,6 +37,10 @@ import {
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
 import brandCrest from "./assets/chess-truck-crest.png";
+import heroVideoDesktop from "./assets/hero/hero-chess-1280.mp4";
+import heroVideoMobile from "./assets/hero/hero-chess-540x960.mp4";
+import heroPosterDesktop from "./assets/hero/hero-chess-1280-poster.webp";
+import heroPosterMobile from "./assets/hero/hero-chess-540x960-poster.webp";
 import {
   CAMP_REGISTRATION_CLOSED_MESSAGE,
   PROGRAM_STATUS,
@@ -1494,6 +1498,97 @@ function AcademySectionHeading({ id, eyebrow, title, intro }) {
   );
 }
 
+// Homepage hero background: a 12-second stock clip (Anastasia Shuraeva, Pexels).
+// Phones get a portrait crop. Reduced-motion and Data Saver visitors get the still
+// poster only, and the video never downloads for them.
+const heroMedia = {
+  desktop: { video: heroVideoDesktop, poster: heroPosterDesktop },
+  mobile: { video: heroVideoMobile, poster: heroPosterMobile },
+};
+
+function HeroVideo() {
+  const videoRef = useRef(null);
+  const userPausedRef = useRef(false);
+  const [media] = useState(() =>
+    window.matchMedia("(max-width: 640px)").matches ? heroMedia.mobile : heroMedia.desktop
+  );
+  const [canPlay] = useState(
+    () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !navigator.connection?.saveData
+  );
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return undefined;
+    }
+
+    // React sets `muted` as a property only; iOS needs it before autoplay will start.
+    video.muted = true;
+    video.defaultMuted = true;
+    video.play().catch(() => setIsPaused(true));
+
+    // Save battery and data: stop while the hero is off screen.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (userPausedRef.current) {
+        return;
+      }
+
+      if (entry.isIntersecting) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+    observer.observe(video);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    if (video.paused) {
+      userPausedRef.current = false;
+      video.play().catch(() => {});
+      setIsPaused(false);
+    } else {
+      userPausedRef.current = true;
+      video.pause();
+      setIsPaused(true);
+    }
+  };
+
+  return (
+    <>
+      <div className="ac-hero-media" aria-hidden="true">
+        {canPlay ? (
+          <video ref={videoRef} src={media.video} poster={media.poster} autoPlay muted loop playsInline preload="auto" />
+        ) : (
+          <img src={media.poster} alt="" />
+        )}
+      </div>
+      <div className="ac-shell ac-hero-media-bar">
+        {canPlay ? (
+          <button
+            type="button"
+            className={`ac-hero-video-toggle${isPaused ? " is-paused" : ""}`}
+            onClick={togglePlayback}
+            aria-label={isPaused ? "Play background video" : "Pause background video"}
+          >
+            <span aria-hidden="true" />
+          </button>
+        ) : null}
+      </div>
+    </>
+  );
+}
+
 function AcademyHomePage({ currentPath, navigate }) {
   const { hero, programsSection, whySection, coachSection, howSection, faqSection, contactCard } =
     academyHomePage;
@@ -1513,17 +1608,18 @@ function AcademyHomePage({ currentPath, navigate }) {
 
   return (
     <div className="ac-home">
-      <section className="ac-hero" aria-labelledby="home-title">
+      <section className="ac-hero ac-hero-cinematic" aria-labelledby="home-title">
+        <HeroVideo />
         <div className="ac-shell ac-hero-grid">
           <div className="ac-hero-copy">
             <span className="ac-eyebrow">{hero.eyebrow}</span>
             <h1 id="home-title">{hero.title}</h1>
             <p className="ac-lead">{hero.intro}</p>
             <div className="ac-actions">
-              <a href="#programs" className="ac-btn ac-btn-primary" onClick={scrollToPrograms}>
+              <a href="#programs" className="ac-btn ac-btn-gold" onClick={scrollToPrograms}>
                 See our programs
               </a>
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn pg-btn-on-dark">
                 Contact us
               </AppLink>
             </div>

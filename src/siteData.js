@@ -59,7 +59,7 @@ export const academyHomePage = {
   },
   coachSection: {
     eyebrow: "Your coach",
-    title: "Meet Andrea",
+    title: "Coach Andrea",
     role: "Coach",
     summary:
       "Andrea has taught chess for 24 years in the United States and Canada, at children's chess camps, in private lessons, and in after-school programs.",
@@ -1488,7 +1488,7 @@ export const aboutPage = {
   },
   coach: {
     eyebrow: "Your coach",
-    title: "Meet Andrea",
+    title: "Coach Andrea",
     role: "Coach",
     bio: "Andrea has taught chess for 24 years in the United States and Canada. He has taught at children's chess camps, given private lessons, and taught in after-school chess programs.",
     facts: [
