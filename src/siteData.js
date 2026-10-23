@@ -59,7 +59,7 @@ export const academyHomePage = {
   },
   coachSection: {
     eyebrow: "Your coach",
-    title: "Meet Andrea",
+    title: "Coach Andrea",
     role: "Coach",
     summary:
       "Andrea has taught chess for 24 years in the United States and Canada, at children's chess camps, in private lessons, and in after-school programs.",
@@ -1446,61 +1446,61 @@ export const campDetailPages = {
   },
 };
 
+// About page: owner-confirmed facts only. Chess & Truck has not run its own
+// camps or tournaments yet; all five programs are upcoming.
 export const aboutPage = {
-  eyebrow: "About us",
-  title: "A small chess program for NYC kids",
-  intro: [
-    "Chess & Truck is a new chess program for kids in New York City. Our coach is Andrea, who has 24 years of experience teaching chess.",
-    "We're starting with five programs: camps, tournaments, lessons, after-school chess, and the Chess Dojo. None are open for registration yet.",
-  ],
-  heroFacts: [
-    { label: "Who", value: "Kids" },
-    { label: "Where", value: "New York City" },
-    { label: "Programs", value: "Camps, tournaments, lessons, after-school, Dojo" },
-  ],
-  introSection: {
-    eyebrow: "How we'll teach",
-    title: "How we'll teach",
-    intro: "Our lessons will have a plan, and kids will still have fun.",
+  hero: {
+    eyebrow: "About us",
+    title: "About Chess & Truck",
+    intro:
+      "Chess & Truck is a new chess program for kids in New York City. Our coach, Andrea, has 24 years of experience teaching chess.",
   },
-  coachSpotlight: {
-    eyebrow: "Your coach",
-    title: "Meet Andrea",
-    intro: "24 years teaching chess",
-    paragraphs: [
-      "Andrea has taught chess for 24 years in the United States and Canada. He has taught at children's chess camps, given private lessons, and taught in after-school chess programs.",
-    ],
-    highlights: [
-      "24 years teaching chess",
-      "Children's camps, private lessons, and after-school programs",
-      "Has taught in the United States and Canada",
-    ],
+  facts: [
+    { label: "Based in", value: "New York City" },
+    { label: "Programs", value: "Five, all opening soon" },
+    { label: "Coach", value: "Andrea, 24 years teaching chess" },
+    { label: "Registration", value: "Not open yet" },
+  ],
+  whoSection: {
+    eyebrow: "Who we are",
+    title: "A new chess program for NYC kids",
+    intro:
+      "We're getting ready to launch camps, tournaments, lessons, after-school chess, and Chess Dojo. These will be our first programs, and we'll share the details of each one before registration opens.",
   },
-  pillars: [
+  whoPoints: [
     {
-      title: "Real games",
-      text: "Kids will learn by playing, not just by listening.",
+      title: "Real chess, explained clearly",
+      text: "Kids will play real games, then go over them with a coach to see what worked and what to change.",
     },
     {
-      title: "Going over the game",
-      text: "After a game, a coach will help kids see what worked and what to try next time.",
+      title: "Details before sign-up",
+      text: "Each program page will list the dates, location, and price before we take any registrations or payments.",
     },
     {
       title: "Easy to reach",
-      text: "Parents can call, text, or email the people who run the program.",
+      text: "You can call, text, or email the people who run Chess & Truck with any question.",
     },
   ],
-  whySection: {
-    eyebrow: "Before you sign up",
-    title: "What you can expect from us",
-    intro: "A few things we promise while our programs are getting ready.",
+  programsSection: {
+    eyebrow: "Our programs",
+    title: "Five upcoming chess programs",
+    intro: "None are open for registration yet. Each page shows what's confirmed and what's still being planned.",
   },
-  standards: [
-    "We'll post dates, location, and price on each program page before registration opens",
-    "We won't take any payment until a program's registration is open",
-    "We'll help you find the right program for your child's level",
-    "You can call, text, or email us with any question",
-  ],
+  coach: {
+    eyebrow: "Your coach",
+    title: "Coach Andrea",
+    role: "Coach",
+    bio: "Andrea has taught chess for 24 years in the United States and Canada. He has taught at children's chess camps, given private lessons, and taught in after-school chess programs.",
+    facts: [
+      { value: "24 years", label: "teaching chess" },
+      { value: "U.S. & Canada", label: "where he's taught" },
+      { value: "Camps, lessons, after-school", label: "teaching experience" },
+    ],
+  },
+  contact: {
+    title: "Have a question?",
+    text: "Call, text, or email. We're happy to help you figure out which program fits your child.",
+  },
 };
 
 export const eventsPage = {
@@ -1609,102 +1609,140 @@ export const tournamentPage = {
   ],
 };
 
+// FAQ page: owner-confirmed facts, with plans labeled as plans.
 export const faqPage = {
-  eyebrow: "FAQ",
-  title: "Questions parents ask",
-  intro: "Answers about all five programs. If your question isn't here, call, text, or email us.",
-  heroFacts: [
-    { label: "Registration", value: "Opening soon" },
-    { label: "Payments", value: "Not taken yet" },
-    { label: "Where", value: "New York City" },
-    { label: "Questions", value: "Call, text, or email" },
-  ],
-  quickCards: [
-    {
-      title: "Is anything open for registration?",
-      text: "Not yet. All five programs are still being planned. We aren't taking sign-ups or payments until a program page says registration is open.",
-    },
-    {
-      title: "How much will programs cost?",
-      text: "We haven't set prices yet. Each program's price will be posted on its page before registration opens.",
-    },
-    {
-      title: "Does my child need chess experience?",
-      text: "Not for private lessons, which will be open to beginners and experienced players. Tell us your child's age and level, and we'll help you find the right program.",
-    },
-    {
-      title: "Who is the coach?",
-      text: "Andrea, who has 24 years of experience teaching chess. We'll share who coaches each program when its registration opens.",
-    },
-    {
-      title: "Where are programs held?",
-      text: "In New York City. We haven't announced specific locations yet. Each program page will list its location before registration opens.",
-    },
-    {
-      title: "What happens at the summer camp?",
-      text: "We're planning full days of chess lessons, games, outdoor time, and an ice cream break, with staff supervising kids all day. A sample daily schedule is on the Camps page.",
-    },
-    {
-      title: "Will tournaments be US Chess rated?",
-      text: "Yes, that's the plan for our tournaments. Rated play usually requires a current US Chess membership. Details will be posted when registration opens.",
-    },
-    {
-      title: "Is after-school chess offered at my child's school?",
-      text: "Not yet. We're talking with schools, but no agreement is final. If your school might be interested, please get in touch.",
-    },
-    {
-      title: "What is the Chess Dojo?",
-      text: "A new chess program we're planning for kids and teens. The details haven't been decided yet and will be posted on the Dojo page.",
-    },
-    {
-      title: "Will lunch be provided at camp?",
-      text: "We haven't decided yet. We'll tell you whether lunch is provided or should be packed from home when registration opens.",
-    },
-    {
-      title: "Will kids be supervised at camp?",
-      text: "Yes. Staff will supervise kids the whole day, including lunch and breaks.",
-    },
-  ],
-  prepSection: {
-    eyebrow: "Before you register",
-    title: "What parents usually want to know first",
-    intro: "These are the questions that usually decide whether a family is ready to move forward.",
+  hero: {
+    eyebrow: "FAQ",
+    title: "Questions parents ask",
+    intro:
+      "Straight answers about our five programs. When something hasn't been decided yet, we say so.",
   },
-  prepCards: [
-    {
-      title: "Who can join?",
-      text: "School-age players who want a stronger summer chess routine.",
-    },
-    {
-      title: "What should students bring?",
-      text: "A water bottle, lunch or snack if needed, and anything staff should know medically.",
-    },
-    {
-      title: "Is prior experience required?",
-      text: "No. Beginners are welcome, and we will help point families to the right starting format.",
-    },
-  ],
-  flowSection: {
-    eyebrow: "How sign-up works",
-    title: "The registration flow is simple",
-    intro: "Families should know what happens before they ever hit checkout.",
+  contact: {
+    title: "Still have a question?",
+    text: "Call, text, or email. Your message comes straight to us, and we'll reply by email or phone.",
   },
-  flowSteps: [
+  categories: [
     {
-      title: "Review the right page",
-      text: "Start with the camp page first so you can see the format, schedule, and fit.",
+      id: "faq-registration",
+      title: "Registration and cost",
+      items: [
+        {
+          question: "Is registration open?",
+          answer:
+            "Not yet. All five programs are still being planned, and we aren't taking sign-ups or payments for any of them. Each program page will say when its registration opens.",
+        },
+        {
+          question: "When will programs begin?",
+          answer:
+            "We haven't set start dates for any program yet. Dates will be posted on each program page before registration opens.",
+        },
+        {
+          question: "How much do programs cost?",
+          answer:
+            "Prices haven't been set for any program yet. Each price will be posted on its program page. When registration opens, you'll pay online by card through Stripe, a secure payment service.",
+        },
+      ],
     },
     {
-      title: "Send one message",
-      text: "Tell us the student age, current level, and what camp question you have.",
+      id: "faq-ages",
+      title: "Ages and experience",
+      items: [
+        {
+          question: "What ages can participate?",
+          answer:
+            "It depends on the program, and nothing is final yet. Camp is planned for ages 4 to 17. Chess Dojo is planned for kids and teens. Ages for after-school classes, lessons, and tournaments will be announced.",
+        },
+        {
+          question: "Are beginners welcome?",
+          answer:
+            "Private lessons will be open to beginners and experienced players. For our other programs, we'll say who each one is for when registration opens. Tell us your child's level, and we'll suggest where to start.",
+        },
+      ],
     },
     {
-      title: "Get the next step",
-      text: "We reply with availability, pricing, and the cleanest next move for your family.",
+      id: "faq-locations",
+      title: "Locations and formats",
+      items: [
+        {
+          question: "Where will programs take place?",
+          answer:
+            "In New York City. We haven't announced specific locations yet. For tournaments, we're looking at a possible venue, but nothing is final. For after-school chess, we're talking with schools, but no agreement is final.",
+        },
+        {
+          question: "Are private lessons online or in person?",
+          answer:
+            "Both. Private lessons will be offered in person and online, with more than one lesson length. In-person locations, lesson lengths, and times will be announced.",
+        },
+      ],
+    },
+    {
+      id: "faq-camps",
+      title: "Chess camps",
+      items: [
+        {
+          question: "Is the chess camp supervised?",
+          answer: "Yes. Staff will supervise kids the whole day, including lunch and breaks.",
+        },
+        {
+          question: "Is lunch included?",
+          answer:
+            "We haven't decided yet. We'll tell you whether lunch is provided or should be packed from home when registration opens.",
+        },
+        {
+          question: "What will a camp day look like?",
+          answer:
+            "We're planning full days of chess lessons, games, outdoor time, and an ice cream break, from about 9:00 AM to 3:00 PM. The times aren't final. A sample daily schedule is on the Camps page.",
+        },
+      ],
+    },
+    {
+      id: "faq-tournaments",
+      title: "Tournaments",
+      items: [
+        {
+          question: "Are tournaments US Chess rated?",
+          answer:
+            "Yes. Our tournaments will be official US Chess rated events, with players grouped by rating or playing level. No tournament has been scheduled yet. Rated play usually requires a current US Chess membership, and we'll explain how to join when registration opens.",
+        },
+        {
+          question: "Will there be prizes?",
+          answer: "We're planning trophies, medals, or other prizes, but the details aren't final.",
+        },
+      ],
+    },
+    {
+      id: "faq-dojo",
+      title: "Chess Dojo and after-school",
+      items: [
+        {
+          question: "What is Chess Dojo?",
+          answer:
+            "An upcoming chess program we're planning for kids and teens. We're still deciding what it will cover and whether it will meet online, in person, or both. Details will be posted on the Dojo page.",
+        },
+        {
+          question: "Is after-school chess offered at my child's school?",
+          answer:
+            "Not yet. We're talking with schools, but no agreement is final. If your school might be interested, please get in touch.",
+        },
+      ],
+    },
+    {
+      id: "faq-contact",
+      title: "Contact",
+      items: [
+        {
+          question: "How can I contact Chess & Truck?",
+          answer:
+            "Call or text (646) 251-7087 or (646) 494-5363, email info@chessandtruck.com, or use the form on our Contact page. We'll reply by email or phone.",
+        },
+        {
+          question: "Who is the coach?",
+          answer:
+            "Andrea, who has 24 years of experience teaching chess. We'll share who coaches each program when its registration opens.",
+        },
+      ],
     },
   ],
-  ctaTitle: "Still have a question?",
-  ctaText: "If the answer is not here yet, send a message and we will point you in the right direction.",
 };
 
 export const contactPage = {

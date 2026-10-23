@@ -24,6 +24,17 @@
   --ac-shadow: 0 1px 2px rgba(17, 29, 25, 0.06), 0 12px 32px rgba(17, 29, 25, 0.07);
   --ac-shadow-hover: 0 2px 4px rgba(17, 29, 25, 0.08), 0 18px 40px rgba(17, 29, 25, 0.12);
   --ac-header-height: 84px;
+
+  /* Motion tokens. Chess & Truck moves like a deliberate chess move: a quick,
+     decisive start that settles calmly. Every transition and animation uses these. */
+  --ct-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ct-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ct-dur-fast: 160ms;
+  --ct-dur-base: 260ms;
+  --ct-dur-reveal: 560ms;
+  --ct-dur-enter: 720ms;
+  --ct-rise: 14px;
+  --ct-stagger: 70ms;
 }
 
 /* `overflow: hidden` on the app shell stops the sticky header from sticking;
@@ -946,30 +957,40 @@
   display: none;
 }
 
+/* The plus is drawn with two bars so it can turn and fold into a minus. */
 .ac-faq-item summary::after {
-  content: "+";
+  content: "";
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
   width: 32px;
   height: 32px;
   border-radius: 50%;
   border: 1px solid var(--ac-line-strong);
-  font-size: 1.2rem;
-  font-weight: 600;
   color: var(--ac-green-900);
-  transition: background-color 160ms ease, color 160ms ease;
+  background-color: transparent;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 12px 2px, 2px 12px;
+  transition:
+    background-color var(--ct-dur-fast) var(--ct-ease),
+    border-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    background-size var(--ct-dur-base) var(--ct-ease),
+    transform var(--ct-dur-base) var(--ct-ease);
 }
 
 .ac-faq-item summary:hover::after,
 .ac-faq-item[open] summary::after {
-  background: var(--ac-green-900);
+  background-color: var(--ac-green-900);
   border-color: var(--ac-green-900);
   color: var(--ac-gold-light);
 }
 
 .ac-faq-item[open] summary::after {
-  content: "\2212";
+  background-size: 12px 2px, 2px 0;
+  transform: rotate(180deg);
 }
 
 .ac-faq-item p {
@@ -2432,6 +2453,109 @@
   }
 }
 
+/* ---------------------------------------------------- about and faq pages */
+/* Built on the program-page hero, homepage sections, and the shared FAQ accordion. */
+
+.pg-hero-about {
+  background:
+    radial-gradient(ellipse at 85% 15%, rgba(196, 149, 73, 0.16), transparent 55%),
+    var(--ac-cream);
+}
+
+.pg-hero-faq {
+  background:
+    radial-gradient(ellipse at 90% 20%, rgba(47, 116, 104, 0.12), transparent 55%),
+    var(--ac-cream);
+}
+
+.pg-fact-panel-crest {
+  display: block;
+  width: 28px;
+  height: auto;
+}
+
+/* A third coach fact spans the full row instead of sitting alone in a half. */
+.ac-coach-facts div:nth-child(3):last-child {
+  grid-column: 1 / -1;
+}
+
+/* faq: topic list in the hero */
+
+.faq-topics h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ac-ink);
+}
+
+.faq-topics ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq-topics a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 0;
+  border-top: 1px solid var(--ac-line);
+  font-weight: 600;
+  color: var(--ac-ink);
+  text-decoration: none;
+}
+
+.faq-topics a span {
+  color: var(--ac-gold-text);
+  transition: transform 160ms ease;
+}
+
+.faq-topics a:hover {
+  color: var(--ac-green-900);
+}
+
+.faq-topics a:hover span {
+  transform: translateX(3px);
+}
+
+.faq-topics a:focus-visible {
+  outline: 3px solid var(--ac-gold);
+  outline-offset: 3px;
+}
+
+/* faq: grouped accordions */
+
+.faq-groups {
+  display: grid;
+  gap: 56px;
+  max-width: 860px;
+}
+
+.faq-group {
+  display: grid;
+  gap: 14px;
+}
+
+.faq-group h2 {
+  margin: 0;
+  scroll-margin-top: calc(var(--ac-header-height) + 24px);
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ac-ink);
+}
+
+@media (max-width: 640px) {
+  .faq-groups {
+    gap: 40px;
+  }
+}
+
 /* ------------------------------------------------------ notify me form */
 /* Shown inside the dark registration status panel when enabled. */
 
@@ -2575,4 +2699,518 @@
 /* Camp schedule times were gold on white at 2.7:1; this darker gold is 6.5:1. */
 .camp-schedule-time {
   color: var(--ac-gold-text);
+}
+
+/* ------------------------------------------------------------ motion system */
+/* Original Chess & Truck motion: short, decisive moves that settle calmly, a
+   one-time knight's move on the homepage board, and gentle reveals as content
+   comes into view. Only transform, opacity, and clip-path animate, so nothing
+   shifts the layout. Everything here is skipped for reduced-motion users. */
+
+/* Interactive elements share one timing. */
+.ac-btn {
+  transition:
+    background-color var(--ct-dur-fast) var(--ct-ease),
+    border-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    box-shadow var(--ct-dur-base) var(--ct-ease),
+    transform var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ac-btn:hover {
+  transform: translateY(-1px);
+}
+
+.ac-btn:active {
+  transform: translateY(0);
+  transition-duration: 60ms;
+}
+
+.ac-btn-primary:hover {
+  box-shadow: 0 10px 20px -12px rgba(23, 53, 48, 0.6);
+}
+
+.ac-btn-gold:hover {
+  box-shadow: 0 10px 20px -12px rgba(122, 85, 34, 0.55);
+}
+
+.ac-program-card {
+  transition:
+    transform var(--ct-dur-base) var(--ct-ease),
+    box-shadow var(--ct-dur-base) var(--ct-ease),
+    border-color var(--ct-dur-base) var(--ct-ease);
+}
+
+.ac-program-card:hover {
+  transform: translateY(-3px);
+}
+
+.ac-program-arrow,
+.ac-text-link span,
+.faq-topics a span {
+  transition:
+    background-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    transform var(--ct-dur-base) var(--ct-ease);
+}
+
+.ac-text-link:hover span {
+  transform: translateX(3px);
+}
+
+.ac-faq-item summary {
+  transition: color var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ac-faq-item summary:hover {
+  color: var(--ac-green-700);
+}
+
+@keyframes ct-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--ct-rise);
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ct-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ct-settle {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* A knight's move on the 8x8 board, beside the crest: one gold square steps two up
+   and one across (b2 to b4 to a4), then stays softly lit. */
+@keyframes ct-knight-move {
+  0% {
+    opacity: 0;
+    translate: 0 0;
+  }
+
+  18% {
+    opacity: 1;
+    translate: 0 0;
+    animation-timing-function: var(--ct-ease-in-out);
+  }
+
+  58% {
+    translate: 0 -200%;
+    animation-timing-function: var(--ct-ease-in-out);
+  }
+
+  84% {
+    opacity: 1;
+    translate: -100% -200%;
+  }
+
+  100% {
+    opacity: 0.7;
+    translate: -100% -200%;
+  }
+}
+
+/* Andrea's photo opens like a curtain, left to right. */
+@keyframes ct-unveil {
+  from {
+    clip-path: inset(0 100% 0 0);
+    scale: 1.05;
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    scale: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Page entrances: hero text, buttons, and side panels arrive in order. */
+  .ac-hero-copy > *,
+  .pg-hero-copy > * {
+    animation: ct-rise var(--ct-dur-enter) var(--ct-ease) both;
+  }
+
+  .ac-hero-copy > :nth-child(2),
+  .pg-hero-copy > :nth-child(2) {
+    animation-delay: calc(var(--ct-stagger) * 1);
+  }
+
+  .ac-hero-copy > :nth-child(3),
+  .pg-hero-copy > :nth-child(3) {
+    animation-delay: calc(var(--ct-stagger) * 2);
+  }
+
+  .ac-hero-copy > :nth-child(4),
+  .pg-hero-copy > :nth-child(4) {
+    animation-delay: calc(var(--ct-stagger) * 3);
+  }
+
+  .ac-hero-copy > :nth-child(5),
+  .pg-hero-copy > :nth-child(5) {
+    animation-delay: calc(var(--ct-stagger) * 4);
+  }
+
+  .pg-hero-grid > :nth-child(2) {
+    animation: ct-rise var(--ct-dur-enter) var(--ct-ease) calc(var(--ct-stagger) * 3) both;
+  }
+
+  .pg-hero-grid > :nth-child(2) dl > div,
+  .pg-hero-grid > :nth-child(2) li {
+    animation: ct-fade var(--ct-dur-reveal) var(--ct-ease) both;
+  }
+
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(1) { animation-delay: 380ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(2) { animation-delay: 450ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(3) { animation-delay: 520ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(4) { animation-delay: 590ms; }
+  .pg-hero-grid > :nth-child(2) :is(dl > div, li):nth-child(n + 5) { animation-delay: 660ms; }
+
+  /* Homepage board: it settles in, then one square makes a knight's move. */
+  .ac-hero-visual {
+    animation: ct-settle 900ms var(--ct-ease) 120ms both;
+  }
+
+  .ac-hero-visual::before {
+    content: "";
+    position: absolute;
+    left: 12.5%;
+    top: 75%;
+    width: 12.5%;
+    height: 12.5%;
+    background: rgba(220, 185, 120, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(220, 185, 120, 0.6);
+    pointer-events: none;
+    animation: ct-knight-move 1500ms linear 700ms both;
+  }
+
+  .ac-hero-crest {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Scroll reveals. Elements are only hidden once the script has marked the
+     page (html.ct-motion), so content stays visible if JavaScript fails. */
+  .ct-motion .ct-reveal:not(.is-revealed) {
+    opacity: 0;
+  }
+
+  .ct-motion .ct-reveal.is-revealed {
+    animation: ct-rise var(--ct-dur-reveal) var(--ct-ease) var(--ct-reveal-delay, 0ms) both;
+  }
+
+  /* Coach: photo unveils, then the experience facts arrive one by one. */
+  .ct-motion .ac-coach.ct-reveal:not(.is-revealed) .ac-coach-photo {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .ct-motion .ac-coach.is-revealed .ac-coach-photo {
+    animation: ct-unveil 1000ms var(--ct-ease) 120ms both;
+  }
+
+  .ct-motion .ac-coach.ct-reveal:not(.is-revealed) .ac-coach-facts > div {
+    opacity: 0;
+  }
+
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div {
+    animation: ct-rise var(--ct-dur-reveal) var(--ct-ease) both;
+  }
+
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div:nth-child(1) { animation-delay: 420ms; }
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div:nth-child(2) { animation-delay: 500ms; }
+  .ct-motion .ac-coach.is-revealed .ac-coach-facts > div:nth-child(3) { animation-delay: 580ms; }
+
+  /* FAQ: answers slide open and closed where the browser supports it
+     (::details-content); elsewhere they open instantly and fade in. */
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  .ac-faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size var(--ct-dur-base) var(--ct-ease),
+      content-visibility var(--ct-dur-base) allow-discrete;
+  }
+
+  .ac-faq-item[open]::details-content {
+    block-size: auto;
+  }
+
+  .ac-faq-item[open] p {
+    animation: ct-fade var(--ct-dur-base) var(--ct-ease) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-btn,
+  .ac-btn:hover,
+  .ac-program-card:hover {
+    transform: none;
+  }
+
+  .ac-faq-item summary::after,
+  .ac-program-arrow,
+  .ac-text-link span,
+  .faq-topics a span {
+    transition: none;
+  }
+
+  .ac-text-link:hover span,
+  .faq-topics a:hover span {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------- cinematic hero */
+/* Homepage hero over a muted stock video, with a forest-green gradient so the
+   text stays readable. The poster image is the fallback and the reduced-motion view. */
+
+.ac-hero-cinematic {
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-content: center;
+  min-height: clamp(560px, 78vh, 760px);
+  padding: 88px 0 104px;
+  background: var(--ac-green-950);
+}
+
+.ac-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.ac-hero-media video,
+.ac-hero-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% center;
+}
+
+.ac-hero-cinematic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(16, 34, 30, 0.94) 0%, rgba(16, 34, 30, 0.82) 36%, rgba(16, 34, 30, 0.45) 66%, rgba(16, 34, 30, 0.28) 100%),
+    linear-gradient(180deg, rgba(16, 34, 30, 0.35) 0%, transparent 28%, transparent 70%, rgba(16, 34, 30, 0.6) 100%);
+  pointer-events: none;
+}
+
+.ac-hero-cinematic .ac-eyebrow {
+  color: var(--ac-gold-light);
+}
+
+.ac-hero-cinematic .ac-hero-copy h1 {
+  color: #fff;
+}
+
+.ac-hero-cinematic .ac-lead {
+  color: #e2e8e4;
+}
+
+.ac-hero-cinematic .ac-hero-facts li {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f4efe4;
+}
+
+.ac-hero-media-bar {
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.ac-hero-video-toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(16, 34, 30, 0.55);
+  color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    border-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    background-color var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ac-hero-video-toggle:hover {
+  border-color: var(--ac-gold-light);
+  color: var(--ac-gold-light);
+}
+
+.ac-hero-video-toggle:focus-visible {
+  outline: 3px solid var(--ac-gold);
+  outline-offset: 3px;
+}
+
+/* Pause icon: two bars. */
+.ac-hero-video-toggle span {
+  width: 12px;
+  height: 14px;
+  background:
+    linear-gradient(currentColor, currentColor) left / 4px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) right / 4px 100% no-repeat;
+}
+
+/* Play icon: a triangle. */
+.ac-hero-video-toggle.is-paused span {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 12px solid currentColor;
+  background: none;
+}
+
+/* The programs section was tuned to follow a cream hero; give it room after the video. */
+.ac-hero-cinematic + .ac-section-programs {
+  padding-top: 72px;
+}
+
+/* Desktop: a smaller crest board leaves more of the video in view. */
+.ac-hero-cinematic .ac-hero-visual {
+  max-width: 300px;
+}
+
+@media (max-width: 640px) {
+  .ac-hero-cinematic + .ac-section-programs {
+    padding-top: 44px;
+  }
+
+  /* Phones: a square clip of the children and the board sits at the top; the text
+     follows on solid green. The gradient only covers the clip's lower edge, where
+     the eyebrow begins, so the children and the board stay clear. */
+  .ac-hero-cinematic {
+    align-content: start;
+    min-height: 0;
+    padding: calc(100vw - 44px) 0 40px;
+  }
+
+  .ac-hero-media {
+    inset: 0 0 auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .ac-hero-media video,
+  .ac-hero-media img {
+    object-position: center;
+  }
+
+  .ac-hero-cinematic::before {
+    background: linear-gradient(
+      180deg,
+      transparent 0,
+      transparent calc(100vw - 150px),
+      rgba(16, 34, 30, 0.82) calc(100vw - 44px),
+      var(--ac-green-950) 100vw,
+      var(--ac-green-950) 100%
+    );
+  }
+
+  .ac-hero-cinematic::after {
+    content: none;
+  }
+
+  /* Pause button in the clip's top-right corner. */
+  .ac-hero-media-bar {
+    top: 14px;
+    bottom: auto;
+  }
+}
+
+/* ---------------------------------------------------- program page photos */
+/* A 4:3 stock photo on the right of each program hero, with the program's
+   panel overlapping its lower edge. Width and height attributes plus
+   aspect-ratio reserve the space, so nothing shifts while it loads. */
+
+.pg-hero-media {
+  position: relative;
+  display: grid;
+}
+
+.pg-hero-photo {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--ac-cream-deep);
+  box-shadow: 0 24px 48px -24px rgba(16, 34, 30, 0.4);
+}
+
+.pg-hero-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pg-hero-media > :not(.pg-hero-photo) {
+  position: relative;
+  z-index: 1;
+  margin: -36px 0 0 32px;
+}
+
+@media (max-width: 1023px) {
+  .pg-hero-media {
+    max-width: 620px;
+  }
+
+  .pg-hero-media > :not(.pg-hero-photo) {
+    margin: -40px 12px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .pg-hero-photo {
+    border-radius: 18px;
+  }
+
+  .pg-hero-media > :not(.pg-hero-photo) {
+    margin: -28px 8px 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The photo settles in slightly as the hero arrives. */
+  .pg-hero-photo img {
+    animation: ct-settle 1100ms var(--ct-ease) 160ms both;
+  }
 }

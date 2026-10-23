@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
   academyHomePage,
@@ -37,6 +37,10 @@ import {
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
 import brandCrest from "./assets/chess-truck-crest.png";
+import heroVideoDesktop from "./assets/hero/hero-chess-1280.mp4";
+import heroVideoMobile from "./assets/hero/hero-chess-720sq.mp4";
+import heroPosterDesktop from "./assets/hero/hero-chess-1280-poster.webp";
+import heroPosterMobile from "./assets/hero/hero-chess-720sq-poster.webp";
 import {
   CAMP_REGISTRATION_CLOSED_MESSAGE,
   PROGRAM_STATUS,
@@ -713,6 +717,71 @@ const canonicalPathAliases = {
 
 // Private, one-time pages that should never appear in search results.
 const isNoIndexPath = (path) => path === "/camps/confirmed" || path.startsWith("/interest/");
+
+// Scroll reveals: these blocks fade and rise into place once, as they enter the
+// viewport. Siblings are staggered. Hero content is animated by CSS instead.
+const REVEAL_SELECTORS = [
+  ".ac-section-heading",
+  ".ac-program-grid > *",
+  ".ac-pillars > li",
+  ".ac-steps > li",
+  ".ac-coach",
+  ".ac-faq-list",
+  ".ac-contact-card",
+  ".pg-timeline > li",
+  ".pg-skill-grid > li",
+  ".pg-section-cards > *",
+  ".pg-morning > li",
+  ".pg-flow > li",
+  ".pg-format-list > li",
+  ".pg-audiences > *",
+  ".pg-status",
+  ".faq-group",
+].join(",");
+
+const useRevealOnScroll = (routeKey) => {
+  // Runs before paint, so content is never shown and then hidden again.
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      root.classList.remove("ct-motion");
+      return undefined;
+    }
+
+    // Content is hidden only after this class is set, so it stays visible if scripts fail.
+    root.classList.add("ct-motion");
+
+    const targets = [...document.querySelectorAll(REVEAL_SELECTORS)].filter(
+      (element) => !element.closest(".ac-hero, .pg-hero, .page-hero")
+    );
+    const siblingCounts = new Map();
+
+    targets.forEach((element) => {
+      const index = siblingCounts.get(element.parentElement) || 0;
+      siblingCounts.set(element.parentElement, index + 1);
+      element.style.setProperty("--ct-reveal-delay", `${Math.min(index, 5) * 70}ms`);
+      element.classList.add("ct-reveal");
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
+    );
+
+    targets.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, [routeKey]);
+};
 
 const updateCanonicalLink = (href) => {
   const element = document.querySelector("link[rel='canonical']");
@@ -1429,6 +1498,125 @@ function AcademySectionHeading({ id, eyebrow, title, intro }) {
   );
 }
 
+/// Homepage hero background: a 12-second stock clip (Anastasia Shuraeva, Pexels).
+// Phones get a square crop that keeps the children and the board in view.
+// Reduced-motion and Data Saver visitors get the still poster only, and the
+// video never downloads for them.
+const heroMedia = {
+  desktop: { video: heroVideoDesktop, poster: heroPosterDesktop },
+  mobile: { video: heroVideoMobile, poster: heroPosterMobile },
+};
+
+function HeroVideo() {
+  const videoRef = useRef(null);
+  // Set when the visitor pauses, or when the browser refuses autoplay: from then on
+  // only the button starts the video, never scrolling back to the hero.
+  const userPausedRef = useRef(false);
+  const [media] = useState(() =>
+    window.matchMedia("(max-width: 640px)").matches ? heroMedia.mobile : heroMedia.desktop
+  );
+  const [canPlay] = useState(
+    () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !navigator.connection?.saveData
+  );
+  const [isPaused, setIsPaused] = useState(false);
+  // The file could not load: show the poster with no play button, since it could not work.
+  const [hasFailed, setHasFailed] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return undefined;
+    }
+
+    // React sets `muted` as a property only; iOS needs it before autoplay will start.
+    video.muted = true;
+    video.defaultMuted = true;
+    video.play().catch((error) => {
+      if (video.error) {
+        setHasFailed(true);
+      } else if (error.name === "NotAllowedError") {
+        // Autoplay refused (for example Low Power Mode): poster plus a manual Play button.
+        userPausedRef.current = true;
+        setIsPaused(true);
+      }
+    });
+
+    // Save battery and data: stop while the hero is off screen.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (userPausedRef.current) {
+        return;
+      }
+
+      if (entry.isIntersecting) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+    observer.observe(video);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    if (video.paused) {
+      userPausedRef.current = false;
+      setIsPaused(false);
+      video.play().catch(() => {
+        userPausedRef.current = true;
+        setIsPaused(true);
+      });
+    } else {
+      userPausedRef.current = true;
+      video.pause();
+      setIsPaused(true);
+    }
+  };
+
+  const showVideo = canPlay && !hasFailed;
+
+  return (
+    <>
+      <div className="ac-hero-media" aria-hidden="true">
+        {showVideo ? (
+          <video
+            ref={videoRef}
+            src={media.video}
+            poster={media.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onError={() => setHasFailed(true)}
+          />
+        ) : (
+          <img src={media.poster} alt="" />
+        )}
+      </div>
+      {showVideo ? (
+        <div className="ac-shell ac-hero-media-bar">
+          <button
+            type="button"
+            className={`ac-hero-video-toggle${isPaused ? " is-paused" : ""}`}
+            onClick={togglePlayback}
+            aria-label={isPaused ? "Play background video" : "Pause background video"}
+          >
+            <span aria-hidden="true" />
+          </button>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 function AcademyHomePage({ currentPath, navigate }) {
   const { hero, programsSection, whySection, coachSection, howSection, faqSection, contactCard } =
     academyHomePage;
@@ -1448,17 +1636,18 @@ function AcademyHomePage({ currentPath, navigate }) {
 
   return (
     <div className="ac-home">
-      <section className="ac-hero" aria-labelledby="home-title">
+      <section className="ac-hero ac-hero-cinematic" aria-labelledby="home-title">
+        <HeroVideo />
         <div className="ac-shell ac-hero-grid">
           <div className="ac-hero-copy">
             <span className="ac-eyebrow">{hero.eyebrow}</span>
             <h1 id="home-title">{hero.title}</h1>
             <p className="ac-lead">{hero.intro}</p>
             <div className="ac-actions">
-              <a href="#programs" className="ac-btn ac-btn-primary" onClick={scrollToPrograms}>
+              <a href="#programs" className="ac-btn ac-btn-gold" onClick={scrollToPrograms}>
                 See our programs
               </a>
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn pg-btn-on-dark">
                 Contact us
               </AppLink>
             </div>
@@ -1600,7 +1789,7 @@ function InnerHero({ eyebrow, title, intro, programId, actions, aside, variant }
         <div className="pg-hero-copy">
           <div className="pg-hero-kicker">
             <span className="ac-eyebrow">{eyebrow}</span>
-            <ProgramStatusBadge programId={programId} />
+            {programId ? <ProgramStatusBadge programId={programId} /> : null}
           </div>
           <h1 id="page-title">{title}</h1>
           <p className="ac-lead">{intro}</p>
@@ -1612,12 +1801,51 @@ function InnerHero({ eyebrow, title, intro, programId, actions, aside, variant }
   );
 }
 
-function FactPanel({ title, iconKey, items, tone }) {
+// Program page photos: Pexels stock images (see src/assets/programs/SOURCES.md).
+// They illustrate the activity only; alt text describes the scene, not our students.
+const programPhotoFiles = import.meta.glob("./assets/programs/*.webp", { eager: true, import: "default" });
+const PROGRAM_PHOTO_WIDTHS = [480, 800, 1200];
+
+const programPhotos = {
+  camps: { file: "camps", alt: "Children playing chess together at a classroom table" },
+  tournaments: { file: "tournaments", alt: "Hands pressing a chess clock beside a chessboard" },
+  lessons: { file: "lessons", alt: "An adult and a child studying a chess position together" },
+  afterSchool: { file: "after-school", alt: "A small group of children playing chess at a long table" },
+  dojo: { file: "dojo", alt: "Close-up of a hand making a move in a chess position" },
+};
+
+const getProgramPhotoSrc = (file, width) => programPhotoFiles[`./assets/programs/${file}-${width}.webp`];
+
+// Photo on the right with the program's panel overlapping its lower edge;
+// on phones they stack under the text.
+function ProgramHeroMedia({ programId, children }) {
+  const photo = programPhotos[programId];
+
+  return (
+    <div className="pg-hero-media">
+      <figure className="pg-hero-photo">
+        <img
+          src={getProgramPhotoSrc(photo.file, 800)}
+          srcSet={PROGRAM_PHOTO_WIDTHS.map((width) => `${getProgramPhotoSrc(photo.file, width)} ${width}w`).join(", ")}
+          sizes="(max-width: 1023px) calc(100vw - 32px), 520px"
+          width="1200"
+          height="900"
+          alt={photo.alt}
+          decoding="async"
+          fetchPriority="high"
+        />
+      </figure>
+      {children}
+    </div>
+  );
+}
+
+function FactPanel({ title, iconKey, icon, items, tone }) {
   return (
     <aside className={`pg-fact-panel pg-fact-panel-${tone}`} aria-label={title}>
       <div className="pg-fact-panel-head">
         <span className="ac-program-icon">
-          <ProgramIcon iconKey={iconKey} />
+          {icon || <ProgramIcon iconKey={iconKey} />}
         </span>
         <h2>{title}</h2>
       </div>
@@ -1907,7 +2135,11 @@ function CampsPage({ currentPath, navigate, bookingProps }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Camp details" iconKey="camps" items={content.glance} tone="dark" />}
+        aside={
+          <ProgramHeroMedia programId="camps">
+            <FactPanel title="Camp details" iconKey="camps" items={content.glance} tone="dark" />
+          </ProgramHeroMedia>
+        }
       />
 
       <section className="ac-section pg-day-section" id="camp-day" aria-labelledby="camp-day-title">
@@ -1980,7 +2212,11 @@ function TournamentsPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Planned format" iconKey="tournaments" items={content.plannedFormat} tone="light" />}
+        aside={
+          <ProgramHeroMedia programId="tournaments">
+            <FactPanel title="Planned format" iconKey="tournaments" items={content.plannedFormat} tone="light" />
+          </ProgramHeroMedia>
+        }
       />
 
       <section className="ac-section pg-dark-section" id="sections" aria-labelledby="sections-title">
@@ -2076,17 +2312,19 @@ function LessonsPage({ currentPath, navigate }) {
           </>
         }
         aside={
-          <aside className="pg-includes" aria-labelledby="lesson-includes-title">
-            <h2 id="lesson-includes-title">{content.includesTitle}</h2>
-            <ul>
-              {content.includes.map((item) => (
-                <li key={item.title}>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <ProgramHeroMedia programId="lessons">
+            <aside className="pg-includes" aria-labelledby="lesson-includes-title">
+              <h2 id="lesson-includes-title">{content.includesTitle}</h2>
+              <ul>
+                {content.includes.map((item) => (
+                  <li key={item.title}>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </ProgramHeroMedia>
         }
       />
 
@@ -2185,7 +2423,11 @@ function AfterSchoolPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Program details" iconKey="afterSchool" items={content.glance} tone="light" />}
+        aside={
+          <ProgramHeroMedia programId="afterSchool">
+            <FactPanel title="Program details" iconKey="afterSchool" items={content.glance} tone="light" />
+          </ProgramHeroMedia>
+        }
       />
 
       <section className="ac-section" id="audiences" aria-labelledby="audiences-title">
@@ -2279,7 +2521,11 @@ function DojoPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Program details" iconKey="dojo" items={content.glance} tone="dark" />}
+        aside={
+          <ProgramHeroMedia programId="dojo">
+            <FactPanel title="Program details" iconKey="dojo" items={content.glance} tone="dark" />
+          </ProgramHeroMedia>
+        }
       />
 
       <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />
@@ -3223,92 +3469,115 @@ function CampBookingFormPanel({
   );
 }
 
-function AboutPage({ currentPath, navigate }) {
+// Dark contact panel at the end of About and FAQ; same look as the program pages' status panel.
+function ContactPanel({ id, title, text, currentPath, navigate }) {
   return (
-    <>
-      <PageHero
-        eyebrow={aboutPage.eyebrow}
-        title={aboutPage.title}
-        intro={aboutPage.intro}
-        heroFacts={aboutPage.heroFacts}
-        currentPath={currentPath}
-        navigate={navigate}
+    <section className="ac-section pg-status-section" aria-labelledby={`${id}-title`}>
+      <div className="ac-shell">
+        <div className="pg-status">
+          <div className="pg-status-copy">
+            <h2 id={`${id}-title`}>{title}</h2>
+            <p>{text}</p>
+          </div>
+          <div className="pg-status-actions">
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
+              Contact us
+            </AppLink>
+            <a href={phoneContact.href} className="ac-btn pg-btn-on-dark">
+              Call or text {phoneContact.display}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AboutPage({ currentPath, navigate }) {
+  const content = aboutPage;
+
+  return (
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="about"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
         actions={
           <>
-            <AppLink to="/" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+            <a href="#about-programs" className="ac-btn ac-btn-primary" onClick={scrollToSection("about-programs")}>
               See our programs
+            </a>
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              Contact us
             </AppLink>
-              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-secondary">
-                Contact us
-              </AppLink>
           </>
+        }
+        aside={
+          <FactPanel
+            title="Chess & Truck"
+            icon={<img src={brandCrest} alt="" className="pg-fact-panel-crest" width="28" height="30" />}
+            items={content.facts}
+            tone="dark"
+          />
         }
       />
 
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={aboutPage.introSection.eyebrow}
-            title={aboutPage.introSection.title}
-            intro={aboutPage.introSection.intro}
-          />
-          <div className="card-grid card-grid-three">
-            {aboutPage.pillars.map((item) => (
-              <article className="surface" key={item.title}>
+      <section className="ac-section" aria-labelledby="about-who-title">
+        <div className="ac-shell ac-why-grid">
+          <AcademySectionHeading id="about-who-title" {...content.whoSection} />
+          <ul className="ac-pillars">
+            {content.whoPoints.map((item) => (
+              <li key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
-              </article>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ac-section ac-section-tint" id="about-programs" aria-labelledby="about-programs-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="about-programs-title" {...content.programsSection} />
+          <div className="ac-program-grid">
+            {programs.map((item) => (
+              <ProgramCard key={item.id} program={item} currentPath={currentPath} navigate={navigate} />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="page-section">
-        <div className="shell">
-          <div className="surface coach-spotlight">
-            <div className="coach-spotlight-media">
-              <img
-                src={andreaPhoto}
-                alt="Andrea at an outdoor chess table"
-                className="coach-spotlight-image"
-              />
-            </div>
-            <div className="coach-spotlight-copy">
-              <span className="section-tag">{aboutPage.coachSpotlight.eyebrow}</span>
-              <h2>{aboutPage.coachSpotlight.title}</h2>
-              <p className="coach-spotlight-role">{aboutPage.coachSpotlight.intro}</p>
-              <div className="coach-spotlight-text">
-                {aboutPage.coachSpotlight.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+      <section className="ac-section" aria-labelledby="about-coach-title">
+        <div className="ac-shell">
+          <AcademySectionHeading id="about-coach-title" eyebrow={content.coach.eyebrow} title={content.coach.title} />
+          <article className="ac-coach">
+            <img
+              src={andreaPhoto}
+              alt="Andrea at an outdoor chess table"
+              className="ac-coach-photo"
+              width="647"
+              height="480"
+              loading="lazy"
+            />
+            <div className="ac-coach-copy">
+              <span className="ac-coach-role">{content.coach.role}</span>
+              <p>{content.coach.bio}</p>
+              <dl className="ac-coach-facts">
+                {content.coach.facts.map((item) => (
+                  <div key={item.label}>
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
+                  </div>
                 ))}
-              </div>
-              <ul className="coach-spotlight-highlights">
-                {aboutPage.coachSpotlight.highlights.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+              </dl>
             </div>
-          </div>
+          </article>
         </div>
       </section>
 
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro
-            eyebrow={aboutPage.whySection.eyebrow}
-            title={aboutPage.whySection.title}
-            intro={aboutPage.whySection.intro}
-          />
-          <div className="surface checklist-surface">
-            <ul className="checklist">
-              {aboutPage.standards.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-    </>
+      <ContactPanel id="about-contact" {...content.contact} currentPath={currentPath} navigate={navigate} />
+    </div>
   );
 }
 
@@ -4154,36 +4423,59 @@ function LessonDetailPage({ page, currentPath, navigate }) {
 }
 
 function FaqPage({ currentPath, navigate }) {
+  const content = faqPage;
+
   return (
-    <>
-      <PageHero
-        eyebrow={faqPage.eyebrow}
-        title={faqPage.title}
-        intro={faqPage.intro}
-        heroFacts={faqPage.heroFacts}
-        currentPath={currentPath}
-        navigate={navigate}
+    <div className="ac-home pg-page">
+      <InnerHero
+        variant="faq"
+        eyebrow={content.hero.eyebrow}
+        title={content.hero.title}
+        intro={content.hero.intro}
         actions={
-          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="btn btn-primary">
+          <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-primary">
             Ask a question
           </AppLink>
         }
+        aside={
+          <nav className="pg-fact-panel pg-fact-panel-light faq-topics" aria-labelledby="faq-topics-title">
+            <h2 id="faq-topics-title">Jump to a topic</h2>
+            <ul>
+              {content.categories.map((category) => (
+                <li key={category.id}>
+                  <a href={`#${category.id}`} onClick={scrollToSection(category.id)}>
+                    {category.title}
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        }
       />
 
-      <section className="page-section">
-        <div className="shell">
-          <SectionIntro eyebrow="All programs" title="Common questions" />
-          <div className="card-grid card-grid-three">
-            {faqPage.quickCards.map((item) => (
-              <article className="surface" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
+      <section className="ac-section" aria-label="Frequently asked questions">
+        <div className="ac-shell">
+          <div className="faq-groups">
+            {content.categories.map((category) => (
+              <div className="faq-group" key={category.id}>
+                <h2 id={category.id}>{category.title}</h2>
+                <div className="ac-faq-list">
+                  {category.items.map((item) => (
+                    <details className="ac-faq-item" key={item.question}>
+                      <summary>{item.question}</summary>
+                      <p>{item.answer}</p>
+                    </details>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
-    </>
+
+      <ContactPanel id="faq-contact" {...content.contact} currentPath={currentPath} navigate={navigate} />
+    </div>
   );
 }
 
@@ -4993,6 +5285,8 @@ function ChessTruckApp() {
     updateMetaTag("meta[property='og:url']", canonicalUrl);
     updateMetaTag("meta[name='robots']", isNoIndexPath(currentPath) ? "noindex,nofollow" : "index,follow");
   }, [currentPath]);
+
+  useRevealOnScroll(currentPath);
 
   useEffect(() => {
     const focusTimer = window.requestAnimationFrame(() => {
