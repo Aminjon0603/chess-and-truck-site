@@ -9,12 +9,12 @@
   <path d="M162 149C152 150 148 158 148 166C148 175 154 181 163 183" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
   <path d="M219 149C229 150 233 158 233 166C233 175 227 181 218 183" stroke="#F7F4EA" stroke-width="8" stroke-linecap="round"/>
   <path d="M176 151H206V162C206 173 199 180 191 183C183 180 176 173 176 162V151Z" fill="#E4BE5E"/>
-  <text x="264" y="164" fill="#F7F4EA" font-family="Sora, Arial, sans-serif" font-size="54" font-weight="700">CHESS AND TRUCK</text>
-  <text x="264" y="214" fill="#D2DFD6" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="600">New York City scholastic chess tournaments</text>
-  <text x="112" y="336" fill="#F7F4EA" font-family="Sora, Arial, sans-serif" font-size="64" font-weight="700">Open and Beginner divisions.</text>
-  <text x="112" y="410" fill="#DCE7E0" font-family="Manrope, Arial, sans-serif" font-size="34" font-weight="500">Clear registration. Direct family support. Secure Stripe checkout.</text>
+  <text x="264" y="164" fill="#F7F4EA" font-family="Sora, Arial, sans-serif" font-size="54" font-weight="700">CHESS &amp; TRUCK</text>
+  <text x="264" y="214" fill="#D2DFD6" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="600">Chess programs for kids in New York City</text>
+  <text x="112" y="336" fill="#F7F4EA" font-family="Sora, Arial, sans-serif" font-size="64" font-weight="700">Camps, lessons, tournaments.</text>
+  <text x="112" y="410" fill="#DCE7E0" font-family="Manrope, Arial, sans-serif" font-size="34" font-weight="500">After-school chess and Chess Dojo, too. Registration opens soon.</text>
   <rect x="112" y="454" width="282" height="64" rx="32" fill="#D2A444"/>
-  <text x="154" y="496" fill="#183126" font-family="Sora, Arial, sans-serif" font-size="28" font-weight="700">Register Online</text>
+  <text x="166" y="496" fill="#183126" font-family="Sora, Arial, sans-serif" font-size="28" font-weight="700">Opening Soon</text>
   <defs>
     <linearGradient id="panel" x1="110" y1="96" x2="1090" y2="560" gradientUnits="userSpaceOnUse">
       <stop stop-color="#15382E"/>

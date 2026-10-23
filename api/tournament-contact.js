@@ -76,7 +76,7 @@ export default {
     const limited = applyRateLimit(request, "contact", {
       limit: 5,
       windowMs: 15 * 60 * 1000,
-      message: "Too many messages were sent from this network. Please wait a little and try again.",
+      message: "Too many messages from this connection. Please wait a few minutes and try again.",
     });
 
     if (limited) {
@@ -102,7 +102,7 @@ export default {
     if (data.website) {
       return Response.json(
         {
-          message: "Thanks. Your message was sent to the tournament team.",
+          message: "Thanks! We got your message and will get back to you soon.",
         },
         { status: 200 }
       );
@@ -112,7 +112,7 @@ export default {
 
     if (Object.keys(errors).length > 0) {
       return Response.json(
-        { error: Object.values(errors)[0] || "Please fill in your name, email, and message." },
+        { error: Object.values(errors)[0] || "Please enter your name, email, and a message." },
         { status: 400 }
       );
     }
@@ -124,7 +124,7 @@ export default {
       return Response.json(
         {
           error:
-            "The contact form is not configured yet. Add RESEND_API_KEY and CONTACT_FROM_EMAIL in Vercel to enable delivery.",
+            "Sorry, the form isn't working right now. Please email info@chessandtruck.com or call (646) 251-7087.",
         },
         { status: 500 }
       );
@@ -142,7 +142,7 @@ export default {
       return Response.json(
         {
           error:
-            "The message could not be delivered right now. Please email the tournament team directly instead.",
+            "Sorry, your message didn't go through. Please email info@chessandtruck.com or call (646) 251-7087.",
         },
         { status: 502 }
       );
@@ -150,7 +150,7 @@ export default {
 
     return Response.json(
       {
-        message: "Thanks. Your message was sent to the tournament team.",
+        message: "Thanks! We got your message and will get back to you soon.",
       },
       { status: 200 }
     );

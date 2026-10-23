@@ -78,10 +78,10 @@ export function validateRegistrationFields(state) {
 export function validateContactFields(state) {
   const errors = {};
 
-  if (!cleanText(state.name)) errors.name = "Please fill in your name.";
+  if (!cleanText(state.name)) errors.name = "Please enter your name.";
 
   if (!cleanText(state.email)) {
-    errors.email = "Please fill in your email.";
+    errors.email = "Please enter your email.";
   } else if (!isValidEmail(state.email)) {
     errors.email = "Enter a valid email address.";
   }
@@ -91,9 +91,9 @@ export function validateContactFields(state) {
   }
 
   if (!cleanText(state.message)) {
-    errors.message = "Please include a message.";
+    errors.message = "Please write a message.";
   } else if (cleanText(state.message).length < 8) {
-    errors.message = "Please add a little more detail so the team can help.";
+    errors.message = "Please add a bit more detail so we can help.";
   }
 
   return errors;
