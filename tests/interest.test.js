@@ -7,6 +7,7 @@ import { readFileSync } from "node:fs";
 import { validateInterestRequest, INTEREST_CONSENT_VERSION } from "../src/lib/interestValidation.js";
 import {
   createInterestHandler,
+  getPreviewOrigins,
   CONFIRMED_MESSAGE,
   GENERIC_SUBSCRIBE_MESSAGE,
   INTEREST_LIMITS,
@@ -78,7 +79,7 @@ const createMemoryStore = () => {
   return store;
 };
 
-const setup = ({ now = new Date("2026-10-23T12:00:00Z"), emailOk = true, configured = true } = {}) => {
+const setup = ({ now = new Date("2026-10-23T12:00:00Z"), emailOk = true, configured = true, extraOrigins } = {}) => {
   const store = createMemoryStore();
   const emails = [];
   const clock = { now };
@@ -90,6 +91,7 @@ const setup = ({ now = new Date("2026-10-23T12:00:00Z"), emailOk = true, configu
       return { ok: emailOk };
     },
     siteUrl: SITE,
+    extraOrigins,
     tokenSecret: SECRET,
     emailConfigured: true,
     now: () => clock.now,
@@ -420,6 +422,27 @@ const run = async () => {
     assert.equal((await post(handler, null, { raw: JSON.stringify(subscribeBody({ email: "a".repeat(3000) })) })).status, 413);
     assert.equal((await post(handler, { action: "drop-table" })).status, 400);
     assert.equal(store.rows.size, 0);
+  });
+
+  await test("Preview trusts only its own Vercel URLs; Production trusts only SITE_URL", async () => {
+    const env = {
+      VERCEL_ENV: "preview",
+      VERCEL_URL: "site-abc123-team.vercel.app",
+      VERCEL_BRANCH_URL: "site-git-redesign-team.vercel.app",
+    };
+    assert.deepEqual(getPreviewOrigins(env), ["https://site-abc123-team.vercel.app", "https://site-git-redesign-team.vercel.app"]);
+    assert.deepEqual(getPreviewOrigins({ ...env, VERCEL_ENV: "production" }), []);
+    assert.deepEqual(getPreviewOrigins({ ...env, VERCEL_ENV: undefined }), []);
+    assert.deepEqual(getPreviewOrigins({ VERCEL_ENV: "preview", VERCEL_URL: "evil.example", VERCEL_BRANCH_URL: "x.vercel.app.evil.example" }), []);
+    assert.deepEqual(getPreviewOrigins({ VERCEL_ENV: "preview", VERCEL_URL: "a.vercel.app/path" }), []);
+
+    const { handler, store } = setup({ extraOrigins: getPreviewOrigins(env) });
+    assert.equal((await post(handler, subscribeBody({ email: "a@example.com" }), { origin: "https://site-abc123-team.vercel.app" })).status, 202);
+    assert.equal((await post(handler, subscribeBody({ email: "b@example.com" }), { origin: "https://site-git-redesign-team.vercel.app" })).status, 202);
+    assert.equal((await post(handler, subscribeBody({ email: "c@example.com" }))).status, 202);
+    assert.equal((await post(handler, subscribeBody({ email: "d@example.com" }), { origin: "https://other-team.vercel.app" })).status, 403);
+    assert.equal((await post(handler, subscribeBody({ email: "e@example.com" }), { origin: "http://site-abc123-team.vercel.app" })).status, 403);
+    assert.equal(store.rows.size, 3);
   });
 
   // ------------------------------------------------- Supabase REST client

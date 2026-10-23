@@ -47,7 +47,7 @@ Add these for **Preview** first:
 | `SUPABASE_URL` | Project URL from step 3 |
 | `SUPABASE_SECRET_KEY` | Secret key from step 3 |
 | `INTEREST_TOKEN_SECRET` | A new random value of at least 32 characters (for example from your password manager's generator). Changing it later breaks existing unsubscribe links. |
-| `SITE_URL` | The exact preview URL you will test on, without a trailing slash. For production: `https://chessandtruck.com` |
+| `SITE_URL` | Used for the links in emails, so it must stay valid: on Preview, use the branch domain (`https://chess-and-truck-site-git-…vercel.app`, shown under the deployment's Domains), without a trailing slash. For production: `https://chessandtruck.com`. On Preview the form also accepts submissions from that deployment's own Vercel URLs; Production accepts only `SITE_URL`. |
 | `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` | Already used for contact emails. The from-address domain must be verified in Resend. |
 | `VITE_INTEREST_FORM_ENABLED` | `true` on Preview only while testing |
 

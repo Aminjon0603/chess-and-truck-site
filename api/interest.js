@@ -7,7 +7,7 @@
 // Without them every POST returns 503 and nothing is stored or sent.
 import { getResendConfig, sendResendEmail } from "./_lib/resend.js";
 import { createSupabaseInterestStore, getSupabaseConfig } from "./_lib/supabaseInterestStore.js";
-import { createInterestHandler } from "./_lib/interestService.js";
+import { createInterestHandler, getPreviewOrigins } from "./_lib/interestService.js";
 
 export const runtime = "nodejs";
 
@@ -20,6 +20,7 @@ export default {
       store: supabaseConfig ? createSupabaseInterestStore(supabaseConfig) : null,
       sendEmail: (message) => sendResendEmail(message),
       siteUrl: String(process.env.SITE_URL || "").replace(/\/+$/, ""),
+      extraOrigins: getPreviewOrigins(),
       tokenSecret: String(process.env.INTEREST_TOKEN_SECRET || ""),
       emailConfigured: Boolean(resend.apiKey && resend.fromEmail),
     });

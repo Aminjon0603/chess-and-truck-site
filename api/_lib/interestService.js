@@ -66,11 +66,29 @@ const buildConfirmationEmail = ({ programName, confirmUrl, unsubscribeUrl, hours
   ].join("\n"),
 });
 
+const VERCEL_HOST_PATTERN = /^[a-z0-9-]+(\.[a-z0-9-]+)*\.vercel\.app$/;
+
+// A Vercel Preview is served on a per-build URL and a per-branch URL, and the
+// visitor may open either. Both are set by Vercel itself for this deployment, so
+// trusting them on Preview keeps the origin check strict. Production trusts only
+// SITE_URL.
+export const getPreviewOrigins = (env = process.env) => {
+  if (env.VERCEL_ENV !== "preview") {
+    return [];
+  }
+
+  return [env.VERCEL_URL, env.VERCEL_BRANCH_URL]
+    .map((host) => String(host || "").trim().toLowerCase())
+    .filter((host) => VERCEL_HOST_PATTERN.test(host))
+    .map((host) => `https://${host}`);
+};
+
 /**
  * @param {{
  *   store: object | null,
  *   sendEmail: (message: object) => Promise<{ ok: boolean }>,
  *   siteUrl: string,
+ *   extraOrigins?: string[],
  *   tokenSecret: string,
  *   emailConfigured: boolean,
  *   now?: () => Date,
@@ -249,8 +267,12 @@ export const createInterestHandler = (deps) => {
     }
 
     const origin = request.headers.get("origin");
+    const trustedOrigins = [new URL(deps.siteUrl).origin, ...(deps.extraOrigins || [])];
 
-    if (origin && origin !== new URL(deps.siteUrl).origin) {
+    if (origin && !trustedOrigins.includes(origin)) {
+      // Origins are public hostnames, never secrets; logged so a misconfigured
+      // SITE_URL can be diagnosed from the deployment logs.
+      log(`rejected request from origin ${origin.slice(0, 200)}`);
       return json({ error: "Request not allowed." }, 403);
     }
 
