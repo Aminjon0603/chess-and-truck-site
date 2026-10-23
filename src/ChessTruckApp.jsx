@@ -47,6 +47,10 @@ import {
   setRegistrationAvailability,
 } from "./lib/programs.js";
 import {
+  getInterestConsentText,
+  validateInterestRequest,
+} from "./lib/interestValidation.js";
+import {
   getCampDayOptions,
   getCampDayOrder,
   getCampWeekOptions,
@@ -371,6 +375,8 @@ const knownRoutes = new Set([
   "/register",
   "/terms",
   "/privacy",
+  "/interest/confirm",
+  "/interest/unsubscribe",
 ]);
 
 const legacyRouteRedirects = {
@@ -395,6 +401,11 @@ const normalizePath = (path) => {
 
   return path.endsWith("/") ? path.slice(0, -1) : path;
 };
+
+// The Notify Me form stays hidden until the interest backend (Supabase, Resend,
+// secrets) is configured and tested. Set VITE_INTEREST_FORM_ENABLED=true in
+// Vercel to show it. See SUPABASE_SETUP.md.
+const INTEREST_FORM_ENABLED = import.meta.env.VITE_INTEREST_FORM_ENABLED === "true";
 
 // Evaluated at render time: availability can change after the server check loads.
 const isCampRegistrationOpen = () => isProgramOpen("camps");
@@ -1647,9 +1658,212 @@ function RegistrationStatusPanel({ id, programId, title, text, currentPath, navi
               Call or text {phoneContact.display}
             </a>
           </div>
+          {INTEREST_FORM_ENABLED && !isOpen ? (
+            <NotifyMeForm programId={programId} currentPath={currentPath} navigate={navigate} />
+          ) : null}
         </div>
       </div>
     </section>
+  );
+}
+
+const NOTIFY_FALLBACK_SUCCESS =
+  "Thanks. If this address can receive email, we sent a link to confirm it. Check your inbox.";
+const NOTIFY_FALLBACK_ERROR = "Something went wrong. Please try again later.";
+
+function NotifyMeForm({ programId, currentPath, navigate }) {
+  const programName = getProgramById(programId)?.name || "this program";
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState("");
+  const [state, setState] = useState({ status: "idle", message: "", errors: {} });
+  const idBase = `notify-${programId}`;
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { ok, errors, value } = validateInterestRequest({ email, programId, consent });
+
+    if (!ok) {
+      setState({ status: "error", message: "", errors });
+      return;
+    }
+
+    setState({ status: "sending", message: "", errors: {} });
+
+    try {
+      const response = await fetch("/api/interest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "subscribe", email: value.email, programId, consent: true, website }),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        setState({ status: "sent", message: payload.message || NOTIFY_FALLBACK_SUCCESS, errors: {} });
+        setEmail("");
+        setConsent(false);
+      } else {
+        setState({ status: "error", message: payload.error || NOTIFY_FALLBACK_ERROR, errors: payload.fieldErrors || {} });
+      }
+    } catch {
+      setState({ status: "error", message: NOTIFY_FALLBACK_ERROR, errors: {} });
+    }
+  };
+
+  if (state.status === "sent") {
+    return (
+      <div className="pg-notify" role="status">
+        <h3>Check your inbox</h3>
+        <p>{state.message}</p>
+      </div>
+    );
+  }
+
+  return (
+    <form className="pg-notify" onSubmit={handleSubmit} noValidate aria-labelledby={`${idBase}-title`}>
+      <h3 id={`${idBase}-title`}>Get an email when registration opens</h3>
+      <p className="pg-notify-note">We only ask for your email, and we will send a link to confirm it first.</p>
+      <div className="pg-notify-row">
+        <label htmlFor={`${idBase}-email`} className="pg-notify-label">
+          Email address
+        </label>
+        <input
+          id={`${idBase}-email`}
+          type="email"
+          name="email"
+          autoComplete="email"
+          inputMode="email"
+          maxLength={254}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          aria-invalid={state.errors.email ? "true" : "false"}
+          aria-describedby={state.errors.email ? `${idBase}-email-error` : undefined}
+        />
+        <button type="submit" className="ac-btn ac-btn-gold" disabled={state.status === "sending"}>
+          {state.status === "sending" ? "Sending..." : "Notify me"}
+        </button>
+      </div>
+      {state.errors.email ? (
+        <p id={`${idBase}-email-error`} className="pg-notify-error">
+          {state.errors.email}
+        </p>
+      ) : null}
+      <label className="pg-notify-consent" htmlFor={`${idBase}-consent`}>
+        <input
+          id={`${idBase}-consent`}
+          type="checkbox"
+          checked={consent}
+          onChange={(event) => setConsent(event.target.checked)}
+          aria-invalid={state.errors.consent ? "true" : "false"}
+        />
+        <span>
+          {getInterestConsentText(programName)}{" "}
+          <AppLink to="/privacy" navigate={navigate} currentPath={currentPath}>
+            Privacy Policy
+          </AppLink>
+        </span>
+      </label>
+      {state.errors.consent ? <p className="pg-notify-error">{state.errors.consent}</p> : null}
+      <div className="pg-notify-trap" aria-hidden="true">
+        <label htmlFor={`${idBase}-website`}>Leave this field empty</label>
+        <input
+          id={`${idBase}-website`}
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(event) => setWebsite(event.target.value)}
+        />
+      </div>
+      {state.status === "error" && state.message ? (
+        <p className="pg-notify-error" role="alert">
+          {state.message}
+        </p>
+      ) : null}
+    </form>
+  );
+}
+
+const INTEREST_ACTION_COPY = {
+  confirm: {
+    title: "Confirm your email",
+    intro: "Press the button to confirm you want an email when registration opens.",
+    button: "Confirm my email",
+  },
+  unsubscribe: {
+    title: "Unsubscribe",
+    intro: "Press the button to stop emails about this program.",
+    button: "Unsubscribe",
+  },
+};
+
+// Confirmation and unsubscribe links land here. The action runs only when the
+// visitor presses the button, so email link scanners cannot trigger it, and the
+// token is removed from the address bar right away.
+function InterestActionPage({ action, currentPath, navigate }) {
+  const copy = INTEREST_ACTION_COPY[action];
+  const [token] = useState(() => new URLSearchParams(window.location.search).get("token") || "");
+  const [state, setState] = useState({ status: "idle", message: "" });
+
+  useEffect(() => {
+    if (window.location.search) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
+  const handleAction = async () => {
+    setState({ status: "sending", message: "" });
+
+    try {
+      const response = await fetch("/api/interest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, token }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      setState({
+        status: response.ok ? "done" : "error",
+        message: response.ok ? payload.message : payload.error || NOTIFY_FALLBACK_ERROR,
+      });
+    } catch {
+      setState({ status: "error", message: NOTIFY_FALLBACK_ERROR });
+    }
+  };
+
+  return (
+    <div className="ac-home pg-page">
+      <section className="pg-hero pg-interest-hero" aria-labelledby="interest-title">
+        <div className="ac-shell">
+          <div className="pg-interest-card">
+            <span className="ac-eyebrow">Chess &amp; Truck</span>
+            <h1 id="interest-title">{copy.title}</h1>
+            {!token ? (
+              <p className="ac-lead">This link is incomplete. Please use the link from your email.</p>
+            ) : state.status === "done" || state.status === "error" ? (
+              <p className="ac-lead" role="status">
+                {state.message}
+              </p>
+            ) : (
+              <>
+                <p className="ac-lead">{copy.intro}</p>
+                <button
+                  type="button"
+                  className="ac-btn ac-btn-primary"
+                  onClick={handleAction}
+                  disabled={state.status === "sending"}
+                >
+                  {state.status === "sending" ? "Working..." : copy.button}
+                </button>
+              </>
+            )}
+            <AppLink to="/" navigate={navigate} currentPath={currentPath} className="ac-text-link">
+              Back to the home page <span aria-hidden="true">&rarr;</span>
+            </AppLink>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -5292,6 +5506,10 @@ function ChessTruckApp() {
         return <FaqPage currentPath={currentPath} navigate={navigate} />;
       case "/terms":
         return <LegalPage {...termsPage} currentPath={currentPath} navigate={navigate} />;
+      case "/interest/confirm":
+        return <InterestActionPage action="confirm" currentPath={currentPath} navigate={navigate} />;
+      case "/interest/unsubscribe":
+        return <InterestActionPage action="unsubscribe" currentPath={currentPath} navigate={navigate} />;
       case "/privacy":
         return <LegalPage {...privacyPage} currentPath={currentPath} navigate={navigate} />;
       case "/contact":

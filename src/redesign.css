@@ -2432,6 +2432,144 @@
   }
 }
 
+/* ------------------------------------------------------ notify me form */
+/* Shown inside the dark registration status panel when enabled. */
+
+.pg-notify {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pg-notify h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.pg-notify p {
+  margin: 0;
+  color: #c9d3ce;
+  line-height: 1.55;
+}
+
+.pg-notify-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  max-width: 620px;
+}
+
+.pg-notify-label {
+  grid-column: 1 / -1;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ac-gold-light);
+}
+
+.pg-notify-row input {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: #fff;
+  color: var(--ac-ink);
+  font-size: 1rem;
+}
+
+.pg-notify-row input:focus-visible,
+.pg-notify-consent input:focus-visible {
+  outline: 3px solid var(--ac-gold);
+  outline-offset: 2px;
+}
+
+.pg-notify-row input[aria-invalid="true"] {
+  border-color: var(--ac-gold-light);
+}
+
+.pg-notify-consent {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  max-width: 720px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #c9d3ce;
+  cursor: pointer;
+}
+
+.pg-notify-consent input {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--ac-gold);
+}
+
+.pg-notify-consent a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.pg-notify-error {
+  color: var(--ac-gold-light) !important;
+  font-weight: 600;
+}
+
+/* Hidden from people and assistive tech; bots tend to fill it. */
+.pg-notify-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* confirm and unsubscribe pages */
+
+.pg-interest-hero {
+  padding: 72px 0 96px;
+}
+
+.pg-interest-card {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  max-width: 620px;
+  padding: 36px;
+  border-radius: 22px;
+  border: 1px solid var(--ac-line);
+  background: var(--ac-paper);
+  box-shadow: 0 20px 44px -24px rgba(17, 29, 25, 0.3);
+}
+
+.pg-interest-card h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ac-ink);
+}
+
+@media (max-width: 640px) {
+  .pg-notify-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pg-notify-row .ac-btn {
+    width: 100%;
+  }
+
+  .pg-interest-card {
+    padding: 24px;
+  }
+}
+
 /* ------------------------------------------------- accessibility patches */
 
 /* Camp schedule times were gold on white at 2.7:1; this darker gold is 6.5:1. */

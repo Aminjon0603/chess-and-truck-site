@@ -831,6 +831,14 @@ export const routeMeta = {
     description:
       "The Master Training Dojo adds coach-guided review around tournament day. Registration is opening soon.",
   },
+  "/interest/confirm": {
+    title: "Confirm your email | Chess & Truck",
+    description: "Confirm your Chess & Truck program interest email.",
+  },
+  "/interest/unsubscribe": {
+    title: "Unsubscribe | Chess & Truck",
+    description: "Stop Chess & Truck program interest emails.",
+  },
   "/terms": {
     title: "Terms of Service | Chess & Truck",
     description:
@@ -2479,6 +2487,11 @@ export const privacyPage = {
       title: "How information is used",
       body:
         "Registration and inquiry information is used for program operations, support, eligibility review, emergency readiness, and family communication. Contact form submissions are used to respond to questions and support needs.",
+    },
+    {
+      title: "Program interest emails",
+      body:
+        "If you ask to hear when a program opens, we store your email address, the program, and when you consented and confirmed. We use it only to confirm your request and to email you when registration for that program opens. You can unsubscribe at any time with the link in our emails. Unconfirmed requests are deleted after 30 days, and we do not collect any information about children for this list.",
     },
     {
       title: "Payments",
