@@ -1773,6 +1773,45 @@ function InnerHero({ eyebrow, title, intro, programId, actions, aside, variant }
   );
 }
 
+// Program page photos: Pexels stock images (see src/assets/programs/SOURCES.md).
+// They illustrate the activity only; alt text describes the scene, not our students.
+const programPhotoFiles = import.meta.glob("./assets/programs/*.webp", { eager: true, import: "default" });
+const PROGRAM_PHOTO_WIDTHS = [480, 800, 1200];
+
+const programPhotos = {
+  camps: { file: "camps", alt: "Children playing chess together at a classroom table" },
+  tournaments: { file: "tournaments", alt: "Hands pressing a chess clock beside a chessboard" },
+  lessons: { file: "lessons", alt: "An adult and a child studying a chess position together" },
+  afterSchool: { file: "after-school", alt: "A small group of children playing chess at a long table" },
+  dojo: { file: "dojo", alt: "Close-up of a hand making a move in a chess position" },
+};
+
+const getProgramPhotoSrc = (file, width) => programPhotoFiles[`./assets/programs/${file}-${width}.webp`];
+
+// Photo on the right with the program's panel overlapping its lower edge;
+// on phones they stack under the text.
+function ProgramHeroMedia({ programId, children }) {
+  const photo = programPhotos[programId];
+
+  return (
+    <div className="pg-hero-media">
+      <figure className="pg-hero-photo">
+        <img
+          src={getProgramPhotoSrc(photo.file, 800)}
+          srcSet={PROGRAM_PHOTO_WIDTHS.map((width) => `${getProgramPhotoSrc(photo.file, width)} ${width}w`).join(", ")}
+          sizes="(max-width: 1023px) calc(100vw - 32px), 520px"
+          width="1200"
+          height="900"
+          alt={photo.alt}
+          decoding="async"
+          fetchPriority="high"
+        />
+      </figure>
+      {children}
+    </div>
+  );
+}
+
 function FactPanel({ title, iconKey, icon, items, tone }) {
   return (
     <aside className={`pg-fact-panel pg-fact-panel-${tone}`} aria-label={title}>
@@ -2068,7 +2107,11 @@ function CampsPage({ currentPath, navigate, bookingProps }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Camp details" iconKey="camps" items={content.glance} tone="dark" />}
+        aside={
+          <ProgramHeroMedia programId="camps">
+            <FactPanel title="Camp details" iconKey="camps" items={content.glance} tone="dark" />
+          </ProgramHeroMedia>
+        }
       />
 
       <section className="ac-section pg-day-section" id="camp-day" aria-labelledby="camp-day-title">
@@ -2141,7 +2184,11 @@ function TournamentsPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Planned format" iconKey="tournaments" items={content.plannedFormat} tone="light" />}
+        aside={
+          <ProgramHeroMedia programId="tournaments">
+            <FactPanel title="Planned format" iconKey="tournaments" items={content.plannedFormat} tone="light" />
+          </ProgramHeroMedia>
+        }
       />
 
       <section className="ac-section pg-dark-section" id="sections" aria-labelledby="sections-title">
@@ -2237,17 +2284,19 @@ function LessonsPage({ currentPath, navigate }) {
           </>
         }
         aside={
-          <aside className="pg-includes" aria-labelledby="lesson-includes-title">
-            <h2 id="lesson-includes-title">{content.includesTitle}</h2>
-            <ul>
-              {content.includes.map((item) => (
-                <li key={item.title}>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <ProgramHeroMedia programId="lessons">
+            <aside className="pg-includes" aria-labelledby="lesson-includes-title">
+              <h2 id="lesson-includes-title">{content.includesTitle}</h2>
+              <ul>
+                {content.includes.map((item) => (
+                  <li key={item.title}>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </ProgramHeroMedia>
         }
       />
 
@@ -2346,7 +2395,11 @@ function AfterSchoolPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Program details" iconKey="afterSchool" items={content.glance} tone="light" />}
+        aside={
+          <ProgramHeroMedia programId="afterSchool">
+            <FactPanel title="Program details" iconKey="afterSchool" items={content.glance} tone="light" />
+          </ProgramHeroMedia>
+        }
       />
 
       <section className="ac-section" id="audiences" aria-labelledby="audiences-title">
@@ -2440,7 +2493,11 @@ function DojoPage({ currentPath, navigate }) {
             </AppLink>
           </>
         }
-        aside={<FactPanel title="Program details" iconKey="dojo" items={content.glance} tone="dark" />}
+        aside={
+          <ProgramHeroMedia programId="dojo">
+            <FactPanel title="Program details" iconKey="dojo" items={content.glance} tone="dark" />
+          </ProgramHeroMedia>
+        }
       />
 
       <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />

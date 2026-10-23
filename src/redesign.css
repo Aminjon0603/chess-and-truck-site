@@ -3140,3 +3140,62 @@
     bottom: 18px;
   }
 }
+
+/* ---------------------------------------------------- program page photos */
+/* A 4:3 stock photo on the right of each program hero, with the program's
+   panel overlapping its lower edge. Width and height attributes plus
+   aspect-ratio reserve the space, so nothing shifts while it loads. */
+
+.pg-hero-media {
+  position: relative;
+  display: grid;
+}
+
+.pg-hero-photo {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--ac-cream-deep);
+  box-shadow: 0 24px 48px -24px rgba(16, 34, 30, 0.4);
+}
+
+.pg-hero-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pg-hero-media > :not(.pg-hero-photo) {
+  position: relative;
+  z-index: 1;
+  margin: -36px 0 0 32px;
+}
+
+@media (max-width: 1023px) {
+  .pg-hero-media {
+    max-width: 620px;
+  }
+
+  .pg-hero-media > :not(.pg-hero-photo) {
+    margin: -40px 12px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .pg-hero-photo {
+    border-radius: 18px;
+  }
+
+  .pg-hero-media > :not(.pg-hero-photo) {
+    margin: -28px 8px 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The photo settles in slightly as the hero arrives. */
+  .pg-hero-photo img {
+    animation: ct-settle 1100ms var(--ct-ease) 160ms both;
+  }
+}
