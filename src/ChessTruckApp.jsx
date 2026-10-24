@@ -1700,9 +1700,83 @@ const UI_ICON_PATHS = {
     </>
   ),
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  monitor: (
+    <>
+      <rect x="3.5" y="4.5" width="17" height="11.5" rx="1.6" />
+      <path d="M9 20h6M12 16v4" />
+    </>
+  ),
+  document: (
+    <>
+      <path d="M7 3.5h7l4 4v12.5a.5.5 0 0 1-.5.5h-10.5a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5z" />
+      <path d="M14 3.5V8h4" />
+      <path d="M9.5 12h5M9.5 15.5h5" />
+    </>
+  ),
+  chat: (
+    <path d="M12 4.5c4.7 0 8.5 3 8.5 6.8s-3.8 6.8-8.5 6.8c-1 0-2-.1-2.9-.4L5 19.5l1.2-3.4c-1.7-1.2-2.7-2.9-2.7-4.8 0-3.8 3.8-6.8 8.5-6.8z" />
+  ),
 };
 
-function UiIcon({ name, size = 24 }) {
+// Solid glyphs, used where the client's mockups show filled icons.
+const UI_ICON_FILLED = {
+  users: (
+    <>
+      <circle cx="9" cy="7.5" r="3.2" />
+      <path d="M2.8 19.5c0-3.6 2.8-6.1 6.2-6.1s6.2 2.5 6.2 6.1v.5H2.8z" />
+      <circle cx="17.2" cy="8.6" r="2.6" />
+      <path d="M16.4 13.6c3 .1 5 2.3 5 5.4v1h-4.6v-.6c0-2.3-.9-4.3-2.4-5.6.6-.1 1.3-.2 2-.2z" />
+    </>
+  ),
+  pin: (
+    <path
+      fillRule="evenodd"
+      d="M12 2.5a7 7 0 0 0-7 7c0 5.3 7 12 7 12s7-6.7 7-12a7 7 0 0 0-7-7zm0 9.6a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z"
+    />
+  ),
+  phone: (
+    <path d="M6.6 3.5h2.6c.5 0 .9.3 1 .8l.9 3.5c.1.4 0 .8-.3 1.1l-1.7 1.4a12.3 12.3 0 0 0 4.6 4.6l1.4-1.7c.3-.3.7-.4 1.1-.3l3.5.9c.5.1.8.5.8 1v2.6c0 .9-.7 1.6-1.6 1.6C10.5 20.5 3.5 13.5 3.5 5.1c0-.9.7-1.6 1.6-1.6z" />
+  ),
+  mail: (
+    <>
+      <path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v.4l-9 5.6-9-5.6z" />
+      <path d="M3 8.9l9 5.6 9-5.6v8.6a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z" />
+    </>
+  ),
+  heart: <path d="M12 20.5s-8.5-5.1-8.5-11a4.8 4.8 0 0 1 8.5-3 4.8 4.8 0 0 1 8.5 3c0 5.9-8.5 11-8.5 11z" />,
+  cap: (
+    <>
+      <path d="M12 4 1.5 9 12 14l10.5-5z" />
+      <path d="M5.5 11.6v4.2c0 1.7 2.9 3.2 6.5 3.2s6.5-1.5 6.5-3.2v-4.2L12 14.8z" />
+      <path d="M20.9 9.6h1.3V15h-1.3z" />
+    </>
+  ),
+  barChart: (
+    <>
+      <rect x="5" y="12" width="3.4" height="7" rx="0.8" />
+      <rect x="10.3" y="8" width="3.4" height="11" rx="0.8" />
+      <rect x="15.6" y="4.5" width="3.4" height="14.5" rx="0.8" />
+    </>
+  ),
+  chartUp: (
+    <>
+      <rect x="4" y="14" width="3.6" height="6" rx="0.8" />
+      <rect x="9.6" y="11.5" width="3.6" height="8.5" rx="0.8" />
+      <rect x="15.2" y="9" width="3.6" height="11" rx="0.8" />
+      <path d="M4 9.5 9.5 6l3 2 5.8-4.6M15.6 3.2h3.2v3.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </>
+  ),
+};
+
+function UiIcon({ name, size = 24, filled = false }) {
+  if (filled && UI_ICON_FILLED[name]) {
+    return (
+      <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true" focusable="false">
+        {UI_ICON_FILLED[name]}
+      </svg>
+    );
+  }
+
   return (
     <svg
       viewBox="0 0 24 24"
@@ -1763,7 +1837,7 @@ function AcademyHomePage({ currentPath, navigate }) {
             <ul className="ac-hero-facts">
               {hero.facts.map((item) => (
                 <li key={item.text}>
-                  <UiIcon name={item.icon} size={18} />
+                  <UiIcon name={item.icon} size={18} filled />
                   {item.text}
                 </li>
               ))}
@@ -1793,7 +1867,7 @@ function AcademyHomePage({ currentPath, navigate }) {
             {whySection.pillars.map((item) => (
               <li key={item.title}>
                 <span className="ac-icon-badge">
-                  <UiIcon name={item.icon} />
+                  <UiIcon name={item.icon} filled />
                 </span>
                 <div>
                   <h3>{item.title}</h3>
@@ -1828,8 +1902,8 @@ function AcademyHomePage({ currentPath, navigate }) {
               <dl className="ac-coach-facts ac-coach-facts-icons">
                 {coachSection.facts.map((item) => (
                   <div key={item.value}>
-                    <span className="ac-icon-badge ac-icon-badge-small">
-                      <UiIcon name={item.icon} size={20} />
+                    <span className="ac-coach-fact-icon">
+                      <UiIcon name={item.icon} size={30} filled />
                     </span>
                     <dt>{item.label}</dt>
                     <dd>{item.value}</dd>
@@ -1897,7 +1971,7 @@ function AcademyHomePage({ currentPath, navigate }) {
               {homeContactMethods.map((item) => (
                 <li key={item.display}>
                   <span className="ac-contact-icon">
-                    <UiIcon name={getContactIcon(item)} size={22} />
+                    <UiIcon name={getContactIcon(item)} size={26} filled />
                   </span>
                   <div>
                     <span>{item.label}</span>
@@ -1907,7 +1981,7 @@ function AcademyHomePage({ currentPath, navigate }) {
               ))}
               <li>
                 <span className="ac-contact-icon">
-                  <UiIcon name="pin" size={22} />
+                  <UiIcon name="pin" size={26} filled />
                 </span>
                 <div>
                   <span>Based in</span>
@@ -2711,7 +2785,7 @@ function SiteFooter({ currentPath, navigate }) {
             <ul className="ac-footer-contact">
               {footerContactMethods.map((item) => (
                 <li key={item.display}>
-                  <UiIcon name={getContactIcon(item)} size={18} />
+                  <UiIcon name={getContactIcon(item)} size={18} filled />
                   <div>
                     <span>{item.label}</span>
                     <a href={item.href} className="ac-footer-link">
@@ -2721,7 +2795,7 @@ function SiteFooter({ currentPath, navigate }) {
                 </li>
               ))}
               <li>
-                <UiIcon name="pin" size={18} />
+                <UiIcon name="pin" size={18} filled />
                 <div>
                   <span>Based in</span>
                   {siteBrand.city}
@@ -2733,7 +2807,7 @@ function SiteFooter({ currentPath, navigate }) {
 
         <div className="ac-footer-bottom">
           <small>
-            &copy; {new Date().getFullYear()} {siteBrand.name}
+            &copy; {new Date().getFullYear()} {siteBrand.name}. All rights reserved.
           </small>
           <ul>
             {footerLegalLinks.map((item) => (

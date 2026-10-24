@@ -8,7 +8,7 @@ export const siteBrand = {
   // Brand slogan and summary for the shared header and footer.
   slogan: "Big Moves Start Small.",
   brandNote:
-    "Upcoming chess camps, tournaments, lessons, and after-school chess for kids in New York City.",
+    "Fun, friendly, and professional chess programs for kids in New York City. Lessons, camps, tournaments, and after-school programs.",
 };
 
 export const navigationItems = [
@@ -40,72 +40,75 @@ export const academyHomePage = {
   programsSection: {
     eyebrow: "Programs",
     title: "Our four programs",
-    intro: "All four are still being planned. None are taking sign-ups yet.",
+    intro: "Four exciting ways to discover chess, make friends, and grow as a player!",
   },
   whySection: {
     eyebrow: "How we teach",
     title: "Fun First.",
     titleAccent: "Strong Players Follow.",
     intro:
-      "Kids learn best when they enjoy what they're doing. Our lessons will mix real games, clear coaching, and plenty of fun.",
+      "We believe kids improve fastest when they love what they're learning. That's why every lesson combines expert coaching, exciting challenges, and plenty of fun. Our goal is to help each child become a stronger player, a more confident thinker, and a lifelong fan of chess.",
     pillars: [
       {
         icon: "smile",
-        title: "Fun is our first move",
-        text: "Lessons will be active and engaging, built around real games kids want to play.",
+        title: "Fun Is Our First Move",
+        text: "Every lesson is engaging, interactive, and something kids look forward to.",
       },
       {
-        icon: "chart",
-        title: "Steady improvement",
-        text: "Kids will play, then go over their games with a coach to see what worked and what to change.",
+        // The mockup's "Improvement Is Our Promise" is replaced: no guaranteed results.
+        icon: "barChart",
+        title: "Steady Improvement",
+        text: "Structured coaching helps every child make real progress, at their own pace.",
       },
       {
         icon: "users",
-        title: "Confidence beyond the board",
-        text: "Chess gives kids regular practice with focus, patience, and good sportsmanship.",
+        title: "Confidence Beyond the Board",
+        text: "Kids develop focus, resilience, friendships, and a love of learning.",
       },
     ],
   },
   coachSection: {
     eyebrow: "Your coach",
     title: "Coach Andrea",
-    intro: "24 years of teaching chess in the United States and Canada.",
+    intro: "Experienced. Passionate. Great with Kids.",
     role: "Coach",
+    // The mockup's unconfirmed "thousands of children" is left out.
     summary:
-      "Andrea has taught chess for 24 years in the United States and Canada, at children's chess camps, in private lessons, and in after-school programs.",
+      "Andrea has been teaching chess for 24 years in the United States and Canada. He has worked with children through chess camps, private lessons, school programs, and after-school clubs.",
     facts: [
-      { icon: "clock", value: "24 years", label: "teaching chess" },
-      { icon: "globe", value: "U.S. & Canada", label: "where he's taught" },
-      { icon: "flag", value: "Camps & lessons", label: "children's camps and private lessons" },
-      { icon: "school", value: "After-school", label: "school chess programs" },
+      { icon: "cap", value: "24 years", label: "teaching chess" },
+      { icon: "users", value: "U.S. & Canada", label: "where he's taught" },
+      { icon: "heart", value: "Loves working with kids", label: "fun and supportive teaching style" },
+      { icon: "chartUp", value: "Helps all levels", label: "from complete beginners to advanced players" },
     ],
   },
   howSection: {
     eyebrow: "Getting started",
     title: "How to get started",
-    intro: "Three simple steps.",
+    intro: "It's easy to join Chess & Truck!",
     steps: [
       {
-        icon: "grid",
+        icon: "monitor",
         title: "Pick a program",
-        text: "Read about each program and see which one fits your child.",
+        text: "Explore our camps, tournaments, lessons, or after-school programs and find the best fit for your child.",
       },
       {
-        icon: "message",
+        icon: "chat",
         title: "Tell us about your child",
-        text: "Share their age and how much chess they've played. We'll suggest where to start.",
+        text: "Share a few details about your child's age, experience, and goals. We're happy to recommend the right program and answer any questions.",
       },
       {
-        icon: "clipboard",
+        // The mockup's "Spots can fill up quickly!" is left out.
+        icon: "document",
         title: "Sign up when it opens",
-        text: "Dates, prices, and sign-up will be posted on each program page when registration opens.",
+        text: "Dates, prices, and registration links will be posted on each program page when registration opens.",
       },
     ],
   },
   faqSection: {
     eyebrow: "Questions",
     title: "Common questions",
-    intro: "Quick answers for parents.",
+    intro: "Everything you need to know about Chess & Truck.",
     items: [
       {
         question: "Is this OK for beginners?",
@@ -128,7 +131,12 @@ export const academyHomePage = {
           "Prices haven't been set for any program yet. They'll be announced on each program page. When registration opens, you'll pay online by card through Stripe, a secure payment service.",
       },
       {
-        question: "Where will programs take place?",
+        question: "What should my child bring?",
+        answer:
+          "It depends on the program. Each program page will list what to bring when registration opens.",
+      },
+      {
+        question: "Where are the programs located?",
         answer:
           "In New York City. We haven't announced specific locations yet. Each program page will list its location before registration opens.",
       },
@@ -521,7 +529,7 @@ export const programs = [
     name: "Private Chess Lessons",
     path: "/private-lessons",
     summary:
-      "Private lessons in person or online, for beginners and experienced players.",
+      "Individual or online lessons for beginners and experienced players.",
   },
   {
     id: "afterSchool",

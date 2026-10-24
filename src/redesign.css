@@ -3316,8 +3316,13 @@
   align-items: center;
 }
 
-.ac-coach-facts-icons .ac-icon-badge {
+/* Gold glyphs without a badge, as in the client's mockup. */
+.ac-coach-fact-icon {
   grid-area: icon;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  color: var(--ac-gold);
 }
 
 .ac-coach-facts-icons dd {
