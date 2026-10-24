@@ -2,13 +2,13 @@ export const siteBrand = {
   name: "Chess & Truck",
   short: "CT",
   city: "New York City",
-  tagline: "Upcoming chess camps, tournaments, lessons, after-school chess, and Chess Dojo for kids in NYC",
+  tagline: "Upcoming chess camps, tournaments, lessons, and after-school chess for kids in NYC",
   footerNote:
     "We're planning our first Chess & Truck summer camp in New York City. Dates and location will be posted when registration opens.",
   // Brand slogan and summary for the shared header and footer.
   slogan: "Big Moves Start Small.",
   brandNote:
-    "Upcoming chess camps, tournaments, lessons, after-school chess, and Chess Dojo for kids in New York City.",
+    "Upcoming chess camps, tournaments, lessons, and after-school chess for kids in New York City.",
 };
 
 export const navigationItems = [
@@ -17,7 +17,6 @@ export const navigationItems = [
   { label: "Tournaments", path: "/tournaments" },
   { label: "Lessons", path: "/private-lessons" },
   { label: "After-School", path: "/after-school" },
-  { label: "Dojo", path: "/dojo" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
 ];
@@ -28,59 +27,76 @@ export const navigationItems = [
 export const academyHomePage = {
   hero: {
     eyebrow: "Chess & Truck",
-    title: "Chess Programs for Kids in NYC",
+    titleLead: "Big Smiles.",
+    titleAccent: "Brilliant Moves.",
+    tagline: "The greatest game in the world without a ball!",
     intro:
-      "Explore chess camps, tournaments, private lessons, after-school programs, and Chess Dojo. Registration for all five opens soon.",
-    facts: ["Beginners welcome", "Based in NYC"],
+      "At Chess & Truck, we make chess the highlight of every child's week! Through exciting lessons, friendly competition, and expert coaching, we help kids fall in love with the game while becoming stronger, smarter, and more confident players.",
+    facts: [
+      { icon: "users", text: "Beginners welcome" },
+      { icon: "pin", text: "Based in NYC" },
+    ],
   },
   programsSection: {
     eyebrow: "Programs",
-    title: "Our five programs",
-    intro: "All five are still being planned. None are taking sign-ups yet.",
+    title: "Our four programs",
+    intro: "All four are still being planned. None are taking sign-ups yet.",
   },
   whySection: {
-    eyebrow: "How we'll teach",
-    title: "Real chess, taught so kids enjoy it",
-    intro: "Our lessons will have a plan, and kids will learn by playing real games.",
+    eyebrow: "How we teach",
+    title: "Fun First.",
+    titleAccent: "Strong Players Follow.",
+    intro:
+      "Kids learn best when they enjoy what they're doing. Our lessons will mix real games, clear coaching, and plenty of fun.",
     pillars: [
       {
-        title: "Details before sign-up",
-        text: "Each program page will list the dates, location, price, and what's included before registration opens.",
+        icon: "smile",
+        title: "Fun is our first move",
+        text: "Lessons will be active and engaging, built around real games kids want to play.",
       },
       {
-        title: "Play, then review",
-        text: "Kids will play real games, then go over them with a coach to see what worked and what to change.",
+        icon: "chart",
+        title: "Steady improvement",
+        text: "Kids will play, then go over their games with a coach to see what worked and what to change.",
       },
       {
-        title: "Talk to us directly",
-        text: "Call, text, or email. You'll hear back from the people who run Chess & Truck.",
+        icon: "users",
+        title: "Confidence beyond the board",
+        text: "Chess gives kids regular practice with focus, patience, and good sportsmanship.",
       },
     ],
   },
   coachSection: {
     eyebrow: "Your coach",
     title: "Coach Andrea",
+    intro: "24 years of teaching chess in the United States and Canada.",
     role: "Coach",
     summary:
       "Andrea has taught chess for 24 years in the United States and Canada, at children's chess camps, in private lessons, and in after-school programs.",
     facts: [
-      { value: "24 years", label: "teaching chess" },
-      { value: "U.S. & Canada", label: "where he's taught" },
+      { icon: "clock", value: "24 years", label: "teaching chess" },
+      { icon: "globe", value: "U.S. & Canada", label: "where he's taught" },
+      { icon: "flag", value: "Camps & lessons", label: "children's camps and private lessons" },
+      { icon: "school", value: "After-school", label: "school chess programs" },
     ],
   },
   howSection: {
     eyebrow: "Getting started",
     title: "How to get started",
+    intro: "Three simple steps.",
     steps: [
       {
+        icon: "grid",
         title: "Pick a program",
         text: "Read about each program and see which one fits your child.",
       },
       {
+        icon: "message",
         title: "Tell us about your child",
         text: "Share their age and how much chess they've played. We'll suggest where to start.",
       },
       {
+        icon: "clipboard",
         title: "Sign up when it opens",
         text: "Dates, prices, and sign-up will be posted on each program page when registration opens.",
       },
@@ -89,6 +105,7 @@ export const academyHomePage = {
   faqSection: {
     eyebrow: "Questions",
     title: "Common questions",
+    intro: "Quick answers for parents.",
     items: [
       {
         question: "Is this OK for beginners?",
@@ -110,11 +127,16 @@ export const academyHomePage = {
         answer:
           "Prices haven't been set for any program yet. They'll be announced on each program page. When registration opens, you'll pay online by card through Stripe, a secure payment service.",
       },
+      {
+        question: "Where will programs take place?",
+        answer:
+          "In New York City. We haven't announced specific locations yet. Each program page will list its location before registration opens.",
+      },
     ],
   },
   contactCard: {
     title: "Have a question?",
-    text: "Call, text, or email. We're happy to help you figure out which program fits.",
+    text: "Call, text, or email. We're happy to help you find the right program for your child.",
   },
 };
 
@@ -466,51 +488,13 @@ export const afterSchoolPageContent = {
   },
 };
 
-export const dojoPageContent = {
-  hero: {
-    eyebrow: "Chess Dojo",
-    title: "A new chess program for kids and teens",
-    intro:
-      "Chess Dojo is an upcoming program we're planning for kids and teens. We're still working out the details, including what it will cover and whether it will meet online, in person, or both. We'll post everything here when it's ready.",
-  },
-  glance: [
-    { label: "For", value: "Kids and teens (planned)" },
-    { label: "Format", value: "Online, in person, or both: not decided" },
-    { label: "Schedule", value: "Not set yet" },
-    { label: "Price", value: "Not set yet" },
-  ],
-  faqSection: {
-    eyebrow: "Dojo questions",
-    title: "Questions about the Dojo",
-  },
-  faqs: [
-    {
-      question: "What will the Chess Dojo be?",
-      answer:
-        "A new chess program for kids and teens. We're still deciding exactly what it will include, and we'll describe it here once it's final.",
-    },
-    {
-      question: "Will it be online or in person?",
-      answer: "We haven't decided yet. It could be online, in person, or both.",
-    },
-    {
-      question: "When and where will it start?",
-      answer: "The schedule, location, and price haven't been set. They'll be posted on this page when registration opens.",
-    },
-  ],
-  status: {
-    title: "Dojo registration is opening soon",
-    text: "We're not taking Dojo sign-ups or payments yet. Details will be posted here first.",
-  },
-};
-
 // Program names, summaries, and page content. Registration status lives in
 // src/lib/programs.js so it can be shared with the checkout API.
 export const programOverview = {
   eyebrow: "Our programs",
-  title: "Our five programs",
+  title: "Our four programs",
   intro:
-    "Camps, tournaments, lessons, after-school chess, and the Chess Dojo. Here's what each one is and where registration stands.",
+    "Camps, tournaments, lessons, and after-school chess. Here's what each one is and where registration stands.",
 };
 
 export const programs = [
@@ -546,14 +530,6 @@ export const programs = [
     path: "/after-school",
     summary:
       "We're talking with schools about after-school chess classes. Nothing is final yet.",
-  },
-  {
-    id: "dojo",
-    iconKey: "dojo",
-    name: "Chess Dojo",
-    path: "/dojo",
-    summary:
-      "A new chess program for kids and teens. Details will be announced.",
   },
 ];
 
@@ -719,7 +695,7 @@ export const routeMeta = {
   "/": {
     title: "Chess & Truck | Chess Programs for Kids in NYC",
     description:
-      "Chess camps, tournaments, private lessons, after-school chess, and Chess Dojo for kids in New York City. Registration opens soon.",
+      "Chess camps, tournaments, private lessons, and after-school chess for kids in New York City. Registration opens soon.",
   },
   "/about": {
     title: "About | Chess & Truck",
@@ -794,7 +770,7 @@ export const routeMeta = {
   "/faq": {
     title: "FAQ | Chess & Truck",
     description:
-      "Answers to common parent questions about Chess & Truck camps, tournaments, lessons, after-school chess, and Chess Dojo.",
+      "Answers to common parent questions about Chess & Truck camps, tournaments, lessons, and after-school chess in NYC.",
   },
   "/contact": {
     title: "Contact | Chess & Truck",
@@ -815,11 +791,6 @@ export const routeMeta = {
     title: "After-School Programs | Chess & Truck",
     description:
       "After-school chess programs for kids in NYC. We're talking with schools; details will be announced. Registration is opening soon.",
-  },
-  "/dojo": {
-    title: "Chess Dojo | Chess & Truck",
-    description:
-      "Chess Dojo is an upcoming chess program for kids and teens in NYC. Details will be announced.",
   },
   "/interest/confirm": {
     title: "Confirm your email | Chess & Truck",
@@ -1447,7 +1418,7 @@ export const campDetailPages = {
 };
 
 // About page: owner-confirmed facts only. Chess & Truck has not run its own
-// camps or tournaments yet; all five programs are upcoming.
+// camps or tournaments yet; all four programs are upcoming.
 export const aboutPage = {
   hero: {
     eyebrow: "About us",
@@ -1457,7 +1428,7 @@ export const aboutPage = {
   },
   facts: [
     { label: "Based in", value: "New York City" },
-    { label: "Programs", value: "Five, all opening soon" },
+    { label: "Programs", value: "Four, all opening soon" },
     { label: "Coach", value: "Andrea, 24 years teaching chess" },
     { label: "Registration", value: "Not open yet" },
   ],
@@ -1465,7 +1436,7 @@ export const aboutPage = {
     eyebrow: "Who we are",
     title: "A new chess program for NYC kids",
     intro:
-      "We're getting ready to launch camps, tournaments, lessons, after-school chess, and Chess Dojo. These will be our first programs, and we'll share the details of each one before registration opens.",
+      "We're getting ready to launch camps, tournaments, lessons, and after-school chess. These will be our first programs, and we'll share the details of each one before registration opens.",
   },
   whoPoints: [
     {
@@ -1483,7 +1454,7 @@ export const aboutPage = {
   ],
   programsSection: {
     eyebrow: "Our programs",
-    title: "Five upcoming chess programs",
+    title: "Four upcoming chess programs",
     intro: "None are open for registration yet. Each page shows what's confirmed and what's still being planned.",
   },
   coach: {
@@ -1615,7 +1586,7 @@ export const faqPage = {
     eyebrow: "FAQ",
     title: "Questions parents ask",
     intro:
-      "Straight answers about our five programs. When something hasn't been decided yet, we say so.",
+      "Straight answers about our four programs. When something hasn't been decided yet, we say so.",
   },
   contact: {
     title: "Still have a question?",
@@ -1629,7 +1600,7 @@ export const faqPage = {
         {
           question: "Is registration open?",
           answer:
-            "Not yet. All five programs are still being planned, and we aren't taking sign-ups or payments for any of them. Each program page will say when its registration opens.",
+            "Not yet. All four programs are still being planned, and we aren't taking sign-ups or payments for any of them. Each program page will say when its registration opens.",
         },
         {
           question: "When will programs begin?",
@@ -1650,7 +1621,7 @@ export const faqPage = {
         {
           question: "What ages can participate?",
           answer:
-            "It depends on the program, and nothing is final yet. Camp is planned for ages 4 to 17. Chess Dojo is planned for kids and teens. Ages for after-school classes, lessons, and tournaments will be announced.",
+            "It depends on the program, and nothing is final yet. Camp is planned for ages 4 to 17. Ages for after-school classes, lessons, and tournaments will be announced.",
         },
         {
           question: "Are beginners welcome?",
@@ -1711,14 +1682,9 @@ export const faqPage = {
       ],
     },
     {
-      id: "faq-dojo",
-      title: "Chess Dojo and after-school",
+      id: "faq-after-school",
+      title: "After-school",
       items: [
-        {
-          question: "What is Chess Dojo?",
-          answer:
-            "An upcoming chess program we're planning for kids and teens. We're still deciding what it will cover and whether it will meet online, in person, or both. Details will be posted on the Dojo page.",
-        },
         {
           question: "Is after-school chess offered at my child's school?",
           answer:

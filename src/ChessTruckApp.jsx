@@ -11,7 +11,6 @@ import {
   contactEmails,
   contactNumbers,
   contactPage,
-  dojoPageContent,
   faqPage,
   featuredTournament,
   footerLegalLinks,
@@ -373,7 +372,6 @@ const knownRoutes = new Set([
   "/tournaments",
   "/private-lessons",
   "/after-school",
-  "/dojo",
   "/faq",
   "/contact",
   "/register",
@@ -384,6 +382,8 @@ const knownRoutes = new Set([
 ]);
 
 const legacyRouteRedirects = {
+  // Chess Dojo was removed from the public site; old links land on the homepage.
+  "/dojo": "/",
   "/events": "/tournaments",
   "/events/chess-and-truck-tournament": "/tournaments",
   "/lessons/online": "/private-lessons",
@@ -1067,7 +1067,7 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts,
     <>
       <span className="mini-tag mini-tag-dark">Questions?</span>
       <h2>Talk to us</h2>
-      <p>All five programs are opening soon. Call, text, or email with any question.</p>
+      <p>All four programs are opening soon. Call, text, or email with any question.</p>
       <div className="fact-list">
         <div>
           <span>{phoneContact.label}</span>
@@ -1488,11 +1488,14 @@ function ProgramCard({ program, currentPath, navigate }) {
   );
 }
 
-function AcademySectionHeading({ id, eyebrow, title, intro }) {
+function AcademySectionHeading({ id, eyebrow, title, titleAccent, intro }) {
   return (
     <div className="ac-section-heading">
       <span className="ac-eyebrow">{eyebrow}</span>
-      <h2 id={id}>{title}</h2>
+      <h2 id={id}>
+        {title}
+        {titleAccent ? <span className="ac-title-accent ac-title-accent-line">{titleAccent}</span> : null}
+      </h2>
       {intro ? <p>{intro}</p> : null}
     </div>
   );
@@ -1617,6 +1620,109 @@ function HeroVideo() {
   );
 }
 
+// One set of simple line icons for the homepage blocks and the footer.
+const UI_ICON_PATHS = {
+  users: (
+    <>
+      <circle cx="9" cy="8" r="3" />
+      <path d="M3.5 19.5c0-3.1 2.5-5.3 5.5-5.3s5.5 2.2 5.5 5.3" />
+      <circle cx="17" cy="9" r="2.4" />
+      <path d="M16.2 14.4c2.5.2 4.3 2.1 4.3 4.6" />
+    </>
+  ),
+  pin: (
+    <>
+      <path d="M12 21s-6.5-6.1-6.5-11.1a6.5 6.5 0 0 1 13 0C18.5 14.9 12 21 12 21z" />
+      <circle cx="12" cy="9.8" r="2.3" />
+    </>
+  ),
+  smile: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8.5 14.3c.9 1.3 2.1 2 3.5 2s2.6-.7 3.5-2" />
+      <path d="M9 9.5h.01M15 9.5h.01" />
+    </>
+  ),
+  chart: (
+    <>
+      <path d="M4 20h16" />
+      <path d="M7 16v-3M12 16V9M17 16V5" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.2 2" />
+    </>
+  ),
+  globe: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3c2.4 2.6 3.7 5.6 3.7 9s-1.3 6.4-3.7 9c-2.4-2.6-3.7-5.6-3.7-9S9.6 5.6 12 3z" />
+    </>
+  ),
+  flag: (
+    <>
+      <path d="M5.5 21V4" />
+      <path d="M5.5 4.5h11.5l-2.2 4 2.2 4H5.5" />
+    </>
+  ),
+  school: (
+    <>
+      <path d="M2.5 9.5 12 4.5l9.5 5-9.5 5-9.5-5z" />
+      <path d="M6.5 11.7v4.4c0 1.6 2.5 3.1 5.5 3.1s5.5-1.5 5.5-3.1v-4.4" />
+    </>
+  ),
+  grid: (
+    <>
+      <rect x="4" y="4" width="7" height="7" rx="1.6" />
+      <rect x="13" y="4" width="7" height="7" rx="1.6" />
+      <rect x="4" y="13" width="7" height="7" rx="1.6" />
+      <rect x="13" y="13" width="7" height="7" rx="1.6" />
+    </>
+  ),
+  message: <path d="M4.5 5h15a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1H10l-4.5 3.5v-3.5h-1a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" />,
+  clipboard: (
+    <>
+      <rect x="5.5" y="4.5" width="13" height="16" rx="2" />
+      <path d="M9 4.5h6v3H9z" />
+      <path d="M9 12h6M9 15.5h4" />
+    </>
+  ),
+  phone: (
+    <path d="M5.2 4h3.3l1.6 4.1-2.1 1.3a10.6 10.6 0 0 0 6.6 6.6l1.3-2.1 4.1 1.6v3.3a1.2 1.2 0 0 1-1.2 1.2A15.8 15.8 0 0 1 4 5.2 1.2 1.2 0 0 1 5.2 4z" />
+  ),
+  mail: (
+    <>
+      <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
+      <path d="m4.5 7 7.5 6 7.5-6" />
+    </>
+  ),
+  arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+};
+
+function UiIcon({ name, size = 24 }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {UI_ICON_PATHS[name]}
+    </svg>
+  );
+}
+
+const getContactIcon = (item) => (item.href?.startsWith("tel:") ? "phone" : "mail");
+
 function AcademyHomePage({ currentPath, navigate }) {
   const { hero, programsSection, whySection, coachSection, howSection, faqSection, contactCard } =
     academyHomePage;
@@ -1641,7 +1747,10 @@ function AcademyHomePage({ currentPath, navigate }) {
         <div className="ac-shell ac-hero-grid">
           <div className="ac-hero-copy">
             <span className="ac-eyebrow">{hero.eyebrow}</span>
-            <h1 id="home-title">{hero.title}</h1>
+            <h1 id="home-title">
+              {hero.titleLead} <span className="ac-title-accent">{hero.titleAccent}</span>
+            </h1>
+            <p className="ac-hero-tagline">{hero.tagline}</p>
             <p className="ac-lead">{hero.intro}</p>
             <div className="ac-actions">
               <a href="#programs" className="ac-btn ac-btn-gold" onClick={scrollToPrograms}>
@@ -1653,7 +1762,10 @@ function AcademyHomePage({ currentPath, navigate }) {
             </div>
             <ul className="ac-hero-facts">
               {hero.facts.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item.text}>
+                  <UiIcon name={item.icon} size={18} />
+                  {item.text}
+                </li>
               ))}
             </ul>
           </div>
@@ -1677,11 +1789,16 @@ function AcademyHomePage({ currentPath, navigate }) {
       <section className="ac-section ac-section-tint" aria-labelledby="why-title">
         <div className="ac-shell ac-why-grid">
           <AcademySectionHeading id="why-title" {...whySection} />
-          <ul className="ac-pillars">
+          <ul className="ac-pillars ac-pillars-icons">
             {whySection.pillars.map((item) => (
               <li key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
+                <span className="ac-icon-badge">
+                  <UiIcon name={item.icon} />
+                </span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
               </li>
             ))}
           </ul>
@@ -1690,7 +1807,12 @@ function AcademyHomePage({ currentPath, navigate }) {
 
       <section className="ac-section" aria-labelledby="coach-title">
         <div className="ac-shell">
-          <AcademySectionHeading id="coach-title" eyebrow={coachSection.eyebrow} title={coachSection.title} />
+          <AcademySectionHeading
+            id="coach-title"
+            eyebrow={coachSection.eyebrow}
+            title={coachSection.title}
+            intro={coachSection.intro}
+          />
           <article className="ac-coach">
             <img
               src={andreaPhoto}
@@ -1703,9 +1825,12 @@ function AcademyHomePage({ currentPath, navigate }) {
             <div className="ac-coach-copy">
               <span className="ac-coach-role">{coachSection.role}</span>
               <p>{coachSection.summary}</p>
-              <dl className="ac-coach-facts">
+              <dl className="ac-coach-facts ac-coach-facts-icons">
                 {coachSection.facts.map((item) => (
-                  <div key={item.label}>
+                  <div key={item.value}>
+                    <span className="ac-icon-badge ac-icon-badge-small">
+                      <UiIcon name={item.icon} size={20} />
+                    </span>
                     <dt>{item.label}</dt>
                     <dd>{item.value}</dd>
                   </div>
@@ -1721,12 +1846,23 @@ function AcademyHomePage({ currentPath, navigate }) {
 
       <section className="ac-section ac-section-tint" aria-labelledby="how-title">
         <div className="ac-shell">
-          <AcademySectionHeading id="how-title" eyebrow={howSection.eyebrow} title={howSection.title} />
-          <ol className="ac-steps">
+          <AcademySectionHeading
+            id="how-title"
+            eyebrow={howSection.eyebrow}
+            title={howSection.title}
+            intro={howSection.intro}
+          />
+          <ol className="ac-steps ac-steps-icons">
             {howSection.steps.map((item, index) => (
               <li key={item.title}>
-                <span className="ac-step-number" aria-hidden="true">
-                  {index + 1}
+                <div className="ac-step-head">
+                  <span className="ac-step-number" aria-hidden="true">
+                    {index + 1}
+                  </span>
+                  <span className="ac-step-line" aria-hidden="true" />
+                </div>
+                <span className="ac-icon-badge">
+                  <UiIcon name={item.icon} />
                 </span>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
@@ -1739,7 +1875,12 @@ function AcademyHomePage({ currentPath, navigate }) {
       <section className="ac-section" aria-labelledby="faq-title">
         <div className="ac-shell ac-faq-grid">
           <div>
-            <AcademySectionHeading id="faq-title" eyebrow={faqSection.eyebrow} title={faqSection.title} />
+            <AcademySectionHeading
+              id="faq-title"
+              eyebrow={faqSection.eyebrow}
+              title={faqSection.title}
+              intro={faqSection.intro}
+            />
             <div className="ac-faq-list">
               {faqSection.items.map((item) => (
                 <details className="ac-faq-item" key={item.question}>
@@ -1752,17 +1893,32 @@ function AcademyHomePage({ currentPath, navigate }) {
           <aside className="ac-contact-card" aria-labelledby="contact-card-title">
             <h2 id="contact-card-title">{contactCard.title}</h2>
             <p>{contactCard.text}</p>
-            <ul className="ac-contact-list">
+            <ul className="ac-contact-list ac-contact-list-icons">
               {homeContactMethods.map((item) => (
                 <li key={item.display}>
-                  <span>{item.label}</span>
-                  <a href={item.href}>{item.display}</a>
+                  <span className="ac-contact-icon">
+                    <UiIcon name={getContactIcon(item)} size={22} />
+                  </span>
+                  <div>
+                    <span>{item.label}</span>
+                    <a href={item.href}>{item.display}</a>
+                  </div>
                 </li>
               ))}
+              <li>
+                <span className="ac-contact-icon">
+                  <UiIcon name="pin" size={22} />
+                </span>
+                <div>
+                  <span>Based in</span>
+                  <strong>{siteBrand.city}</strong>
+                </div>
+              </li>
             </ul>
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
-              Send a message
+              Send a message <UiIcon name="arrow" size={18} />
             </AppLink>
+            <img src={brandCrest} alt="" className="ac-contact-crest" width="168" height="178" loading="lazy" />
           </aside>
         </div>
       </section>
@@ -1811,7 +1967,6 @@ const programPhotos = {
   tournaments: { file: "tournaments", alt: "Hands pressing a chess clock beside a chessboard" },
   lessons: { file: "lessons", alt: "An adult and a child studying a chess position together" },
   afterSchool: { file: "after-school", alt: "A small group of children playing chess at a long table" },
-  dojo: { file: "dojo", alt: "Close-up of a hand making a move in a chess position" },
 };
 
 const getProgramPhotoSrc = (file, width) => programPhotoFiles[`./assets/programs/${file}-${width}.webp`];
@@ -2500,48 +2655,6 @@ function AfterSchoolPage({ currentPath, navigate }) {
   );
 }
 
-function DojoPage({ currentPath, navigate }) {
-  const content = dojoPageContent;
-
-  return (
-    <div className="ac-home pg-page">
-      <InnerHero
-        variant="dojo"
-        eyebrow={content.hero.eyebrow}
-        title={content.hero.title}
-        intro={content.hero.intro}
-        programId="dojo"
-        actions={
-          <>
-            <a href="#dojo-faq-title" className="ac-btn ac-btn-primary" onClick={scrollToSection("dojo-faq-title")}>
-              Dojo questions
-            </a>
-            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
-              Contact us
-            </AppLink>
-          </>
-        }
-        aside={
-          <ProgramHeroMedia programId="dojo">
-            <FactPanel title="Program details" iconKey="dojo" items={content.glance} tone="dark" />
-          </ProgramHeroMedia>
-        }
-      />
-
-      <FaqBlock id="dojo-faq-title" {...content.faqSection} items={content.faqs} />
-
-      <RegistrationStatusPanel
-        id="dojo-registration"
-        programId="dojo"
-        title={content.status.title}
-        text={content.status.text}
-        currentPath={currentPath}
-        navigate={navigate}
-      />
-    </div>
-  );
-}
-
 function SiteFooter({ currentPath, navigate }) {
   const academyLinks = [
     { label: "Home", path: "/" },
@@ -2598,15 +2711,21 @@ function SiteFooter({ currentPath, navigate }) {
             <ul className="ac-footer-contact">
               {footerContactMethods.map((item) => (
                 <li key={item.display}>
-                  <span>{item.label}</span>
-                  <a href={item.href} className="ac-footer-link">
-                    {item.display}
-                  </a>
+                  <UiIcon name={getContactIcon(item)} size={18} />
+                  <div>
+                    <span>{item.label}</span>
+                    <a href={item.href} className="ac-footer-link">
+                      {item.display}
+                    </a>
+                  </div>
                 </li>
               ))}
               <li>
-                <span>Based in</span>
-                {siteBrand.city}
+                <UiIcon name="pin" size={18} />
+                <div>
+                  <span>Based in</span>
+                  {siteBrand.city}
+                </div>
               </li>
             </ul>
           </div>
@@ -5785,8 +5904,6 @@ function ChessTruckApp() {
         return <LessonsPage currentPath={currentPath} navigate={navigate} />;
       case "/after-school":
         return <AfterSchoolPage currentPath={currentPath} navigate={navigate} />;
-      case "/dojo":
-        return <DojoPage currentPath={currentPath} navigate={navigate} />;
       case "/faq":
         return <FaqPage currentPath={currentPath} navigate={navigate} />;
       case "/terms":

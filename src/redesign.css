@@ -3214,3 +3214,276 @@
     animation: ct-settle 1100ms var(--ct-ease) 160ms both;
   }
 }
+
+/* ------------------------------------------------- homepage refresh (client) */
+/* Four program cards, gold accent lines in headings, one icon set across the
+   homepage blocks and the footer. Brand colors only. */
+
+:root {
+  --ac-gold-strong: #9a6c28; /* gold for large headings on cream: 4.2:1 */
+}
+
+.ac-title-accent {
+  color: var(--ac-gold-strong);
+}
+
+.ac-title-accent-line {
+  display: block;
+}
+
+.ac-hero-cinematic .ac-title-accent {
+  color: var(--ac-gold-light);
+}
+
+/* Hero: tagline above the paragraph; badges with icons. */
+.ac-hero-tagline {
+  margin: 0;
+  max-width: 34rem;
+  font-family: var(--display);
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+}
+
+.ac-hero-cinematic .ac-lead {
+  max-width: 38rem;
+  font-size: 1.05rem;
+}
+
+.ac-hero-facts li svg {
+  flex-shrink: 0;
+  color: var(--ac-gold-light);
+}
+
+.ac-hero-facts li:has(svg)::before {
+  content: none;
+}
+
+/* Program cards: a 2 x 2 grid on desktop. */
+.ac-program-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ac-program-card,
+.ac-program-card:nth-child(4),
+.ac-program-card:nth-child(5) {
+  grid-column: auto;
+}
+
+/* Shared round icon badge. */
+.ac-icon-badge {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(196, 149, 73, 0.18);
+  color: var(--ac-green-900);
+}
+
+.ac-icon-badge-small {
+  width: 40px;
+  height: 40px;
+}
+
+/* How we teach: icon beside each point. */
+.ac-pillars-icons li {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  padding-left: 0;
+}
+
+.ac-pillars-icons li::before {
+  content: none;
+}
+
+.ac-pillars-icons li > div {
+  display: grid;
+  gap: 6px;
+}
+
+/* Coach: compact experience cards with icons. */
+.ac-coach-facts-icons div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "icon value"
+    "icon label";
+  column-gap: 12px;
+  align-items: center;
+}
+
+.ac-coach-facts-icons .ac-icon-badge {
+  grid-area: icon;
+}
+
+.ac-coach-facts-icons dd {
+  grid-area: value;
+  font-size: 1.08rem;
+  line-height: 1.2;
+}
+
+.ac-coach-facts-icons dt {
+  grid-area: label;
+  font-size: 0.84rem;
+  line-height: 1.3;
+}
+
+/* How to get started: numbered steps joined by a gold line. */
+.ac-steps-icons li {
+  gap: 12px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ac-step-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.ac-step-head .ac-step-number {
+  margin-bottom: 0;
+}
+
+.ac-step-line {
+  flex: 1;
+  height: 2px;
+  background: rgba(196, 149, 73, 0.55);
+}
+
+/* Contact card: icon rows, a gold button with an arrow, the crest as a quiet accent. */
+.ac-contact-card {
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    repeating-conic-gradient(rgba(255, 255, 255, 0.035) 0% 25%, transparent 0% 50%) 100% 0 / 56px 56px,
+    radial-gradient(circle at 100% 0%, rgba(220, 185, 120, 0.16), transparent 50%),
+    linear-gradient(160deg, var(--ac-green-900), var(--ac-green-950));
+}
+
+.ac-contact-list-icons li {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.ac-contact-list-icons li > div {
+  display: grid;
+  gap: 2px;
+}
+
+.ac-contact-icon {
+  display: grid;
+  place-items: center;
+  color: var(--ac-gold-light);
+}
+
+.ac-contact-list-icons strong {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ac-contact-card .ac-btn svg {
+  margin-left: 2px;
+}
+
+.ac-contact-crest {
+  position: absolute;
+  right: -22px;
+  bottom: -26px;
+  z-index: -1;
+  width: 150px;
+  height: auto;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* Footer contact rows with icons. */
+.ac-footer-contact li {
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: start;
+}
+
+.ac-footer-contact li > svg {
+  margin-top: 2px;
+  color: var(--ac-gold-light);
+}
+
+.ac-footer-contact li > div {
+  display: grid;
+  gap: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-hero-copy > :nth-child(6) {
+    animation-delay: calc(var(--ct-stagger) * 5);
+  }
+}
+
+@media (max-width: 1023px) {
+  .ac-steps-icons {
+    gap: 32px;
+  }
+
+  /* The card stops being sticky here; keep it positioned for the crest accent. */
+  .ac-contact-card {
+    position: relative;
+  }
+}
+
+@media (max-width: 640px) {
+  .ac-program-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ac-hero-tagline {
+    font-size: 1.12rem;
+  }
+
+  .ac-hero-cinematic .ac-lead {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Phones: number on the left, title and text on the right; the step icon is
+     dropped to keep each row compact. */
+  .ac-steps-icons li {
+    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-areas:
+      "number title"
+      "number text";
+    column-gap: 14px;
+    row-gap: 4px;
+  }
+
+  .ac-steps-icons .ac-step-head {
+    grid-area: number;
+    align-self: start;
+    margin-bottom: 0;
+  }
+
+  .ac-steps-icons .ac-step-line,
+  .ac-steps-icons .ac-icon-badge {
+    display: none;
+  }
+
+  .ac-steps-icons h3 {
+    grid-area: title;
+  }
+
+  .ac-steps-icons p {
+    grid-area: text;
+  }
+
+  .ac-coach-facts-icons {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
