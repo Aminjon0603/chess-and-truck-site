@@ -24,10 +24,6 @@
       "destination": "/index.html"
     },
     {
-      "source": "/dojo",
-      "destination": "/index.html"
-    },
-    {
       "source": "/faq",
       "destination": "/index.html"
     },
@@ -103,6 +99,13 @@
           "value": "noindex, nofollow"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/dojo",
+      "destination": "/",
+      "permanent": true
     }
   ]
 }

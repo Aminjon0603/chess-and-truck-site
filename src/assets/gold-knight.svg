@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+  <!-- Decorative gold chess knight for the homepage contact card. -->
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fbe7b5"/>
+      <stop offset="0.35" stop-color="#e9c47c"/>
+      <stop offset="0.7" stop-color="#c58f3e"/>
+      <stop offset="1" stop-color="#7d5119"/>
+    </linearGradient>
+    <linearGradient id="goldV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3d595"/>
+      <stop offset="1" stop-color="#a8752c"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0.32" cy="0.3" r="0.5">
+      <stop offset="0" stop-color="#fff6dc" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#fff6dc" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a3a10" stop-opacity="0"/>
+      <stop offset="1" stop-color="#5a3a10" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Base -->
+  <ellipse cx="100" cy="286" rx="78" ry="9" fill="#000" opacity="0.28"/>
+  <path d="M26 266c0-8 6-13 14-13h120c8 0 14 5 14 13v10c0 6-5 10-11 10H37c-6 0-11-4-11-10z" fill="url(#gold)"/>
+  <path d="M26 270h148" stroke="#fff3d0" stroke-opacity="0.45" stroke-width="2"/>
+  <path d="M40 253c0-9 7-15 16-15h88c9 0 16 6 16 15z" fill="url(#gold)"/>
+  <path d="M52 238c0-6 5-10 11-10h74c6 0 11 4 11 10z" fill="url(#goldV)"/>
+  <rect x="48" y="226" width="104" height="6" rx="3" fill="#8a5a1c" opacity="0.55"/>
+
+  <!-- Head and neck -->
+  <path id="head" d="M62 228C60 205 66 190 84 174C72 171 60 172 49 175C36 178 26 170 28 157C30 146 40 138 52 130C64 121 72 108 78 92L80 64L94 80C102 76 112 76 122 80C144 90 156 112 158 142C160 172 156 202 148 228Z" fill="url(#gold)"/>
+  <path d="M62 228C60 205 66 190 84 174C72 171 60 172 49 175C36 178 26 170 28 157C30 146 40 138 52 130C64 121 72 108 78 92L80 64L94 80C102 76 112 76 122 80C144 90 156 112 158 142C160 172 156 202 148 228Z" fill="url(#shine)"/>
+  <path d="M62 228C60 205 66 190 84 174C72 171 60 172 49 175C36 178 26 170 28 157C30 146 40 138 52 130C64 121 72 108 78 92L80 64L94 80C102 76 112 76 122 80C144 90 156 112 158 142C160 172 156 202 148 228Z" fill="url(#shade)"/>
+
+  <!-- Mane -->
+  <path d="M122 82c14 8 24 22 28 40M128 100c8 8 13 18 15 30M134 124c5 10 7 22 7 34M138 152c2 12 1 24-1 36M136 186c-1 12-3 24-6 36" fill="none" stroke="#8a5a1c" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round"/>
+  <path d="M118 84c12 8 20 20 24 34M124 104c6 8 10 16 12 26" fill="none" stroke="#fff3d0" stroke-opacity="0.5" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- Face details -->
+  <path d="M84 174c10-6 18-14 22-24" fill="none" stroke="#8a5a1c" stroke-opacity="0.5" stroke-width="2.4" stroke-linecap="round"/>
+  <ellipse cx="88" cy="112" rx="5" ry="3.6" transform="rotate(-20 88 112)" fill="#5a3a10" opacity="0.8"/>
+  <circle cx="86.5" cy="111" r="1.2" fill="#fff6dc"/>
+  <ellipse cx="38" cy="157" rx="3.4" ry="2.4" transform="rotate(-30 38 157)" fill="#5a3a10" opacity="0.7"/>
+  <path d="M30 166c6 4 14 5 22 3" fill="none" stroke="#8a5a1c" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+  <path d="M84 70l6 9" stroke="#8a5a1c" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"/>
+  <path d="M56 132c8-8 16-20 22-34" fill="none" stroke="#fff6dc" stroke-opacity="0.7" stroke-width="2.4" stroke-linecap="round"/>
+</svg>
