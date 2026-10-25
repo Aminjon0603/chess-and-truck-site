@@ -513,6 +513,8 @@ export const programs = [
     path: "/camps",
     summary:
       "We're planning our first summer camp: full days of chess lessons, games, and time outside.",
+    // Homepage card text from the client's mockup; other pages keep summary.
+    homeSummary: "Fun-filled camps with chess lessons, games, tournaments, and time outside.",
   },
   {
     id: "tournaments",
@@ -538,6 +540,7 @@ export const programs = [
     path: "/after-school",
     summary:
       "We're talking with schools about after-school chess classes. Nothing is final yet.",
+    homeSummary: "Weekly chess classes at schools across NYC. No details yet.",
   },
 ];
 

@@ -3399,15 +3399,24 @@
   margin-left: 2px;
 }
 
-.ac-contact-crest {
+/* Gold knight from the client's mockup, sitting at the card's lower right. */
+.ac-contact-knight {
   position: absolute;
-  right: -22px;
-  bottom: -26px;
+  right: 18px;
+  bottom: 22px;
   z-index: -1;
-  width: 150px;
+  width: 122px;
   height: auto;
-  opacity: 0.16;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
   pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .ac-contact-knight {
+    right: 12px;
+    bottom: 18px;
+    width: 84px;
+  }
 }
 
 /* Footer contact rows with icons. */
@@ -3438,9 +3447,10 @@
     gap: 32px;
   }
 
-  /* The card stops being sticky here; keep it positioned for the crest accent. */
+  /* The card stops being sticky here; keep it positioned for the knight, without the sticky offset. */
   .ac-contact-card {
     position: relative;
+    top: auto;
   }
 }
 

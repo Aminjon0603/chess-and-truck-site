@@ -36,6 +36,7 @@ import {
 } from "./siteData";
 import brandLogo from "./assets/chess-truck-logo.png";
 import brandCrest from "./assets/chess-truck-crest.png";
+import goldKnight from "./assets/gold-knight.svg";
 import heroVideoDesktop from "./assets/hero/hero-chess-1280.mp4";
 import heroVideoMobile from "./assets/hero/hero-chess-720sq.mp4";
 import heroPosterDesktop from "./assets/hero/hero-chess-1280-poster.webp";
@@ -1469,7 +1470,7 @@ function BrandMark({ tone = "light" }) {
   );
 }
 
-function ProgramCard({ program, currentPath, navigate }) {
+function ProgramCard({ program, summary = program.summary, currentPath, navigate }) {
   return (
     <AppLink to={program.path} navigate={navigate} currentPath={currentPath} className="ac-program-card">
       <span className="ac-program-icon">
@@ -1477,7 +1478,7 @@ function ProgramCard({ program, currentPath, navigate }) {
       </span>
       <ProgramStatusBadge programId={program.id} />
       <h3>{program.name}</h3>
-      <p>{program.summary}</p>
+      <p>{summary}</p>
       <span className="ac-program-link">
         Learn more
         <span className="ac-program-arrow" aria-hidden="true">
@@ -1854,7 +1855,13 @@ function AcademyHomePage({ currentPath, navigate }) {
           <AcademySectionHeading id="programs-title" {...programsSection} />
           <div className="ac-program-grid">
             {programs.map((item) => (
-              <ProgramCard key={item.id} program={item} currentPath={currentPath} navigate={navigate} />
+              <ProgramCard
+                key={item.id}
+                program={item}
+                summary={item.homeSummary ?? item.summary}
+                currentPath={currentPath}
+                navigate={navigate}
+              />
             ))}
           </div>
         </div>
@@ -1992,7 +1999,7 @@ function AcademyHomePage({ currentPath, navigate }) {
             <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-gold">
               Send a message <UiIcon name="arrow" size={18} />
             </AppLink>
-            <img src={brandCrest} alt="" className="ac-contact-crest" width="168" height="178" loading="lazy" />
+            <img src={goldKnight} alt="" className="ac-contact-knight" width="200" height="300" loading="lazy" />
           </aside>
         </div>
       </section>
