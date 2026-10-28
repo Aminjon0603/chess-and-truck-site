@@ -1106,7 +1106,7 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts,
     <>
       <span className="mini-tag mini-tag-dark">Questions?</span>
       <h2>Talk to us</h2>
-      <p>All four programs are opening soon. Call, text, or email with any question.</p>
+      <p>Online private lessons are open now; our other programs are opening soon. Call, text, or email with any question.</p>
       <div className="fact-list">
         <div>
           <span>{phoneContact.label}</span>
@@ -1270,12 +1270,12 @@ function DojoFeature({ currentPath, navigate }) {
   );
 }
 
-function ProgramStatusBadge({ programId }) {
+function ProgramStatusBadge({ programId, openLabel }) {
   const status = getProgramStatus(programId);
 
   return (
     <span className={`slot-status-badge program-status-badge is-${status}`}>
-      {PROGRAM_STATUS_LABELS[status]}
+      {status === PROGRAM_STATUS.OPEN && openLabel ? openLabel : PROGRAM_STATUS_LABELS[status]}
     </span>
   );
 }
@@ -1514,7 +1514,7 @@ function ProgramCard({ program, summary = program.summary, currentPath, navigate
       <span className="ac-program-icon">
         <ProgramIcon iconKey={program.iconKey} />
       </span>
-      <ProgramStatusBadge programId={program.id} />
+      <ProgramStatusBadge programId={program.statusProgramId || program.id} openLabel={program.openLabel} />
       <h3>{program.name}</h3>
       <p>{summary}</p>
       <span className="ac-program-link">

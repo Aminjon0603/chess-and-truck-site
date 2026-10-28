@@ -111,7 +111,7 @@ export const academyHomePage = {
         // The mockup's "Spots can fill up quickly!" is left out.
         icon: "document",
         title: "Sign up when it opens",
-        text: "Dates, prices, and registration links will be posted on each program page when registration opens.",
+        text: "Online private lessons are open now. For our other programs, dates, prices, and registration links will be posted on each program page when registration opens.",
       },
     ],
   },
@@ -123,32 +123,32 @@ export const academyHomePage = {
       {
         question: "Is this OK for beginners?",
         answer:
-          "Yes. Private lessons will be open to beginners as well as experienced players. Tell us your child's age and level, and we'll help you find the right program.",
+          "Yes. Online private lessons are open to complete beginners as well as experienced players. Tell us your child's age and level, and we'll help you find the right program.",
       },
       {
         question: "Who is the coach?",
         answer:
-          "Andrea, who has 24 years of experience teaching chess. We'll share who coaches each program when its registration opens.",
+          "Online private lessons are taught by Coach Andrea, a FIDE Master with 24 years of experience teaching chess, and Coach Amir, also a FIDE Master. You can read about both on our Our Team page. We'll share who coaches our other programs when their registration opens.",
       },
       {
         question: "When does registration open?",
         answer:
-          "We haven't set dates yet. Until a program page says registration is open, we aren't taking sign-ups or payments for it.",
+          "Online private lessons are open now: you can buy a lesson package on the Online Lessons page. Camps, tournaments, after-school chess, and in-person and group lessons aren't open yet. Until a program page says registration is open, we aren't taking sign-ups or payments for it.",
       },
       {
         question: "How much does it cost?",
         answer:
-          "Prices haven't been set for any program yet. They'll be announced on each program page. When registration opens, you'll pay online by card through Stripe, a secure payment service.",
+          "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online by card through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
       },
       {
         question: "What should my child bring?",
         answer:
-          "It depends on the program. Each program page will list what to bring when registration opens.",
+          "It depends on the program. For online lessons, our team will tell you what you need when they contact you by email to arrange the lessons. Other program pages will list what to bring when registration opens.",
       },
       {
         question: "Where are the programs located?",
         answer:
-          "In New York City. We haven't announced specific locations yet. Each program page will list its location before registration opens.",
+          "Online private lessons take place online, from home. Our other programs will be in New York City. We haven't announced specific locations yet; each program page will list its location before registration opens.",
       },
     ],
   },
@@ -540,6 +540,9 @@ export const programs = [
     iconKey: "lessons",
     name: "Private Chess Lessons",
     path: "/lessons/online",
+    // Online private lessons are on sale, so this card shows their status.
+    statusProgramId: "onlineLessons",
+    openLabel: "Online Lessons Open",
     summary:
       "Individual or online lessons for beginners and experienced players.",
   },
@@ -716,7 +719,7 @@ export const routeMeta = {
   "/": {
     title: "Chess & Truck | Chess Programs for Kids in NYC",
     description:
-      "Chess camps, tournaments, private lessons, and after-school chess for kids in New York City. Registration opens soon.",
+      "Chess camps, tournaments, private lessons, and after-school chess for kids in New York City. Online private lessons are open now.",
   },
   "/about": {
     title: "About | Chess & Truck",
@@ -1459,7 +1462,7 @@ export const campDetailPages = {
 };
 
 // About page: owner-confirmed facts only. Chess & Truck has not run its own
-// camps or tournaments yet; all four programs are upcoming.
+// camps or tournaments yet. Online private lessons are on sale; the rest are upcoming.
 export const aboutPage = {
   hero: {
     eyebrow: "About us",
@@ -1469,15 +1472,15 @@ export const aboutPage = {
   },
   facts: [
     { label: "Based in", value: "New York City" },
-    { label: "Programs", value: "Four, all opening soon" },
+    { label: "Programs", value: "Four, online lessons open now" },
     { label: "Coach", value: "Andrea, 24 years teaching chess" },
-    { label: "Registration", value: "Not open yet" },
+    { label: "Registration", value: "Online lessons open" },
   ],
   whoSection: {
     eyebrow: "Who we are",
     title: "A new chess program for NYC kids",
     intro:
-      "We're getting ready to launch camps, tournaments, lessons, and after-school chess. These will be our first programs, and we'll share the details of each one before registration opens.",
+      "We're launching camps, tournaments, lessons, and after-school chess. Online private lessons are open now, and we'll share the details of each other program before its registration opens.",
   },
   whoPoints: [
     {
@@ -1486,7 +1489,7 @@ export const aboutPage = {
     },
     {
       title: "Details before sign-up",
-      text: "Each program page will list the dates, location, and price before we take any registrations or payments.",
+      text: "Each program page lists the price and details before we take any registrations or payments.",
     },
     {
       title: "Easy to reach",
@@ -1495,8 +1498,8 @@ export const aboutPage = {
   ],
   programsSection: {
     eyebrow: "Our programs",
-    title: "Four upcoming chess programs",
-    intro: "None are open for registration yet. Each page shows what's confirmed and what's still being planned.",
+    title: "Our four chess programs",
+    intro: "Online private lessons are open now. The other programs aren't open for registration yet; each page shows what's confirmed and what's still being planned.",
   },
   coach: {
     eyebrow: "Your coach",
@@ -1641,17 +1644,17 @@ export const faqPage = {
         {
           question: "Is registration open?",
           answer:
-            "Not yet. All four programs are still being planned, and we aren't taking sign-ups or payments for any of them. Each program page will say when its registration opens.",
+            "For online private lessons, yes: you can buy a lesson package on the Online Lessons page. Camps, tournaments, after-school chess, and in-person and group lessons aren't open yet, and we aren't taking sign-ups or payments for them. Each program page will say when its registration opens.",
         },
         {
           question: "When will programs begin?",
           answer:
-            "We haven't set start dates for any program yet. Dates will be posted on each program page before registration opens.",
+            "Online private lessons start after you buy a package: our team contacts you by email to arrange the schedule. We haven't set start dates for our other programs yet. Dates will be posted on each program page before registration opens.",
         },
         {
           question: "How much do programs cost?",
           answer:
-            "Prices haven't been set for any program yet. Each price will be posted on its program page. When registration opens, you'll pay online by card through Stripe, a secure payment service.",
+            "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online by card through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
         },
       ],
     },
@@ -1667,7 +1670,7 @@ export const faqPage = {
         {
           question: "Are beginners welcome?",
           answer:
-            "Private lessons will be open to beginners and experienced players. For our other programs, we'll say who each one is for when registration opens. Tell us your child's level, and we'll suggest where to start.",
+            "Yes. Online private lessons are open to everyone from complete beginners to advanced tournament players. For our other programs, we'll say who each one is for when registration opens. Tell us your child's level, and we'll suggest where to start.",
         },
       ],
     },
@@ -1683,7 +1686,7 @@ export const faqPage = {
         {
           question: "Are private lessons online or in person?",
           answer:
-            "Both. Private lessons will be offered in person and online, with more than one lesson length. In-person locations, lesson lengths, and times will be announced.",
+            "Online private lessons are open now: one-on-one, 60 minutes each. In-person and group lessons are coming; their locations, schedules, and prices will be announced.",
         },
       ],
     },
@@ -1745,7 +1748,7 @@ export const faqPage = {
         {
           question: "Who is the coach?",
           answer:
-            "Andrea, who has 24 years of experience teaching chess. We'll share who coaches each program when its registration opens.",
+            "Online private lessons are taught by Coach Andrea, a FIDE Master with 24 years of experience teaching chess, and Coach Amir, also a FIDE Master. You can read about both on our Our Team page. We'll share who coaches our other programs when their registration opens.",
         },
       ],
     },
