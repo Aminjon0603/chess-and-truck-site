@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   aboutPage,
-  aboutSecondCoach,
   academyHomePage,
   afterSchoolPageContent,
   campBookingPage,
@@ -9,6 +8,7 @@ import {
   campMenuItems,
   campOverviewPage,
   campsPageContent,
+  coaches,
   comingSoonLessonPages,
   contactEmails,
   contactNumbers,
@@ -23,6 +23,7 @@ import {
   masterTrainingDojo,
   navigationItems,
   onlineLessonsPage,
+  ourTeamPage,
   privateLessonsPage,
   programOverview,
   programPages,
@@ -395,9 +396,13 @@ const knownRoutes = new Set([
   "/about",
   "/tournaments",
   "/lessons/online",
+  "/lessons/online/checkout",
   "/lessons/online/thank-you",
   "/lessons/in-person",
   "/lessons/group",
+  "/our-team",
+  "/our-team/amir",
+  "/our-team/andrea",
   "/after-school",
   "/faq",
   "/contact",
@@ -744,7 +749,10 @@ const canonicalPathAliases = {
 
 // Private, one-time pages that should never appear in search results.
 const isNoIndexPath = (path) =>
-  path === "/camps/confirmed" || path === "/lessons/online/thank-you" || path.startsWith("/interest/");
+  path === "/camps/confirmed" ||
+  path === "/lessons/online/checkout" ||
+  path === "/lessons/online/thank-you" ||
+  path.startsWith("/interest/");
 
 // Scroll reveals: these blocks fade and rise into place once, as they enter the
 // viewport. Siblings are staggered. Hero content is animated by CSS instead.
@@ -820,8 +828,10 @@ const updateCanonicalLink = (href) => {
   }
 };
 
-function AppLink({ to, navigate, children, className = "", currentPath, onNavigate, ...rest }) {
-  const isActive = normalizePath(to) === currentPath;
+function AppLink({ to, navigate, children, className = "", currentPath, onNavigate, matchSection = false, ...rest }) {
+  // matchSection: the link also counts as current on its sub-pages (Our Team -> a profile).
+  const target = normalizePath(to);
+  const isActive = target === currentPath || (matchSection && target !== "/" && currentPath?.startsWith(`${target}/`));
 
   const handleClick = (event) => {
     if (
@@ -3835,10 +3845,10 @@ function AboutPage({ currentPath, navigate }) {
         </div>
       </section>
 
-      <section className="ac-section" id="coaches" aria-labelledby="about-coach-title">
+      <section className="ac-section" aria-labelledby="about-coach-title">
         <div className="ac-shell">
           <AcademySectionHeading id="about-coach-title" eyebrow={content.coach.eyebrow} title={content.coach.title} />
-          <article className="ac-coach" id="coach-andrea">
+          <article className="ac-coach">
             <img
               src={andreaPhoto}
               alt="Andrea at an outdoor chess table"
@@ -3858,23 +3868,6 @@ function AboutPage({ currentPath, navigate }) {
                   </div>
                 ))}
               </dl>
-            </div>
-          </article>
-          <article className="ac-coach ac-coach-second" id={aboutSecondCoach.id} aria-labelledby="about-amir-title">
-            <img
-              src={amirPlaceholder640}
-              srcSet={`${amirPlaceholder400} 400w, ${amirPlaceholder640} 640w`}
-              sizes="(max-width: 780px) 100vw, 480px"
-              alt=""
-              className="ac-coach-photo"
-              width="640"
-              height="480"
-              loading="lazy"
-            />
-            <div className="ac-coach-copy">
-              <span className="ac-coach-role">{aboutSecondCoach.role}</span>
-              <h3 id="about-amir-title" className="ac-coach-name">{aboutSecondCoach.title}</h3>
-              <p>{aboutSecondCoach.bio}</p>
             </div>
           </article>
         </div>
@@ -5434,7 +5427,7 @@ const scrollToElementId = (id) => {
   element.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
 };
 
-const lessonCoachPhotos = {
+const coachPhotos = {
   andrea: { src: andreaPhoto, srcSet: undefined, width: 647, height: 480 },
   amirPlaceholder: {
     src: amirPlaceholder640,
@@ -5580,12 +5573,9 @@ function LessonCheckoutForm({ plans, state, errors, submitState, onChange, onSub
 function OnlineLessonsPage({ currentPath, navigate, search }) {
   useLessonsFont();
   const content = onlineLessonsPage;
-  const { hero, fun, special, audience, pricing, policy, aid, coaches, cta } = content;
+  const { hero, fun, special, audience, pricing, policy, aid, cta } = content;
+  const coachesSection = content.coaches;
   const wasCancelled = new URLSearchParams(search).get("payment") === "cancelled";
-  const [checkoutState, setCheckoutState] = useState(lessonCheckoutInitialState);
-  const [checkoutErrors, setCheckoutErrors] = useState({});
-  const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   useEffect(() => {
     if (wasCancelled) {
@@ -5593,12 +5583,42 @@ function OnlineLessonsPage({ currentPath, navigate, search }) {
     }
   }, [wasCancelled]);
 
-  const choosePackage = (packageId) => {
-    setCheckoutState((current) => ({ ...current, packageId }));
-    setCheckoutErrors((current) => ({ ...current, packageId: undefined }));
-    setIsCheckoutOpen(true);
-    window.requestAnimationFrame(() => scrollToElementId("lesson-checkout"));
-  };
+  const getStarted = () => scrollToElementId("pricing");
+
+  return (
+    <OnlineLessonsContent
+      content={content}
+      hero={hero}
+      fun={fun}
+      special={special}
+      audience={audience}
+      pricing={pricing}
+      policy={policy}
+      aid={aid}
+      coachesSection={coachesSection}
+      cta={cta}
+      wasCancelled={wasCancelled}
+      getStarted={getStarted}
+      currentPath={currentPath}
+      navigate={navigate}
+    />
+  );
+}
+
+// One checkout page for all three packages. The package chosen on a pricing
+// card arrives as ?package=..., and can still be changed here.
+function LessonCheckoutPage({ currentPath, navigate, search }) {
+  useLessonsFont();
+  const params = new URLSearchParams(search);
+  const requestedPackage = params.get("package");
+  const wasCancelled = params.get("payment") === "cancelled";
+  const plans = onlineLessonsPage.pricing.plans;
+  const [checkoutState, setCheckoutState] = useState(() => ({
+    ...lessonCheckoutInitialState,
+    packageId: plans.some((plan) => plan.packageId === requestedPackage) ? requestedPackage : "",
+  }));
+  const [checkoutErrors, setCheckoutErrors] = useState({});
+  const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
 
   const updateField = (event) => {
     const { name, type, value, checked } = event.target;
@@ -5641,7 +5661,68 @@ function OnlineLessonsPage({ currentPath, navigate, search }) {
     }
   };
 
-  const getStarted = () => scrollToElementId("pricing");
+  return (
+    <div className="ol-page">
+      <section className="ol-section ol-checkout-page">
+        <div className="ol-shell">
+          <LessonsBreadcrumb
+            items={[
+              { label: "Home", path: "/" },
+              { label: "Lessons" },
+              { label: "Online Private Lessons", path: "/lessons/online" },
+              { label: onlineLessonsPage.checkout.pageTitle },
+            ]}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+          <h1 className="ol-title">{onlineLessonsPage.pricing.title}</h1>
+          {wasCancelled ? (
+            <p className="ol-notice" role="status">
+              {onlineLessonsPage.checkout.cancelled}
+            </p>
+          ) : null}
+          <LessonCheckoutForm
+            plans={plans}
+            state={checkoutState}
+            errors={checkoutErrors}
+            submitState={submitState}
+            onChange={updateField}
+            onSubmit={submitCheckout}
+          />
+          <section className="ol-checkout-policy" aria-labelledby="ol-checkout-policy-title">
+            <h2 id="ol-checkout-policy-title">{onlineLessonsPage.policy.title}</h2>
+            <ul>
+              {onlineLessonsPage.policy.points.map((point) => (
+                <li key={point}>
+                  <UiIcon name="check" size={18} filled />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function OnlineLessonsContent({
+  content,
+  hero,
+  fun,
+  special,
+  audience,
+  pricing,
+  policy,
+  aid,
+  coachesSection,
+  cta,
+  wasCancelled,
+  getStarted,
+  currentPath,
+  navigate,
+}) {
+  const choosePackage = (packageId) => navigate(`${content.checkout.path}?package=${packageId}`);
 
   return (
     <div className="ol-page">
@@ -5761,29 +5842,20 @@ function OnlineLessonsPage({ currentPath, navigate, search }) {
                     </li>
                   ))}
                 </ul>
-                <button
-                  type="button"
+                <a
+                  href={`${content.checkout.path}?package=${plan.packageId}`}
                   className={`ol-btn ol-btn-block ${plan.featured ? "ol-btn-gold" : "ol-btn-outline"}`}
-                  onClick={() => choosePackage(plan.packageId)}
-                  aria-controls="lesson-checkout"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    choosePackage(plan.packageId);
+                  }}
                 >
                   Get Started
                   <span className="sr-only"> with the {plan.name}</span>
-                </button>
+                </a>
               </article>
             ))}
           </div>
-
-          {isCheckoutOpen ? (
-            <LessonCheckoutForm
-              plans={pricing.plans}
-              state={checkoutState}
-              errors={checkoutErrors}
-              submitState={submitState}
-              onChange={updateField}
-              onSubmit={submitCheckout}
-            />
-          ) : null}
 
           <div className="ol-terms ol-panel-tint">
             <section className="ol-policy" aria-labelledby="ol-policy-title">
@@ -5819,41 +5891,14 @@ function OnlineLessonsPage({ currentPath, navigate, search }) {
         <div className="ol-shell">
           <div className="ol-coaches-head ol-reveal">
             <div>
-              <h2 id="ol-coaches-title" className="ol-title">{coaches.title}</h2>
-              <p className="ol-text">{coaches.intro}</p>
+              <h2 id="ol-coaches-title" className="ol-title">{coachesSection.title}</h2>
+              <p className="ol-text">{coachesSection.intro}</p>
             </div>
-            <AppLink to={coaches.teamPath} navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-outline ol-btn-small">
-              {coaches.teamLabel}
+            <AppLink to={coachesSection.teamPath} navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-outline ol-btn-small">
+              {coachesSection.teamLabel}
             </AppLink>
           </div>
-          <div className="ol-coaches">
-            {coaches.people.map((coach) => {
-              const photo = lessonCoachPhotos[coach.photo];
-
-              return (
-                <article key={coach.id} className="ol-coach ol-reveal">
-                  <img
-                    src={photo.src}
-                    srcSet={photo.srcSet}
-                    sizes={photo.srcSet ? "(max-width: 640px) 40vw, 200px" : undefined}
-                    alt={coach.photoAlt}
-                    width={photo.width}
-                    height={photo.height}
-                    loading="lazy"
-                  />
-                  <div>
-                    <h3>{coach.name}</h3>
-                    <span className="ol-coach-badge">{coach.badge}</span>
-                    <p>{coach.text}</p>
-                    <AppLink to={coach.profilePath} navigate={navigate} currentPath={currentPath} className="ol-coach-link">
-                      View full profile <span aria-hidden="true">&rarr;</span>
-                      <span className="sr-only"> of {coach.name}</span>
-                    </AppLink>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+          <CoachCards currentPath={currentPath} navigate={navigate} />
         </div>
       </section>
 
@@ -5874,6 +5919,100 @@ function OnlineLessonsPage({ currentPath, navigate, search }) {
           <button type="button" className="ol-btn ol-btn-gold" onClick={getStarted}>
             {cta.button}
           </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CoachPhoto({ coach, sizes, loading = "lazy", className }) {
+  const photo = coachPhotos[coach.photo];
+
+  return (
+    <img
+      className={className}
+      src={photo.src}
+      srcSet={photo.srcSet}
+      sizes={photo.srcSet ? sizes : undefined}
+      alt={coach.photoAlt}
+      width={photo.width}
+      height={photo.height}
+      loading={loading}
+    />
+  );
+}
+
+// Coach cards in the style of the mockup's "Meet Your Online Coaches" block.
+function CoachCards({ currentPath, navigate, headingLevel = "h3" }) {
+  const Heading = headingLevel;
+
+  return (
+    <div className="ol-coaches">
+      {coaches.map((coach) => (
+        <article key={coach.id} className="ol-coach ol-reveal">
+          <CoachPhoto coach={coach} sizes="(max-width: 640px) 90vw, 200px" />
+          <div>
+            <Heading>{coach.name}</Heading>
+            <span className="ol-coach-badge">{coach.title}</span>
+            <p>{coach.text}</p>
+            <AppLink to={coach.profilePath} navigate={navigate} currentPath={currentPath} className="ol-coach-link">
+              View full profile <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only"> of {coach.name}</span>
+            </AppLink>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function OurTeamPage({ currentPath, navigate }) {
+  useLessonsFont();
+
+  return (
+    <div className="ol-page">
+      <section className="ol-section ol-team">
+        <div className="ol-shell">
+          <LessonsBreadcrumb items={ourTeamPage.breadcrumb} currentPath={currentPath} navigate={navigate} />
+          <div className="ol-team-head">
+            <h1 className="ol-title">{ourTeamPage.title}</h1>
+            <p className="ol-text">{ourTeamPage.intro}</p>
+          </div>
+          <CoachCards currentPath={currentPath} navigate={navigate} headingLevel="h2" />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CoachProfilePage({ coach, currentPath, navigate }) {
+  useLessonsFont();
+
+  return (
+    <div className="ol-page">
+      <section className="ol-section ol-profile">
+        <div className="ol-shell">
+          <LessonsBreadcrumb
+            items={[{ label: "Home", path: "/" }, { label: "Our Team", path: "/our-team" }, { label: coach.name }]}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+          <article className="ol-profile-card">
+            <CoachPhoto coach={coach} sizes="(max-width: 780px) 92vw, 460px" loading="eager" className="ol-profile-photo" />
+            <div className="ol-profile-copy">
+              <h1 className="ol-title">{coach.name}</h1>
+              <span className="ol-coach-badge">{coach.title}</span>
+              <p className="ol-text">{coach.text}</p>
+              <div className="ol-profile-actions">
+                <AppLink to={ourTeamPage.profileCtaPath} navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-gold">
+                  {ourTeamPage.profileCta}
+                </AppLink>
+                <AppLink to="/our-team" navigate={navigate} currentPath={currentPath} className="ol-back-link">
+                  <span aria-hidden="true">&larr;</span> {ourTeamPage.backLabel}
+                </AppLink>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
     </div>
@@ -6020,7 +6159,7 @@ function NavDropdown({ item, currentPath, navigate, onNavigate }) {
   const setIsOpen = (open) => setOpenOnPath(open ? currentPath : null);
   const containerRef = useRef(null);
   const menuId = `nav-menu-${item.label.toLowerCase()}`;
-  const isActive = item.children.some((child) => child.path === currentPath);
+  const isActive = item.children.some((child) => currentPath === child.path || currentPath.startsWith(`${child.path}/`));
 
   useEffect(() => {
     if (!isOpen) {
@@ -6781,6 +6920,19 @@ function ChessTruckApp() {
         return <TournamentsPage currentPath={currentPath} navigate={navigate} />;
       case "/lessons/online":
         return <OnlineLessonsPage currentPath={currentPath} navigate={navigate} search={route.search} />;
+      case "/lessons/online/checkout":
+        return <LessonCheckoutPage currentPath={currentPath} navigate={navigate} search={route.search} />;
+      case "/our-team":
+        return <OurTeamPage currentPath={currentPath} navigate={navigate} />;
+      case "/our-team/amir":
+      case "/our-team/andrea":
+        return (
+          <CoachProfilePage
+            coach={coaches.find((item) => item.profilePath === currentPath)}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+        );
       case "/lessons/online/thank-you":
         return <LessonThankYouPage currentPath={currentPath} navigate={navigate} search={route.search} />;
       case "/lessons/in-person":
@@ -6881,6 +7033,7 @@ function ChessTruckApp() {
                       navigate={navigate}
                       currentPath={currentPath}
                       className="ac-nav-link"
+                      matchSection
                       onNavigate={() => setIsMobileNavOpen(false)}
                     >
                       {item.label}

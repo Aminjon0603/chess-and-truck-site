@@ -220,7 +220,7 @@ const run = async () => {
     assert.equal(params.get("customer_email"), "parent@example.test");
     assert.equal(params.get("allow_promotion_codes"), null);
     assert.equal(params.get("success_url"), "https://preview.example.test/lessons/online/thank-you?session_id={CHECKOUT_SESSION_ID}");
-    assert.equal(params.get("cancel_url"), "https://preview.example.test/lessons/online?payment=cancelled#pricing");
+    assert.equal(params.get("cancel_url"), "https://preview.example.test/lessons/online/checkout?package=five&payment=cancelled");
   });
 
   await test("checkout rejects unknown packages, missing details, and bots", async () => {

@@ -11,10 +11,9 @@ export const siteBrand = {
     "Fun, friendly, and professional chess programs for kids in New York City. Lessons, camps, tournaments, and after-school programs.",
 };
 
+// Order follows the client's mockup. Contact Us is the separate header button.
 export const navigationItems = [
   { label: "Home", path: "/" },
-  { label: "Camps", path: "/camps" },
-  { label: "Tournaments", path: "/tournaments" },
   {
     label: "Lessons",
     path: "/lessons/online",
@@ -24,7 +23,10 @@ export const navigationItems = [
       { label: "Group Lessons", path: "/lessons/group", icon: "users" },
     ],
   },
+  { label: "Camps", path: "/camps" },
+  { label: "Tournaments", path: "/tournaments" },
   { label: "After-School", path: "/after-school" },
+  { label: "Our Team", path: "/our-team" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
 ];
@@ -770,6 +772,22 @@ export const routeMeta = {
     title: "Online Private Chess Lessons | Chess & Truck",
     description:
       "Personalized one-on-one online chess lessons for kids, from beginners to tournament players. Private 60-minute lessons, single or in packages.",
+  },
+  "/lessons/online/checkout": {
+    title: "Checkout | Online Private Chess Lessons | Chess & Truck",
+    description: "Choose your online private lesson package and tell us about your child.",
+  },
+  "/our-team": {
+    title: "Our Team | Chess & Truck",
+    description: "Meet the Chess & Truck coaches, Coach Amir and Coach Andrea.",
+  },
+  "/our-team/amir": {
+    title: "Coach Amir | Chess & Truck",
+    description: "Coach Amir, FIDE Master, coaches online private chess lessons for Chess & Truck.",
+  },
+  "/our-team/andrea": {
+    title: "Coach Andrea | Chess & Truck",
+    description: "Coach Andrea, FIDE Master, has 24 years of experience teaching chess in the United States and Canada.",
   },
   "/lessons/online/thank-you": {
     title: "Thank You | Online Private Chess Lessons | Chess & Truck",
@@ -2642,30 +2660,7 @@ export const onlineLessonsPage = {
     title: "Meet Your Online Coaches",
     intro: "Learn from experienced coaches who love working with kids.",
     teamLabel: "Meet Our Team",
-    teamPath: "/about#coaches",
-    people: [
-      {
-        id: "amir",
-        name: "Coach Amir",
-        badge: "FIDE Master",
-        text:
-          "25+ years of playing experience and 15+ years of coaching. Passionate about helping children build skills, confidence, and a love for chess.",
-        // Temporary stock photo (Pexels). Replace with Amir's real photo before publishing.
-        photo: "amirPlaceholder",
-        photoAlt: "",
-        profilePath: "/about#coach-amir",
-      },
-      {
-        id: "andrea",
-        name: "Coach Andrea",
-        badge: "FIDE Master",
-        text:
-          "Andrea is a FIDE Master with 24 years of experience teaching chess in the United States and Canada. He has taught at children's chess camps, given private lessons, and taught in after-school programs.",
-        photo: "andrea",
-        photoAlt: "Coach Andrea at an outdoor chess table",
-        profilePath: "/about#coach-andrea",
-      },
-    ],
+    teamPath: "/our-team",
   },
   cta: {
     title: "Ready to Make Your Next Move?",
@@ -2673,6 +2668,8 @@ export const onlineLessonsPage = {
     button: "Get Started",
   },
   checkout: {
+    path: "/lessons/online/checkout",
+    pageTitle: "Checkout",
     title: "Tell us about your child",
     intro: "After payment, our team will contact you by email to arrange your online lessons.",
     cancelled: "Payment was cancelled. You have not been charged. You can choose a package again whenever you're ready.",
@@ -2683,13 +2680,40 @@ export const onlineLessonsPage = {
   },
 };
 
-// The second coach on the About page, from the client's lessons mockup.
-// Temporary stock photo until Amir's real photo and bio arrive.
-export const aboutSecondCoach = {
-  id: "coach-amir",
-  title: "Coach Amir",
-  role: "FIDE Master",
-  bio: "25+ years of playing experience and 15+ years of coaching. Passionate about helping children build skills, confidence, and a love for chess.",
+// The coaching team. The online lessons cards, the Our Team page, and each
+// profile all read from here, so they never disagree. Text is the client's;
+// Andrea's line uses the owner-confirmed 24 years (not the mockup's 7+).
+export const coaches = [
+  {
+    id: "amir",
+    name: "Coach Amir",
+    title: "FIDE Master",
+    text:
+      "25+ years of playing experience and 15+ years of coaching. Passionate about helping children build skills, confidence, and a love for chess.",
+    // TEMPORARY stock photo (Pexels). Replace with Amir's real photo before publishing.
+    photo: "amirPlaceholder",
+    photoAlt: "",
+    profilePath: "/our-team/amir",
+  },
+  {
+    id: "andrea",
+    name: "Coach Andrea",
+    title: "FIDE Master",
+    text:
+      "Andrea is a FIDE Master with 24 years of experience teaching chess in the United States and Canada. He has taught at children's chess camps, given private lessons, and taught in after-school programs.",
+    photo: "andrea",
+    photoAlt: "Coach Andrea at an outdoor chess table",
+    profilePath: "/our-team/andrea",
+  },
+];
+
+export const ourTeamPage = {
+  breadcrumb: [{ label: "Home", path: "/" }, { label: "Our Team" }],
+  title: "Our Team",
+  intro: "Learn from experienced coaches who love working with kids.",
+  profileCta: "Explore Online Lessons",
+  profileCtaPath: "/lessons/online",
+  backLabel: "Back to Our Team",
 };
 
 // In-person and group lessons have no approved terms yet: no prices,

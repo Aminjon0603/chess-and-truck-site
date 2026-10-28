@@ -124,7 +124,7 @@ export default {
     params.set("expires_at", String(getCheckoutExpiresAt()));
     // Stripe replaces {CHECKOUT_SESSION_ID} (the form encoding is decoded first).
     params.set("success_url", `${baseUrl}/lessons/online/thank-you?session_id={CHECKOUT_SESSION_ID}`);
-    params.set("cancel_url", `${baseUrl}/lessons/online?payment=cancelled#pricing`);
+    params.set("cancel_url", `${baseUrl}/lessons/online/checkout?package=${data.packageId}&payment=cancelled`);
     params.set("payment_method_types[0]", "card");
     params.set("customer_email", data.parentEmail);
     params.set("client_reference_id", orderNumber);

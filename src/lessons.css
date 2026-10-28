@@ -927,6 +927,148 @@
   margin: 0 0 6px;
 }
 
+/* ---------------------------------------------------------------- team, profiles, checkout page */
+
+.ol-team,
+.ol-profile,
+.ol-checkout-page {
+  padding: 36px 0 64px;
+}
+
+.ol-team .ol-breadcrumb ol,
+.ol-profile .ol-breadcrumb ol,
+.ol-checkout-page .ol-breadcrumb ol {
+  margin-bottom: 18px;
+  color: var(--ol-ink-soft);
+}
+
+.ol-team .ol-breadcrumb li + li::before,
+.ol-profile .ol-breadcrumb li + li::before,
+.ol-checkout-page .ol-breadcrumb li + li::before {
+  color: var(--ol-ink-soft);
+}
+
+.ol-team .ol-breadcrumb a,
+.ol-profile .ol-breadcrumb a,
+.ol-checkout-page .ol-breadcrumb a {
+  color: var(--ol-green);
+}
+
+.ol-team-head {
+  margin-bottom: 24px;
+}
+
+.ol-team .ol-title,
+.ol-profile .ol-title,
+.ol-checkout-page h1.ol-title {
+  font-size: clamp(2.1rem, 1.5rem + 2vw, 3rem);
+}
+
+.ol-team .ol-coach h2 {
+  margin: 4px 0 8px;
+  font-family: var(--ol-serif);
+  font-size: 1.45rem;
+  color: var(--ol-green);
+}
+
+.ol-profile-card {
+  display: grid;
+  grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--ol-card);
+  box-shadow: 0 1px 2px rgba(17, 29, 25, 0.05), 0 14px 32px rgba(17, 29, 25, 0.08);
+}
+
+.ol-profile-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.ol-profile-copy .ol-title {
+  margin-bottom: 10px;
+}
+
+.ol-profile-copy .ol-text {
+  margin-top: 18px;
+  max-width: 36em;
+}
+
+.ol-profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 26px;
+  margin-top: 28px;
+}
+
+.ol-back-link {
+  font-weight: 700;
+  color: var(--ol-green);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ol-checkout-page .ol-checkout {
+  margin-top: 8px;
+}
+
+.ol-checkout-page h1.ol-title,
+.ol-checkout-page .ol-breadcrumb {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ol-checkout-policy {
+  max-width: 860px;
+  margin: 22px auto 0;
+  padding: 22px 26px;
+  border-radius: 16px;
+  background: var(--ol-panel);
+}
+
+.ol-checkout-policy h2 {
+  margin: 0 0 10px;
+  font-family: var(--ol-serif);
+  font-size: 1.25rem;
+  color: var(--ol-green);
+}
+
+.ol-checkout-policy ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-checkout-policy li {
+  display: flex;
+  gap: 10px;
+  line-height: 1.45;
+  color: var(--ol-ink-soft);
+}
+
+.ol-checkout-policy li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--ol-gold);
+}
+
+@media (max-width: 780px) {
+  .ol-profile-card {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 16px;
+  }
+}
+
 /* ---------------------------------------------------------------- Lessons menu */
 
 .ac-nav-dropdown {
