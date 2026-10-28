@@ -1136,6 +1136,29 @@
     animation: ct-rise var(--ct-dur-base) var(--ct-ease) both;
   }
 
+  /* An invisible bridge over the gap, so the menu stays open while the
+     pointer moves from "Lessons" down to the items. */
+  .ac-nav-submenu::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 10px;
+  }
+}
+
+/* With a mouse, hovering "Lessons" opens the menu; click and keyboard still work. */
+@media (min-width: 1180px) and (hover: hover) {
+  .ac-nav-dropdown:hover .ac-nav-submenu {
+    display: block;
+    animation: ct-rise var(--ct-dur-base) var(--ct-ease) both;
+  }
+
+  .ac-nav-dropdown:hover .ac-nav-chevron {
+    transform: rotate(180deg);
+  }
+
   .ac-nav-sublink {
     color: #f3efe6;
   }
@@ -1348,7 +1371,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ol-checkout,
-  .ac-nav-dropdown.is-open .ac-nav-submenu {
+  .ac-nav-dropdown.is-open .ac-nav-submenu,
+  .ac-nav-dropdown:hover .ac-nav-submenu {
     animation: none;
   }
 
