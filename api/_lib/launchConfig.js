@@ -36,6 +36,30 @@ export const programLaunchConfig = {
   camps: emptyConfig("camps"),
   tournaments: emptyConfig("tournaments"),
   lessons: emptyConfig("lessons"),
+  // Approved by the owner on 2026-10-28: online private lessons, three packages.
+  onlineLessons: {
+    programId: "onlineLessons",
+    sessions: [],
+    location: {
+      type: "online",
+      platform: "Live online lesson; the team arranges the time and link by email after purchase",
+      confirmed: true,
+    },
+    pricing: [
+      { optionId: "single", amountCents: 15000 },
+      { optionId: "five", amountCents: 67500 },
+      { optionId: "ten", amountCents: 120000 },
+    ],
+    capacity: null,
+    eligibility: { summary: "Private one-on-one lessons for complete beginners to advanced tournament players." },
+    approval: {
+      approvedBy: "Chess & Truck owner (pricing approved 2026-10-28)",
+      approvedAt: "2026-10-28",
+      fingerprint: "2bdb9d9cf1a04aa6",
+    },
+  },
+  inPersonLessons: emptyConfig("inPersonLessons"),
+  groupLessons: emptyConfig("groupLessons"),
   afterSchool: emptyConfig("afterSchool"),
   dojo: emptyConfig("dojo"),
 };

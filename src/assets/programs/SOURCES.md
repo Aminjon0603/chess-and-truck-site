@@ -18,3 +18,13 @@ the main subject, and exported as WebP at 480, 800, and 1200px wide (quality 0.8
 The homepage hero video is also from Pexels: "Children Playing Chess on the
 Table", https://www.pexels.com/video/children-playing-chess-on-the-table-8466942/
 (ID 8466942), by Anastasia Shuraeva, Pexels License (files in `../hero/`).
+
+## Online Private Chess Lessons page (`../lessons/`)
+
+All from Pexels, Pexels License, exported as WebP. Illustrations only.
+
+| Use | Files | Pexels photo | Photographer |
+| --- | --- | --- | --- |
+| Hero (teen with headphones and laptop) | `online-hero-*.webp` | Teenage Boy in Headphones Working on Computer, https://www.pexels.com/photo/teenage-boy-in-headphones-working-on-computer-6345307/ (ID 6345307) | Karola G (kaboompics) |
+| TEMPORARY placeholder for Coach Amir. Replace with Amir's real photo before publishing. | `coach-amir-placeholder-*.webp` | Serious ethnic man thinking over tactic of playing chess, https://www.pexels.com/photo/serious-ethnic-man-thinking-over-tactic-of-playing-chess-7207269/ (ID 7207269) | emre keshavarz |
+| Final banner background | `cta-chess-*.webp` | Black and White Chess Pieces on Chess Board, https://www.pexels.com/photo/black-and-white-chess-pieces-on-chess-board-1762815/ (ID 1762815) | Charlie Solorzano |

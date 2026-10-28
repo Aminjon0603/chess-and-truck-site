@@ -92,6 +92,19 @@
       ]
     },
     {
+      "source": "/lessons/online/thank-you",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
       "source": "/camps/confirmed",
       "headers": [
         {
@@ -105,6 +118,21 @@
     {
       "source": "/dojo",
       "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/private-lessons",
+      "destination": "/lessons/online",
+      "permanent": true
+    },
+    {
+      "source": "/lessons",
+      "destination": "/lessons/online",
+      "permanent": false
+    },
+    {
+      "source": "/lessons/manage",
+      "destination": "/lessons/online",
       "permanent": true
     }
   ]

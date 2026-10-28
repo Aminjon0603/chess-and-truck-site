@@ -2,6 +2,7 @@
 import ReactDOM from "react-dom/client";
 import "./site.css";
 import "./redesign.css";
+import "./lessons.css";
 import ChessTruckApp from "./ChessTruckApp.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -12,6 +12,9 @@ export const PROGRAM_REQUIREMENTS = {
   camps: ["sessions", "location", "pricing", "capacity", "eligibility"],
   tournaments: ["sessions", "location", "pricing", "capacity", "eligibility"],
   lessons: ["location", "pricing", "eligibility"],
+  onlineLessons: ["location", "pricing", "eligibility"],
+  inPersonLessons: ["location", "pricing", "eligibility"],
+  groupLessons: ["sessions", "location", "pricing", "capacity", "eligibility"],
   afterSchool: ["sessions", "location", "pricing", "capacity", "eligibility"],
   dojo: ["sessions", "location", "pricing", "capacity", "eligibility"],
 };

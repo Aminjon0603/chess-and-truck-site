@@ -1,4 +1,10 @@
 import { checkRegistrationGate } from "./_lib/registrationGate.js";
+import {
+  describeLessonSession,
+  fulfillLessonOrder,
+  isLessonSession,
+  LESSON_THANK_YOU_MESSAGE,
+} from "./_lib/lessonOrders.js";
 
 const sanitize = (value, limit = 180) => {
   if (typeof value !== "string") {
@@ -68,6 +74,28 @@ export default {
           error: "Payment is not marked as paid yet.",
         },
         { status: 409 }
+      );
+    }
+
+    // Online lessons: the session was just re-read from Stripe with the secret
+    // key and is paid, so the order can be recorded here too (once) in case
+    // the webhook is late. The webhook does the same and nothing is duplicated.
+    if (isLessonSession(stripePayload)) {
+      await fulfillLessonOrder(stripePayload).catch(() => null);
+      const order = describeLessonSession(stripePayload);
+
+      return Response.json(
+        {
+          status: "paid",
+          bookingType: "online_lessons",
+          message: LESSON_THANK_YOU_MESSAGE,
+          orderNumber: order.orderNumber,
+          packageLabel: order.packageLabel,
+          lessons: order.lessonPackage?.lessons || null,
+          amountTotal: order.amountCents !== null ? order.amountCents / 100 : null,
+          customerEmail: order.parentEmail,
+        },
+        { status: 200, headers: { "Cache-Control": "no-store" } }
       );
     }
 

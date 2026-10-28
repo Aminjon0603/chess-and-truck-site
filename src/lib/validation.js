@@ -140,3 +140,39 @@ export function validateCampBookingFields(state, optionId = "") {
 
   return errors;
 }
+
+// Online private lessons checkout form (website and /api/create-lesson-checkout).
+export const LESSON_PACKAGE_IDS = ["single", "five", "ten"];
+export const LESSON_LEVELS = ["Beginner", "Intermediate", "Advanced / tournament player", "Not sure"];
+
+export function validateLessonCheckoutFields(state) {
+  const errors = {};
+
+  if (!LESSON_PACKAGE_IDS.includes(state.packageId)) errors.packageId = "Choose a lesson package.";
+  if (!cleanText(state.parentName)) errors.parentName = "Parent or guardian name is required.";
+
+  if (!cleanText(state.parentEmail)) {
+    errors.parentEmail = "Email is required.";
+  } else if (!isValidEmail(state.parentEmail)) {
+    errors.parentEmail = "Enter a valid email address.";
+  }
+
+  if (cleanText(state.parentPhone) && !isValidPhone(state.parentPhone)) {
+    errors.parentPhone = "Enter a valid phone number.";
+  }
+
+  if (!cleanText(state.studentName)) errors.studentName = "Student's name is required.";
+
+  const age = Number(cleanText(state.studentAge));
+
+  if (!cleanText(state.studentAge)) {
+    errors.studentAge = "Student's age is required.";
+  } else if (!Number.isInteger(age) || age < 3 || age > 99) {
+    errors.studentAge = "Enter the student's age in years.";
+  }
+
+  if (!LESSON_LEVELS.includes(state.studentLevel)) errors.studentLevel = "Choose a chess level.";
+  if (state.acceptPolicy !== true) errors.acceptPolicy = "Please confirm you have read the booking policy.";
+
+  return errors;
+}

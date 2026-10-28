@@ -15,7 +15,15 @@ export const navigationItems = [
   { label: "Home", path: "/" },
   { label: "Camps", path: "/camps" },
   { label: "Tournaments", path: "/tournaments" },
-  { label: "Lessons", path: "/private-lessons" },
+  {
+    label: "Lessons",
+    path: "/lessons/online",
+    children: [
+      { label: "Online Lessons", path: "/lessons/online", icon: "monitor" },
+      { label: "In-Person Lessons", path: "/lessons/in-person", icon: "users" },
+      { label: "Group Lessons", path: "/lessons/group", icon: "users" },
+    ],
+  },
   { label: "After-School", path: "/after-school" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
@@ -529,7 +537,7 @@ export const programs = [
     id: "lessons",
     iconKey: "lessons",
     name: "Private Chess Lessons",
-    path: "/private-lessons",
+    path: "/lessons/online",
     summary:
       "Individual or online lessons for beginners and experienced players.",
   },
@@ -759,19 +767,23 @@ export const routeMeta = {
       "Private chess lessons for kids in NYC, in person or online, for beginners and experienced players. Registration opens soon.",
   },
   "/lessons/online": {
-    title: "Online Lessons | Chess & Truck",
+    title: "Online Private Chess Lessons | Chess & Truck",
     description:
-      "Online chess lessons for students who want focused coaching, cleaner structure, and a clear private lesson path.",
+      "Personalized one-on-one online chess lessons for kids, from beginners to tournament players. Private 60-minute lessons, single or in packages.",
+  },
+  "/lessons/online/thank-you": {
+    title: "Thank You | Online Private Chess Lessons | Chess & Truck",
+    description: "Your online private chess lesson purchase.",
   },
   "/lessons/in-person": {
-    title: "In Person Lessons | Chess & Truck",
+    title: "In-Person Lessons | Chess & Truck",
     description:
-      "In-person chess lessons in New York City for students who benefit from direct board work and face-to-face coaching.",
+      "In-person chess lessons from Chess & Truck. Registration is opening soon.",
   },
   "/lessons/group": {
     title: "Group Lessons | Chess & Truck",
     description:
-      "Small-group chess lessons for students who learn well through shared pace, focused instruction, and strong level matching.",
+      "Group chess lessons from Chess & Truck. Registration is opening soon.",
   },
   "/lessons/manage": {
     title: "Manage Lessons | Chess & Truck",
@@ -2527,4 +2539,172 @@ export const privacyPage = {
         "Registration and contact records may be retained for program operations, support follow-up, and administration. Families can contact the team if they need help reviewing or correcting submitted information.",
     },
   ],
+};
+
+// Online Private Chess Lessons page. Text follows the client's mockup; the
+// approved exceptions are Coach Andrea's bio and the Coach Ikrom -> Coach Amir swap.
+export const onlineLessonsPage = {
+  breadcrumb: [
+    { label: "Home", path: "/" },
+    { label: "Lessons" },
+    { label: "Online Private Lessons" },
+  ],
+  hero: {
+    title: "Online Private Chess Lessons",
+    accent: "Big Moves. From Anywhere.",
+    intro:
+      "Personalized one-on-one chess coaching from the comfort of your home. Fun, engaging, and effective lessons designed to help your child build skills, confidence, and a genuine love for the game.",
+    cta: "Get Started",
+    features: [
+      { icon: "monitor", text: "Learn from experienced coaches" },
+      { icon: "barChart", text: "Lessons tailored to your child" },
+      { icon: "calendar", text: "Flexible scheduling from home" },
+    ],
+  },
+  fun: {
+    title: "Learning Chess Should Be Fun!",
+    text:
+      "We believe the best improvement happens when children genuinely enjoy learning. Our private online lessons combine expert instruction, interactive puzzles, practical games, and personalized feedback to make every session something kids look forward to.",
+    items: [
+      { icon: "bulb", label: "Build Skills", tone: "gold" },
+      { icon: "users", label: "Grow Confidence", tone: "green" },
+      { icon: "barChart", label: "Have Fun", tone: "blue" },
+      { icon: "trophy", label: "See Real Progress", tone: "rose" },
+    ],
+  },
+  special: {
+    title: "What Makes Our Online Lessons Special?",
+    cards: [
+      { icon: "personStar", title: "100% Personalized", text: "Every lesson is tailored to your child's level, strengths, and goals." },
+      { icon: "puzzle", title: "Fun & Interactive", text: "Chess puzzles, games, challenges, and practical exercises keep kids engaged and motivated." },
+      { icon: "barChart", title: "Measurable Progress", text: "Game analysis and clear learning goals help students improve with confidence." },
+      { icon: "cap", title: "All Skill Levels", text: "From complete beginners to advanced tournament players, everyone is welcome." },
+    ],
+  },
+  audience: {
+    title: "Who Are These Lessons For?",
+    intro: "Our online private lessons are a great fit for:",
+    items: [
+      { icon: "learner", title: "Beginners", text: "learning the basics" },
+      { icon: "rook", title: "Intermediate", text: "players looking to improve" },
+      { icon: "trophy", title: "Competitive", text: "players preparing for tournaments" },
+      { icon: "users", title: "", text: "Students who prefer the flexibility of learning from home" },
+    ],
+  },
+  pricing: {
+    eyebrow: "Invest in their next big move",
+    title: "Private Lesson Packages & Pricing",
+    intro: "All lessons are private, one-on-one sessions conducted online. Each lesson lasts 60 minutes.",
+    // Prices must match api/_lib/priceCatalog.js (checked by tests/lessons.test.js).
+    plans: [
+      {
+        packageId: "single",
+        name: "Pay As You Go",
+        price: "$150",
+        unit: "per 60-minute lesson",
+        points: ["Maximum flexibility", "No package commitment"],
+      },
+      {
+        packageId: "five",
+        name: "5-Lesson Package",
+        price: "$675",
+        unit: "($135 per lesson)",
+        points: ["Save $75 compared with individual lessons", "Great for consistent progress"],
+      },
+      {
+        packageId: "ten",
+        name: "10-Lesson Package",
+        price: "$1,200",
+        unit: "($120 per lesson)",
+        points: ["Save $300 compared with individual lessons", "20% savings"],
+        badge: "Best Value",
+        featured: true,
+      },
+    ],
+  },
+  policy: {
+    title: "Booking & Rescheduling Policy",
+    points: [
+      "All 5- and 10-lesson packages are paid in full upfront.",
+      "Please give at least 24 hours' notice if you need to reschedule a lesson.",
+      "Lessons canceled or rescheduled with less than 24 hours' notice will count as a completed session.",
+    ],
+    note: "We value your time and ours, and appreciate your help in keeping lessons running smoothly!",
+  },
+  aid: {
+    title: "Financial Aid & Discounts",
+    text:
+      "We believe every child should have the opportunity to experience the many benefits of chess. Financial aid and discounts are available for families who need support.",
+    cta: "Learn More / Inquire",
+    contactPath: "/contact?topic=financial-aid",
+  },
+  coaches: {
+    title: "Meet Your Online Coaches",
+    intro: "Learn from experienced coaches who love working with kids.",
+    teamLabel: "Meet Our Team",
+    teamPath: "/about#coaches",
+    people: [
+      {
+        id: "amir",
+        name: "Coach Amir",
+        badge: "FIDE Master",
+        text:
+          "25+ years of playing experience and 15+ years of coaching. Passionate about helping children build skills, confidence, and a love for chess.",
+        // Temporary stock photo (Pexels). Replace with Amir's real photo before publishing.
+        photo: "amirPlaceholder",
+        photoAlt: "",
+        profilePath: "/about#coach-amir",
+      },
+      {
+        id: "andrea",
+        name: "Coach Andrea",
+        badge: "FIDE Master",
+        text:
+          "Andrea is a FIDE Master with 24 years of experience teaching chess in the United States and Canada. He has taught at children's chess camps, given private lessons, and taught in after-school programs.",
+        photo: "andrea",
+        photoAlt: "Coach Andrea at an outdoor chess table",
+        profilePath: "/about#coach-andrea",
+      },
+    ],
+  },
+  cta: {
+    title: "Ready to Make Your Next Move?",
+    text: "Tell us a little about your child, and we'll help you find the right coach and schedule for online private lessons.",
+    button: "Get Started",
+  },
+  checkout: {
+    title: "Tell us about your child",
+    intro: "After payment, our team will contact you by email to arrange your online lessons.",
+    cancelled: "Payment was cancelled. You have not been charged. You can choose a package again whenever you're ready.",
+  },
+  thankYou: {
+    title: "Thank you for your purchase!",
+    message: "Thank you for your purchase! Our team will contact you by email to arrange your online lessons.",
+  },
+};
+
+// The second coach on the About page, from the client's lessons mockup.
+// Temporary stock photo until Amir's real photo and bio arrive.
+export const aboutSecondCoach = {
+  id: "coach-amir",
+  title: "Coach Amir",
+  role: "FIDE Master",
+  bio: "25+ years of playing experience and 15+ years of coaching. Passionate about helping children build skills, confidence, and a love for chess.",
+};
+
+// In-person and group lessons have no approved terms yet: no prices,
+// schedule, or payment until the owner approves them.
+export const comingSoonLessonPages = {
+  "/lessons/in-person": {
+    programId: "inPersonLessons",
+    eyebrow: "Lessons",
+    title: "In-Person Lessons",
+    intro: "Prices, schedule, and location will be posted here when registration opens.",
+  },
+  "/lessons/group": {
+    programId: "groupLessons",
+    eyebrow: "Lessons",
+    title: "Group Lessons",
+    intro: "Prices, schedule, and location will be posted here when registration opens.",
+  },
 };
