@@ -52,7 +52,11 @@
       "destination": "/index.html"
     },
     {
-      "source": "/private-lessons",
+      "source": "/our-team",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/our-team/:path*",
       "destination": "/index.html"
     },
     {
