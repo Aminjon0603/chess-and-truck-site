@@ -40,8 +40,8 @@ export const academyHomePage = {
     titleLead: "Big Smiles.",
     titleAccent: "Brilliant Moves.",
     tagline: "The greatest game in the world without a ball!",
-    intro:
-      "At Chess & Truck, we make chess the highlight of every child's week! Through exciting lessons, friendly competition, and expert coaching, we help kids fall in love with the game while becoming stronger, smarter, and more confident players.",
+    // The client's latest hero mockup: this line replaces the longer paragraph.
+    intro: "Fun, friendship, and real chess improvement — guaranteed.",
     facts: [
       { icon: "users", text: "Beginners welcome" },
       { icon: "pin", text: "Based in NYC" },
