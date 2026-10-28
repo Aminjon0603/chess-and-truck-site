@@ -5555,7 +5555,7 @@ function LessonCheckoutForm({ plans, state, errors, submitState, onChange, onSub
       <label className={`ol-consent${errors.acceptPolicy ? " has-error" : ""}`}>
         <input type="checkbox" name="acceptPolicy" checked={state.acceptPolicy} onChange={onChange} />
         <span>
-          I have read the Booking &amp; Rescheduling Policy above and the <a href="/terms">Terms</a>.
+          I have read the Booking &amp; Rescheduling Policy and the <a href="/terms">Terms</a>.
         </span>
       </label>
       {errors.acceptPolicy ? <small className="field-error">{errors.acceptPolicy}</small> : null}
@@ -7049,7 +7049,7 @@ function ChessTruckApp() {
               className="ac-btn ac-btn-primary ac-nav-contact"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Contact us
+              Contact Us
             </AppLink>
           </nav>
 
@@ -7061,7 +7061,7 @@ function ChessTruckApp() {
               className="ac-btn ac-btn-primary ac-header-cta"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Contact us
+              Contact Us
             </AppLink>
             <button
               type="button"
