@@ -52,6 +52,7 @@ import {
   getRegistrationUnavailableMessage,
   hasOpenConfiguredStatus,
   isProgramOpen,
+  programStatuses,
   setRegistrationAvailability,
 } from "./lib/programs.js";
 import {
@@ -6300,9 +6301,10 @@ function ChessTruckApp() {
         }
 
         // Malformed or missing data parses to "everything closed".
+        // Every program the site knows, including ones without a homepage card (online lessons).
         const { programs: availablePrograms, campSessions } = parseAvailabilityResponse(
           payload,
-          programs.map((item) => item.id)
+          Object.keys(programStatuses)
         );
         setApprovedCampSessions(campSessions);
         setRegistrationAvailability(availablePrograms);
