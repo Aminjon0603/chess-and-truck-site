@@ -219,7 +219,7 @@ const run = async () => {
     assert.equal(params.get("metadata[package_id]"), "five");
     assert.equal(params.get("metadata[student_name]"), "Sam");
     assert.equal(params.get("customer_email"), "parent@example.test");
-    assert.equal(params.get("allow_promotion_codes"), null);
+    assert.equal(params.get("allow_promotion_codes"), "true");
     assert.equal(params.get("success_url"), "https://preview.example.test/lessons/online/thank-you?session_id={CHECKOUT_SESSION_ID}");
     assert.equal(params.get("cancel_url"), "https://preview.example.test/lessons/online/checkout?package=five&payment=cancelled");
   });
@@ -326,6 +326,20 @@ const run = async () => {
     await signedWebhook(completedEvent("evt_mismatch", paidSession("cs_test_ggg777", "five", { amount_total: 100 })));
     assert.match(sentEmails[0].subject, /\[REVIEW NEEDED\]/);
     assert.match(sentEmails[0].text, /does not match the package price/);
+  });
+
+  await test("a promotion code discount is shown to the team and not flagged as a price mismatch", async () => {
+    reset();
+    await signedWebhook(
+      completedEvent(
+        "evt_promo",
+        paidSession("cs_test_kkk111", "single", { amount_subtotal: 15000, amount_total: 100, total_details: { amount_discount: 14900 } })
+      )
+    );
+    assert.doesNotMatch(sentEmails[0].subject, /REVIEW NEEDED/);
+    assert.match(sentEmails[0].text, /Amount paid: \$1\.00/);
+    assert.match(sentEmails[0].text, /Promotion code discount: \$149\.00/);
+    assert.match(sentEmails[1].text, /Amount paid: \$1\.00/);
   });
 
   // ------------------------------------------------------------ thank-you page

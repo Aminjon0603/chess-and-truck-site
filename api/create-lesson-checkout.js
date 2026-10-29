@@ -127,6 +127,8 @@ export default {
     params.set("success_url", `${baseUrl}/lessons/online/thank-you?session_id={CHECKOUT_SESSION_ID}`);
     params.set("cancel_url", `${baseUrl}/lessons/online/checkout?package=${data.packageId}&payment=cancelled`);
     params.set("payment_method_types[0]", "card");
+    // Lets the team give discounts (for example financial aid) with Stripe promotion codes.
+    params.set("allow_promotion_codes", "true");
     params.set("customer_email", data.parentEmail);
     params.set("client_reference_id", orderNumber);
     params.set("line_items[0][quantity]", "1");
