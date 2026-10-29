@@ -136,8 +136,13 @@ export const describeLessonSession = (session) => {
     lessonPackage,
     packageLabel: lessonPackage ? lessonPackage.label : "Unknown package",
     amountCents: typeof session?.amount_total === "number" ? session.amount_total : null,
-    // A paid amount that differs from the catalog price is flagged for review.
-    amountMatches: Boolean(lessonPackage) && session?.amount_total === lessonPackage.amount,
+    // The price before any promotion code must match the catalog; otherwise the
+    // order is flagged for review.
+    amountMatches:
+      Boolean(lessonPackage) &&
+      (typeof session?.amount_subtotal === "number" ? session.amount_subtotal : session?.amount_total) ===
+        lessonPackage.amount,
+    discountCents: session?.total_details?.amount_discount || 0,
     livemode: session?.livemode === true,
     parentName: metadata.parent_name || "",
     parentEmail: metadata.parent_email || session?.customer_details?.email || "",
@@ -190,6 +195,9 @@ export const buildTeamEmailText = (order, session) =>
     `Order number: ${order.orderNumber}`,
     `Package: ${packageLine(order)}`,
     `Amount paid: ${order.amountCents !== null ? formatUsd(order.amountCents) : "-"}`,
+    order.discountCents
+      ? `Promotion code discount: ${formatUsd(order.discountCents)}. Refunds for discounted purchases need a manual decision.`
+      : null,
     "",
     `Parent / guardian: ${order.parentName || "-"}`,
     `Parent email: ${order.parentEmail || "-"}`,
