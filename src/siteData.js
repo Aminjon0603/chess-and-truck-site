@@ -140,7 +140,7 @@ export const academyHomePage = {
       {
         question: "How much does it cost?",
         answer:
-          "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online by card through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
+          "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
       },
       {
         question: "What should my child bring?",
@@ -1656,7 +1656,7 @@ export const faqPage = {
         {
           question: "How much do programs cost?",
           answer:
-            "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online by card through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
+            "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
         },
       ],
     },
@@ -2527,7 +2527,7 @@ export const termsPage = {
       id: "payment",
       title: "Payment",
       body: [
-        "Every purchase is paid in full upfront, by card, on a secure checkout page run by Stripe, our payment processor. Your purchase is confirmed only after Stripe confirms the payment. We then email you a confirmation with your package and order number. We never see or store your full card number.",
+        "Every purchase is paid in full upfront on a secure checkout page run by Stripe, our payment processor. You can use a card or another payment method Stripe offers on that page. Your purchase is confirmed only after Stripe confirms the payment. We then email you a confirmation with your package and order number. We never see or store your full card or bank details.",
       ],
     },
     {
@@ -2568,7 +2568,7 @@ export const termsPage = {
       after: [
         "Lessons that have already taken place, and lessons that count as used under the 24-hour rule above, are not refunded. We do not recalculate used lessons at the single-lesson price, and we do not charge a refund fee.",
         "Example: you paid $675 for the 5-Lesson Package and used 2 lessons. Your refund for the 3 unused lessons is 3 × $135 = $405.",
-        "To ask for a refund, email info@chessandtruck.com. Our team reviews each request and issues approved refunds through Stripe to the card you paid with. How long it takes to appear depends on your bank or card issuer.",
+        "To ask for a refund, email info@chessandtruck.com. Our team reviews each request and issues approved refunds through Stripe to the payment method you used. How long it takes to appear depends on your bank or payment provider.",
       ],
     },
     {
@@ -2634,7 +2634,7 @@ export const privacyPage = {
       body: ["We only ask for what we need. Depending on what you do on the site, that is:"],
       items: [
         "Buying online lessons: your name, your email address, your phone number (optional), the student's name, the student's age, the student's chess level, any notes you choose to add for the coach, the package you chose, and the version of the Terms of Service you agreed to and when.",
-        "Paying: you enter your card details on Stripe's checkout page, not on our site. Stripe tells us whether the payment succeeded, the amount, and the contact details entered at checkout.",
+        "Paying: you enter your payment details on Stripe's checkout page, not on our site. Stripe tells us whether the payment succeeded, the amount, and the contact details entered at checkout.",
         "Using the contact form: your name, your email address, your phone number (optional), your message, and the topic if you picked one (for example, Financial Aid & Discounts).",
         "Asking to hear when a program opens (where we offer this): your email address, the program, and when you asked and confirmed.",
         "Emailing or calling us: whatever you choose to tell us.",
@@ -2679,7 +2679,7 @@ export const privacyPage = {
         "The Chess & Truck team and the coach who teaches your lessons can see the details you gave us. We also use these service providers, which handle information only to provide their service to us:",
       ],
       items: [
-        "Stripe processes payments. It receives your card details directly and stores your payment, together with the purchase details we send it (your name, email, optional phone, and the student's name, age, level, and notes). Stripe's own privacy policy applies to the information it collects.",
+        "Stripe processes payments. It receives your payment details directly and stores your payment, together with the purchase details we send it (your name, email, optional phone, and the student's name, age, level, and notes). Stripe's own privacy policy applies to the information it collects.",
         "Supabase hosts our database. For lesson purchases, it stores the order number, the Stripe payment reference, the package, the amount, and when the order and its emails were processed. It doesn't store names or contact details for orders. It also stores the list of people who asked to hear when a program opens.",
         "Resend sends our emails, so it handles the email addresses and the contents of the emails we send.",
         "Vercel hosts our website and the server code behind our forms. Like any web host, it processes technical information such as your IP address and browser type when you visit.",
