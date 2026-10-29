@@ -8,6 +8,8 @@ import {
   campMenuItems,
   campOverviewPage,
   campsPageContent,
+  coaches,
+  comingSoonLessonPages,
   contactEmails,
   contactNumbers,
   contactPage,
@@ -20,6 +22,8 @@ import {
   lessonMenuItems,
   masterTrainingDojo,
   navigationItems,
+  onlineLessonsPage,
+  ourTeamPage,
   privateLessonsPage,
   programOverview,
   programPages,
@@ -48,6 +52,7 @@ import {
   getRegistrationUnavailableMessage,
   hasOpenConfiguredStatus,
   isProgramOpen,
+  programStatuses,
   setRegistrationAvailability,
 } from "./lib/programs.js";
 import {
@@ -73,9 +78,19 @@ import lessonPhoto from "./assets/private-lesson-visual.svg";
 import dojoMark from "./assets/dojo-mark.svg";
 import trophyBadge from "./assets/trophy-badge.svg";
 import andreaPhoto from "./assets/andrea.jpg";
+import onlineHero720 from "./assets/lessons/online-hero-720.webp";
+import onlineHero1200 from "./assets/lessons/online-hero-1200.webp";
+import onlineHero1800 from "./assets/lessons/online-hero-1800.webp";
+import coachAmir400 from "./assets/lessons/coach-amir-400.webp";
+import coachAmir640 from "./assets/lessons/coach-amir-640.webp";
+import coachAmir960 from "./assets/lessons/coach-amir-960.webp";
+import ctaChess900 from "./assets/lessons/cta-chess-900.webp";
+import ctaChess1800 from "./assets/lessons/cta-chess-1800.webp";
 import {
+  LESSON_LEVELS,
   validateCampBookingFields,
   validateContactFields,
+  validateLessonCheckoutFields,
   validateRegistrationFields,
 } from "./lib/validation.js";
 
@@ -114,7 +129,18 @@ const contactInitialState = {
   phone: "",
   message: "",
   website: "",
+  topic: "",
 };
+
+// Contact topics a page can preselect with /contact?topic=... (the API accepts only these).
+const CONTACT_TOPICS = {
+  "financial-aid": "Financial Aid & Discounts",
+};
+
+const getContactTopic = (search) => {
+  const topic = new URLSearchParams(search || "").get("topic") || "";
+  return CONTACT_TOPICS[topic] ? topic : "";
+}
 
 const campCheckoutInitialState = {
   status: "idle",
@@ -371,7 +397,14 @@ const knownRoutes = new Set([
   "/camps/online",
   "/about",
   "/tournaments",
-  "/private-lessons",
+  "/lessons/online",
+  "/lessons/online/checkout",
+  "/lessons/online/thank-you",
+  "/lessons/in-person",
+  "/lessons/group",
+  "/our-team",
+  "/our-team/amir",
+  "/our-team/andrea",
   "/after-school",
   "/faq",
   "/contact",
@@ -387,10 +420,10 @@ const legacyRouteRedirects = {
   "/dojo": "/",
   "/events": "/tournaments",
   "/events/chess-and-truck-tournament": "/tournaments",
-  "/lessons/online": "/private-lessons",
-  "/lessons/in-person": "/private-lessons",
-  "/lessons/group": "/private-lessons",
-  "/lessons/manage": "/private-lessons",
+  // The old private lessons page now leads to the online lessons page.
+  "/private-lessons": "/lessons/online",
+  "/lessons": "/lessons/online",
+  "/lessons/manage": "/lessons/online",
   "/camps/training": "/camps",
   "/camps/prep": "/camps",
   "/camps/online": "/camps",
@@ -717,7 +750,11 @@ const canonicalPathAliases = {
 };
 
 // Private, one-time pages that should never appear in search results.
-const isNoIndexPath = (path) => path === "/camps/confirmed" || path.startsWith("/interest/");
+const isNoIndexPath = (path) =>
+  path === "/camps/confirmed" ||
+  path === "/lessons/online/checkout" ||
+  path === "/lessons/online/thank-you" ||
+  path.startsWith("/interest/");
 
 // Scroll reveals: these blocks fade and rise into place once, as they enter the
 // viewport. Siblings are staggered. Hero content is animated by CSS instead.
@@ -738,6 +775,7 @@ const REVEAL_SELECTORS = [
   ".pg-audiences > *",
   ".pg-status",
   ".faq-group",
+  ".ol-reveal",
 ].join(",");
 
 const useRevealOnScroll = (routeKey) => {
@@ -792,8 +830,10 @@ const updateCanonicalLink = (href) => {
   }
 };
 
-function AppLink({ to, navigate, children, className = "", currentPath, onNavigate, ...rest }) {
-  const isActive = normalizePath(to) === currentPath;
+function AppLink({ to, navigate, children, className = "", currentPath, onNavigate, matchSection = false, ...rest }) {
+  // matchSection: the link also counts as current on its sub-pages (Our Team -> a profile).
+  const target = normalizePath(to);
+  const isActive = target === currentPath || (matchSection && target !== "/" && currentPath?.startsWith(`${target}/`));
 
   const handleClick = (event) => {
     if (
@@ -1068,7 +1108,7 @@ function PageHero({ eyebrow, title, intro, actions, aside, asideLink, heroFacts,
     <>
       <span className="mini-tag mini-tag-dark">Questions?</span>
       <h2>Talk to us</h2>
-      <p>All four programs are opening soon. Call, text, or email with any question.</p>
+      <p>Online private lessons are open now; our other programs are opening soon. Call, text, or email with any question.</p>
       <div className="fact-list">
         <div>
           <span>{phoneContact.label}</span>
@@ -1232,12 +1272,12 @@ function DojoFeature({ currentPath, navigate }) {
   );
 }
 
-function ProgramStatusBadge({ programId }) {
+function ProgramStatusBadge({ programId, openLabel }) {
   const status = getProgramStatus(programId);
 
   return (
     <span className={`slot-status-badge program-status-badge is-${status}`}>
-      {PROGRAM_STATUS_LABELS[status]}
+      {status === PROGRAM_STATUS.OPEN && openLabel ? openLabel : PROGRAM_STATUS_LABELS[status]}
     </span>
   );
 }
@@ -1476,7 +1516,7 @@ function ProgramCard({ program, summary = program.summary, currentPath, navigate
       <span className="ac-program-icon">
         <ProgramIcon iconKey={program.iconKey} />
       </span>
-      <ProgramStatusBadge programId={program.id} />
+      <ProgramStatusBadge programId={program.statusProgramId || program.id} openLabel={program.openLabel} />
       <h3>{program.name}</h3>
       <p>{summary}</p>
       <span className="ac-program-link">
@@ -1701,6 +1741,15 @@ const UI_ICON_PATHS = {
     </>
   ),
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  calendar: (
+    <>
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2" />
+      <path d="M3.5 9.5h17M8 3v4M16 3v4" />
+      <path d="M7.5 13h1.5M11.25 13h1.5M15 13h1.5M7.5 16.5h1.5M11.25 16.5h1.5" />
+    </>
+  ),
+  heart: <path d="M12 20s-8-4.9-8-10.6A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8 2.8C20 15.1 12 20 12 20z" />,
+  barChart: <path d="M5 20V13M10 20V9M15 20V5M20 20H3.5" />,
   monitor: (
     <>
       <rect x="3.5" y="4.5" width="17" height="11.5" rx="1.6" />
@@ -1757,6 +1806,49 @@ const UI_ICON_FILLED = {
       <rect x="5" y="12" width="3.4" height="7" rx="0.8" />
       <rect x="10.3" y="8" width="3.4" height="11" rx="0.8" />
       <rect x="15.6" y="4.5" width="3.4" height="14.5" rx="0.8" />
+    </>
+  ),
+  check: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <path d="m7.4 12.4 3 3 6.2-6.4" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </>
+  ),
+  bulb: (
+    <>
+      <path d="M12 2.5a6.6 6.6 0 0 0-4 11.8c.7.6 1 1.3 1 2.1v.4h6v-.4c0-.8.3-1.5 1-2.1a6.6 6.6 0 0 0-4-11.8z" />
+      <rect x="9" y="17.6" width="6" height="1.8" rx="0.9" />
+      <rect x="10" y="20.2" width="4" height="1.6" rx="0.8" />
+    </>
+  ),
+  trophy: (
+    <>
+      <path d="M7 3h10v5.5a5 5 0 0 1-10 0z" />
+      <path d="M7 5H4.3v1.8A3.6 3.6 0 0 0 7.6 10.4M17 5h2.7v1.8a3.6 3.6 0 0 1-3.3 3.6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <rect x="10.8" y="13" width="2.4" height="4" />
+      <path d="M7.5 21a3 3 0 0 1 3-3.6h3a3 3 0 0 1 3 3.6z" />
+    </>
+  ),
+  personStar: (
+    <>
+      <circle cx="9.5" cy="7" r="3.6" />
+      <path d="M2.5 20.5c0-4.2 3.1-7.2 7-7.2 1.5 0 2.9.4 4 1.2l-1.3 6z" />
+      <path d="m17.5 11.6 1.5 3.1 3.3.4-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.4z" />
+    </>
+  ),
+  puzzle: (
+    <path d="M4 7.5h3.6a2.6 2.6 0 1 1 5 0H16v3.6a2.6 2.6 0 1 1 0 5V20h-3.4a2.6 2.6 0 1 0-5 0H4v-3.9a2.6 2.6 0 1 0 0-5z" />
+  ),
+  learner: (
+    <>
+      <circle cx="12" cy="8" r="4.2" />
+      <path d="M4 21c0-4.3 3.6-7 8-7s8 2.7 8 7z" />
+    </>
+  ),
+  rook: (
+    <>
+      <path d="M6.5 3h2.6v2h1.6V3h2.6v2h1.6V3h2.6v4.6l-2 1.9v5.6l1.7 2.9H6.8l1.7-2.9V9.5l-2-1.9z" />
+      <rect x="5.5" y="18.4" width="13" height="2.6" rx="0.7" />
     </>
   ),
   chartUp: (
@@ -2760,14 +2852,16 @@ function SiteFooter({ currentPath, navigate }) {
             <h2 className="ac-footer-heading">Programs</h2>
             <ul className="ac-footer-programs">
               {programs.map((item) => {
-                const status = getProgramStatus(item.id);
+                // Private lessons are on sale online, so the footer shows that status.
+                const status = getProgramStatus(item.id === "lessons" ? "onlineLessons" : item.id);
+                const label = item.id === "lessons" && status === PROGRAM_STATUS.OPEN ? "Online lessons open" : PROGRAM_STATUS_SHORT_LABELS[status];
 
                 return (
                   <li key={item.id}>
                     <AppLink to={item.path} navigate={navigate} currentPath={currentPath} className="ac-footer-link">
                       {item.name}
                     </AppLink>
-                    <span className={`ac-footer-status is-${status}`}>{PROGRAM_STATUS_SHORT_LABELS[status]}</span>
+                    <span className={`ac-footer-status is-${status}`}>{label}</span>
                   </li>
                 );
               })}
@@ -2831,17 +2925,32 @@ function SiteFooter({ currentPath, navigate }) {
   );
 }
 
-function LegalPage({ eyebrow, title, intro, sections, currentPath, navigate }) {
+const asParagraphs = (value) => (Array.isArray(value) ? value : value ? [value] : []);
+
+function LegalPage({ eyebrow, title, intro, updated, sections, currentPath, navigate }) {
   return (
     <>
       <PageHero eyebrow={eyebrow} title={title} intro={intro} currentPath={currentPath} navigate={navigate} />
 
       <section className="page-section">
         <div className="shell legal-stack">
+          {updated ? <p className="legal-updated">Last updated: {updated}</p> : null}
           {sections.map((item) => (
-            <article className="surface" key={item.title}>
+            <article className="surface" key={item.title} id={item.id}>
               <h3>{item.title}</h3>
-              <p>{item.body}</p>
+              {asParagraphs(item.body).map((text) => (
+                <p key={text}>{text}</p>
+              ))}
+              {item.items ? (
+                <ul className="legal-list">
+                  {item.items.map((text) => (
+                    <li key={text}>{text}</li>
+                  ))}
+                </ul>
+              ) : null}
+              {asParagraphs(item.after).map((text) => (
+                <p key={text}>{text}</p>
+              ))}
             </article>
           ))}
         </div>
@@ -2894,6 +3003,11 @@ function ContactForm({
     <form className="surface contact-form" onSubmit={handleContactSubmit}>
       <span className="mini-tag">Send a message</span>
       <h3>Ask us anything</h3>
+      {contactState.topic ? (
+        <p className="contact-topic">
+          Topic: <strong>{CONTACT_TOPICS[contactState.topic]}</strong>
+        </p>
+      ) : null}
       <p>Fields marked * are required.</p>
 
       <label className={getFieldClassName(contactErrors.name)}>
@@ -5299,6 +5413,858 @@ function NotFoundPage({ currentPath, navigate }) {
   );
 }
 
+// ---------------------------------------------------------------- Lessons pages
+
+// The serif display face is used only on the online lessons pages, so it is
+// loaded when one of them opens instead of with the shared stylesheet.
+const LESSONS_FONT_URL = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap";
+
+const useLessonsFont = () => {
+  useEffect(() => {
+    if (document.querySelector("link[data-lessons-font]")) {
+      return;
+    }
+
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = LESSONS_FONT_URL;
+    link.dataset.lessonsFont = "true";
+    document.head.appendChild(link);
+  }, []);
+};
+
+const scrollToElementId = (id) => {
+  const element = document.getElementById(id);
+
+  if (!element) {
+    return;
+  }
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  element.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+};
+
+const coachPhotos = {
+  andrea: { src: andreaPhoto, srcSet: undefined, width: 647, height: 480 },
+  amir: {
+    src: coachAmir640,
+    srcSet: `${coachAmir400} 400w, ${coachAmir640} 640w, ${coachAmir960} 960w`,
+    width: 640,
+    height: 480,
+  },
+};
+
+const lessonCheckoutInitialState = {
+  packageId: "",
+  parentName: "",
+  parentEmail: "",
+  parentPhone: "",
+  studentName: "",
+  studentAge: "",
+  studentLevel: "",
+  notes: "",
+  acceptTerms: false,
+  website: "",
+};
+
+function LessonsBreadcrumb({ items, currentPath, navigate }) {
+  return (
+    <nav className="ol-breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1;
+
+          return (
+            <li key={item.label}>
+              {item.path && !isLast ? (
+                <AppLink to={item.path} navigate={navigate} currentPath={currentPath}>
+                  {item.label}
+                </AppLink>
+              ) : (
+                <span aria-current={isLast ? "page" : undefined}>{item.label}</span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+function LessonCheckoutForm({ plans, state, errors, submitState, onChange, onSubmit }) {
+  const content = onlineLessonsPage.checkout;
+
+  return (
+    <form className="ol-checkout" id="lesson-checkout" onSubmit={onSubmit} noValidate>
+      <div className="ol-checkout-head">
+        <h3>{content.title}</h3>
+        <p>{content.intro}</p>
+      </div>
+
+      <fieldset className={`ol-package-choice${errors.packageId ? " has-error" : ""}`}>
+        <legend>Package *</legend>
+        <div className="ol-package-options">
+          {plans.map((plan) => (
+            <label key={plan.packageId} className={state.packageId === plan.packageId ? "is-selected" : undefined}>
+              <input
+                type="radio"
+                name="packageId"
+                value={plan.packageId}
+                checked={state.packageId === plan.packageId}
+                onChange={onChange}
+              />
+              <span className="ol-package-name">{plan.name}</span>
+              <span className="ol-package-price">{plan.price}</span>
+            </label>
+          ))}
+        </div>
+        {errors.packageId ? <small className="field-error">{errors.packageId}</small> : null}
+      </fieldset>
+
+      <div className="ol-checkout-grid">
+        <label className={getFieldClassName(errors.parentName)}>
+          <span>Parent or guardian name *</span>
+          <input name="parentName" value={state.parentName} onChange={onChange} autoComplete="name" aria-invalid={errors.parentName ? "true" : "false"} />
+          {errors.parentName ? <small className="field-error">{errors.parentName}</small> : null}
+        </label>
+        <label className={getFieldClassName(errors.parentEmail)}>
+          <span>Email *</span>
+          <input name="parentEmail" type="email" value={state.parentEmail} onChange={onChange} autoComplete="email" aria-invalid={errors.parentEmail ? "true" : "false"} />
+          {errors.parentEmail ? <small className="field-error">{errors.parentEmail}</small> : null}
+        </label>
+        <label className={getFieldClassName(errors.parentPhone)}>
+          <span>Phone (optional)</span>
+          <input name="parentPhone" type="tel" inputMode="tel" value={state.parentPhone} onChange={onChange} autoComplete="tel" aria-invalid={errors.parentPhone ? "true" : "false"} />
+          {errors.parentPhone ? <small className="field-error">{errors.parentPhone}</small> : null}
+        </label>
+        <label className={getFieldClassName(errors.studentName)}>
+          <span>Student's name *</span>
+          <input name="studentName" value={state.studentName} onChange={onChange} autoComplete="off" aria-invalid={errors.studentName ? "true" : "false"} />
+          {errors.studentName ? <small className="field-error">{errors.studentName}</small> : null}
+        </label>
+        <label className={getFieldClassName(errors.studentAge)}>
+          <span>Student's age *</span>
+          <input name="studentAge" type="number" min="3" max="99" inputMode="numeric" value={state.studentAge} onChange={onChange} aria-invalid={errors.studentAge ? "true" : "false"} />
+          {errors.studentAge ? <small className="field-error">{errors.studentAge}</small> : null}
+        </label>
+        <label className={getFieldClassName(errors.studentLevel)}>
+          <span>Chess level *</span>
+          <select name="studentLevel" value={state.studentLevel} onChange={onChange} aria-invalid={errors.studentLevel ? "true" : "false"}>
+            <option value="">Choose one</option>
+            {LESSON_LEVELS.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+          {errors.studentLevel ? <small className="field-error">{errors.studentLevel}</small> : null}
+        </label>
+        <label className="field ol-checkout-wide">
+          <span>Anything the coach should know? (optional)</span>
+          <textarea name="notes" rows="3" maxLength="480" value={state.notes} onChange={onChange} placeholder="Goals, experience, and days or times that usually work for you." />
+        </label>
+        <label className="field honeypot-field" aria-hidden="true" tabIndex="-1">
+          <span>Website</span>
+          <input name="website" value={state.website} onChange={onChange} autoComplete="off" tabIndex="-1" />
+        </label>
+      </div>
+
+      <section className="ol-before-pay" aria-labelledby="ol-before-pay-title">
+        <h4 id="ol-before-pay-title">{content.summaryTitle}</h4>
+        <ul>
+          {content.summary.map((point) => (
+            <li key={point}>
+              <UiIcon name="check" size={18} filled />
+              {point}
+            </li>
+          ))}
+        </ul>
+        <p>
+          Full details: <a href="/terms" target="_blank" rel="noopener">Terms of Service</a> and{" "}
+          <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
+        </p>
+      </section>
+
+      <label className={`ol-consent${errors.acceptTerms ? " has-error" : ""}`}>
+        <input
+          type="checkbox"
+          name="acceptTerms"
+          checked={state.acceptTerms}
+          onChange={onChange}
+          aria-invalid={errors.acceptTerms ? "true" : "false"}
+        />
+        <span>
+          I agree to the{" "}
+          <a href="/terms" target="_blank" rel="noopener">
+            Terms of Service
+          </a>
+          .
+        </span>
+      </label>
+      <p className="ol-privacy-note">
+        Read how we handle your information in our{" "}
+        <a href="/privacy" target="_blank" rel="noopener">
+          Privacy Policy
+        </a>
+        .
+      </p>
+      {errors.acceptTerms ? <small className="field-error">{errors.acceptTerms}</small> : null}
+
+      <button type="submit" className="ol-btn ol-btn-gold ol-btn-block" disabled={submitState.status === "loading"}>
+        {submitState.status === "loading" ? "Opening secure checkout..." : "Continue to secure payment"}
+      </button>
+      <small className={`ol-checkout-status status-${submitState.status}`} aria-live="polite">
+        {submitState.status === "error" ? submitState.message : "Payment is processed securely by Stripe."}
+      </small>
+    </form>
+  );
+}
+
+function OnlineLessonsPage({ currentPath, navigate, search }) {
+  useLessonsFont();
+  const content = onlineLessonsPage;
+  const { hero, fun, special, audience, pricing, policy, aid, cta } = content;
+  const coachesSection = content.coaches;
+  const wasCancelled = new URLSearchParams(search).get("payment") === "cancelled";
+
+  useEffect(() => {
+    if (wasCancelled) {
+      window.requestAnimationFrame(() => scrollToElementId("pricing"));
+    }
+  }, [wasCancelled]);
+
+  const getStarted = () => scrollToElementId("pricing");
+
+  return (
+    <OnlineLessonsContent
+      content={content}
+      hero={hero}
+      fun={fun}
+      special={special}
+      audience={audience}
+      pricing={pricing}
+      policy={policy}
+      aid={aid}
+      coachesSection={coachesSection}
+      cta={cta}
+      wasCancelled={wasCancelled}
+      getStarted={getStarted}
+      currentPath={currentPath}
+      navigate={navigate}
+    />
+  );
+}
+
+// One checkout page for all three packages. The package chosen on a pricing
+// card arrives as ?package=..., and can still be changed here.
+function LessonCheckoutPage({ currentPath, navigate, search }) {
+  useLessonsFont();
+  const params = new URLSearchParams(search);
+  const requestedPackage = params.get("package");
+  const wasCancelled = params.get("payment") === "cancelled";
+  const plans = onlineLessonsPage.pricing.plans;
+  const [checkoutState, setCheckoutState] = useState(() => ({
+    ...lessonCheckoutInitialState,
+    packageId: plans.some((plan) => plan.packageId === requestedPackage) ? requestedPackage : "",
+  }));
+  const [checkoutErrors, setCheckoutErrors] = useState({});
+  const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
+
+  const updateField = (event) => {
+    const { name, type, value, checked } = event.target;
+    setCheckoutState((current) => ({ ...current, [name]: type === "checkbox" ? checked : value }));
+  };
+
+  const submitCheckout = async (event) => {
+    event.preventDefault();
+    const errors = validateLessonCheckoutFields(checkoutState);
+    setCheckoutErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      setSubmitState({ status: "error", message: Object.values(errors)[0] });
+      const firstField = document.querySelector(`#lesson-checkout [name="${Object.keys(errors)[0]}"]`);
+      firstField?.focus();
+      return;
+    }
+
+    setSubmitState({ status: "loading", message: "" });
+
+    try {
+      const response = await fetch("/api/create-lesson-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(checkoutState),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload.url) {
+        setCheckoutErrors(payload.fieldErrors || {});
+        throw new Error(payload.error || "Checkout could not be started. Please try again.");
+      }
+
+      window.location.assign(payload.url);
+    } catch (error) {
+      setSubmitState({
+        status: "error",
+        message: error instanceof Error ? error.message : "Checkout could not be started. Please try again.",
+      });
+    }
+  };
+
+  return (
+    <div className="ol-page">
+      <section className="ol-section ol-checkout-page">
+        <div className="ol-shell">
+          <LessonsBreadcrumb
+            items={[
+              { label: "Home", path: "/" },
+              { label: "Lessons" },
+              { label: "Online Private Lessons", path: "/lessons/online" },
+              { label: onlineLessonsPage.checkout.pageTitle },
+            ]}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+          <h1 className="ol-title">{onlineLessonsPage.pricing.title}</h1>
+          {wasCancelled ? (
+            <p className="ol-notice" role="status">
+              {onlineLessonsPage.checkout.cancelled}
+            </p>
+          ) : null}
+          <LessonCheckoutForm
+            plans={plans}
+            state={checkoutState}
+            errors={checkoutErrors}
+            submitState={submitState}
+            onChange={updateField}
+            onSubmit={submitCheckout}
+          />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function OnlineLessonsContent({
+  content,
+  hero,
+  fun,
+  special,
+  audience,
+  pricing,
+  policy,
+  aid,
+  coachesSection,
+  cta,
+  wasCancelled,
+  getStarted,
+  currentPath,
+  navigate,
+}) {
+  const choosePackage = (packageId) => navigate(`${content.checkout.path}?package=${packageId}`);
+
+  return (
+    <div className="ol-page">
+      <section className="ol-hero" aria-labelledby="ol-hero-title">
+        <img
+          className="ol-hero-photo"
+          src={onlineHero1200}
+          srcSet={`${onlineHero720} 720w, ${onlineHero1200} 1200w, ${onlineHero1800} 1800w`}
+          sizes="(max-width: 780px) 100vw, 1240px"
+          alt=""
+          width="1800"
+          height="1125"
+          fetchPriority="high"
+        />
+        <div className="ol-hero-inner">
+          <LessonsBreadcrumb items={content.breadcrumb} currentPath={currentPath} navigate={navigate} />
+          <h1 id="ol-hero-title">{hero.title}</h1>
+          <p className="ol-hero-accent">{hero.accent}</p>
+          <p className="ol-hero-intro">{hero.intro}</p>
+          <button type="button" className="ol-btn ol-btn-gold" onClick={getStarted}>
+            {hero.cta}
+          </button>
+          <ul className="ol-hero-features">
+            {hero.features.map((item) => (
+              <li key={item.text}>
+                <UiIcon name={item.icon} size={30} />
+                <span>{item.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ol-section ol-fun" aria-labelledby="ol-fun-title">
+        <div className="ol-shell ol-fun-grid">
+          <div className="ol-reveal">
+            <h2 id="ol-fun-title" className="ol-title">{fun.title}</h2>
+            <p className="ol-text">{fun.text}</p>
+          </div>
+          <ul className="ol-fun-icons">
+            {fun.items.map((item) => (
+              <li key={item.label} className="ol-reveal">
+                <span className={`ol-round-icon ol-tone-${item.tone}`}>
+                  <UiIcon name={item.icon} size={34} filled />
+                </span>
+                <span>{item.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ol-section" aria-labelledby="ol-special-title">
+        <div className="ol-shell ol-panel">
+          <h2 id="ol-special-title" className="ol-title ol-reveal">{special.title}</h2>
+          <div className="ol-special-grid">
+            {special.cards.map((item) => (
+              <article key={item.title} className="ol-special-card ol-reveal">
+                <span className="ol-special-icon">
+                  <UiIcon name={item.icon} size={44} filled />
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ol-section" aria-labelledby="ol-audience-title">
+        <div className="ol-shell ol-panel ol-panel-tint ol-audience">
+          <div className="ol-reveal">
+            <h2 id="ol-audience-title" className="ol-title">{audience.title}</h2>
+            <p className="ol-text">{audience.intro}</p>
+          </div>
+          <ul className="ol-audience-list">
+            {audience.items.map((item) => (
+              <li key={item.text} className="ol-reveal">
+                <UiIcon name={item.icon} size={34} filled />
+                <p>
+                  {item.title ? <strong>{item.title}</strong> : null}
+                  {item.title ? " " : null}
+                  {item.text}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="ol-section ol-pricing" id="pricing" aria-labelledby="ol-pricing-title">
+        <div className="ol-shell">
+          <div className="ol-pricing-head ol-reveal">
+            <span className="ol-eyebrow">{pricing.eyebrow}</span>
+            <h2 id="ol-pricing-title" className="ol-title">{pricing.title}</h2>
+            <p className="ol-text">{pricing.intro}</p>
+          </div>
+
+          {wasCancelled ? (
+            <p className="ol-notice" role="status">
+              {content.checkout.cancelled}
+            </p>
+          ) : null}
+
+          <div className="ol-plans">
+            {pricing.plans.map((plan) => (
+              <article key={plan.packageId} className={`ol-plan ol-reveal${plan.featured ? " is-featured" : ""}`}>
+                {plan.badge ? <span className="ol-plan-badge">{plan.badge}</span> : null}
+                <h3>{plan.name}</h3>
+                <p className="ol-plan-price">{plan.price}</p>
+                <p className="ol-plan-unit">{plan.unit}</p>
+                <ul>
+                  {plan.points.map((point) => (
+                    <li key={point}>
+                      <UiIcon name="check" size={20} filled />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={`${content.checkout.path}?package=${plan.packageId}`}
+                  className={`ol-btn ol-btn-block ${plan.featured ? "ol-btn-gold" : "ol-btn-outline"}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    choosePackage(plan.packageId);
+                  }}
+                >
+                  Get Started
+                  <span className="sr-only"> with the {plan.name}</span>
+                </a>
+              </article>
+            ))}
+          </div>
+
+          <div className="ol-terms ol-panel-tint">
+            <section className="ol-policy" aria-labelledby="ol-policy-title">
+              <UiIcon name="calendar" size={46} />
+              <div>
+                <h3 id="ol-policy-title">{policy.title}</h3>
+                <ul>
+                  {policy.points.map((point) => (
+                    <li key={point}>
+                      <UiIcon name="check" size={18} filled />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <p className="ol-policy-note">{policy.note}</p>
+                <AppLink to="/terms" navigate={navigate} currentPath={currentPath} className="ol-coach-link">
+                  {policy.termsLabel}
+                </AppLink>
+              </div>
+            </section>
+            <section className="ol-aid" aria-labelledby="ol-aid-title">
+              <UiIcon name="heart" size={46} />
+              <div>
+                <h3 id="ol-aid-title">{aid.title}</h3>
+                <p>{aid.text}</p>
+                <AppLink to={aid.contactPath} navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-outline ol-btn-small">
+                  {aid.cta}
+                </AppLink>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section className="ol-section" aria-labelledby="ol-coaches-title">
+        <div className="ol-shell">
+          <div className="ol-coaches-head ol-reveal">
+            <div>
+              <h2 id="ol-coaches-title" className="ol-title">{coachesSection.title}</h2>
+              <p className="ol-text">{coachesSection.intro}</p>
+            </div>
+            <AppLink to={coachesSection.teamPath} navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-outline ol-btn-small">
+              {coachesSection.teamLabel}
+            </AppLink>
+          </div>
+          <CoachCards currentPath={currentPath} navigate={navigate} />
+        </div>
+      </section>
+
+      <section className="ol-cta" aria-labelledby="ol-cta-title">
+        <img
+          className="ol-cta-photo"
+          src={ctaChess1800}
+          srcSet={`${ctaChess900} 900w, ${ctaChess1800} 1800w`}
+          sizes="100vw"
+          alt=""
+          width="1800"
+          height="771"
+          loading="lazy"
+        />
+        <div className="ol-cta-inner ol-reveal">
+          <h2 id="ol-cta-title">{cta.title}</h2>
+          <p>{cta.text}</p>
+          <button type="button" className="ol-btn ol-btn-gold" onClick={getStarted}>
+            {cta.button}
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CoachPhoto({ coach, sizes, loading = "lazy", className }) {
+  const photo = coachPhotos[coach.photo];
+
+  return (
+    <img
+      className={className}
+      src={photo.src}
+      srcSet={photo.srcSet}
+      sizes={photo.srcSet ? sizes : undefined}
+      alt={coach.photoAlt}
+      width={photo.width}
+      height={photo.height}
+      loading={loading}
+    />
+  );
+}
+
+// Coach cards in the style of the mockup's "Meet Your Online Coaches" block.
+function CoachCards({ currentPath, navigate, headingLevel = "h3" }) {
+  const Heading = headingLevel;
+
+  return (
+    <div className="ol-coaches">
+      {coaches.map((coach) => (
+        <article key={coach.id} className="ol-coach ol-reveal">
+          <CoachPhoto coach={coach} sizes="(max-width: 640px) 90vw, 200px" />
+          <div>
+            <Heading>{coach.name}</Heading>
+            <span className="ol-coach-badge">{coach.title}</span>
+            <p>{coach.text}</p>
+            <AppLink to={coach.profilePath} navigate={navigate} currentPath={currentPath} className="ol-coach-link">
+              View full profile <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only"> of {coach.name}</span>
+            </AppLink>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function OurTeamPage({ currentPath, navigate }) {
+  useLessonsFont();
+
+  return (
+    <div className="ol-page">
+      <section className="ol-section ol-team">
+        <div className="ol-shell">
+          <LessonsBreadcrumb items={ourTeamPage.breadcrumb} currentPath={currentPath} navigate={navigate} />
+          <div className="ol-team-head">
+            <h1 className="ol-title">{ourTeamPage.title}</h1>
+            <p className="ol-text">{ourTeamPage.intro}</p>
+          </div>
+          <CoachCards currentPath={currentPath} navigate={navigate} headingLevel="h2" />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CoachProfilePage({ coach, currentPath, navigate }) {
+  useLessonsFont();
+
+  return (
+    <div className="ol-page">
+      <section className="ol-section ol-profile">
+        <div className="ol-shell">
+          <LessonsBreadcrumb
+            items={[{ label: "Home", path: "/" }, { label: "Our Team", path: "/our-team" }, { label: coach.name }]}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+          <article className="ol-profile-card">
+            <CoachPhoto coach={coach} sizes="(max-width: 780px) 92vw, 460px" loading="eager" className="ol-profile-photo" />
+            <div className="ol-profile-copy">
+              <h1 className="ol-title">{coach.name}</h1>
+              <span className="ol-coach-badge">{coach.title}</span>
+              <p className="ol-text">{coach.text}</p>
+              <div className="ol-profile-actions">
+                <AppLink to={ourTeamPage.profileCtaPath} navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-gold">
+                  {ourTeamPage.profileCta}
+                </AppLink>
+                <AppLink to="/our-team" navigate={navigate} currentPath={currentPath} className="ol-back-link">
+                  <span aria-hidden="true">&larr;</span> {ourTeamPage.backLabel}
+                </AppLink>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function LessonThankYouPage({ currentPath, navigate, search }) {
+  useLessonsFont();
+  const sessionId = new URLSearchParams(search).get("session_id") || "";
+  const [state, setState] = useState({ status: sessionId ? "loading" : "missing", details: null });
+
+  useEffect(() => {
+    if (!sessionId) {
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    fetch("/api/checkout-status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId }),
+    })
+      .then(async (response) => {
+        const payload = await response.json().catch(() => ({}));
+
+        if (!cancelled) {
+          setState(
+            response.ok && payload.status === "paid" && payload.bookingType === "online_lessons"
+              ? { status: "paid", details: payload }
+              : { status: "unconfirmed", details: null }
+          );
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setState({ status: "unconfirmed", details: null });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId]);
+
+  const { details } = state;
+
+  return (
+    <div className="ol-page">
+      <section className="ol-section ol-thanks">
+        <div className="ol-shell ol-thanks-card" aria-live="polite">
+          {state.status === "loading" ? <p className="ol-text">Confirming your payment...</p> : null}
+
+          {state.status === "paid" ? (
+            <>
+              <span className="ol-round-icon ol-tone-green">
+                <UiIcon name="check" size={34} filled />
+              </span>
+              <h1 className="ol-title">{onlineLessonsPage.thankYou.title}</h1>
+              <p className="ol-text">{onlineLessonsPage.thankYou.message}</p>
+              <dl className="ol-order">
+                <div>
+                  <dt>Order number</dt>
+                  <dd>{details.orderNumber}</dd>
+                </div>
+                <div>
+                  <dt>Package</dt>
+                  <dd>{details.packageLabel}</dd>
+                </div>
+                {typeof details.amountTotal === "number" ? (
+                  <div>
+                    <dt>Amount paid</dt>
+                    <dd>${details.amountTotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}</dd>
+                  </div>
+                ) : null}
+                {details.customerEmail ? (
+                  <div>
+                    <dt>Confirmation sent to</dt>
+                    <dd>{details.customerEmail}</dd>
+                  </div>
+                ) : null}
+              </dl>
+            </>
+          ) : null}
+
+          {state.status === "unconfirmed" || state.status === "missing" ? (
+            <>
+              <h1 className="ol-title">We couldn't confirm a payment</h1>
+              <p className="ol-text">
+                If you completed checkout, your payment is safe and our team will see it. If you were charged and
+                don't get a confirmation email, please contact us with your email address.
+              </p>
+            </>
+          ) : null}
+
+          {state.status !== "loading" ? (
+            <div className="ol-thanks-actions">
+              <AppLink to="/lessons/online" navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-outline ol-btn-small">
+                Back to Online Lessons
+              </AppLink>
+              <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-gold ol-btn-small">
+                Contact us
+              </AppLink>
+            </div>
+          ) : null}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ComingSoonLessonPage({ page, currentPath, navigate }) {
+  return (
+    <div className="ac-page">
+      <section className="ac-section">
+        <div className="ac-shell ol-soon">
+          <LessonsBreadcrumb
+            items={[{ label: "Home", path: "/" }, { label: "Lessons" }, { label: page.title }]}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+          <ProgramStatusBadge programId={page.programId} />
+          <h1>{page.title}</h1>
+          <p className="ac-lead">{page.intro}</p>
+          <div className="ac-actions">
+            <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-primary">
+              Contact us
+            </AppLink>
+            <AppLink to="/lessons/online" navigate={navigate} currentPath={currentPath} className="ac-btn ac-btn-secondary">
+              See Online Lessons
+            </AppLink>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// Lessons menu: a dropdown on desktop, an expandable group in the phone menu.
+function NavDropdown({ item, currentPath, navigate, onNavigate }) {
+  // Remembers the page the menu was opened on, so it closes itself after navigation.
+  const [openOnPath, setOpenOnPath] = useState(null);
+  const isOpen = openOnPath === currentPath;
+  const setIsOpen = (open) => setOpenOnPath(open ? currentPath : null);
+  const containerRef = useRef(null);
+  const menuId = `nav-menu-${item.label.toLowerCase()}`;
+  const isActive = item.children.some((child) => currentPath === child.path || currentPath.startsWith(`${child.path}/`));
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handlePointer = (event) => {
+      if (!containerRef.current?.contains(event.target)) {
+        setOpenOnPath(null);
+      }
+    };
+    const handleKey = (event) => {
+      if (event.key === "Escape") {
+        setOpenOnPath(null);
+        containerRef.current?.querySelector("button")?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointer);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointer);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [isOpen]);
+
+  return (
+    <div className={`ac-nav-dropdown${isOpen ? " is-open" : ""}`} ref={containerRef}>
+      <button
+        type="button"
+        className={`ac-nav-link ac-nav-trigger${isActive ? " is-active" : ""}`}
+        aria-expanded={isOpen}
+        aria-controls={menuId}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {item.label}
+        <svg className="ac-nav-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+          <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <ul className="ac-nav-submenu" id={menuId}>
+        {item.children.map((child) => (
+          <li key={child.path}>
+            <AppLink
+              to={child.path}
+              navigate={navigate}
+              currentPath={currentPath}
+              className="ac-nav-sublink"
+              onNavigate={() => {
+                setIsOpen(false);
+                onNavigate();
+              }}
+            >
+              <UiIcon name={child.icon} size={20} />
+              {child.label}
+            </AppLink>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function ChessTruckApp() {
   const [route, setRoute] = useState(readLocation);
   const [registrationState, setRegistrationState] = useState(readRegistrationDraft);
@@ -5322,7 +6288,10 @@ function ChessTruckApp() {
       CAMP_PURCHASE_OPTIONS[0]?.id ||
       ""
   );
-  const [contactState, setContactState] = useState(contactInitialState);
+  const [contactState, setContactState] = useState(() => ({
+    ...contactInitialState,
+    topic: getContactTopic(window.location.search),
+  }));
   const [contactErrors, setContactErrors] = useState({});
   const [contactSubmitState, setContactSubmitState] = useState({ status: "idle", message: "" });
   const [isCompactViewport, setIsCompactViewport] = useState(
@@ -5373,9 +6342,10 @@ function ChessTruckApp() {
         }
 
         // Malformed or missing data parses to "everything closed".
+        // Every program the site knows, including ones without a homepage card (online lessons).
         const { programs: availablePrograms, campSessions } = parseAvailabilityResponse(
           payload,
-          programs.map((item) => item.id)
+          Object.keys(programStatuses)
         );
         setApprovedCampSessions(campSessions);
         setRegistrationAvailability(availablePrograms);
@@ -5426,6 +6396,10 @@ function ChessTruckApp() {
 
   const syncStateForRoute = (nextRoute) => {
     setIsMobileNavOpen(false);
+
+    if (nextRoute.pathname === "/contact") {
+      setContactState((current) => ({ ...current, topic: getContactTopic(nextRoute.search) }));
+    }
 
     if (nextRoute.pathname === "/camps/confirmed") {
       setCampCheckoutState((current) =>
@@ -5601,8 +6575,14 @@ function ChessTruckApp() {
       return;
     }
 
-    window.history.pushState({}, "", `${nextRoute.pathname}${nextRoute.search}`);
+    window.history.pushState({}, "", `${nextRoute.pathname}${nextRoute.search}${nextUrl.hash}`);
     setRoute(nextRoute);
+
+    if (nextUrl.hash) {
+      window.setTimeout(() => scrollToElementId(decodeURIComponent(nextUrl.hash.slice(1))), 80);
+      return;
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -5981,8 +6961,26 @@ function ChessTruckApp() {
           return <AboutPage currentPath={currentPath} navigate={navigate} />;
       case "/tournaments":
         return <TournamentsPage currentPath={currentPath} navigate={navigate} />;
-      case "/private-lessons":
-        return <LessonsPage currentPath={currentPath} navigate={navigate} />;
+      case "/lessons/online":
+        return <OnlineLessonsPage currentPath={currentPath} navigate={navigate} search={route.search} />;
+      case "/lessons/online/checkout":
+        return <LessonCheckoutPage currentPath={currentPath} navigate={navigate} search={route.search} />;
+      case "/our-team":
+        return <OurTeamPage currentPath={currentPath} navigate={navigate} />;
+      case "/our-team/amir":
+      case "/our-team/andrea":
+        return (
+          <CoachProfilePage
+            coach={coaches.find((item) => item.profilePath === currentPath)}
+            currentPath={currentPath}
+            navigate={navigate}
+          />
+        );
+      case "/lessons/online/thank-you":
+        return <LessonThankYouPage currentPath={currentPath} navigate={navigate} search={route.search} />;
+      case "/lessons/in-person":
+      case "/lessons/group":
+        return <ComingSoonLessonPage page={comingSoonLessonPages[currentPath]} currentPath={currentPath} navigate={navigate} />;
       case "/after-school":
         return <AfterSchoolPage currentPath={currentPath} navigate={navigate} />;
       case "/faq":
@@ -6065,15 +7063,25 @@ function ChessTruckApp() {
             <ul className="ac-nav-list">
               {navigationItems.map((item) => (
                 <li key={item.path} className={item.path === "/" ? "ac-nav-home" : undefined}>
-                  <AppLink
-                    to={item.path}
-                    navigate={navigate}
-                    currentPath={currentPath}
-                    className="ac-nav-link"
-                    onNavigate={() => setIsMobileNavOpen(false)}
-                  >
-                    {item.label}
-                  </AppLink>
+                  {item.children ? (
+                    <NavDropdown
+                      item={item}
+                      currentPath={currentPath}
+                      navigate={navigate}
+                      onNavigate={() => setIsMobileNavOpen(false)}
+                    />
+                  ) : (
+                    <AppLink
+                      to={item.path}
+                      navigate={navigate}
+                      currentPath={currentPath}
+                      className="ac-nav-link"
+                      matchSection
+                      onNavigate={() => setIsMobileNavOpen(false)}
+                    >
+                      {item.label}
+                    </AppLink>
+                  )}
                 </li>
               ))}
             </ul>
@@ -6084,7 +7092,7 @@ function ChessTruckApp() {
               className="ac-btn ac-btn-primary ac-nav-contact"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Contact us
+              Contact Us
             </AppLink>
           </nav>
 
@@ -6096,7 +7104,7 @@ function ChessTruckApp() {
               className="ac-btn ac-btn-primary ac-header-cta"
               onNavigate={() => setIsMobileNavOpen(false)}
             >
-              Contact us
+              Contact Us
             </AppLink>
             <button
               type="button"

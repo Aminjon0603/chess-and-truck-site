@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { getNotificationRecipients, sendResendEmail } from "./_lib/resend.js";
 import { checkRegistrationGate } from "./_lib/registrationGate.js";
+import { fulfillLessonOrder, isLessonSession } from "./_lib/lessonOrders.js";
 
 const processedEvents = globalThis.__chessTruckProcessedStripeEvents || new Map();
 globalThis.__chessTruckProcessedStripeEvents = processedEvents;
@@ -218,6 +219,19 @@ export default {
     if (!session || session.object !== "checkout.session" || session.payment_status !== "paid") {
       markProcessed(event.id);
       return Response.json({ received: true, ignored: true }, { status: 200 });
+    }
+
+    // Online lessons: the order is recorded once in Supabase and the emails go
+    // out once. If that fails, answer with an error so Stripe retries later.
+    if (isLessonSession(session)) {
+      try {
+        await fulfillLessonOrder(session);
+      } catch {
+        return Response.json({ error: "Order could not be recorded yet." }, { status: 500 });
+      }
+
+      markProcessed(event.id);
+      return Response.json({ received: true }, { status: 200 });
     }
 
     const metadata = session.metadata || {};

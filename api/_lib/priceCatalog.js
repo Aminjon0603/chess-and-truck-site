@@ -62,10 +62,34 @@ export const tournamentServiceLevels = {
   "entry-dojo": { label: "Tournament Entry + Master Training Dojo", amount: 15500 },
 };
 
+// Online private lesson packages. Prices approved by the owner on 2026-10-28.
+// Each lesson is a private, one-on-one, 60-minute online session.
+export const onlineLessonPackages = {
+  single: {
+    label: "Pay As You Go",
+    lessons: 1,
+    amount: 15000,
+    description: "1 private online chess lesson (60 minutes).",
+  },
+  five: {
+    label: "5-Lesson Package",
+    lessons: 5,
+    amount: 67500,
+    description: "5 private online chess lessons (60 minutes each), $135 per lesson.",
+  },
+  ten: {
+    label: "10-Lesson Package",
+    lessons: 10,
+    amount: 120000,
+    description: "10 private online chess lessons (60 minutes each), $120 per lesson.",
+  },
+};
+
 // Set to true only after the amounts and line-item text above are reviewed for launch.
 const CHECKOUT_REVIEWED = {
   camps: false,
   tournaments: false,
+  onlineLessons: true,
 };
 
 const flatten = (prefix, table) =>
@@ -87,6 +111,8 @@ export const getServerPriceCatalog = (programId) => {
       };
     case "tournaments":
       return { reviewed: CHECKOUT_REVIEWED.tournaments, prices: flatten("", tournamentServiceLevels) };
+    case "onlineLessons":
+      return { reviewed: CHECKOUT_REVIEWED.onlineLessons, prices: flatten("", onlineLessonPackages) };
     default:
       return null;
   }

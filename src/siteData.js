@@ -1,3 +1,5 @@
+import { PRIVACY_UPDATED, TERMS_UPDATED } from "./lib/legal.js";
+
 export const siteBrand = {
   name: "Chess & Truck",
   short: "CT",
@@ -11,12 +13,22 @@ export const siteBrand = {
     "Fun, friendly, and professional chess programs for kids in New York City. Lessons, camps, tournaments, and after-school programs.",
 };
 
+// Order follows the client's mockup. Contact Us is the separate header button.
 export const navigationItems = [
   { label: "Home", path: "/" },
+  {
+    label: "Lessons",
+    path: "/lessons/online",
+    children: [
+      { label: "Online Lessons", path: "/lessons/online", icon: "monitor" },
+      { label: "In-Person Lessons", path: "/lessons/in-person", icon: "users" },
+      { label: "Group Lessons", path: "/lessons/group", icon: "users" },
+    ],
+  },
   { label: "Camps", path: "/camps" },
   { label: "Tournaments", path: "/tournaments" },
-  { label: "Lessons", path: "/private-lessons" },
   { label: "After-School", path: "/after-school" },
+  { label: "Our Team", path: "/our-team" },
   { label: "About", path: "/about" },
   { label: "FAQ", path: "/faq" },
 ];
@@ -30,8 +42,8 @@ export const academyHomePage = {
     titleLead: "Big Smiles.",
     titleAccent: "Brilliant Moves.",
     tagline: "The greatest game in the world without a ball!",
-    intro:
-      "At Chess & Truck, we make chess the highlight of every child's week! Through exciting lessons, friendly competition, and expert coaching, we help kids fall in love with the game while becoming stronger, smarter, and more confident players.",
+    // The client's latest hero mockup: this line replaces the longer paragraph.
+    intro: "Fun, friendship, and real chess improvement — guaranteed.",
     facts: [
       { icon: "users", text: "Beginners welcome" },
       { icon: "pin", text: "Based in NYC" },
@@ -101,7 +113,7 @@ export const academyHomePage = {
         // The mockup's "Spots can fill up quickly!" is left out.
         icon: "document",
         title: "Sign up when it opens",
-        text: "Dates, prices, and registration links will be posted on each program page when registration opens.",
+        text: "Online private lessons are open now. For our other programs, dates, prices, and registration links will be posted on each program page when registration opens.",
       },
     ],
   },
@@ -113,32 +125,32 @@ export const academyHomePage = {
       {
         question: "Is this OK for beginners?",
         answer:
-          "Yes. Private lessons will be open to beginners as well as experienced players. Tell us your child's age and level, and we'll help you find the right program.",
+          "Yes. Online private lessons are open to complete beginners as well as experienced players. Tell us your child's age and level, and we'll help you find the right program.",
       },
       {
         question: "Who is the coach?",
         answer:
-          "Andrea, who has 24 years of experience teaching chess. We'll share who coaches each program when its registration opens.",
+          "Online private lessons are taught by Coach Andrea, a FIDE Master with 24 years of experience teaching chess, and Coach Amir, also a FIDE Master. You can read about both on our Our Team page. We'll share who coaches our other programs when their registration opens.",
       },
       {
         question: "When does registration open?",
         answer:
-          "We haven't set dates yet. Until a program page says registration is open, we aren't taking sign-ups or payments for it.",
+          "Online private lessons are open now: you can buy a lesson package on the Online Lessons page. Camps, tournaments, after-school chess, and in-person and group lessons aren't open yet. Until a program page says registration is open, we aren't taking sign-ups or payments for it.",
       },
       {
         question: "How much does it cost?",
         answer:
-          "Prices haven't been set for any program yet. They'll be announced on each program page. When registration opens, you'll pay online by card through Stripe, a secure payment service.",
+          "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
       },
       {
         question: "What should my child bring?",
         answer:
-          "It depends on the program. Each program page will list what to bring when registration opens.",
+          "It depends on the program. For online lessons, our team will tell you what you need when they contact you by email to arrange the lessons. Other program pages will list what to bring when registration opens.",
       },
       {
         question: "Where are the programs located?",
         answer:
-          "In New York City. We haven't announced specific locations yet. Each program page will list its location before registration opens.",
+          "Online private lessons take place online, from home. Our other programs will be in New York City. We haven't announced specific locations yet; each program page will list its location before registration opens.",
       },
     ],
   },
@@ -529,7 +541,10 @@ export const programs = [
     id: "lessons",
     iconKey: "lessons",
     name: "Private Chess Lessons",
-    path: "/private-lessons",
+    path: "/lessons/online",
+    // Online private lessons are on sale, so this card shows their status.
+    statusProgramId: "onlineLessons",
+    openLabel: "Online Lessons Open",
     summary:
       "Individual or online lessons for beginners and experienced players.",
   },
@@ -706,7 +721,7 @@ export const routeMeta = {
   "/": {
     title: "Chess & Truck | Chess Programs for Kids in NYC",
     description:
-      "Chess camps, tournaments, private lessons, and after-school chess for kids in New York City. Registration opens soon.",
+      "Chess camps, tournaments, private lessons, and after-school chess for kids in New York City. Online private lessons are open now.",
   },
   "/about": {
     title: "About | Chess & Truck",
@@ -759,19 +774,39 @@ export const routeMeta = {
       "Private chess lessons for kids in NYC, in person or online, for beginners and experienced players. Registration opens soon.",
   },
   "/lessons/online": {
-    title: "Online Lessons | Chess & Truck",
+    title: "Online Private Chess Lessons | Chess & Truck",
     description:
-      "Online chess lessons for students who want focused coaching, cleaner structure, and a clear private lesson path.",
+      "Personalized one-on-one online chess lessons for kids, from beginners to tournament players. Private 60-minute lessons, single or in packages.",
+  },
+  "/lessons/online/checkout": {
+    title: "Checkout | Online Private Chess Lessons | Chess & Truck",
+    description: "Choose your online private lesson package and tell us about your child.",
+  },
+  "/our-team": {
+    title: "Our Team | Chess & Truck",
+    description: "Meet the Chess & Truck coaches, Coach Amir and Coach Andrea.",
+  },
+  "/our-team/amir": {
+    title: "Coach Amir | Chess & Truck",
+    description: "Coach Amir, FIDE Master, coaches online private chess lessons for Chess & Truck.",
+  },
+  "/our-team/andrea": {
+    title: "Coach Andrea | Chess & Truck",
+    description: "Coach Andrea, FIDE Master, has 24 years of experience teaching chess in the United States and Canada.",
+  },
+  "/lessons/online/thank-you": {
+    title: "Thank You | Online Private Chess Lessons | Chess & Truck",
+    description: "Your online private chess lesson purchase.",
   },
   "/lessons/in-person": {
-    title: "In Person Lessons | Chess & Truck",
+    title: "In-Person Lessons | Chess & Truck",
     description:
-      "In-person chess lessons in New York City for students who benefit from direct board work and face-to-face coaching.",
+      "In-person chess lessons from Chess & Truck. Registration is opening soon.",
   },
   "/lessons/group": {
     title: "Group Lessons | Chess & Truck",
     description:
-      "Small-group chess lessons for students who learn well through shared pace, focused instruction, and strong level matching.",
+      "Group chess lessons from Chess & Truck. Registration is opening soon.",
   },
   "/lessons/manage": {
     title: "Manage Lessons | Chess & Truck",
@@ -1429,7 +1464,7 @@ export const campDetailPages = {
 };
 
 // About page: owner-confirmed facts only. Chess & Truck has not run its own
-// camps or tournaments yet; all four programs are upcoming.
+// camps or tournaments yet. Online private lessons are on sale; the rest are upcoming.
 export const aboutPage = {
   hero: {
     eyebrow: "About us",
@@ -1439,15 +1474,15 @@ export const aboutPage = {
   },
   facts: [
     { label: "Based in", value: "New York City" },
-    { label: "Programs", value: "Four, all opening soon" },
+    { label: "Programs", value: "Four, online lessons open now" },
     { label: "Coach", value: "Andrea, 24 years teaching chess" },
-    { label: "Registration", value: "Not open yet" },
+    { label: "Registration", value: "Online lessons open" },
   ],
   whoSection: {
     eyebrow: "Who we are",
     title: "A new chess program for NYC kids",
     intro:
-      "We're getting ready to launch camps, tournaments, lessons, and after-school chess. These will be our first programs, and we'll share the details of each one before registration opens.",
+      "We're launching camps, tournaments, lessons, and after-school chess. Online private lessons are open now, and we'll share the details of each other program before its registration opens.",
   },
   whoPoints: [
     {
@@ -1456,7 +1491,7 @@ export const aboutPage = {
     },
     {
       title: "Details before sign-up",
-      text: "Each program page will list the dates, location, and price before we take any registrations or payments.",
+      text: "Each program page lists the price and details before we take any registrations or payments.",
     },
     {
       title: "Easy to reach",
@@ -1465,8 +1500,8 @@ export const aboutPage = {
   ],
   programsSection: {
     eyebrow: "Our programs",
-    title: "Four upcoming chess programs",
-    intro: "None are open for registration yet. Each page shows what's confirmed and what's still being planned.",
+    title: "Our four chess programs",
+    intro: "Online private lessons are open now. The other programs aren't open for registration yet; each page shows what's confirmed and what's still being planned.",
   },
   coach: {
     eyebrow: "Your coach",
@@ -1611,17 +1646,17 @@ export const faqPage = {
         {
           question: "Is registration open?",
           answer:
-            "Not yet. All four programs are still being planned, and we aren't taking sign-ups or payments for any of them. Each program page will say when its registration opens.",
+            "For online private lessons, yes: you can buy a lesson package on the Online Lessons page. Camps, tournaments, after-school chess, and in-person and group lessons aren't open yet, and we aren't taking sign-ups or payments for them. Each program page will say when its registration opens.",
         },
         {
           question: "When will programs begin?",
           answer:
-            "We haven't set start dates for any program yet. Dates will be posted on each program page before registration opens.",
+            "Online private lessons start after you buy a package: our team contacts you by email to arrange the schedule. We haven't set start dates for our other programs yet. Dates will be posted on each program page before registration opens.",
         },
         {
           question: "How much do programs cost?",
           answer:
-            "Prices haven't been set for any program yet. Each price will be posted on its program page. When registration opens, you'll pay online by card through Stripe, a secure payment service.",
+            "Online private lessons are $150 for one 60-minute lesson, $675 for 5 lessons, or $1,200 for 10 lessons, paid online through Stripe, a secure payment service. Prices for our other programs will be announced on each program page.",
         },
       ],
     },
@@ -1637,7 +1672,7 @@ export const faqPage = {
         {
           question: "Are beginners welcome?",
           answer:
-            "Private lessons will be open to beginners and experienced players. For our other programs, we'll say who each one is for when registration opens. Tell us your child's level, and we'll suggest where to start.",
+            "Yes. Online private lessons are open to everyone from complete beginners to advanced tournament players. For our other programs, we'll say who each one is for when registration opens. Tell us your child's level, and we'll suggest where to start.",
         },
       ],
     },
@@ -1653,7 +1688,7 @@ export const faqPage = {
         {
           question: "Are private lessons online or in person?",
           answer:
-            "Both. Private lessons will be offered in person and online, with more than one lesson length. In-person locations, lesson lengths, and times will be announced.",
+            "Online private lessons are open now: one-on-one, 60 minutes each. In-person and group lessons are coming; their locations, schedules, and prices will be announced.",
         },
       ],
     },
@@ -1715,7 +1750,7 @@ export const faqPage = {
         {
           question: "Who is the coach?",
           answer:
-            "Andrea, who has 24 years of experience teaching chess. We'll share who coaches each program when its registration opens.",
+            "Online private lessons are taught by Coach Andrea, a FIDE Master with 24 years of experience teaching chess, and Coach Amir, also a FIDE Master. You can read about both on our Our Team page. We'll share who coaches our other programs when their registration opens.",
         },
       ],
     },
@@ -2454,38 +2489,127 @@ export const contactEmails = [
 export const termsPage = {
   eyebrow: "Terms of Service",
   title: "Terms of Service",
+  updated: TERMS_UPDATED,
   intro:
-    "These terms explain how CHESS AND TRUCK handles inquiries, payments, cancellations, and participation in its programs.",
+    "These terms explain how online private chess lessons from Chess & Truck work: what you buy, how lessons are scheduled, and how rescheduling, cancellations, and refunds work.",
   sections: [
     {
-      title: "Inquiry accuracy",
-      body:
-        "Families are responsible for submitting accurate student, parent, contact, and any relevant medical information when making an inquiry or registering for a program.",
+      id: "about",
+      title: "About these terms",
+      body: [
+        "Chess & Truck is the brand of CHESS AND TRUCK, a chess program for kids based in New York City. In these terms, \"we\" and \"us\" mean CHESS AND TRUCK.",
+        "These terms apply to the chessandtruck.com website and to online private lesson purchases made through it. By checking \"I agree to the Terms of Service\" at checkout, you accept the version of these terms shown on this page at that time.",
+      ],
     },
     {
-      title: "Payment and confirmation",
-      body:
-        "Any payment handled through the website is completed through Stripe. A program booking or payment is treated as confirmed only after Stripe confirms it successfully.",
+      id: "who-can-buy",
+      title: "Who can buy",
+      body: [
+        "If the lessons are for a child, a parent or legal guardian must make the purchase and arrange the lessons with us. Please make sure the details you give us about yourself and the student are accurate.",
+      ],
     },
     {
-      title: "Program fit",
-      body:
-        "Families should choose the most appropriate program format before paying. CHESS AND TRUCK may contact a family if a selected option appears inconsistent with the student's level, age, or program fit.",
+      id: "lessons",
+      title: "Online private lessons and packages",
+      body: [
+        "Online private lessons are one-on-one sessions with a Chess & Truck coach, held online. Each lesson lasts 60 minutes. You can buy:",
+      ],
+      items: [
+        "1 lesson: $150",
+        "5-Lesson Package: $675 ($135 per lesson)",
+        "10-Lesson Package: $1,200 ($120 per lesson)",
+      ],
+      after: [
+        "Prices are in U.S. dollars. Each purchase is a one-time payment. There is no subscription, no automatic renewal, and no recurring charge.",
+      ],
     },
     {
-      title: "Cancellations and changes",
-      body:
-        "Requests to cancel or change a booking should be sent as early as possible. Approved changes depend on timing, program capacity, and operational feasibility.",
+      id: "payment",
+      title: "Payment",
+      body: [
+        "Every purchase is paid in full upfront on a secure checkout page run by Stripe, our payment processor. You can use a card or another payment method Stripe offers on that page. Your purchase is confirmed only after Stripe confirms the payment. We then email you a confirmation with your package and order number. We never see or store your full card or bank details.",
+      ],
     },
     {
-      title: "Program conduct",
-      body:
-        "Students, parents, and guests are expected to follow staff instructions, respect the learning environment, and support a safe, focused program experience.",
+      id: "scheduling",
+      title: "Scheduling your lessons",
+      body: [
+        "After your payment is confirmed, our team contacts you by email to arrange lesson times with you. Times are agreed by email; there is no online booking calendar at this time.",
+      ],
     },
     {
+      id: "rescheduling",
+      title: "Rescheduling, cancellations, and missed lessons",
+      items: [
+        "If you tell us at least 24 hours before a scheduled lesson starts, you can reschedule it at no cost.",
+        "If you cancel or reschedule with less than 24 hours' notice, or the student misses the lesson without telling us, that lesson counts as used.",
+        "We never charge anything extra for a late cancellation or a missed lesson. It simply counts as one of the lessons you bought.",
+      ],
+      after: ["Please send rescheduling and cancellation requests to info@chessandtruck.com."],
+    },
+    {
+      id: "our-cancellations",
+      title: "If we cancel a lesson",
+      body: [
+        "If we need to cancel a scheduled lesson, we will offer you a new time or a refund for that lesson at your package's per-lesson price. A lesson we cancel never counts as used.",
+      ],
+    },
+    {
+      id: "refunds",
+      title: "Refunds",
+      body: [
+        "You can ask for a refund for any unused lessons. The refund for each unused lesson is your package's per-lesson price:",
+      ],
+      items: [
+        "1 lesson: $150",
+        "5-Lesson Package: $135 per lesson",
+        "10-Lesson Package: $120 per lesson",
+      ],
+      after: [
+        "Lessons that have already taken place, and lessons that count as used under the 24-hour rule above, are not refunded. We do not recalculate used lessons at the single-lesson price, and we do not charge a refund fee.",
+        "Example: you paid $675 for the 5-Lesson Package and used 2 lessons. Your refund for the 3 unused lessons is 3 × $135 = $405.",
+        "To ask for a refund, email info@chessandtruck.com. Our team reviews each request and issues approved refunds through Stripe to the payment method you used. How long it takes to appear depends on your bank or payment provider.",
+      ],
+    },
+    {
+      id: "no-expiration",
+      title: "Lessons don't expire",
+      body: ["Paid lessons you haven't used do not expire."],
+    },
+    {
+      id: "financial-aid",
+      title: "Financial aid and discounts",
+      body: [
+        "Financial aid and discounts are available for families who need support. They are arranged individually: ask us through the Contact page before you buy. No discount is applied automatically.",
+      ],
+    },
+    {
+      id: "other-programs",
+      title: "Other programs",
+      body: [
+        "These lesson rules apply to online private lessons only. Camps, tournaments, after-school programs, and in-person and group lessons are not open yet. Their terms will be posted before their registration opens.",
+      ],
+    },
+    {
+      id: "conduct",
+      title: "Lesson conduct",
+      body: [
+        "Students and families are expected to treat coaches and other participants with respect and to follow the coach's instructions during lessons, so every lesson stays safe, focused, and fun.",
+      ],
+    },
+    {
+      id: "changes",
+      title: "Changes to these terms",
+      body: [
+        "We may update these terms. The date at the top shows the latest version. The version you agreed to when you bought your lessons applies to that purchase.",
+      ],
+    },
+    {
+      id: "contact",
       title: "Contact",
-      body:
-        "Questions about program fit, payment, or terms may be sent through the Contact page before payment is made.",
+      body: [
+        "Questions, rescheduling, cancellations, and refund requests: info@chessandtruck.com.",
+      ],
     },
   ],
 };
@@ -2493,38 +2617,312 @@ export const termsPage = {
 export const privacyPage = {
   eyebrow: "Privacy Policy",
   title: "Privacy Policy",
+  updated: PRIVACY_UPDATED,
   intro:
-    "CHESS AND TRUCK collects only the information needed to run its programs, communicate with families, and process secure payments.",
+    "This policy explains what information Chess & Truck collects, why we need it, who can see it, and how you can ask us to correct or delete it.",
   sections: [
     {
-      title: "Information collected",
-      body:
-        "The site may collect contact details, student information, parent and emergency contact information, and medical notes that are relevant to safety and communication.",
+      id: "who-we-are",
+      title: "Who we are",
+      body: [
+        "Chess & Truck is the brand of CHESS AND TRUCK, a chess program for kids based in New York City. You can reach us at info@chessandtruck.com.",
+      ],
     },
     {
-      title: "How information is used",
-      body:
-        "Registration and inquiry information is used for program operations, support, eligibility review, emergency readiness, and family communication. Contact form submissions are used to respond to questions and support needs.",
+      id: "information-you-give",
+      title: "Information you give us",
+      body: ["We only ask for what we need. Depending on what you do on the site, that is:"],
+      items: [
+        "Buying online lessons: your name, your email address, your phone number (optional), the student's name, the student's age, the student's chess level, any notes you choose to add for the coach, the package you chose, and the version of the Terms of Service you agreed to and when.",
+        "Paying: you enter your payment details on Stripe's checkout page, not on our site. Stripe tells us whether the payment succeeded, the amount, and the contact details entered at checkout.",
+        "Using the contact form: your name, your email address, your phone number (optional), your message, and the topic if you picked one (for example, Financial Aid & Discounts).",
+        "Asking to hear when a program opens (where we offer this): your email address, the program, and when you asked and confirmed.",
+        "Emailing or calling us: whatever you choose to tell us.",
+      ],
+      after: [
+        "We don't ask for a home address, a full date of birth, or the student's school. Please don't put sensitive information, such as health details, in the notes for the coach.",
+      ],
     },
     {
-      title: "Program interest emails",
-      body:
-        "If you ask to hear when a program opens, we store your email address, the program, and when you consented and confirmed. We use it only to confirm your request and to email you when registration for that program opens. You can unsubscribe at any time with the link in our emails. Unconfirmed requests are deleted after 30 days, and we do not collect any information about children for this list.",
+      id: "children",
+      title: "Information about children",
+      body: [
+        "Our lessons are for kids, so when a parent or guardian buys lessons, we ask that adult for the student's name, age, chess level, and optional notes. We use this only to arrange and teach the lessons and to choose the right level. Purchases and sign-ups should be made by a parent or guardian, not by a child. If you think a child sent us information directly, email us and we will delete it.",
+      ],
     },
     {
-      title: "Payments",
-      body:
-        "Payments are processed securely through Stripe. CHESS AND TRUCK does not store full card information on the website.",
+      id: "how-we-use",
+      title: "How we use information",
+      items: [
+        "To process your payment and confirm your purchase.",
+        "To contact you by email to arrange lesson times, and to run the lessons.",
+        "To handle rescheduling, cancellations, and refund requests.",
+        "To answer your questions.",
+        "To email you when a program you asked about opens, if you asked us to.",
+        "To keep business, accounting, and tax records of purchases.",
+        "To protect the site from abuse, for example by limiting repeated form submissions.",
+      ],
+      after: ["We don't sell your information, and we don't use it for advertising."],
     },
     {
-      title: "Limited sharing",
-      body:
-        "Information is shared only with service providers that help operate the registration and communication workflow, such as payment and email delivery services, and only for operational purposes.",
+      id: "emails",
+      title: "Emails we send",
+      body: [
+        "After a purchase, we email the buyer a confirmation with the package and order number, and our team gets an email with the purchase details so we can arrange the lessons. We then email you about scheduling. These are service emails about your purchase.",
+        "We don't run a marketing newsletter, and buying lessons does not sign you up for one. If you ask to hear when a program opens, we send one email to confirm your request and one email when registration for that program opens. Each of those emails has an unsubscribe link. When you unsubscribe, we keep a record of it so we don't email you again.",
+      ],
     },
     {
-      title: "Retention and review",
-      body:
-        "Registration and contact records may be retained for program operations, support follow-up, and administration. Families can contact the team if they need help reviewing or correcting submitted information.",
+      id: "who-can-see",
+      title: "Who can see your information",
+      body: [
+        "The Chess & Truck team and the coach who teaches your lessons can see the details you gave us. We also use these service providers, which handle information only to provide their service to us:",
+      ],
+      items: [
+        "Stripe processes payments. It receives your payment details directly and stores your payment, together with the purchase details we send it (your name, email, optional phone, and the student's name, age, level, and notes). Stripe's own privacy policy applies to the information it collects.",
+        "Supabase hosts our database. For lesson purchases, it stores the order number, the Stripe payment reference, the package, the amount, and when the order and its emails were processed. It doesn't store names or contact details for orders. It also stores the list of people who asked to hear when a program opens.",
+        "Resend sends our emails, so it handles the email addresses and the contents of the emails we send.",
+        "Vercel hosts our website and the server code behind our forms. Like any web host, it processes technical information such as your IP address and browser type when you visit.",
+        "Google Fonts provides some of the fonts on our pages, so your browser contacts Google's servers, which receive your IP address.",
+      ],
+      after: [
+        "Emails we send and receive are also kept in our business email account. We may share information if the law requires it.",
+      ],
+    },
+    {
+      id: "cookies",
+      title: "Cookies and analytics",
+      body: [
+        "We don't use analytics tools, advertising cookies, or tracking pixels. Our site doesn't set cookies. Registration forms that are not open yet may save a draft in your browser's own storage, on your device only.",
+        "Stripe's checkout page is run by Stripe and uses its own cookies, for example to process the payment and prevent fraud.",
+      ],
+    },
+    {
+      id: "retention",
+      title: "How long we keep information",
+      body: [
+        "We keep information only as long as we need it for the reason we collected it, and longer only when we need it for accounting, tax, refunds, payment disputes, or legal reasons. For example:",
+      ],
+      items: [
+        "Purchase records are kept as business records while we need them for lessons, refunds, accounting, and tax.",
+        "Contact form messages are kept as long as we need them to answer you and keep a record of our conversation.",
+        "Requests to hear when a program opens that are never confirmed are deleted automatically 30 days after the request. This rule applies only to those requests.",
+        "Records used to limit repeated form submissions are kept in coded form and deleted after about 2 days.",
+        "Stripe keeps payment records under its own policies.",
+      ],
+    },
+    {
+      id: "your-choices",
+      title: "Correcting or deleting your information",
+      body: [
+        "To see, correct, or delete your information, email info@chessandtruck.com from the email address you used with us, so we can confirm the request is yours. We will correct or delete what we can. We may need to keep some records, such as purchase and payment records, for accounting, tax, refunds, or payment disputes. Copies of emails already sent, and records held by Stripe, may also remain. We will tell you what we kept and why.",
+        "You can unsubscribe from program-opening emails at any time with the link in those emails.",
+      ],
+    },
+    {
+      id: "security",
+      title: "Security",
+      body: [
+        "Our site uses HTTPS. Our database can be reached only by our own server code, and only people who need the information to run lessons can see it. No system is perfectly secure, but we work to protect your information.",
+      ],
+    },
+    {
+      id: "changes",
+      title: "Changes to this policy",
+      body: ["We may update this policy. The date at the top shows the latest version."],
+    },
+    {
+      id: "contact",
+      title: "Contact",
+      body: ["Privacy questions and requests: info@chessandtruck.com."],
     },
   ],
+};
+
+// Online Private Chess Lessons page. Text follows the client's mockup; the
+// approved exceptions are Coach Andrea's bio and the Coach Ikrom -> Coach Amir swap.
+export const onlineLessonsPage = {
+  breadcrumb: [
+    { label: "Home", path: "/" },
+    { label: "Lessons" },
+    { label: "Online Private Lessons" },
+  ],
+  hero: {
+    title: "Online Private Chess Lessons",
+    accent: "Big Moves. From Anywhere.",
+    intro:
+      "Personalized one-on-one chess coaching from the comfort of your home. Fun, engaging, and effective lessons designed to help your child build skills, confidence, and a genuine love for the game.",
+    cta: "Get Started",
+    features: [
+      { icon: "monitor", text: "Learn from experienced coaches" },
+      { icon: "barChart", text: "Lessons tailored to your child" },
+      { icon: "calendar", text: "Flexible scheduling from home" },
+    ],
+  },
+  fun: {
+    title: "Learning Chess Should Be Fun!",
+    text:
+      "We believe the best improvement happens when children genuinely enjoy learning. Our private online lessons combine expert instruction, interactive puzzles, practical games, and personalized feedback to make every session something kids look forward to.",
+    items: [
+      { icon: "bulb", label: "Build Skills", tone: "gold" },
+      { icon: "users", label: "Grow Confidence", tone: "green" },
+      { icon: "barChart", label: "Have Fun", tone: "blue" },
+      { icon: "trophy", label: "See Real Progress", tone: "rose" },
+    ],
+  },
+  special: {
+    title: "What Makes Our Online Lessons Special?",
+    cards: [
+      { icon: "personStar", title: "100% Personalized", text: "Every lesson is tailored to your child's level, strengths, and goals." },
+      { icon: "puzzle", title: "Fun & Interactive", text: "Chess puzzles, games, challenges, and practical exercises keep kids engaged and motivated." },
+      { icon: "barChart", title: "Measurable Progress", text: "Game analysis and clear learning goals help students improve with confidence." },
+      { icon: "cap", title: "All Skill Levels", text: "From complete beginners to advanced tournament players, everyone is welcome." },
+    ],
+  },
+  audience: {
+    title: "Who Are These Lessons For?",
+    intro: "Our online private lessons are a great fit for:",
+    items: [
+      { icon: "learner", title: "Beginners", text: "learning the basics" },
+      { icon: "rook", title: "Intermediate", text: "players looking to improve" },
+      { icon: "trophy", title: "Competitive", text: "players preparing for tournaments" },
+      { icon: "users", title: "", text: "Students who prefer the flexibility of learning from home" },
+    ],
+  },
+  pricing: {
+    eyebrow: "Invest in their next big move",
+    title: "Private Lesson Packages & Pricing",
+    intro: "All lessons are private, one-on-one sessions conducted online. Each lesson lasts 60 minutes.",
+    // Prices must match api/_lib/priceCatalog.js (checked by tests/lessons.test.js).
+    plans: [
+      {
+        packageId: "single",
+        name: "Pay As You Go",
+        price: "$150",
+        unit: "per 60-minute lesson",
+        points: ["Maximum flexibility", "No package commitment"],
+      },
+      {
+        packageId: "five",
+        name: "5-Lesson Package",
+        price: "$675",
+        unit: "($135 per lesson)",
+        points: ["Save $75 compared with individual lessons", "Great for consistent progress"],
+      },
+      {
+        packageId: "ten",
+        name: "10-Lesson Package",
+        price: "$1,200",
+        unit: "($120 per lesson)",
+        points: ["Save $300 compared with individual lessons", "20% savings"],
+        badge: "Best Value",
+        featured: true,
+      },
+    ],
+  },
+  // The first three points and the note are the client's text; the last two
+  // match the Terms of Service (refunds and no expiration).
+  policy: {
+    title: "Booking & Rescheduling Policy",
+    points: [
+      "All 5- and 10-lesson packages are paid in full upfront.",
+      "Please give at least 24 hours' notice if you need to reschedule a lesson.",
+      "Lessons canceled or rescheduled with less than 24 hours' notice will count as a completed session.",
+      "Unused lessons never expire.",
+      "You can ask for a refund for unused lessons at your package's per-lesson price.",
+    ],
+    note: "We value your time and ours, and appreciate your help in keeping lessons running smoothly!",
+    termsLabel: "Read the full Terms of Service",
+  },
+  aid: {
+    title: "Financial Aid & Discounts",
+    text:
+      "We believe every child should have the opportunity to experience the many benefits of chess. Financial aid and discounts are available for families who need support.",
+    cta: "Learn More / Inquire",
+    contactPath: "/contact?topic=financial-aid",
+  },
+  coaches: {
+    title: "Meet Your Online Coaches",
+    intro: "Learn from experienced coaches who love working with kids.",
+    teamLabel: "Meet Our Team",
+    teamPath: "/our-team",
+  },
+  cta: {
+    title: "Ready to Make Your Next Move?",
+    text: "Tell us a little about your child, and we'll help you find the right coach and schedule for online private lessons.",
+    button: "Get Started",
+  },
+  checkout: {
+    path: "/lessons/online/checkout",
+    pageTitle: "Checkout",
+    title: "Tell us about your child",
+    intro: "After payment, our team will contact you by email to arrange your online lessons.",
+    cancelled: "Payment was cancelled. You have not been charged. You can choose a package again whenever you're ready.",
+    // Short version of the Terms of Service, shown right before payment.
+    summaryTitle: "Before you pay",
+    summary: [
+      "You pay for your lessons in full upfront. This is a one-time payment, not a subscription.",
+      "Our team will email you to arrange lesson times.",
+      "Tell us at least 24 hours before a lesson to reschedule it at no cost.",
+      "A lesson canceled with less than 24 hours' notice, or missed, counts as used.",
+      "You can get a refund for unused lessons at your package's per-lesson price ($150, $135, or $120).",
+      "Unused lessons never expire.",
+    ],
+  },
+  thankYou: {
+    title: "Thank you for your purchase!",
+    message: "Thank you for your purchase! Our team will contact you by email to arrange your online lessons.",
+  },
+};
+
+// The coaching team. The online lessons cards, the Our Team page, and each
+// profile all read from here, so they never disagree. Text is the client's;
+// Andrea's line uses the owner-confirmed 24 years (not the mockup's 7+).
+export const coaches = [
+  {
+    id: "amir",
+    name: "Coach Amir",
+    title: "FIDE Master",
+    text:
+      "25+ years of playing experience and 15+ years of coaching. Passionate about helping children build skills, confidence, and a love for chess.",
+    photo: "amir",
+    photoAlt: "Coach Amir at a chess board",
+    profilePath: "/our-team/amir",
+  },
+  {
+    id: "andrea",
+    name: "Coach Andrea",
+    title: "FIDE Master",
+    text:
+      "Andrea is a FIDE Master with 24 years of experience teaching chess in the United States and Canada. He has taught at children's chess camps, given private lessons, and taught in after-school programs.",
+    photo: "andrea",
+    photoAlt: "Coach Andrea at an outdoor chess table",
+    profilePath: "/our-team/andrea",
+  },
+];
+
+export const ourTeamPage = {
+  breadcrumb: [{ label: "Home", path: "/" }, { label: "Our Team" }],
+  title: "Our Team",
+  intro: "Learn from experienced coaches who love working with kids.",
+  profileCta: "Explore Online Lessons",
+  profileCtaPath: "/lessons/online",
+  backLabel: "Back to Our Team",
+};
+
+// In-person and group lessons have no approved terms yet: no prices,
+// schedule, or payment until the owner approves them.
+export const comingSoonLessonPages = {
+  "/lessons/in-person": {
+    programId: "inPersonLessons",
+    eyebrow: "Lessons",
+    title: "In-Person Lessons",
+    intro: "Prices, schedule, and location will be posted here when registration opens.",
+  },
+  "/lessons/group": {
+    programId: "groupLessons",
+    eyebrow: "Lessons",
+    title: "Group Lessons",
+    intro: "Prices, schedule, and location will be posted here when registration opens.",
+  },
 };

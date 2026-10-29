@@ -14,6 +14,11 @@ const sanitize = (value, limit = 2000) => {
   return value.trim().replace(/\r\n/g, "\n").slice(0, limit);
 };
 
+// Topics a page can preselect (for example the lessons page's Financial Aid button).
+const CONTACT_TOPICS = {
+  "financial-aid": "Financial Aid & Discounts",
+};
+
 const escapeHtml = (value) =>
   value
     .replaceAll("&", "&amp;")
@@ -30,6 +35,7 @@ const buildHtml = (data) => `
     <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
       <tbody>
         ${[
+          ...(data.topic ? [["Topic", data.topic]] : []),
           ["Name", data.name],
           ["Email", data.email],
           ["Phone", data.phone],
@@ -57,13 +63,16 @@ const buildText = (data) =>
   [
     "New CHESS AND TRUCK message",
     "",
+    data.topic ? `Topic: ${data.topic}` : null,
     `Name: ${data.name || "-"}`,
     `Email: ${data.email || "-"}`,
     `Phone: ${data.phone || "-"}`,
     "",
     "Message:",
     data.message || "-",
-  ].join("\n");
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
 
 export const runtime = "nodejs";
 
@@ -97,6 +106,7 @@ export default {
       phone: sanitize(payload.phone, 80),
       message: sanitize(payload.message, 4000),
       website: sanitize(payload.website, 120),
+      topic: CONTACT_TOPICS[sanitize(payload.topic, 40)] || "",
     };
 
     if (data.website) {
@@ -132,7 +142,9 @@ export default {
 
     const resendResponse = await sendResendEmail({
       to: recipients,
-      subject: `New CHESS AND TRUCK inquiry - ${data.name}`,
+      subject: data.topic
+        ? `New CHESS AND TRUCK inquiry (${data.topic}) - ${data.name}`
+        : `New CHESS AND TRUCK inquiry - ${data.name}`,
       html: buildHtml(data),
       text: buildText(data),
       replyTo: data.email,

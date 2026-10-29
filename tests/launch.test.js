@@ -101,8 +101,11 @@ const run = async () => {
   // ---------------------------------------------------------------- readiness
 
 
-  await test("all five programs are blocked with the shipped configuration", async () => {
-    for (const programId of Object.keys(programStatuses)) {
+  await test("every program except online lessons is blocked with the shipped configuration", async () => {
+    // Online private lessons were approved for sale on 2026-10-28 (see tests/lessons.test.js).
+    assert.equal((await checkRegistrationGate("onlineLessons", { log: false })).ready, true);
+
+    for (const programId of Object.keys(programStatuses).filter((id) => id !== "onlineLessons")) {
       const result = await checkRegistrationGate(programId, { now: NOW, log: false });
       assert.equal(result.ready, false, programId);
       assert.ok(codes(result).includes("STATUS_NOT_OPEN"), programId);
@@ -267,8 +270,10 @@ const run = async () => {
     const body = await response.json();
     assert.deepEqual(Object.keys(body).sort(), ["programs", "sessions"]);
     assert.deepEqual(body.sessions, { camps: [] });
-    Object.values(body.programs).forEach((value) => assert.equal(value, false));
-    assert.deepEqual(await getPublicAvailability({ now: NOW }), body.programs);
+    Object.entries(body.programs).forEach(([programId, value]) =>
+      assert.equal(value, programId === "onlineLessons", programId)
+    );
+    assert.deepEqual(await getPublicAvailability(), body.programs);
     restore();
   });
 

@@ -14,6 +14,11 @@ export const programStatuses = {
   camps: PROGRAM_STATUS.COMING_SOON,
   tournaments: PROGRAM_STATUS.COMING_SOON,
   lessons: PROGRAM_STATUS.COMING_SOON,
+  // Online private lessons are on sale (owner approval 2026-10-28). In-person and
+  // group lessons have no approved terms yet.
+  onlineLessons: PROGRAM_STATUS.OPEN,
+  inPersonLessons: PROGRAM_STATUS.COMING_SOON,
+  groupLessons: PROGRAM_STATUS.COMING_SOON,
   afterSchool: PROGRAM_STATUS.COMING_SOON,
   dojo: PROGRAM_STATUS.COMING_SOON,
 };

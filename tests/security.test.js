@@ -17,7 +17,9 @@ import programAvailability from "../api/program-availability.js";
 import stripeWebhook from "../api/stripe-webhook.js";
 import checkoutStatus from "../api/checkout-status.js";
 
-const PROGRAM_IDS = ["camps", "tournaments", "lessons", "afterSchool", "dojo"];
+const PROGRAM_IDS = ["camps", "tournaments", "lessons", "onlineLessons", "inPersonLessons", "groupLessons", "afterSchool", "dojo"];
+// Online private lessons are the only program on sale (owner approval 2026-10-28).
+const OPEN_PROGRAM_IDS = ["onlineLessons"];
 const results = [];
 const test = async (name, fn) => {
   await fn();
@@ -165,10 +167,12 @@ const run = async () => {
     assert.equal(getLaunchReadiness(undefined).ready, false);
   });
 
-  await test("public availability stays closed for every program by default", async () => {
+  await test("public availability stays closed for every program except online lessons", async () => {
     const availability = await getPublicAvailability();
     assert.deepEqual(Object.keys(availability).sort(), [...PROGRAM_IDS].sort());
-    Object.values(availability).forEach((value) => assert.equal(value, false));
+    Object.entries(availability).forEach(([programId, value]) =>
+      assert.equal(value, OPEN_PROGRAM_IDS.includes(programId), programId)
+    );
   });
 
   // --------------------------------------------------------- booking dates

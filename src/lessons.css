@@ -1,0 +1,1471 @@
+/* Online Private Chess Lessons page (client mockup) and the Lessons menu.
+   Everything here is scoped to .ol-* and .ac-nav-dropdown, so other pages keep
+   their fonts and design. Motion reuses the shared tokens and keyframes. */
+
+.ol-page {
+  --ol-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --ol-green: #14382f;
+  --ol-green-deep: #0e2a23;
+  --ol-gold: #e2ac3f;
+  --ol-gold-deep: #b9822a;
+  --ol-gold-text: #8a5c14;
+  --ol-cream: #fbf8f1;
+  --ol-panel: #f5f0e4;
+  --ol-card: #fffdf8;
+  --ol-ink: #17221e;
+  --ol-ink-soft: #4f5c55;
+  --ol-line: rgba(23, 34, 30, 0.12);
+  background: var(--ol-cream);
+  color: var(--ol-ink);
+  padding-bottom: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ol-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.ol-section {
+  padding: 28px 0;
+}
+
+.ol-title {
+  margin: 0 0 12px;
+  font-family: var(--ol-serif);
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ol-green);
+}
+
+.ol-text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ol-ink-soft);
+}
+
+.ol-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ol-gold-text);
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.ol-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 34px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--ct-dur-fast) var(--ct-ease),
+    border-color var(--ct-dur-fast) var(--ct-ease),
+    color var(--ct-dur-fast) var(--ct-ease),
+    box-shadow var(--ct-dur-base) var(--ct-ease),
+    transform var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ol-btn:focus-visible {
+  outline: 3px solid var(--ol-gold);
+  outline-offset: 3px;
+}
+
+.ol-btn-gold {
+  background: var(--ol-gold);
+  color: var(--ol-green-deep);
+  box-shadow: 0 8px 20px rgba(185, 130, 42, 0.28);
+}
+
+.ol-btn-gold:hover {
+  background: #eab955;
+  transform: translateY(-1px);
+}
+
+.ol-btn-outline {
+  background: transparent;
+  border-color: var(--ol-green);
+  color: var(--ol-green);
+}
+
+.ol-btn-outline:hover {
+  background: var(--ol-green);
+  color: #fff;
+}
+
+.ol-btn-small {
+  min-height: 44px;
+  padding: 0 26px;
+  font-size: 0.95rem;
+}
+
+.ol-btn-block {
+  width: 100%;
+}
+
+.ol-btn:disabled {
+  opacity: 0.7;
+  cursor: progress;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------- hero */
+
+.ol-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: min(1240px, calc(100% - 24px));
+  margin: 12px auto 0;
+  border-radius: 22px;
+  background: var(--ol-green-deep);
+  color: #fff;
+}
+
+.ol-hero-photo {
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: -2;
+  width: 64%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 30%;
+}
+
+/* Green gradient under the text on the left, fading into the photo. */
+.ol-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, var(--ol-green-deep) 0%, var(--ol-green-deep) 36%, rgba(14, 42, 35, 0.86) 48%, rgba(14, 42, 35, 0.3) 70%, rgba(14, 42, 35, 0.12) 100%);
+}
+
+.ol-hero-inner {
+  max-width: 660px;
+  padding: 26px 48px 30px;
+}
+
+.ol-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 26px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.ol-breadcrumb li + li::before {
+  content: "/";
+  margin-right: 6px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ol-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ol-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.ol-hero h1 {
+  margin: 0;
+  font-family: var(--ol-serif);
+  font-size: clamp(2.4rem, 1.6rem + 3vw, 3.9rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.ol-hero-accent {
+  margin: 12px 0 18px;
+  font-family: var(--ol-serif);
+  font-size: clamp(1.5rem, 1.15rem + 1.3vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ol-gold);
+}
+
+.ol-hero-intro {
+  margin: 0 0 26px;
+  max-width: 34em;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ol-hero-features {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0;
+  margin: 30px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-hero-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 18px;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ol-hero-features li:first-child {
+  padding-left: 0;
+}
+
+.ol-hero-features li + li {
+  border-left: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.ol-hero-features svg {
+  flex-shrink: 0;
+  color: var(--ol-gold);
+}
+
+.ol-hero-features span {
+  max-width: 9.5em;
+}
+
+/* ---------------------------------------------------------------- fun */
+
+.ol-fun {
+  padding-top: 40px;
+}
+
+.ol-fun-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+}
+
+.ol-fun-icons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.ol-fun-icons li {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ol-green);
+}
+
+.ol-round-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+}
+
+.ol-tone-gold { background: #fbe7c4; color: #d99a22; }
+.ol-tone-green { background: #e3ece6; color: var(--ol-green); }
+.ol-tone-blue { background: #e1ebf7; color: #3b7fd0; }
+.ol-tone-rose { background: #f9e1dc; color: #d4572f; }
+
+/* ---------------------------------------------------------------- panels */
+
+.ol-panel {
+  padding: 30px;
+  border-radius: 20px;
+  background: var(--ol-panel);
+}
+
+.ol-special-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.ol-special-card {
+  padding: 26px 20px 24px;
+  border-radius: 16px;
+  background: var(--ol-card);
+  box-shadow: 0 1px 2px rgba(17, 29, 25, 0.05), 0 10px 26px rgba(17, 29, 25, 0.06);
+  text-align: center;
+  transition:
+    transform var(--ct-dur-base) var(--ct-ease),
+    box-shadow var(--ct-dur-base) var(--ct-ease);
+}
+
+.ol-special-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgba(17, 29, 25, 0.08), 0 18px 36px rgba(17, 29, 25, 0.1);
+}
+
+.ol-special-icon {
+  display: inline-flex;
+  color: #d9871f;
+}
+
+.ol-special-card:nth-child(4) .ol-special-icon {
+  color: var(--ol-green);
+}
+
+.ol-special-card h3 {
+  margin: 14px 0 8px;
+  font-size: 1.1rem;
+  color: var(--ol-green);
+}
+
+.ol-special-card p {
+  margin: 0;
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--ol-ink-soft);
+}
+
+.ol-audience {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.6fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.ol-audience .ol-title {
+  font-size: clamp(1.6rem, 1.25rem + 1vw, 2.05rem);
+}
+
+.ol-audience-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-audience-list li {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 4px 14px;
+  text-align: center;
+  color: var(--ol-green);
+}
+
+.ol-audience-list li + li {
+  border-left: 1px solid var(--ol-line);
+}
+
+.ol-audience-list p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: var(--ol-ink-soft);
+}
+
+.ol-audience-list strong {
+  display: block;
+  color: var(--ol-green);
+}
+
+/* ---------------------------------------------------------------- pricing */
+
+.ol-pricing {
+  padding-top: 40px;
+  scroll-margin-top: calc(var(--ac-header-height) + 12px);
+}
+
+.ol-pricing-head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 26px;
+}
+
+.ol-pricing-head .ol-title {
+  font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.6rem);
+}
+
+.ol-notice {
+  max-width: 760px;
+  margin: 0 auto 22px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #fff4dc;
+  border: 1px solid #ecd29a;
+  color: var(--ol-ink);
+  text-align: center;
+}
+
+.ol-plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+.ol-plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 28px 26px;
+  border-radius: 16px;
+  border: 1.5px solid #ecd6a6;
+  background: var(--ol-card);
+  text-align: center;
+  transition:
+    transform var(--ct-dur-base) var(--ct-ease),
+    box-shadow var(--ct-dur-base) var(--ct-ease);
+}
+
+.ol-plan:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(17, 29, 25, 0.1);
+}
+
+.ol-plan h3 {
+  margin: 0;
+  font-family: var(--ol-serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--ol-green);
+}
+
+.ol-plan-price {
+  margin: 10px 0 0;
+  font-family: var(--ol-serif);
+  font-size: clamp(2.6rem, 2.1rem + 1.4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ol-green);
+}
+
+.ol-plan-unit {
+  margin: 10px 0 0;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--ol-line);
+  color: var(--ol-ink-soft);
+}
+
+.ol-plan ul {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 24px;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  flex: 1;
+}
+
+.ol-plan li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.4;
+  color: var(--ol-ink-soft);
+}
+
+.ol-plan li svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--ol-gold);
+}
+
+.ol-plan.is-featured {
+  border-color: var(--ol-green);
+  background: var(--ol-green);
+  color: #fff;
+}
+
+.ol-plan.is-featured h3,
+.ol-plan.is-featured .ol-plan-price {
+  color: #fff;
+}
+
+.ol-plan.is-featured .ol-plan-unit,
+.ol-plan.is-featured li {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ol-plan.is-featured .ol-plan-unit {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ol-plan.is-featured li svg path {
+  stroke: var(--ol-green);
+}
+
+.ol-plan-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% -50%;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: var(--ol-gold);
+  color: var(--ol-green-deep);
+  font-size: 0.85rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Checkout form, shown after a package is chosen. */
+.ol-checkout {
+  margin: 26px auto 0;
+  max-width: 860px;
+  padding: 28px;
+  border-radius: 18px;
+  border: 1.5px solid #ecd6a6;
+  background: var(--ol-card);
+  scroll-margin-top: calc(var(--ac-header-height) + 12px);
+  animation: ct-rise var(--ct-dur-reveal) var(--ct-ease) both;
+}
+
+.ol-checkout-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--ol-serif);
+  font-size: 1.6rem;
+  color: var(--ol-green);
+}
+
+.ol-checkout-head p {
+  margin: 0 0 18px;
+  color: var(--ol-ink-soft);
+}
+
+.ol-package-choice {
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+}
+
+.ol-package-choice legend {
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.ol-package-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ol-package-options label {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--ol-line);
+  cursor: pointer;
+}
+
+.ol-package-options label.is-selected {
+  border-color: var(--ol-green);
+  background: #eef3ef;
+}
+
+.ol-package-options input {
+  position: absolute;
+  opacity: 0;
+}
+
+.ol-package-options label:has(input:focus-visible) {
+  outline: 3px solid var(--ol-gold);
+  outline-offset: 2px;
+}
+
+.ol-package-name {
+  font-weight: 700;
+  color: var(--ol-green);
+}
+
+.ol-package-price {
+  font-family: var(--ol-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.ol-checkout-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+
+.ol-checkout-wide {
+  grid-column: 1 / -1;
+}
+
+.ol-checkout .field input,
+.ol-checkout .field select,
+.ol-checkout .field textarea {
+  width: 100%;
+}
+
+.ol-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 18px 0 4px;
+  line-height: 1.45;
+}
+
+.ol-consent input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--ol-green);
+}
+
+.ol-consent a {
+  color: var(--ol-green);
+}
+
+.ol-checkout .ol-btn-block {
+  margin-top: 16px;
+}
+
+.ol-checkout-status {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  color: var(--ol-ink-soft);
+}
+
+.ol-checkout-status.status-error {
+  color: #a3261c;
+}
+
+/* Policy and financial aid */
+.ol-terms {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  margin-top: 26px;
+  padding: 28px 30px;
+  border-radius: 18px;
+  background: var(--ol-panel);
+}
+
+.ol-policy,
+.ol-aid {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.ol-aid {
+  padding-left: 30px;
+  border-left: 1px solid var(--ol-line);
+}
+
+.ol-policy {
+  padding-right: 30px;
+}
+
+.ol-policy > svg,
+.ol-aid > svg {
+  flex-shrink: 0;
+  color: var(--ol-gold-deep);
+}
+
+.ol-terms h3 {
+  margin: 0 0 12px;
+  font-family: var(--ol-serif);
+  font-size: 1.35rem;
+  color: var(--ol-green);
+}
+
+.ol-policy ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-policy li {
+  display: flex;
+  gap: 10px;
+  line-height: 1.45;
+  color: var(--ol-ink-soft);
+}
+
+.ol-policy li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--ol-gold);
+}
+
+.ol-policy-note {
+  margin: 14px 0 0;
+  font-style: italic;
+  color: var(--ol-ink-soft);
+}
+
+.ol-aid p {
+  margin: 0 0 18px;
+  line-height: 1.55;
+  color: var(--ol-ink-soft);
+}
+
+/* ---------------------------------------------------------------- coaches */
+
+.ol-coaches-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.ol-coaches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.ol-coach {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--ol-card);
+  box-shadow: 0 1px 2px rgba(17, 29, 25, 0.05), 0 10px 26px rgba(17, 29, 25, 0.06);
+}
+
+.ol-coach img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3.4;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.ol-coach h3 {
+  margin: 4px 0 8px;
+  font-family: var(--ol-serif);
+  font-size: 1.35rem;
+  color: var(--ol-green);
+}
+
+.ol-coach-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #fbe7c4;
+  color: var(--ol-gold-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.ol-coach p {
+  margin: 12px 0 14px;
+  line-height: 1.55;
+  color: var(--ol-ink-soft);
+}
+
+.ol-coach-link {
+  font-weight: 700;
+  color: var(--ol-gold-text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------------------------------------------------------------- final banner */
+
+.ol-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-top: 36px;
+  padding: 64px 24px 70px;
+  text-align: center;
+  color: #fff;
+}
+
+.ol-cta-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ol-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(14, 42, 35, 0.82), rgba(14, 42, 35, 0.9));
+}
+
+.ol-cta-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.ol-cta h2 {
+  margin: 0 0 14px;
+  font-family: var(--ol-serif);
+  font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.6rem);
+  font-weight: 700;
+}
+
+.ol-cta p {
+  margin: 0 0 26px;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* ---------------------------------------------------------------- thank you / coming soon */
+
+.ol-thanks {
+  padding: 56px 0 72px;
+}
+
+.ol-thanks-card {
+  max-width: 720px;
+  padding: 40px;
+  border-radius: 20px;
+  background: var(--ol-card);
+  box-shadow: 0 1px 2px rgba(17, 29, 25, 0.05), 0 14px 32px rgba(17, 29, 25, 0.08);
+  text-align: center;
+}
+
+.ol-thanks-card .ol-round-icon {
+  margin-bottom: 16px;
+}
+
+.ol-order {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--ol-panel);
+  text-align: left;
+}
+
+.ol-order div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ol-order dt {
+  color: var(--ol-ink-soft);
+}
+
+.ol-order dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.ol-thanks-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.ol-soon {
+  max-width: 760px;
+}
+
+.ol-soon .ol-breadcrumb ol {
+  color: var(--ac-ink-soft);
+}
+
+.ol-soon .ol-breadcrumb li + li::before {
+  color: var(--ac-ink-soft);
+}
+
+.ol-soon h1 {
+  margin: 16px 0 12px;
+}
+
+.contact-topic {
+  margin: 0 0 6px;
+}
+
+/* ---------------------------------------------------------------- team, profiles, checkout page */
+
+.ol-team,
+.ol-profile,
+.ol-checkout-page {
+  padding: 36px 0 64px;
+}
+
+.ol-team .ol-breadcrumb ol,
+.ol-profile .ol-breadcrumb ol,
+.ol-checkout-page .ol-breadcrumb ol {
+  margin-bottom: 18px;
+  color: var(--ol-ink-soft);
+}
+
+.ol-team .ol-breadcrumb li + li::before,
+.ol-profile .ol-breadcrumb li + li::before,
+.ol-checkout-page .ol-breadcrumb li + li::before {
+  color: var(--ol-ink-soft);
+}
+
+.ol-team .ol-breadcrumb a,
+.ol-profile .ol-breadcrumb a,
+.ol-checkout-page .ol-breadcrumb a {
+  color: var(--ol-green);
+}
+
+.ol-team-head {
+  margin-bottom: 24px;
+}
+
+.ol-team .ol-title,
+.ol-profile .ol-title,
+.ol-checkout-page h1.ol-title {
+  font-size: clamp(2.1rem, 1.5rem + 2vw, 3rem);
+}
+
+.ol-team .ol-coach h2 {
+  margin: 4px 0 8px;
+  font-family: var(--ol-serif);
+  font-size: 1.45rem;
+  color: var(--ol-green);
+}
+
+.ol-profile-card {
+  display: grid;
+  grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--ol-card);
+  box-shadow: 0 1px 2px rgba(17, 29, 25, 0.05), 0 14px 32px rgba(17, 29, 25, 0.08);
+}
+
+.ol-profile-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.ol-profile-copy .ol-title {
+  margin-bottom: 10px;
+}
+
+.ol-profile-copy .ol-text {
+  margin-top: 18px;
+  max-width: 36em;
+}
+
+.ol-profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 26px;
+  margin-top: 28px;
+}
+
+.ol-back-link {
+  font-weight: 700;
+  color: var(--ol-green);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ol-checkout-page .ol-checkout {
+  margin-top: 8px;
+}
+
+.ol-checkout-page h1.ol-title,
+.ol-checkout-page .ol-breadcrumb {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ol-checkout-policy {
+  max-width: 860px;
+  margin: 22px auto 0;
+  padding: 22px 26px;
+  border-radius: 16px;
+  background: var(--ol-panel);
+}
+
+.ol-checkout-policy h2 {
+  margin: 0 0 10px;
+  font-family: var(--ol-serif);
+  font-size: 1.25rem;
+  color: var(--ol-green);
+}
+
+.ol-checkout-policy ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-checkout-policy li {
+  display: flex;
+  gap: 10px;
+  line-height: 1.45;
+  color: var(--ol-ink-soft);
+}
+
+.ol-checkout-policy li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--ol-gold);
+}
+
+@media (max-width: 780px) {
+  .ol-profile-card {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 16px;
+  }
+}
+
+/* ---------------------------------------------------------------- Lessons menu */
+
+.ac-nav-dropdown {
+  position: relative;
+}
+
+.ac-nav-trigger {
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.ac-nav-chevron {
+  transition: transform var(--ct-dur-fast) var(--ct-ease);
+}
+
+.ac-nav-dropdown.is-open .ac-nav-chevron {
+  transform: rotate(180deg);
+}
+
+.ac-nav-submenu {
+  display: none;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+}
+
+.ac-nav-dropdown.is-open .ac-nav-submenu {
+  display: block;
+}
+
+.ac-nav-sublink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ac-nav-sublink svg {
+  flex-shrink: 0;
+  color: var(--ac-gold, #c49549);
+}
+
+@media (min-width: 1180px) {
+  .ac-nav-submenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    z-index: 50;
+    min-width: 240px;
+    translate: -50% 0;
+    border-radius: 14px;
+    background: var(--ac-green-950, #10221e);
+    box-shadow: 0 18px 40px rgba(16, 34, 30, 0.28);
+  }
+
+  .ac-nav-dropdown.is-open .ac-nav-submenu {
+    animation: ct-rise var(--ct-dur-base) var(--ct-ease) both;
+  }
+
+  /* An invisible bridge over the gap, so the menu stays open while the
+     pointer moves from "Lessons" down to the items. */
+  .ac-nav-submenu::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 10px;
+  }
+}
+
+/* With a mouse, hovering "Lessons" opens the menu; click and keyboard still work. */
+@media (min-width: 1180px) and (hover: hover) {
+  .ac-nav-dropdown:hover .ac-nav-submenu {
+    display: block;
+    animation: ct-rise var(--ct-dur-base) var(--ct-ease) both;
+  }
+
+  .ac-nav-dropdown:hover .ac-nav-chevron {
+    transform: rotate(180deg);
+  }
+
+  .ac-nav-sublink {
+    color: #f3efe6;
+  }
+
+  .ac-nav-sublink:hover,
+  .ac-nav-sublink.is-active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+
+  .ac-nav-sublink svg {
+    color: var(--ac-gold-light, #dcb978);
+  }
+}
+
+@media (max-width: 1179px) {
+  .ac-nav-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ac-nav-submenu {
+    padding: 0 0 10px 4px;
+  }
+
+  .ac-nav-sublink {
+    min-height: 48px;
+    padding: 0 4px;
+    font-size: 1.05rem;
+    color: var(--ac-ink, #17221e);
+  }
+
+  .ac-nav-sublink.is-active {
+    color: var(--ac-green-900, #173530);
+    font-weight: 700;
+  }
+}
+
+/* ---------------------------------------------------------------- responsive */
+
+@media (max-width: 1023px) {
+  .ol-fun-grid,
+  .ol-audience {
+    grid-template-columns: 1fr;
+  }
+
+  .ol-special-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ol-plans {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+    margin: 0 auto;
+    gap: 30px;
+  }
+
+  .ol-terms {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .ol-policy {
+    padding-right: 0;
+  }
+
+  .ol-aid {
+    padding: 24px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--ol-line);
+  }
+
+  .ol-coaches {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 780px) {
+  .ol-hero {
+    width: calc(100% - 16px);
+    margin-top: 8px;
+    border-radius: 18px;
+  }
+
+  /* On phones the photo sits on top and the text below it, on solid green. */
+  .ol-hero-photo {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-position: 62% 30%;
+  }
+
+  /* The fade covers only the photo (16:10 of the hero's width). */
+  .ol-hero::before {
+    bottom: auto;
+    height: calc((100vw - 16px) * 0.625);
+    background: linear-gradient(180deg, transparent 50%, var(--ol-green-deep) 100%);
+  }
+
+  .ol-hero-inner {
+    max-width: none;
+    margin-top: -36px;
+    padding: 0 20px 26px;
+  }
+
+  .ol-breadcrumb ol {
+    margin-bottom: 14px;
+  }
+
+  .ol-hero-features {
+    display: grid;
+    gap: 12px;
+  }
+
+  .ol-hero-features li,
+  .ol-hero-features li:first-child {
+    padding: 0;
+  }
+
+  .ol-hero-features li + li {
+    border-left: 0;
+  }
+
+  .ol-hero-features span {
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .ol-shell {
+    width: calc(100% - 32px);
+  }
+
+  .ol-panel,
+  .ol-terms {
+    padding: 22px 18px;
+  }
+
+  .ol-fun-icons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .ol-special-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ol-audience-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 0;
+  }
+
+  .ol-audience-list li + li {
+    border-left: 0;
+  }
+
+  .ol-audience-list li:nth-child(even) {
+    border-left: 1px solid var(--ol-line);
+  }
+
+  .ol-policy,
+  .ol-aid {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ol-coaches-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ol-coach {
+    grid-template-columns: 1fr;
+  }
+
+  .ol-coach img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .ol-package-options,
+  .ol-checkout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ol-checkout,
+  .ol-thanks-card {
+    padding: 22px 18px;
+  }
+
+  .ol-cta {
+    padding: 52px 16px 56px;
+  }
+}
+
+/* Hero entrance, same timing as the other page heroes. */
+@media (prefers-reduced-motion: no-preference) {
+  .ol-hero-inner > * {
+    animation: ct-rise var(--ct-dur-enter) var(--ct-ease) both;
+  }
+
+  .ol-hero-inner > :nth-child(2) { animation-delay: calc(var(--ct-stagger) * 1); }
+  .ol-hero-inner > :nth-child(3) { animation-delay: calc(var(--ct-stagger) * 2); }
+  .ol-hero-inner > :nth-child(4) { animation-delay: calc(var(--ct-stagger) * 3); }
+  .ol-hero-inner > :nth-child(5) { animation-delay: calc(var(--ct-stagger) * 4); }
+  .ol-hero-inner > :nth-child(6) { animation-delay: calc(var(--ct-stagger) * 5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ol-checkout,
+  .ac-nav-dropdown.is-open .ac-nav-submenu,
+  .ac-nav-dropdown:hover .ac-nav-submenu {
+    animation: none;
+  }
+
+  .ol-btn,
+  .ol-plan,
+  .ol-special-card {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------- legal pages and pre-payment summary */
+
+.legal-updated {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ac-ink-soft, #4f5c55);
+}
+
+.legal-stack > .surface {
+  gap: 12px;
+  scroll-margin-top: calc(var(--ac-header-height, 84px) + 16px);
+}
+
+.legal-stack > .surface p,
+.legal-list {
+  margin: 0;
+}
+
+.legal-list {
+  display: grid;
+  gap: 6px;
+  padding-left: 1.3em;
+  line-height: 1.55;
+}
+
+.ol-before-pay {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--ol-panel);
+}
+
+.ol-before-pay h4 {
+  margin: 0 0 10px;
+  font-family: var(--ol-serif);
+  font-size: 1.15rem;
+  color: var(--ol-green);
+}
+
+.ol-before-pay ul {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-before-pay li {
+  display: flex;
+  gap: 10px;
+  line-height: 1.45;
+  color: var(--ol-ink-soft);
+}
+
+.ol-before-pay li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--ol-gold);
+}
+
+.ol-before-pay p {
+  margin: 0;
+  color: var(--ol-ink-soft);
+}
+
+.ol-before-pay a,
+.ol-privacy-note a {
+  color: var(--ol-green);
+  font-weight: 700;
+}
+
+.ol-privacy-note {
+  margin: 4px 0 0 30px;
+  font-size: 0.92rem;
+  color: var(--ol-ink-soft);
+}
+
+.ol-policy .ol-coach-link {
+  display: inline-block;
+  margin-top: 12px;
+}
+
+.ol-consent a {
+  font-weight: 700;
+}
