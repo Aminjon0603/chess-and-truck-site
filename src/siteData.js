@@ -2885,9 +2885,8 @@ export const coaches = [
     title: "FIDE Master",
     text:
       "25+ years of playing experience and 15+ years of coaching. Passionate about helping children build skills, confidence, and a love for chess.",
-    // TEMPORARY stock photo (Pexels). Replace with Amir's real photo before publishing.
-    photo: "amirPlaceholder",
-    photoAlt: "",
+    photo: "amir",
+    photoAlt: "Coach Amir at a chess board",
     profilePath: "/our-team/amir",
   },
   {

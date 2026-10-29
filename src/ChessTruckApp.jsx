@@ -81,8 +81,9 @@ import andreaPhoto from "./assets/andrea.jpg";
 import onlineHero720 from "./assets/lessons/online-hero-720.webp";
 import onlineHero1200 from "./assets/lessons/online-hero-1200.webp";
 import onlineHero1800 from "./assets/lessons/online-hero-1800.webp";
-import amirPlaceholder400 from "./assets/lessons/coach-amir-placeholder-400.webp";
-import amirPlaceholder640 from "./assets/lessons/coach-amir-placeholder-640.webp";
+import coachAmir400 from "./assets/lessons/coach-amir-400.webp";
+import coachAmir640 from "./assets/lessons/coach-amir-640.webp";
+import coachAmir960 from "./assets/lessons/coach-amir-960.webp";
 import ctaChess900 from "./assets/lessons/cta-chess-900.webp";
 import ctaChess1800 from "./assets/lessons/cta-chess-1800.webp";
 import {
@@ -5445,9 +5446,9 @@ const scrollToElementId = (id) => {
 
 const coachPhotos = {
   andrea: { src: andreaPhoto, srcSet: undefined, width: 647, height: 480 },
-  amirPlaceholder: {
-    src: amirPlaceholder640,
-    srcSet: `${amirPlaceholder400} 400w, ${amirPlaceholder640} 640w`,
+  amir: {
+    src: coachAmir640,
+    srcSet: `${coachAmir400} 400w, ${coachAmir640} 640w, ${coachAmir960} 960w`,
     width: 640,
     height: 480,
   },
