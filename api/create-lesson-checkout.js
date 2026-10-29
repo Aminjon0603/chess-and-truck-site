@@ -6,6 +6,7 @@ import { onlineLessonPackages } from "./_lib/priceCatalog.js";
 import { checkRegistrationGate } from "./_lib/registrationGate.js";
 import { getCheckoutExpiresAt } from "./_lib/checkoutExpiry.js";
 import { LESSON_BOOKING_TYPE, LESSON_PROGRAM_ID } from "./_lib/lessonOrders.js";
+import { TERMS_VERSION } from "../src/lib/legal.js";
 
 const sanitize = (value, limit = 200) => {
   if (typeof value !== "string") {
@@ -88,7 +89,7 @@ export default {
       studentAge: sanitize(String(payload.studentAge ?? ""), 3),
       studentLevel: sanitize(payload.studentLevel, 40),
       notes: sanitize(payload.notes, 480),
-      acceptPolicy: payload.acceptPolicy === true,
+      acceptTerms: payload.acceptTerms === true,
       website: sanitize(payload.website, 120),
     };
 
@@ -146,6 +147,9 @@ export default {
       student_age: data.studentAge,
       student_level: data.studentLevel,
       notes: data.notes,
+      // Which Terms of Service the buyer agreed to, and when (server time).
+      terms_version: TERMS_VERSION,
+      terms_accepted_at: new Date().toISOString(),
     };
 
     Object.entries(metadata).forEach(([key, value]) => {

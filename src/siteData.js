@@ -1,3 +1,5 @@
+import { PRIVACY_UPDATED, TERMS_UPDATED } from "./lib/legal.js";
+
 export const siteBrand = {
   name: "Chess & Truck",
   short: "CT",
@@ -2487,38 +2489,127 @@ export const contactEmails = [
 export const termsPage = {
   eyebrow: "Terms of Service",
   title: "Terms of Service",
+  updated: TERMS_UPDATED,
   intro:
-    "These terms explain how CHESS AND TRUCK handles inquiries, payments, cancellations, and participation in its programs.",
+    "These terms explain how online private chess lessons from Chess & Truck work: what you buy, how lessons are scheduled, and how rescheduling, cancellations, and refunds work.",
   sections: [
     {
-      title: "Inquiry accuracy",
-      body:
-        "Families are responsible for submitting accurate student, parent, contact, and any relevant medical information when making an inquiry or registering for a program.",
+      id: "about",
+      title: "About these terms",
+      body: [
+        "Chess & Truck is the brand of CHESS AND TRUCK, a chess program for kids based in New York City. In these terms, \"we\" and \"us\" mean CHESS AND TRUCK.",
+        "These terms apply to the chessandtruck.com website and to online private lesson purchases made through it. By checking \"I agree to the Terms of Service\" at checkout, you accept the version of these terms shown on this page at that time.",
+      ],
     },
     {
-      title: "Payment and confirmation",
-      body:
-        "Any payment handled through the website is completed through Stripe. A program booking or payment is treated as confirmed only after Stripe confirms it successfully.",
+      id: "who-can-buy",
+      title: "Who can buy",
+      body: [
+        "If the lessons are for a child, a parent or legal guardian must make the purchase and arrange the lessons with us. Please make sure the details you give us about yourself and the student are accurate.",
+      ],
     },
     {
-      title: "Program fit",
-      body:
-        "Families should choose the most appropriate program format before paying. CHESS AND TRUCK may contact a family if a selected option appears inconsistent with the student's level, age, or program fit.",
+      id: "lessons",
+      title: "Online private lessons and packages",
+      body: [
+        "Online private lessons are one-on-one sessions with a Chess & Truck coach, held online. Each lesson lasts 60 minutes. You can buy:",
+      ],
+      items: [
+        "1 lesson: $150",
+        "5-Lesson Package: $675 ($135 per lesson)",
+        "10-Lesson Package: $1,200 ($120 per lesson)",
+      ],
+      after: [
+        "Prices are in U.S. dollars. Each purchase is a one-time payment. There is no subscription, no automatic renewal, and no recurring charge.",
+      ],
     },
     {
-      title: "Cancellations and changes",
-      body:
-        "Requests to cancel or change a booking should be sent as early as possible. Approved changes depend on timing, program capacity, and operational feasibility.",
+      id: "payment",
+      title: "Payment",
+      body: [
+        "Every purchase is paid in full upfront, by card, on a secure checkout page run by Stripe, our payment processor. Your purchase is confirmed only after Stripe confirms the payment. We then email you a confirmation with your package and order number. We never see or store your full card number.",
+      ],
     },
     {
-      title: "Program conduct",
-      body:
-        "Students, parents, and guests are expected to follow staff instructions, respect the learning environment, and support a safe, focused program experience.",
+      id: "scheduling",
+      title: "Scheduling your lessons",
+      body: [
+        "After your payment is confirmed, our team contacts you by email to arrange lesson times with you. Times are agreed by email; there is no online booking calendar at this time.",
+      ],
     },
     {
+      id: "rescheduling",
+      title: "Rescheduling, cancellations, and missed lessons",
+      items: [
+        "If you tell us at least 24 hours before a scheduled lesson starts, you can reschedule it at no cost.",
+        "If you cancel or reschedule with less than 24 hours' notice, or the student misses the lesson without telling us, that lesson counts as used.",
+        "We never charge anything extra for a late cancellation or a missed lesson. It simply counts as one of the lessons you bought.",
+      ],
+      after: ["Please send rescheduling and cancellation requests to info@chessandtruck.com."],
+    },
+    {
+      id: "our-cancellations",
+      title: "If we cancel a lesson",
+      body: [
+        "If we need to cancel a scheduled lesson, we will offer you a new time or a refund for that lesson at your package's per-lesson price. A lesson we cancel never counts as used.",
+      ],
+    },
+    {
+      id: "refunds",
+      title: "Refunds",
+      body: [
+        "You can ask for a refund for any unused lessons. The refund for each unused lesson is your package's per-lesson price:",
+      ],
+      items: [
+        "1 lesson: $150",
+        "5-Lesson Package: $135 per lesson",
+        "10-Lesson Package: $120 per lesson",
+      ],
+      after: [
+        "Lessons that have already taken place, and lessons that count as used under the 24-hour rule above, are not refunded. We do not recalculate used lessons at the single-lesson price, and we do not charge a refund fee.",
+        "Example: you paid $675 for the 5-Lesson Package and used 2 lessons. Your refund for the 3 unused lessons is 3 × $135 = $405.",
+        "To ask for a refund, email info@chessandtruck.com. Our team reviews each request and issues approved refunds through Stripe to the card you paid with. How long it takes to appear depends on your bank or card issuer.",
+      ],
+    },
+    {
+      id: "no-expiration",
+      title: "Lessons don't expire",
+      body: ["Paid lessons you haven't used do not expire."],
+    },
+    {
+      id: "financial-aid",
+      title: "Financial aid and discounts",
+      body: [
+        "Financial aid and discounts are available for families who need support. They are arranged individually: ask us through the Contact page before you buy. No discount is applied automatically.",
+      ],
+    },
+    {
+      id: "other-programs",
+      title: "Other programs",
+      body: [
+        "These lesson rules apply to online private lessons only. Camps, tournaments, after-school programs, and in-person and group lessons are not open yet. Their terms will be posted before their registration opens.",
+      ],
+    },
+    {
+      id: "conduct",
+      title: "Lesson conduct",
+      body: [
+        "Students and families are expected to treat coaches and other participants with respect and to follow the coach's instructions during lessons, so every lesson stays safe, focused, and fun.",
+      ],
+    },
+    {
+      id: "changes",
+      title: "Changes to these terms",
+      body: [
+        "We may update these terms. The date at the top shows the latest version. The version you agreed to when you bought your lessons applies to that purchase.",
+      ],
+    },
+    {
+      id: "contact",
       title: "Contact",
-      body:
-        "Questions about program fit, payment, or terms may be sent through the Contact page before payment is made.",
+      body: [
+        "Questions, rescheduling, cancellations, and refund requests: info@chessandtruck.com.",
+      ],
     },
   ],
 };
@@ -2526,38 +2617,124 @@ export const termsPage = {
 export const privacyPage = {
   eyebrow: "Privacy Policy",
   title: "Privacy Policy",
+  updated: PRIVACY_UPDATED,
   intro:
-    "CHESS AND TRUCK collects only the information needed to run its programs, communicate with families, and process secure payments.",
+    "This policy explains what information Chess & Truck collects, why we need it, who can see it, and how you can ask us to correct or delete it.",
   sections: [
     {
-      title: "Information collected",
-      body:
-        "The site may collect contact details, student information, parent and emergency contact information, and medical notes that are relevant to safety and communication.",
+      id: "who-we-are",
+      title: "Who we are",
+      body: [
+        "Chess & Truck is the brand of CHESS AND TRUCK, a chess program for kids based in New York City. You can reach us at info@chessandtruck.com.",
+      ],
     },
     {
-      title: "How information is used",
-      body:
-        "Registration and inquiry information is used for program operations, support, eligibility review, emergency readiness, and family communication. Contact form submissions are used to respond to questions and support needs.",
+      id: "information-you-give",
+      title: "Information you give us",
+      body: ["We only ask for what we need. Depending on what you do on the site, that is:"],
+      items: [
+        "Buying online lessons: your name, your email address, your phone number (optional), the student's name, the student's age, the student's chess level, any notes you choose to add for the coach, the package you chose, and the version of the Terms of Service you agreed to and when.",
+        "Paying: you enter your card details on Stripe's checkout page, not on our site. Stripe tells us whether the payment succeeded, the amount, and the contact details entered at checkout.",
+        "Using the contact form: your name, your email address, your phone number (optional), your message, and the topic if you picked one (for example, Financial Aid & Discounts).",
+        "Asking to hear when a program opens (where we offer this): your email address, the program, and when you asked and confirmed.",
+        "Emailing or calling us: whatever you choose to tell us.",
+      ],
+      after: [
+        "We don't ask for a home address, a full date of birth, or the student's school. Please don't put sensitive information, such as health details, in the notes for the coach.",
+      ],
     },
     {
-      title: "Program interest emails",
-      body:
-        "If you ask to hear when a program opens, we store your email address, the program, and when you consented and confirmed. We use it only to confirm your request and to email you when registration for that program opens. You can unsubscribe at any time with the link in our emails. Unconfirmed requests are deleted after 30 days, and we do not collect any information about children for this list.",
+      id: "children",
+      title: "Information about children",
+      body: [
+        "Our lessons are for kids, so when a parent or guardian buys lessons, we ask that adult for the student's name, age, chess level, and optional notes. We use this only to arrange and teach the lessons and to choose the right level. Purchases and sign-ups should be made by a parent or guardian, not by a child. If you think a child sent us information directly, email us and we will delete it.",
+      ],
     },
     {
-      title: "Payments",
-      body:
-        "Payments are processed securely through Stripe. CHESS AND TRUCK does not store full card information on the website.",
+      id: "how-we-use",
+      title: "How we use information",
+      items: [
+        "To process your payment and confirm your purchase.",
+        "To contact you by email to arrange lesson times, and to run the lessons.",
+        "To handle rescheduling, cancellations, and refund requests.",
+        "To answer your questions.",
+        "To email you when a program you asked about opens, if you asked us to.",
+        "To keep business, accounting, and tax records of purchases.",
+        "To protect the site from abuse, for example by limiting repeated form submissions.",
+      ],
+      after: ["We don't sell your information, and we don't use it for advertising."],
     },
     {
-      title: "Limited sharing",
-      body:
-        "Information is shared only with service providers that help operate the registration and communication workflow, such as payment and email delivery services, and only for operational purposes.",
+      id: "emails",
+      title: "Emails we send",
+      body: [
+        "After a purchase, we email the buyer a confirmation with the package and order number, and our team gets an email with the purchase details so we can arrange the lessons. We then email you about scheduling. These are service emails about your purchase.",
+        "We don't run a marketing newsletter, and buying lessons does not sign you up for one. If you ask to hear when a program opens, we send one email to confirm your request and one email when registration for that program opens. Each of those emails has an unsubscribe link. When you unsubscribe, we keep a record of it so we don't email you again.",
+      ],
     },
     {
-      title: "Retention and review",
-      body:
-        "Registration and contact records may be retained for program operations, support follow-up, and administration. Families can contact the team if they need help reviewing or correcting submitted information.",
+      id: "who-can-see",
+      title: "Who can see your information",
+      body: [
+        "The Chess & Truck team and the coach who teaches your lessons can see the details you gave us. We also use these service providers, which handle information only to provide their service to us:",
+      ],
+      items: [
+        "Stripe processes payments. It receives your card details directly and stores your payment, together with the purchase details we send it (your name, email, optional phone, and the student's name, age, level, and notes). Stripe's own privacy policy applies to the information it collects.",
+        "Supabase hosts our database. For lesson purchases, it stores the order number, the Stripe payment reference, the package, the amount, and when the order and its emails were processed. It doesn't store names or contact details for orders. It also stores the list of people who asked to hear when a program opens.",
+        "Resend sends our emails, so it handles the email addresses and the contents of the emails we send.",
+        "Vercel hosts our website and the server code behind our forms. Like any web host, it processes technical information such as your IP address and browser type when you visit.",
+        "Google Fonts provides some of the fonts on our pages, so your browser contacts Google's servers, which receive your IP address.",
+      ],
+      after: [
+        "Emails we send and receive are also kept in our business email account. We may share information if the law requires it.",
+      ],
+    },
+    {
+      id: "cookies",
+      title: "Cookies and analytics",
+      body: [
+        "We don't use analytics tools, advertising cookies, or tracking pixels. Our site doesn't set cookies. Registration forms that are not open yet may save a draft in your browser's own storage, on your device only.",
+        "Stripe's checkout page is run by Stripe and uses its own cookies, for example to process the payment and prevent fraud.",
+      ],
+    },
+    {
+      id: "retention",
+      title: "How long we keep information",
+      body: [
+        "We keep information only as long as we need it for the reason we collected it, and longer only when we need it for accounting, tax, refunds, payment disputes, or legal reasons. For example:",
+      ],
+      items: [
+        "Purchase records are kept as business records while we need them for lessons, refunds, accounting, and tax.",
+        "Contact form messages are kept as long as we need them to answer you and keep a record of our conversation.",
+        "Requests to hear when a program opens that are never confirmed are deleted automatically 30 days after the request. This rule applies only to those requests.",
+        "Records used to limit repeated form submissions are kept in coded form and deleted after about 2 days.",
+        "Stripe keeps payment records under its own policies.",
+      ],
+    },
+    {
+      id: "your-choices",
+      title: "Correcting or deleting your information",
+      body: [
+        "To see, correct, or delete your information, email info@chessandtruck.com from the email address you used with us, so we can confirm the request is yours. We will correct or delete what we can. We may need to keep some records, such as purchase and payment records, for accounting, tax, refunds, or payment disputes. Copies of emails already sent, and records held by Stripe, may also remain. We will tell you what we kept and why.",
+        "You can unsubscribe from program-opening emails at any time with the link in those emails.",
+      ],
+    },
+    {
+      id: "security",
+      title: "Security",
+      body: [
+        "Our site uses HTTPS. Our database can be reached only by our own server code, and only people who need the information to run lessons can see it. No system is perfectly secure, but we work to protect your information.",
+      ],
+    },
+    {
+      id: "changes",
+      title: "Changes to this policy",
+      body: ["We may update this policy. The date at the top shows the latest version."],
+    },
+    {
+      id: "contact",
+      title: "Contact",
+      body: ["Privacy questions and requests: info@chessandtruck.com."],
     },
   ],
 };
@@ -2643,14 +2820,19 @@ export const onlineLessonsPage = {
       },
     ],
   },
+  // The first three points and the note are the client's text; the last two
+  // match the Terms of Service (refunds and no expiration).
   policy: {
     title: "Booking & Rescheduling Policy",
     points: [
       "All 5- and 10-lesson packages are paid in full upfront.",
       "Please give at least 24 hours' notice if you need to reschedule a lesson.",
       "Lessons canceled or rescheduled with less than 24 hours' notice will count as a completed session.",
+      "Unused lessons never expire.",
+      "You can ask for a refund for unused lessons at your package's per-lesson price.",
     ],
     note: "We value your time and ours, and appreciate your help in keeping lessons running smoothly!",
+    termsLabel: "Read the full Terms of Service",
   },
   aid: {
     title: "Financial Aid & Discounts",
@@ -2676,6 +2858,16 @@ export const onlineLessonsPage = {
     title: "Tell us about your child",
     intro: "After payment, our team will contact you by email to arrange your online lessons.",
     cancelled: "Payment was cancelled. You have not been charged. You can choose a package again whenever you're ready.",
+    // Short version of the Terms of Service, shown right before payment.
+    summaryTitle: "Before you pay",
+    summary: [
+      "You pay for your lessons in full upfront. This is a one-time payment, not a subscription.",
+      "Our team will email you to arrange lesson times.",
+      "Tell us at least 24 hours before a lesson to reschedule it at no cost.",
+      "A lesson canceled with less than 24 hours' notice, or missed, counts as used.",
+      "You can get a refund for unused lessons at your package's per-lesson price ($150, $135, or $120).",
+      "Unused lessons never expire.",
+    ],
   },
   thankYou: {
     title: "Thank you for your purchase!",

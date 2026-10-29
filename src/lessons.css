@@ -1382,3 +1382,90 @@
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------- legal pages and pre-payment summary */
+
+.legal-updated {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ac-ink-soft, #4f5c55);
+}
+
+.legal-stack > .surface {
+  gap: 12px;
+  scroll-margin-top: calc(var(--ac-header-height, 84px) + 16px);
+}
+
+.legal-stack > .surface p,
+.legal-list {
+  margin: 0;
+}
+
+.legal-list {
+  display: grid;
+  gap: 6px;
+  padding-left: 1.3em;
+  line-height: 1.55;
+}
+
+.ol-before-pay {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--ol-panel);
+}
+
+.ol-before-pay h4 {
+  margin: 0 0 10px;
+  font-family: var(--ol-serif);
+  font-size: 1.15rem;
+  color: var(--ol-green);
+}
+
+.ol-before-pay ul {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-before-pay li {
+  display: flex;
+  gap: 10px;
+  line-height: 1.45;
+  color: var(--ol-ink-soft);
+}
+
+.ol-before-pay li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--ol-gold);
+}
+
+.ol-before-pay p {
+  margin: 0;
+  color: var(--ol-ink-soft);
+}
+
+.ol-before-pay a,
+.ol-privacy-note a {
+  color: var(--ol-green);
+  font-weight: 700;
+}
+
+.ol-privacy-note {
+  margin: 4px 0 0 30px;
+  font-size: 0.92rem;
+  color: var(--ol-ink-soft);
+}
+
+.ol-policy .ol-coach-link {
+  display: inline-block;
+  margin-top: 12px;
+}
+
+.ol-consent a {
+  font-weight: 700;
+}

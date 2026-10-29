@@ -6,13 +6,14 @@ import crypto from "node:crypto";
 import { onlineLessonPackages } from "../api/_lib/priceCatalog.js";
 import { programLaunchConfig } from "../api/_lib/launchConfig.js";
 import { checkRegistrationGate } from "../api/_lib/registrationGate.js";
-import { LESSON_THANK_YOU_MESSAGE } from "../api/_lib/lessonOrders.js";
+import { getUnusedLessonRefundCents, LESSON_POLICY_LINES, LESSON_THANK_YOU_MESSAGE } from "../api/_lib/lessonOrders.js";
+import { TERMS_VERSION } from "../src/lib/legal.js";
 import lessonCheckout, { isStripeKeyAllowed } from "../api/create-lesson-checkout.js";
 import campCheckout from "../api/create-camp-checkout-session.js";
 import tournamentCheckout from "../api/create-checkout-session.js";
 import stripeWebhook from "../api/stripe-webhook.js";
 import checkoutStatus from "../api/checkout-status.js";
-import { onlineLessonsPage } from "../src/siteData.js";
+import { onlineLessonsPage, privacyPage, termsPage } from "../src/siteData.js";
 
 const results = [];
 const test = async (name, fn) => {
@@ -102,7 +103,7 @@ const validForm = (packageId = "five") => ({
   studentAge: "9",
   studentLevel: "Beginner",
   notes: "Weekday evenings work best.",
-  acceptPolicy: true,
+  acceptTerms: true,
   website: "",
 });
 
@@ -228,7 +229,8 @@ const run = async () => {
     assert.equal((await checkout({ ...validForm(), packageId: "twenty" })).status, 400);
     assert.equal((await checkout({ ...validForm(), parentEmail: "nope" })).status, 400);
     assert.equal((await checkout({ ...validForm(), studentName: "" })).status, 400);
-    assert.equal((await checkout({ ...validForm(), acceptPolicy: false })).status, 400);
+    assert.equal((await checkout({ ...validForm(), acceptTerms: false })).status, 400);
+    assert.equal((await checkout({ ...validForm(), acceptTerms: "yes" })).status, 400);
     assert.equal((await checkout({ ...validForm(), website: "spam.example" })).status, 400);
     assert.equal((await checkout("not json")).status, 400);
     assert.equal(stripeCreates.length, 0);
@@ -357,6 +359,63 @@ const run = async () => {
     assert.equal(sentEmails.length, 0);
   });
 
+
+  // ------------------------------------------------------------ terms and refunds
+  await test("refunds use the package's per-lesson price (the $405 example in the Terms)", async () => {
+    assert.equal(getUnusedLessonRefundCents("five", 2), 40500);
+    assert.equal(getUnusedLessonRefundCents("single", 0), 15000);
+    assert.equal(getUnusedLessonRefundCents("single", 1), 0);
+    assert.equal(getUnusedLessonRefundCents("ten", 3), 84000);
+    assert.equal(getUnusedLessonRefundCents("five", 6), null);
+    assert.equal(getUnusedLessonRefundCents("unknown", 0), null);
+    const termsText = JSON.stringify(termsPage);
+    assert.ok(termsText.includes("3 × $135 = $405"), "Terms show the $405 example");
+  });
+
+  await test("Terms, checkout summary, and emails state the same lesson rules", async () => {
+    const termsText = JSON.stringify(termsPage);
+    for (const fact of ["$150", "$675", "$1,200", "$135 per lesson", "$120 per lesson", "24 hours", "do not expire", "no automatic renewal", "parent or legal guardian", "CHESS AND TRUCK", "info@chessandtruck.com"]) {
+      assert.ok(termsText.includes(fact), `Terms mention ${fact}`);
+    }
+    assert.doesNotMatch(termsText, /all sales are final|non-refundable|refund fee of|expire after/i);
+
+    const summary = onlineLessonsPage.checkout.summary.join(" ");
+    for (const fact of ["upfront", "24 hours", "counts as used", "per-lesson price", "never expire"]) {
+      assert.ok(summary.includes(fact), `checkout summary mentions ${fact}`);
+    }
+
+    const emailRules = LESSON_POLICY_LINES.join(" ");
+    for (const fact of ["24 hours", "counts as used", "per-lesson price", "never expire", "info@chessandtruck.com"]) {
+      assert.ok(emailRules.includes(fact), `emails mention ${fact}`);
+    }
+
+    const privacyText = JSON.stringify(privacyPage);
+    for (const provider of ["Stripe", "Supabase", "Resend", "Vercel", "Google Fonts"]) {
+      assert.ok(privacyText.includes(provider), `Privacy names ${provider}`);
+    }
+    assert.doesNotMatch(privacyText, /not intended for children|we store (your )?card/i);
+  });
+
+  await test("checkout records the Terms version and time, and both appear in the order emails", async () => {
+    reset();
+    const before = Date.now();
+    await checkout(validForm("five"));
+    const params = stripeCreates[0];
+    assert.equal(params.get("metadata[terms_version]"), TERMS_VERSION);
+    const acceptedAt = Date.parse(params.get("metadata[terms_accepted_at]"));
+    assert.ok(acceptedAt >= before - 1000 && acceptedAt <= Date.now() + 1000);
+
+    const session = paidSession("cs_test_jjj000", "five");
+    session.metadata.terms_version = TERMS_VERSION;
+    session.metadata.terms_accepted_at = "2026-10-28T15:00:00.000Z";
+    await signedWebhook(completedEvent("evt_terms", session));
+    const [team, parent] = sentEmails;
+    assert.match(team.text, new RegExp(`Terms of Service accepted: version ${TERMS_VERSION} at 2026-10-28T15:00:00.000Z`));
+    assert.match(team.text, /Refund value per unused lesson: \$135\.00/);
+    assert.match(parent.text, /Per-lesson price for refunds: \$135\.00/);
+    assert.match(parent.text, /Unused lessons never expire\./);
+    assert.match(parent.text, /https:\/\/www\.chessandtruck\.com\/terms/);
+  });
 
   results.forEach((name) => console.log(`  ok - ${name}`));
   console.log(`${results.length} online lesson checks passed.`);

@@ -172,7 +172,7 @@ export function validateLessonCheckoutFields(state) {
   }
 
   if (!LESSON_LEVELS.includes(state.studentLevel)) errors.studentLevel = "Choose a chess level.";
-  if (state.acceptPolicy !== true) errors.acceptPolicy = "Please confirm you have read the booking policy.";
+  if (state.acceptTerms !== true) errors.acceptTerms = "Please agree to the Terms of Service to continue.";
 
   return errors;
 }

@@ -8,6 +8,7 @@
 import { getSupabaseConfig } from "./supabaseInterestStore.js";
 import { onlineLessonPackages } from "./priceCatalog.js";
 import { getNotificationRecipients, sendResendEmail } from "./resend.js";
+import { SITE_TERMS_URL } from "../../src/lib/legal.js";
 
 export const LESSON_BOOKING_TYPE = "online_lessons";
 export const LESSON_PROGRAM_ID = "onlineLessons";
@@ -15,11 +16,31 @@ export const LESSON_PROGRAM_ID = "onlineLessons";
 export const LESSON_THANK_YOU_MESSAGE =
   "Thank you for your purchase! Our team will contact you by email to arrange your online lessons.";
 
+// Same rules as the Terms of Service and the checkout summary.
 export const LESSON_POLICY_LINES = [
-  "All 5- and 10-lesson packages are paid in full upfront.",
-  "Please give at least 24 hours' notice if you need to reschedule a lesson.",
-  "Lessons canceled or rescheduled with less than 24 hours' notice will count as a completed session.",
+  "Tell us at least 24 hours before a lesson to reschedule it at no cost.",
+  "A lesson canceled with less than 24 hours' notice, or missed, counts as used. There is no extra charge.",
+  "You can get a refund for unused lessons at your package's per-lesson price.",
+  "Unused lessons never expire.",
+  "Send rescheduling, cancellation, and refund requests to info@chessandtruck.com.",
 ];
+
+// Refund for unused lessons: each one is worth the package's per-lesson price
+// (single $150, five $135, ten $120). Used lessons are never repriced.
+export const getPerLessonCents = (packageId) => {
+  const lessonPackage = onlineLessonPackages[packageId];
+  return lessonPackage ? lessonPackage.amount / lessonPackage.lessons : null;
+};
+
+export const getUnusedLessonRefundCents = (packageId, usedLessons) => {
+  const lessonPackage = onlineLessonPackages[packageId];
+
+  if (!lessonPackage || !Number.isInteger(usedLessons) || usedLessons < 0 || usedLessons > lessonPackage.lessons) {
+    return null;
+  }
+
+  return (lessonPackage.lessons - usedLessons) * getPerLessonCents(packageId);
+};
 
 const TABLE = "lesson_orders";
 
@@ -125,6 +146,8 @@ export const describeLessonSession = (session) => {
     studentAge: metadata.student_age || "",
     studentLevel: metadata.student_level || "",
     notes: metadata.notes || "",
+    termsVersion: metadata.terms_version || "",
+    termsAcceptedAt: metadata.terms_accepted_at || "",
   };
 };
 
@@ -142,8 +165,14 @@ export const buildParentEmailText = (order) =>
     order.amountCents !== null ? `Amount paid: ${formatUsd(order.amountCents)}` : null,
     order.studentName ? `Student: ${order.studentName}` : null,
     "",
+    order.lessonPackage
+      ? `Per-lesson price for refunds: ${formatUsd(order.lessonPackage.amount / order.lessonPackage.lessons)}`
+      : null,
+    "",
     "Booking & Rescheduling Policy",
     ...LESSON_POLICY_LINES.map((line) => `- ${line}`),
+    "",
+    `Terms of Service: ${SITE_TERMS_URL}`,
     "",
     "Questions? Reply to this email or write to info@chessandtruck.com.",
     "",
@@ -170,6 +199,11 @@ export const buildTeamEmailText = (order, session) =>
     `Student age: ${order.studentAge || "-"}`,
     `Chess level: ${order.studentLevel || "-"}`,
     `Notes for the coach: ${order.notes || "-"}`,
+    "",
+    order.lessonPackage
+      ? `Refund value per unused lesson: ${formatUsd(order.lessonPackage.amount / order.lessonPackage.lessons)}`
+      : null,
+    `Terms of Service accepted: version ${order.termsVersion || "-"} at ${order.termsAcceptedAt || "-"}`,
     "",
     `Stripe Checkout Session: ${session.id}`,
   ]

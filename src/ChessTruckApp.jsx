@@ -2924,17 +2924,32 @@ function SiteFooter({ currentPath, navigate }) {
   );
 }
 
-function LegalPage({ eyebrow, title, intro, sections, currentPath, navigate }) {
+const asParagraphs = (value) => (Array.isArray(value) ? value : value ? [value] : []);
+
+function LegalPage({ eyebrow, title, intro, updated, sections, currentPath, navigate }) {
   return (
     <>
       <PageHero eyebrow={eyebrow} title={title} intro={intro} currentPath={currentPath} navigate={navigate} />
 
       <section className="page-section">
         <div className="shell legal-stack">
+          {updated ? <p className="legal-updated">Last updated: {updated}</p> : null}
           {sections.map((item) => (
-            <article className="surface" key={item.title}>
+            <article className="surface" key={item.title} id={item.id}>
               <h3>{item.title}</h3>
-              <p>{item.body}</p>
+              {asParagraphs(item.body).map((text) => (
+                <p key={text}>{text}</p>
+              ))}
+              {item.items ? (
+                <ul className="legal-list">
+                  {item.items.map((text) => (
+                    <li key={text}>{text}</li>
+                  ))}
+                </ul>
+              ) : null}
+              {asParagraphs(item.after).map((text) => (
+                <p key={text}>{text}</p>
+              ))}
             </article>
           ))}
         </div>
@@ -5447,7 +5462,7 @@ const lessonCheckoutInitialState = {
   studentAge: "",
   studentLevel: "",
   notes: "",
-  acceptPolicy: false,
+  acceptTerms: false,
   website: "",
 };
 
@@ -5553,13 +5568,46 @@ function LessonCheckoutForm({ plans, state, errors, submitState, onChange, onSub
         </label>
       </div>
 
-      <label className={`ol-consent${errors.acceptPolicy ? " has-error" : ""}`}>
-        <input type="checkbox" name="acceptPolicy" checked={state.acceptPolicy} onChange={onChange} />
+      <section className="ol-before-pay" aria-labelledby="ol-before-pay-title">
+        <h4 id="ol-before-pay-title">{content.summaryTitle}</h4>
+        <ul>
+          {content.summary.map((point) => (
+            <li key={point}>
+              <UiIcon name="check" size={18} filled />
+              {point}
+            </li>
+          ))}
+        </ul>
+        <p>
+          Full details: <a href="/terms" target="_blank" rel="noopener">Terms of Service</a> and{" "}
+          <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
+        </p>
+      </section>
+
+      <label className={`ol-consent${errors.acceptTerms ? " has-error" : ""}`}>
+        <input
+          type="checkbox"
+          name="acceptTerms"
+          checked={state.acceptTerms}
+          onChange={onChange}
+          aria-invalid={errors.acceptTerms ? "true" : "false"}
+        />
         <span>
-          I have read the Booking &amp; Rescheduling Policy and the <a href="/terms">Terms</a>.
+          I agree to the{" "}
+          <a href="/terms" target="_blank" rel="noopener">
+            Terms of Service
+          </a>
+          .
         </span>
       </label>
-      {errors.acceptPolicy ? <small className="field-error">{errors.acceptPolicy}</small> : null}
+      <p className="ol-privacy-note">
+        Read how we handle your information in our{" "}
+        <a href="/privacy" target="_blank" rel="noopener">
+          Privacy Policy
+        </a>
+        .
+      </p>
+      {errors.acceptTerms ? <small className="field-error">{errors.acceptTerms}</small> : null}
 
       <button type="submit" className="ol-btn ol-btn-gold ol-btn-block" disabled={submitState.status === "loading"}>
         {submitState.status === "loading" ? "Opening secure checkout..." : "Continue to secure payment"}
@@ -5690,17 +5738,6 @@ function LessonCheckoutPage({ currentPath, navigate, search }) {
             onChange={updateField}
             onSubmit={submitCheckout}
           />
-          <section className="ol-checkout-policy" aria-labelledby="ol-checkout-policy-title">
-            <h2 id="ol-checkout-policy-title">{onlineLessonsPage.policy.title}</h2>
-            <ul>
-              {onlineLessonsPage.policy.points.map((point) => (
-                <li key={point}>
-                  <UiIcon name="check" size={18} filled />
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </section>
         </div>
       </section>
     </div>
@@ -5872,6 +5909,9 @@ function OnlineLessonsContent({
                   ))}
                 </ul>
                 <p className="ol-policy-note">{policy.note}</p>
+                <AppLink to="/terms" navigate={navigate} currentPath={currentPath} className="ol-coach-link">
+                  {policy.termsLabel}
+                </AppLink>
               </div>
             </section>
             <section className="ol-aid" aria-labelledby="ol-aid-title">
