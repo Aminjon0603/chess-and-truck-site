@@ -2527,7 +2527,14 @@ export const termsPage = {
       id: "payment",
       title: "Payment",
       body: [
-        "Every purchase is paid in full upfront on a secure checkout page run by Stripe, our payment processor. You can use a card or another payment method Stripe offers on that page. Your purchase is confirmed only after Stripe confirms the payment. We then email you a confirmation with your package and order number. We never see or store your full card or bank details.",
+        "Every purchase is paid in full upfront. You can pay in one of two ways:",
+      ],
+      items: [
+        "Online, on a secure checkout page run by Stripe, our payment processor. You can use a card or another payment method Stripe offers on that page. Your purchase is confirmed once Stripe confirms the payment, and we email you a confirmation with your package and order number. We never see or store your full card or bank details.",
+        "With Zelle, to 929-386-7574. After you place your order, we email you the amount and your order number. Send the full amount with your order number in the Zelle memo. A Zelle order is confirmed only after we receive the payment; we then email you.",
+      ],
+      after: [
+        "Promotion codes can be used only on Stripe's checkout page.",
       ],
     },
     {
@@ -2568,7 +2575,7 @@ export const termsPage = {
       after: [
         "Lessons that have already taken place, and lessons that count as used under the 24-hour rule above, are not refunded. We do not recalculate used lessons at the single-lesson price, and we do not charge a refund fee.",
         "Example: you paid $675 for the 5-Lesson Package and used 2 lessons. Your refund for the 3 unused lessons is 3 × $135 = $405.",
-        "To ask for a refund, email info@chessandtruck.com. Our team reviews each request and issues approved refunds through Stripe to the payment method you used. How long it takes to appear depends on your bank or payment provider.",
+        "To ask for a refund, email info@chessandtruck.com. Our team reviews each request and issues approved refunds through Stripe to the payment method you used, or by Zelle if you paid with Zelle. How long it takes to appear depends on your bank or payment provider.",
       ],
     },
     {
@@ -2634,7 +2641,7 @@ export const privacyPage = {
       body: ["We only ask for what we need. Depending on what you do on the site, that is:"],
       items: [
         "Buying online lessons: your name, your email address, your phone number (optional), the student's name, the student's age, the student's chess level, any notes you choose to add for the coach, the package you chose, and the version of the Terms of Service you agreed to and when.",
-        "Paying: you enter your payment details on Stripe's checkout page, not on our site. Stripe tells us whether the payment succeeded, the amount, and the contact details entered at checkout.",
+        "Paying: if you pay online, you enter your payment details on Stripe's checkout page, not on our site. Stripe tells us whether the payment succeeded, the amount, and the contact details entered at checkout. If you pay with Zelle, the payment goes through your bank, and we see the sender's name, the amount, and the memo in our bank account.",
         "Using the contact form: your name, your email address, your phone number (optional), your message, and the topic if you picked one (for example, Financial Aid & Discounts).",
         "Asking to hear when a program opens (where we offer this): your email address, the program, and when you asked and confirmed.",
         "Emailing or calling us: whatever you choose to tell us.",
@@ -2682,6 +2689,7 @@ export const privacyPage = {
         "Stripe processes payments. It receives your payment details directly and stores your payment, together with the purchase details we send it (your name, email, optional phone, and the student's name, age, level, and notes). Stripe's own privacy policy applies to the information it collects.",
         "Supabase hosts our database. For lesson purchases, it stores the order number, the Stripe payment reference, the package, the amount, and when the order and its emails were processed. It doesn't store names or contact details for orders. It also stores the list of people who asked to hear when a program opens.",
         "Resend sends our emails, so it handles the email addresses and the contents of the emails we send.",
+        "Zelle and the banks involved process Zelle payments under their own policies.",
         "Vercel hosts our website and the server code behind our forms. Like any web host, it processes technical information such as your IP address and browser type when you visit.",
         "Google Fonts provides some of the fonts on our pages, so your browser contacts Google's servers, which receive your IP address.",
       ],
@@ -2858,6 +2866,19 @@ export const onlineLessonsPage = {
     title: "Tell us about your child",
     intro: "After payment, our team will contact you by email to arrange your online lessons.",
     cancelled: "Payment was cancelled. You have not been charged. You can choose a package again whenever you're ready.",
+    paymentTitle: "How would you like to pay?",
+    paymentOptions: [
+      { value: "stripe", label: "Pay online", note: "Card, bank, or other options on Stripe's secure checkout." },
+      { value: "zelle", label: "Pay with Zelle", note: "Send the payment from your bank's app. We confirm it by email." },
+    ],
+    zelleTitle: "Almost done: send your payment with Zelle",
+    zelleSteps: [
+      "Open Zelle in your bank's app.",
+      "Send the amount below to the Zelle number below.",
+      "Write your order number in the memo.",
+    ],
+    zelleNote:
+      "Your order is confirmed once we receive your payment. Our team will then contact you by email to arrange your lessons. We also sent these instructions to your email.",
     // Short version of the Terms of Service, shown right before payment.
     summaryTitle: "Before you pay",
     summary: [

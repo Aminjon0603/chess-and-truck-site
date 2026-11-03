@@ -5,7 +5,14 @@ import { validateLessonCheckoutFields } from "../src/lib/validation.js";
 import { onlineLessonPackages } from "./_lib/priceCatalog.js";
 import { checkRegistrationGate } from "./_lib/registrationGate.js";
 import { getCheckoutExpiresAt } from "./_lib/checkoutExpiry.js";
-import { LESSON_BOOKING_TYPE, LESSON_PROGRAM_ID } from "./_lib/lessonOrders.js";
+import {
+  buildZelleParentEmailText,
+  buildZelleTeamEmailText,
+  LESSON_BOOKING_TYPE,
+  LESSON_PROGRAM_ID,
+} from "./_lib/lessonOrders.js";
+import { getNotificationRecipients, sendResendEmail } from "./_lib/resend.js";
+import { ZELLE_PHONE } from "../src/lib/zelle.js";
 import { TERMS_VERSION } from "../src/lib/legal.js";
 
 const sanitize = (value, limit = 200) => {
@@ -42,6 +49,63 @@ export const isStripeKeyAllowed = (key, env = process.env) => {
 
   const isLiveKey = /^(sk|rk)_live_/.test(key);
   return env.VERCEL_ENV === "production" || !isLiveKey;
+};
+
+const formatUsd = (cents) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(cents / 100);
+
+// Zelle: no online payment. The order goes to the team and the family by email,
+// with the Zelle number and the order number to put in the memo.
+const createZelleOrder = async (data, lessonPackage) => {
+  const order = {
+    orderNumber: buildLessonOrderNumber(),
+    lessonPackage,
+    packageLabel: lessonPackage.label,
+    parentName: data.parentName,
+    parentEmail: data.parentEmail,
+    parentPhone: data.parentPhone,
+    studentName: data.studentName,
+    studentAge: data.studentAge,
+    studentLevel: data.studentLevel,
+    notes: data.notes,
+    termsVersion: TERMS_VERSION,
+    termsAcceptedAt: new Date().toISOString(),
+  };
+  const teamRecipients = getNotificationRecipients();
+
+  const team = await sendResendEmail({
+    to: teamRecipients,
+    subject: `[ZELLE - AWAITING PAYMENT] New online lesson order - ${order.packageLabel} (${order.orderNumber})`,
+    text: buildZelleTeamEmailText(order),
+    replyTo: order.parentEmail,
+  }).catch(() => ({ ok: false }));
+
+  // Without the team email nobody would know about the order, so stop here.
+  if (!team?.ok) {
+    return Response.json(
+      { error: "Your order could not be placed right now. Please try again or contact us." },
+      { status: 502 }
+    );
+  }
+
+  await sendResendEmail({
+    to: [order.parentEmail],
+    subject: `Your Chess & Truck online lessons - order ${order.orderNumber} (pay with Zelle)`,
+    text: buildZelleParentEmailText(order),
+    replyTo: teamRecipients[0],
+  }).catch(() => null);
+
+  return Response.json(
+    {
+      zelle: {
+        orderNumber: order.orderNumber,
+        packageLabel: order.packageLabel,
+        amount: formatUsd(lessonPackage.amount),
+        zellePhone: ZELLE_PHONE,
+      },
+    },
+    { status: 200 }
+  );
 };
 
 export const runtime = "nodejs";
@@ -90,6 +154,7 @@ export default {
       studentLevel: sanitize(payload.studentLevel, 40),
       notes: sanitize(payload.notes, 480),
       acceptTerms: payload.acceptTerms === true,
+      paymentMethod: payload.paymentMethod === undefined ? "stripe" : sanitize(payload.paymentMethod, 10),
       website: sanitize(payload.website, 120),
     };
 
@@ -108,6 +173,11 @@ export default {
 
     // The price always comes from the server catalog, never from the request.
     const lessonPackage = onlineLessonPackages[data.packageId];
+
+    if (data.paymentMethod === "zelle") {
+      return createZelleOrder(data, lessonPackage);
+    }
+
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "";
 
     if (!isStripeKeyAllowed(stripeSecretKey)) {

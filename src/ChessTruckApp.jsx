@@ -5464,6 +5464,7 @@ const lessonCheckoutInitialState = {
   studentLevel: "",
   notes: "",
   acceptTerms: false,
+  paymentMethod: "stripe",
   website: "",
 };
 
@@ -5519,6 +5520,25 @@ function LessonCheckoutForm({ plans, state, errors, submitState, onChange, onSub
           ))}
         </div>
         {errors.packageId ? <small className="field-error">{errors.packageId}</small> : null}
+      </fieldset>
+
+      <fieldset className="ol-package-choice ol-payment-choice">
+        <legend>{content.paymentTitle}</legend>
+        <div className="ol-package-options ol-payment-options">
+          {content.paymentOptions.map((option) => (
+            <label key={option.value} className={state.paymentMethod === option.value ? "is-selected" : undefined}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value={option.value}
+                checked={state.paymentMethod === option.value}
+                onChange={onChange}
+              />
+              <span className="ol-package-name">{option.label}</span>
+              <span className="ol-payment-note">{option.note}</span>
+            </label>
+          ))}
+        </div>
       </fieldset>
 
       <div className="ol-checkout-grid">
@@ -5611,10 +5631,20 @@ function LessonCheckoutForm({ plans, state, errors, submitState, onChange, onSub
       {errors.acceptTerms ? <small className="field-error">{errors.acceptTerms}</small> : null}
 
       <button type="submit" className="ol-btn ol-btn-gold ol-btn-block" disabled={submitState.status === "loading"}>
-        {submitState.status === "loading" ? "Opening secure checkout..." : "Continue to secure payment"}
+        {state.paymentMethod === "zelle"
+          ? submitState.status === "loading"
+            ? "Placing your order..."
+            : "Place order and pay with Zelle"
+          : submitState.status === "loading"
+            ? "Opening secure checkout..."
+            : "Continue to secure payment"}
       </button>
       <small className={`ol-checkout-status status-${submitState.status}`} aria-live="polite">
-        {submitState.status === "error" ? submitState.message : "Payment is processed securely by Stripe."}
+        {submitState.status === "error"
+          ? submitState.message
+          : state.paymentMethod === "zelle"
+            ? "Next, we'll show you how to send the payment with Zelle."
+            : "Payment is processed securely by Stripe."}
       </small>
     </form>
   );
@@ -5655,6 +5685,48 @@ function OnlineLessonsPage({ currentPath, navigate, search }) {
   );
 }
 
+function ZelleInstructions({ order, currentPath, navigate }) {
+  const content = onlineLessonsPage.checkout;
+
+  return (
+    <section className="ol-checkout ol-zelle" id="zelle-instructions" aria-labelledby="zelle-title" aria-live="polite">
+      <h2 id="zelle-title" className="ol-checkout-title">{content.zelleTitle}</h2>
+      <ol className="ol-zelle-steps">
+        {content.zelleSteps.map((step) => (
+          <li key={step}>{step}</li>
+        ))}
+      </ol>
+      <dl className="ol-order">
+        <div>
+          <dt>Zelle</dt>
+          <dd>{order.zellePhone}</dd>
+        </div>
+        <div>
+          <dt>Amount to send</dt>
+          <dd>{order.amount}</dd>
+        </div>
+        <div>
+          <dt>Memo (order number)</dt>
+          <dd>{order.orderNumber}</dd>
+        </div>
+        <div>
+          <dt>Package</dt>
+          <dd>{order.packageLabel}</dd>
+        </div>
+      </dl>
+      <p className="ol-text">{content.zelleNote}</p>
+      <div className="ol-thanks-actions">
+        <AppLink to="/lessons/online" navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-outline ol-btn-small">
+          Back to Online Lessons
+        </AppLink>
+        <AppLink to="/contact" navigate={navigate} currentPath={currentPath} className="ol-btn ol-btn-gold ol-btn-small">
+          Contact us
+        </AppLink>
+      </div>
+    </section>
+  );
+}
+
 // One checkout page for all three packages. The package chosen on a pricing
 // card arrives as ?package=..., and can still be changed here.
 function LessonCheckoutPage({ currentPath, navigate, search }) {
@@ -5669,6 +5741,7 @@ function LessonCheckoutPage({ currentPath, navigate, search }) {
   }));
   const [checkoutErrors, setCheckoutErrors] = useState({});
   const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
+  const [zelleOrder, setZelleOrder] = useState(null);
 
   const updateField = (event) => {
     const { name, type, value, checked } = event.target;
@@ -5696,6 +5769,13 @@ function LessonCheckoutPage({ currentPath, navigate, search }) {
         body: JSON.stringify(checkoutState),
       });
       const payload = await response.json().catch(() => ({}));
+
+      if (response.ok && payload.zelle) {
+        setZelleOrder(payload.zelle);
+        setSubmitState({ status: "idle", message: "" });
+        window.requestAnimationFrame(() => scrollToElementId("zelle-instructions"));
+        return;
+      }
 
       if (!response.ok || !payload.url) {
         setCheckoutErrors(payload.fieldErrors || {});
@@ -5731,14 +5811,18 @@ function LessonCheckoutPage({ currentPath, navigate, search }) {
               {onlineLessonsPage.checkout.cancelled}
             </p>
           ) : null}
-          <LessonCheckoutForm
-            plans={plans}
-            state={checkoutState}
-            errors={checkoutErrors}
-            submitState={submitState}
-            onChange={updateField}
-            onSubmit={submitCheckout}
-          />
+          {zelleOrder ? (
+            <ZelleInstructions order={zelleOrder} currentPath={currentPath} navigate={navigate} />
+          ) : (
+            <LessonCheckoutForm
+              plans={plans}
+              state={checkoutState}
+              errors={checkoutErrors}
+              submitState={submitState}
+              onChange={updateField}
+              onSubmit={submitCheckout}
+            />
+          )}
         </div>
       </section>
     </div>

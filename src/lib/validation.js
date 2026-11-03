@@ -148,6 +148,10 @@ export const LESSON_LEVELS = ["Beginner", "Intermediate", "Advanced / tournament
 export function validateLessonCheckoutFields(state) {
   const errors = {};
 
+  if (state.paymentMethod !== undefined && !["stripe", "zelle"].includes(state.paymentMethod)) {
+    errors.paymentMethod = "Choose how you'd like to pay.";
+  }
+
   if (!LESSON_PACKAGE_IDS.includes(state.packageId)) errors.packageId = "Choose a lesson package.";
   if (!cleanText(state.parentName)) errors.parentName = "Parent or guardian name is required.";
 

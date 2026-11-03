@@ -9,6 +9,7 @@ import { getSupabaseConfig } from "./supabaseInterestStore.js";
 import { onlineLessonPackages } from "./priceCatalog.js";
 import { getNotificationRecipients, sendResendEmail } from "./resend.js";
 import { SITE_TERMS_URL } from "../../src/lib/legal.js";
+import { ZELLE_PHONE } from "../../src/lib/zelle.js";
 
 export const LESSON_BOOKING_TYPE = "online_lessons";
 export const LESSON_PROGRAM_ID = "onlineLessons";
@@ -279,3 +280,55 @@ export const fulfillLessonOrder = async (
   await store.releaseNotification(session.id).catch(() => null);
   throw new Error("Lesson order emails could not be sent.");
 };
+
+// ---------------------------------------------------------------- Zelle orders
+// A Zelle order is not paid yet: the family sends the money from their bank
+// and the team confirms it by hand. Nothing is stored in the database; the
+// emails carry the order.
+export const buildZelleParentEmailText = (order) =>
+  [
+    "Thank you for your order! To complete it, please send your payment with Zelle.",
+    "",
+    `Order number: ${order.orderNumber}`,
+    `Package: ${packageLine(order)}`,
+    `Amount to send: ${formatUsd(order.lessonPackage.amount)}`,
+    `Zelle: ${ZELLE_PHONE}`,
+    `Please write your order number (${order.orderNumber}) in the Zelle memo.`,
+    "",
+    "Your order is confirmed once we receive your payment. Our team will then contact you by email to arrange your online lessons.",
+    "",
+    `Per-lesson price for refunds: ${formatUsd(order.lessonPackage.amount / order.lessonPackage.lessons)}`,
+    "",
+    "Booking & Rescheduling Policy",
+    ...LESSON_POLICY_LINES.map((line) => `- ${line}`),
+    "",
+    `Terms of Service: ${SITE_TERMS_URL}`,
+    "",
+    "Questions? Reply to this email or write to info@chessandtruck.com.",
+    "",
+    "Chess & Truck",
+  ].join("\n");
+
+export const buildZelleTeamEmailText = (order) =>
+  [
+    "ZELLE ORDER, AWAITING PAYMENT. Check that the Zelle payment arrived before scheduling.",
+    "",
+    `Order number: ${order.orderNumber}`,
+    `Package: ${packageLine(order)}`,
+    `Amount to receive by Zelle: ${formatUsd(order.lessonPackage.amount)} (memo should include ${order.orderNumber})`,
+    `Zelle number shown to the family: ${ZELLE_PHONE}`,
+    "",
+    `Parent / guardian: ${order.parentName || "-"}`,
+    `Parent email: ${order.parentEmail || "-"}`,
+    `Parent phone: ${order.parentPhone || "-"}`,
+    "",
+    `Student: ${order.studentName || "-"}`,
+    `Student age: ${order.studentAge || "-"}`,
+    `Chess level: ${order.studentLevel || "-"}`,
+    `Notes for the coach: ${order.notes || "-"}`,
+    "",
+    `Refund value per unused lesson: ${formatUsd(order.lessonPackage.amount / order.lessonPackage.lessons)}`,
+    `Terms of Service accepted: version ${order.termsVersion} at ${order.termsAcceptedAt}`,
+    "",
+    "When the payment arrives, email the family to confirm it and arrange the lessons.",
+  ].join("\n");
