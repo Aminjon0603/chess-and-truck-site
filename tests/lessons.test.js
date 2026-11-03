@@ -77,10 +77,18 @@ globalThis.fetch = async (input, init = {}) => {
     const body = init.body ? JSON.parse(init.body) : null;
 
     if (init.method === "POST") {
-      if (!orders.some((row) => row.stripe_session_id === body.stripe_session_id)) {
-        orders.push({ ...body, notify_claimed_at: null, notified_at: null });
+      const isDuplicate = body.stripe_session_id
+        ? orders.some((row) => row.stripe_session_id === body.stripe_session_id)
+        : orders.some((row) => row.order_number === body.order_number);
+      if (!isDuplicate) {
+        orders.push({ payment_method: "stripe", payment_status: "paid", ...body, notify_claimed_at: null, notified_at: null });
       }
       return new Response(null, { status: 201 });
+    }
+
+    if (init.method === "DELETE") {
+      orders = orders.filter((row) => !matchesFilters(row, url.searchParams));
+      return new Response(null, { status: 204 });
     }
 
     if (init.method === "PATCH") {
@@ -348,7 +356,13 @@ const run = async () => {
     assert.equal(response.status, 200);
     const payload = await response.json();
     assert.equal(stripeCreates.length, 0);
-    assert.equal(orders.length, 0);
+    assert.equal(orders.length, 1);
+    assert.equal(orders[0].order_number, payload.zelle.orderNumber);
+    assert.equal(orders[0].payment_method, "zelle");
+    assert.equal(orders[0].payment_status, "awaiting_payment");
+    assert.equal(orders[0].package_id, "five");
+    assert.equal(orders[0].amount_cents, 67500);
+    assert.equal(orders[0].stripe_session_id, undefined);
     assert.equal(payload.zelle.zellePhone, "929-386-7574");
     assert.equal(payload.zelle.amount, "$675.00");
     assert.match(payload.zelle.orderNumber, /^CT-L-\d{8}-[0-9A-F]{6}$/);
@@ -361,6 +375,21 @@ const run = async () => {
     assert.match(parent.text, new RegExp(`memo`));
     assert.ok(parent.text.includes(payload.zelle.orderNumber));
     assert.ok(JSON.stringify(termsPage).includes("929-386-7574"));
+  });
+
+  await test("a Zelle order is not placed when the database or the team email is unavailable", async () => {
+    reset();
+    supabaseDown = true;
+    assert.equal((await checkout({ ...validForm("ten"), paymentMethod: "zelle" })).status, 502);
+    assert.equal(sentEmails.length, 0);
+    supabaseDown = false;
+
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = async (input, init) =>
+      String(input).startsWith("https://api.resend.com/") ? new Response("down", { status: 503 }) : realFetch(input, init);
+    assert.equal((await checkout({ ...validForm("ten"), paymentMethod: "zelle" })).status, 502);
+    globalThis.fetch = realFetch;
+    assert.equal(orders.length, 0);
   });
 
   await test("an unknown payment method is rejected", async () => {
