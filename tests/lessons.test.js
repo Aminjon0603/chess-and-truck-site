@@ -342,6 +342,34 @@ const run = async () => {
     assert.match(sentEmails[1].text, /Amount paid: \$1\.00/);
   });
 
+  await test("a Zelle order skips Stripe and emails the team and the parent the Zelle instructions", async () => {
+    reset();
+    const response = await checkout({ ...validForm("five"), paymentMethod: "zelle" });
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.equal(stripeCreates.length, 0);
+    assert.equal(orders.length, 0);
+    assert.equal(payload.zelle.zellePhone, "929-386-7574");
+    assert.equal(payload.zelle.amount, "$675.00");
+    assert.match(payload.zelle.orderNumber, /^CT-L-\d{8}-[0-9A-F]{6}$/);
+    assert.equal(sentEmails.length, 2);
+    const [team, parent] = sentEmails;
+    assert.match(team.subject, /^\[ZELLE - AWAITING PAYMENT\]/);
+    assert.match(team.text, /Amount to receive by Zelle: \$675\.00/);
+    assert.deepEqual(parent.to, ["parent@example.test"]);
+    assert.match(parent.text, /Zelle: 929-386-7574/);
+    assert.match(parent.text, new RegExp(`memo`));
+    assert.ok(parent.text.includes(payload.zelle.orderNumber));
+    assert.ok(JSON.stringify(termsPage).includes("929-386-7574"));
+  });
+
+  await test("an unknown payment method is rejected", async () => {
+    reset();
+    assert.equal((await checkout({ ...validForm(), paymentMethod: "venmo" })).status, 400);
+    assert.equal(stripeCreates.length, 0);
+    assert.equal(sentEmails.length, 0);
+  });
+
   // ------------------------------------------------------------ thank-you page
   await test("the thank-you page shows the order after Stripe confirms payment, without duplicating it", async () => {
     reset();
