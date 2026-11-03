@@ -71,6 +71,30 @@ export const createLessonOrderStore = ({ url, key }, fetchImpl = (...args) => fe
   const bySession = (sessionId) => `stripe_session_id=eq.${encodeURIComponent(sessionId)}`;
 
   return {
+    // A Zelle order: no Stripe session, and not paid until the team confirms it.
+    async recordZelle(row) {
+      await request(TABLE, {
+        method: "POST",
+        body: {
+          order_number: row.orderNumber,
+          package_id: row.packageId,
+          amount_cents: row.amountCents,
+          currency: "usd",
+          livemode: row.livemode,
+          payment_method: "zelle",
+          payment_status: "awaiting_payment",
+        },
+        prefer: "return=minimal",
+      });
+    },
+
+    async removeOrder(orderNumber) {
+      await request(`${TABLE}?order_number=eq.${encodeURIComponent(orderNumber)}`, {
+        method: "DELETE",
+        prefer: "return=minimal",
+      });
+    },
+
     // Inserts the order once. A second call for the same session inserts nothing.
     async record(row) {
       await request(`${TABLE}?on_conflict=stripe_session_id`, {
@@ -331,4 +355,6 @@ export const buildZelleTeamEmailText = (order) =>
     `Terms of Service accepted: version ${order.termsVersion} at ${order.termsAcceptedAt}`,
     "",
     "When the payment arrives, email the family to confirm it and arrange the lessons.",
+    "Then mark the order as paid in Supabase (SQL Editor):",
+    `update public.lesson_orders set payment_status = 'paid' where order_number = '${order.orderNumber}';`,
   ].join("\n");

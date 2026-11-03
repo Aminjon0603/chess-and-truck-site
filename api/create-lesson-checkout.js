@@ -8,6 +8,7 @@ import { getCheckoutExpiresAt } from "./_lib/checkoutExpiry.js";
 import {
   buildZelleParentEmailText,
   buildZelleTeamEmailText,
+  getLessonOrderStore,
   LESSON_BOOKING_TYPE,
   LESSON_PROGRAM_ID,
 } from "./_lib/lessonOrders.js";
@@ -54,9 +55,10 @@ export const isStripeKeyAllowed = (key, env = process.env) => {
 const formatUsd = (cents) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(cents / 100);
 
-// Zelle: no online payment. The order goes to the team and the family by email,
-// with the Zelle number and the order number to put in the memo.
-const createZelleOrder = async (data, lessonPackage) => {
+// Zelle: no online payment. The order is saved as "awaiting payment" and goes
+// to the team and the family by email, with the Zelle number and the order
+// number to put in the memo.
+const createZelleOrder = async (data, lessonPackage, store = getLessonOrderStore()) => {
   const order = {
     orderNumber: buildLessonOrderNumber(),
     lessonPackage,
@@ -72,6 +74,26 @@ const createZelleOrder = async (data, lessonPackage) => {
     termsAcceptedAt: new Date().toISOString(),
   };
   const teamRecipients = getNotificationRecipients();
+  const notPlaced = () =>
+    Response.json(
+      { error: "Your order could not be placed right now. Please try again or contact us." },
+      { status: 502 }
+    );
+
+  if (!store) {
+    return notPlaced();
+  }
+
+  try {
+    await store.recordZelle({
+      orderNumber: order.orderNumber,
+      packageId: data.packageId,
+      amountCents: lessonPackage.amount,
+      livemode: process.env.VERCEL_ENV === "production",
+    });
+  } catch {
+    return notPlaced();
+  }
 
   const team = await sendResendEmail({
     to: teamRecipients,
@@ -80,12 +102,10 @@ const createZelleOrder = async (data, lessonPackage) => {
     replyTo: order.parentEmail,
   }).catch(() => ({ ok: false }));
 
-  // Without the team email nobody would know about the order, so stop here.
+  // Without the team email nobody would act on the order, so undo it and stop here.
   if (!team?.ok) {
-    return Response.json(
-      { error: "Your order could not be placed right now. Please try again or contact us." },
-      { status: 502 }
-    );
+    await store.removeOrder(order.orderNumber).catch(() => null);
+    return notPlaced();
   }
 
   await sendResendEmail({
